@@ -11,14 +11,14 @@ public class BubblyMain extends Activity {
     
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
         
         // tell system to use the layout defined in our XML file
-        setContentView(R.layout.main);
+        setContentView( R.layout.main );
 
-        // give the LunarView a handle to the TextView used for messages
-        mBubblyView = (BubblyView) findViewById(R.id.bubbly);
-        mBubblyView.setTextView((TextView) findViewById(R.id.text));
+        // get the view instance
+        mBubblyView = (BubblyView)findViewById( R.id.bubbly );
     }
+    
 }

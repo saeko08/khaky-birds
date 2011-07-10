@@ -3,10 +3,62 @@
       package="com.hypefoundry.bubbly.test"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true" >
+        <activity android:name=".BubblyTestMain"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:label="Life Cycle Test"
+			android:name=".tests.misc.LifeCycleTest"
+			android:configChanges="keyboard|keyboardHidden|orientation" />
+			
+		<activity android:label="Single Touch Test"
+			android:name=".tests.apiBasics.SingleTouchTest"
+			android:configChanges="keyboard|keyboardHidden|orientation" />
+			
+		<activity android:label="Key Test"
+			android:name=".tests.apiBasics.KeyTest"
+			android:configChanges="keyboard|keyboardHidden|orientation" />
+			
+		<activity android:label="Accelerometer Test"
+			android:name=".tests.apiBasics.AccelerometerTest"
+			android:configChanges="keyboard|keyboardHidden|orientation" />
 
-    <uses-library android:name="android.test.runner" />
+		<activity android:label="Assets Test"
+			android:name=".tests.apiBasics.AssetsTest"
+			android:configChanges="keyboard|keyboardHidden|orientation" />
+			
+		<activity android:label="External Storage Test"
+			android:name=".tests.apiBasics.ExternalStorageTest"
+			android:configChanges="keyboard|keyboardHidden|orientation" />
+			
+		<activity android:label="Sound Pool Test"
+			android:name=".tests.apiBasics.SoundPoolTest"
+			android:configChanges="keyboard|keyboardHidden|orientation" />
+			
+		<activity android:label="Shape Test"
+			android:name=".tests.apiBasics.ShapeTest"
+			android:screenOrientation="portrait" />
+			
+		<activity android:label="Bitmap Test"
+			android:name=".tests.apiBasics.BitmapTest"
+			android:screenOrientation="portrait" />
+			
+		<activity android:label="Font Test"
+			android:name=".tests.apiBasics.FontTest"
+			android:screenOrientation="portrait" />
+			
+		<activity android:label="Surface View Test"
+			android:name=".tests.apiBasics.SurfaceViewTest"
+			android:screenOrientation="portrait" />
+			
     </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-sdk android:minSdkVersion="4" />
-    <instrumentation android:targetPackage="com.hypefoundry.bubbly" android:name="android.test.InstrumentationTestRunner" />
 </manifest> 

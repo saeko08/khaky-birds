@@ -90,10 +90,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable
 			startTime = System.nanoTime();
 			
 			// update the game
-			m_game.getCurrentScreen().update( deltaTime );
-			
-			// present the game
-			m_game.getCurrentScreen().present( deltaTime );
+			m_game.update( deltaTime );
 			
 			// draw the contents of the framebuffer
 			Canvas canvas = m_holder.lockCanvas();

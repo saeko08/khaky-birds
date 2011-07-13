@@ -22,7 +22,8 @@ public class BubblyTestMain extends ListActivity
 	/// Add your test classes here
 	private final String m_testClassNames[] = 
 	{ 
-			"apiBasics.SurfaceViewTest"
+			"prototypes.khaky_birds.KhakyBirds"
+			, "apiBasics.SurfaceViewTest"
 			, "apiBasics.FontTest"
 			, "apiBasics.BitmapTest"
 			, "apiBasics.ShapeTest"
@@ -67,7 +68,8 @@ public class BubblyTestMain extends ListActivity
         {
 	        try 
 	        {
-	        	Class testClass = Class.forName( "com.hypefoundry.bubbly.test.tests." + className );
+	        	String fullClassName = "com.hypefoundry.bubbly.test.tests." + className;
+	        	Class testClass = Class.forName( fullClassName );
 	        	classes.add( testClass );
 	        } 
 	        catch ( ClassNotFoundException e ) 

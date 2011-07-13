@@ -1,7 +1,6 @@
 package com.hypefoundry.engine.impl.core.input;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import android.view.MotionEvent;
 import android.view.View;

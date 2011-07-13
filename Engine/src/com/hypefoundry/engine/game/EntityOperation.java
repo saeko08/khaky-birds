@@ -5,6 +5,9 @@ package com.hypefoundry.engine.game;
  * This is a visitor interface that allows to perform 
  * operations on the entities a world contains. 
  * 
+ * A good example of such an operation would be a rendering
+ * query that renders all entities present in the world.
+ * 
  * @author paksas
  *
  */

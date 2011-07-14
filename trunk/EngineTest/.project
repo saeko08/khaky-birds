@@ -37,10 +37,5 @@
 			<type>2</type>
 			<locationURI>_android_Bubbly_773ea0c0/src</locationURI>
 		</link>
-		<link>
-			<name>Bubbly_unittests</name>
-			<type>2</type>
-			<locationURI>_android_Bubbly_773ea0c0/unittests</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>

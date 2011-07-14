@@ -61,8 +61,11 @@
 			android:name=".tests.prototypes.khaky_birds.KhakyBirds"
 			android:screenOrientation="landscape" />
 		
+		<uses-library android:name="android.test.runner" />
+		
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-sdk android:minSdkVersion="4" />
+    <instrumentation android:targetPackage="com.hypefoundry.engine" android:name="android.test.InstrumentationTestRunner" />
 </manifest> 

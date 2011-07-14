@@ -2,28 +2,41 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds;
 
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
+import com.hypefoundry.engine.game.Updatable;
+import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.renderer2D.Renderer2D;
 
 public class MyScreen extends Screen 
 {
-
-	public MyScreen(Game game) 
+	World			m_world;
+	Renderer2D	m_worldRenderer;
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param game				host game
+	 */
+	public MyScreen( Game game ) 
 	{
 		super(game);
-		// TODO Auto-generated constructor stub
+		
+		// create the game world
+		m_world = new World();
+
+		// register the updatables
+		addUpdatable( m_world );
+		
+		// create the renderer
+		m_worldRenderer = new Renderer2D( game.getGraphics() );
+		m_world.attachView( m_worldRenderer );
 	}
 
-	@Override
-	public void update(float deltaTime) 
-	{
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
-	public void present(float deltaTime) 
-	{
-		// TODO Auto-generated method stub
-
+	public void present( float deltaTime ) 
+	{	
+		// draw the world contents
+		m_worldRenderer.draw();
 	}
 
 	@Override

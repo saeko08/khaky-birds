@@ -1,7 +1,7 @@
 package com.hypefoundry.engine.game;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 /**
  * Represents the game world.
@@ -9,16 +9,18 @@ import java.util.List;
  * @author paksas
  *
  */
-public class World 
+public class World implements Updatable
 {
-	List<Entity>		m_entities;
+	List< Entity >		m_entities;
+	List< WorldView >	m_views;
 	
 	/**
 	 * Constructor.
 	 */
 	public World()
 	{
-		m_entities = new ArrayList<Entity>();
+		m_entities = new ArrayList< Entity >();
+		m_views = new ArrayList< WorldView >();
 	}
 	
 	/**
@@ -32,6 +34,12 @@ public class World
 		{
 			m_entities.add( entity );
 		}
+		
+		// notify the views
+		for( WorldView view : m_views )
+		{
+			view.onEntityAdded( entity );
+		}
 	}
 	
 	/**
@@ -40,8 +48,55 @@ public class World
 	 * @param entity
 	 */
 	public void removeEntity( Entity entity )
+	{		
+		if ( m_entities.remove( entity ) )
+		{
+			// notify the views
+			for( WorldView view : m_views )
+			{
+				view.onEntityRemoved( entity );
+			}
+		}
+	}
+	
+	/**
+	 * Attaches a new view to the world.
+	 * 
+	 * @param newView
+	 */
+	public void attachView( WorldView view )
 	{
-		m_entities.remove( entity );
+		for( WorldView v : m_views )
+		{
+			if ( v.equals( view ) )
+			{
+				return;
+			}
+		}
+		m_views.add( view );
+		
+		// inform the view about all present entities
+		for ( Entity entity : m_entities )
+		{
+			view.onEntityAdded( entity );
+		}
+	}
+	
+	/**
+	 * Attaches a new view to the world.
+	 * 
+	 * @param newView
+	 */
+	public void detachView( WorldView view )
+	{
+		// remove all entities from the view
+		for ( Entity entity : m_entities )
+		{
+			view.onEntityRemoved( entity );
+		}
+		
+		// remove the view
+		m_views.remove( view );
 	}
 	
 	/**
@@ -62,6 +117,7 @@ public class World
 	 * 
 	 * @param deltaTime
 	 */
+	@Override
 	public void update( float deltaTime )
 	{		
 		// resolve collisions

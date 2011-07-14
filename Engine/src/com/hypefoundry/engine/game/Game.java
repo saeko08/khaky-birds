@@ -58,17 +58,4 @@ public interface Game
 	 */
 	public Screen getStartScreen();
 	
-	/**
-	 * Adds a new updatable object.
-	 * 
-	 * @param updatable
-	 */
-	public void addUpdatable( Updatable updatable );
-	
-	/**
-	 * Removes an updatable object.
-	 * 
-	 * @param updatable
-	 */
-	public void removeUpdatable( Updatable updatable );
 }

@@ -1,5 +1,7 @@
 package com.hypefoundry.engine.game;
 
+import java.util.*;
+
 /**
  * This abstract class represents a single screen of the running game.
  * 
@@ -12,10 +14,20 @@ package com.hypefoundry.engine.game;
 public abstract class Screen {
 	
 	/// Host game instance
-	protected final Game 	m_game;
+	protected final Game 			m_game;
+	private List<Updatable>			m_updatables;
 	
-	public Screen(Game game) {
+	/**
+	 * Constructor.
+	 * 
+	 * @param game				host game
+	 */
+	public Screen( Game game ) 
+	{
 		this.m_game = game;
+		
+		// create the list that will store the registered updatable objects
+		m_updatables = new ArrayList<Updatable>();
 	}
 	
 	/**
@@ -23,7 +35,14 @@ public abstract class Screen {
 	 * 
 	 * @param deltaTime
 	 */
-	public abstract void update(float deltaTime);
+	public final void update( float deltaTime )
+	{
+		// update the updatable objects
+		for ( Updatable updatable : m_updatables )
+		{
+			updatable.update( deltaTime );
+		}
+	}
 	
 	/**
 	 * Draw the screen in the frame buffer.
@@ -48,4 +67,30 @@ public abstract class Screen {
 	 * This is the place where you want to clean up after the screen.
 	 */
 	public abstract void dispose();
+	
+	/**
+	 * Adds a new updatable object.
+	 * 
+	 * @param updatable
+	 */
+	public void addUpdatable( Updatable updatable )
+	{
+		if ( updatable != null )
+		{
+			m_updatables.add( updatable );
+		}
+	}
+	
+	/**
+	 * Removes an updatable object.
+	 * 
+	 * @param updatable
+	 */
+	public void removeUpdatable( Updatable updatable )
+	{
+		if ( updatable != null )
+		{
+			m_updatables.remove( updatable );
+		}
+	}
 }

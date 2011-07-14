@@ -60,5 +60,4 @@ public abstract class Entity
 	{
 		return m_worldBB.doesOverlap( e2.m_worldBB );
 	}
-	
 }

@@ -1,8 +1,5 @@
 package com.hypefoundry.engine.impl.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -47,7 +44,6 @@ public class AndroidGame extends Activity implements Game
 	FileIO 						m_fileIO;
 	Screen 						m_screen;
 	WakeLock 					m_wakeLock;
-	List<Updatable>				m_updatables;
 	
 	@Override
 	public void onCreate( Bundle savedInstanceState ) 
@@ -82,9 +78,6 @@ public class AndroidGame extends Activity implements Game
 		// setup a wake lock
 		PowerManager powerManager = (PowerManager)getSystemService( Context.POWER_SERVICE );
 		m_wakeLock = powerManager.newWakeLock( PowerManager.FULL_WAKE_LOCK, "GLGame" );
-		
-		// create the list that will store the registered updatable objects
-		m_updatables = new ArrayList<Updatable>();
 	}
 	
 	@Override
@@ -127,12 +120,6 @@ public class AndroidGame extends Activity implements Game
 	public void update( float deltaTime )
 	{
 		Screen currentScreen = getCurrentScreen();
-		
-		// update the updatable objects
-		for ( Updatable updatable : m_updatables )
-		{
-			updatable.update( deltaTime );
-		}
 		
 		// update current screen
 		currentScreen.update( deltaTime );
@@ -193,23 +180,5 @@ public class AndroidGame extends Activity implements Game
 	public Screen getStartScreen() 
 	{
 		return m_screen;
-	}
-	
-	@Override
-	public void addUpdatable( Updatable updatable )
-	{
-		if ( updatable != null )
-		{
-			m_updatables.add( updatable );
-		}
-	}
-	
-	@Override
-	public void removeUpdatable( Updatable updatable )
-	{
-		if ( updatable != null )
-		{
-			m_updatables.remove( updatable );
-		}
 	}
 }

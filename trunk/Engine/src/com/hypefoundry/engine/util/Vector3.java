@@ -7,18 +7,20 @@ package com.hypefoundry.engine.util;
  * @author paksas
  *
  */
-public class Vector2 
+public class Vector3 
 {
 	public float		m_x;
 	public float		m_y;
+	public float		m_z;
 	
 	/**
 	 * Default constructor.
 	 */
-	public Vector2()
+	public Vector3()
 	{
 		m_x = 0;
 		m_y = 0;
+		m_z = 0;
 	}
 	
 	/**
@@ -27,9 +29,10 @@ public class Vector2
 	 * @param x
 	 * @param y
 	 */
-	public Vector2( float x, float y )
+	public Vector3( float x, float y, float z )
 	{
 		m_x = x;
 		m_y = y;
+		m_z = z;
 	}
 }

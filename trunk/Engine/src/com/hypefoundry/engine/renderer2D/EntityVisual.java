@@ -40,4 +40,17 @@ public abstract class EntityVisual
 	 * @param graphics
 	 */
 	public abstract void draw( Graphics graphics );
+
+	/**
+	 * Returns the position in the Z buffer. 
+	 * 
+	 * Numbers towards the negative values are closer to the screen,
+	 * and the numbers towards the positive values are farther from the screen.
+	 * 
+	 * @return
+	 */
+	final float getZ()
+	{
+		return m_entity.getPosition().m_z;
+	}
 }

@@ -7,6 +7,7 @@ import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.WorldView;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.EntityVisualFactory;
+import com.hypefoundry.engine.util.GenericFactory;
 
 
 /**
@@ -15,24 +16,10 @@ import com.hypefoundry.engine.renderer2D.EntityVisualFactory;
  * @author paksas
  *
  */
-public class Renderer2D implements WorldView
+public class Renderer2D extends GenericFactory< Entity, EntityVisual > implements WorldView
 {
 	private Graphics 				m_graphics;
 	private List< EntityVisual >	m_visuals;
-	
-	private static class VisualAssociation 
-	{
-		Class						m_entityType;
-		EntityVisualFactory			m_visualFactory;
-		
-		VisualAssociation( Class entityType, EntityVisualFactory visualFactory )
-		{
-			m_entityType = entityType;
-			m_visualFactory = visualFactory;
-		}
-		
-	}
-	private List< VisualAssociation > 		m_associations;
 	
 	
 	/**
@@ -44,7 +31,6 @@ public class Renderer2D implements WorldView
 	{
 		m_graphics = graphics;
 		m_visuals = new ArrayList< EntityVisual >();
-		m_associations = new ArrayList< VisualAssociation >();
 	}
 	
 	/**
@@ -59,29 +45,6 @@ public class Renderer2D implements WorldView
 		}
 	}
 	
-	/**
-	 * Registers the class of a visual that should be created
-	 * when an entity of the specified type is added.
-	 * 
-	 * @param entityType
-	 * @param visualType
-	 */
-	public void registerVisual( Class entityType, EntityVisualFactory visualFactory )
-	{
-		for ( VisualAssociation association : m_associations )
-		{
-			if ( association.m_entityType.equals( entityType ) )
-			{
-				// a definition already exists - change it
-				association.m_visualFactory = visualFactory;
-				return;
-			}
-		}
-		
-		// if we got so far, it means there definition wasn't found - so create one
-		m_associations.add( new VisualAssociation( entityType, visualFactory ) );
-	}
-
 	@Override
 	public void onEntityAdded( Entity entity ) 
 	{
@@ -92,21 +55,27 @@ public class Renderer2D implements WorldView
 			return;
 		}
 		
-		// locate a visual class for the entity
-		Class entityType = entity.getClass();
-		for ( VisualAssociation association : m_associations )
+		try
 		{
-			if ( association.m_entityType.equals( entityType ) )
-			{
-				// create the visual
-				visual = association.m_visualFactory.instantiate( entity );
-				m_visuals.add( visual );
-				return;
-			}
+			visual = create( entity );
 		}
+		catch( IndexOutOfBoundsException e )
+		{
+			// ups... - no visual representation defined - notify about it
+			throw new RuntimeException( "Visual representation not defined for entity '" + entity.getClass().getName() + "'" );
+		}
+		
+		// add the visual to the render list
+		m_visuals.add( visual );
+		Collections.sort( m_visuals, new Comparator< EntityVisual >() {
 
-		// ups... - no visual representation defined - notify about it
-		throw new RuntimeException( "Visual representation not defined for entity '" + entityType.getName() + "'" );
+			@Override
+			public int compare( EntityVisual object1, EntityVisual object2) 
+			{
+				float val = object2.getZ() - object1.getZ();
+				return ( val < 1e-3 ) ? -1 : ( ( val > 1e-3 ) ? 1 : 0 ); 
+			}
+		} );
 	}
 
 	@Override

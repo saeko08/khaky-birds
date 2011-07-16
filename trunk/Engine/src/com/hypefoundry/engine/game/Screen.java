@@ -11,7 +11,8 @@ import java.util.*;
  * @author paksas
  *
  */
-public abstract class Screen {
+public abstract class Screen implements UpdatesManager 
+{
 	
 	/// Host game instance
 	protected final Game 			m_game;
@@ -68,11 +69,7 @@ public abstract class Screen {
 	 */
 	public abstract void dispose();
 	
-	/**
-	 * Adds a new updatable object.
-	 * 
-	 * @param updatable
-	 */
+	@Override
 	public void addUpdatable( Updatable updatable )
 	{
 		if ( updatable != null )
@@ -81,11 +78,7 @@ public abstract class Screen {
 		}
 	}
 	
-	/**
-	 * Removes an updatable object.
-	 * 
-	 * @param updatable
-	 */
+	@Override
 	public void removeUpdatable( Updatable updatable )
 	{
 		if ( updatable != null )

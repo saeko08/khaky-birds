@@ -19,7 +19,7 @@ public class WorldTest extends AndroidTestCase
 		EntityMock()
 		{
 			super();
-			setBoundingBox( new BoundingBox( -5, -5, 5, 5 ) );
+			setBoundingBox( new BoundingBox( -5, -5, -5, 5, 5, 5 ) );
 			m_collisions = 0;
 		}
 		
@@ -60,15 +60,15 @@ public class WorldTest extends AndroidTestCase
 		world.addEntity( e1 );
 		world.addEntity( e2 );
 		
-		e1.setPosition( 0, 0 );
-		e2.setPosition( 15, 15 );
+		e1.setPosition( 0, 0, 0 );
+		e2.setPosition( 15, 15, 0 );
 		world.update( 0 );
 		assertEquals( 0, e1.m_collisions );
 		assertEquals( 0, e2.m_collisions );
 		world.executeOperation( op );
 		
-		e1.setPosition( 2, 2 );
-		e2.setPosition( 4, 4 );
+		e1.setPosition( 2, 2, 0 );
+		e2.setPosition( 4, 4, 0 );
 		world.update( 0 );
 		assertEquals( 1, e1.m_collisions );
 		assertEquals( 1, e2.m_collisions );

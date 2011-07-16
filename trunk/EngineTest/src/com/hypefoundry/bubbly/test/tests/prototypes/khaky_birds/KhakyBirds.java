@@ -10,7 +10,7 @@ public class KhakyBirds extends AndroidGame
 	@Override
 	public Screen getStartScreen()
 	{
-		return new MyScreen( this );
+		return new GameScreen( this );
 	}
 }
 

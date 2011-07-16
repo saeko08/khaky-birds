@@ -48,12 +48,34 @@ public class RendererTest extends AndroidTestCase
 	
 	class Chair extends Entity
 	{
+		public Chair()
+		{
+			setPosition( 0, 0, 50 );
+		}
+		
 		@Override
 		public void onCollision(Entity colider) {}	
 	}
 	
 	class Bike extends Entity
 	{
+		@Override
+		public void onCollision(Entity colider) {}	
+	}
+	
+	class Ground extends Entity
+	{
+		public Ground()
+		{
+			setPosition( 0, 0, 100 );
+		}
+		
+		@Override
+		public void onCollision(Entity colider) {}	
+	}
+	
+	class Cloud extends Entity
+	{		
 		@Override
 		public void onCollision(Entity colider) {}	
 	}
@@ -77,9 +99,11 @@ public class RendererTest extends AndroidTestCase
 	String m_report = "";
 	public class ReportingVisualMock extends EntityVisual
 	{
+		private String 	m_id;
 		public ReportingVisualMock( String id, Entity parentEntity )
 		{
 			super( parentEntity );
+			m_id = id;
 			
 			m_report += id;
 			m_report += ";";
@@ -88,6 +112,8 @@ public class RendererTest extends AndroidTestCase
 		@Override
 		public void draw(Graphics graphics) 
 		{
+			m_report += m_id;
+			m_report += ";";
 		}
 	}
 
@@ -101,7 +127,7 @@ public class RendererTest extends AndroidTestCase
 		
 		// setup the renderer
 		Renderer2D renderer = new Renderer2D( new GraphicsStub() );
-		renderer.registerVisual( Chair.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new VisualMock( parentEntity ); } } );
+		renderer.register( Chair.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new VisualMock( parentEntity ); } } );
 		
 		// at first nothing is drawn - of course
 		renderer.draw();
@@ -157,8 +183,8 @@ public class RendererTest extends AndroidTestCase
 		world.attachView( renderer );
 		
 		// register types
-		renderer.registerVisual( Chair.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ReportingVisualMock( "Chair", parentEntity ); } } );
-		renderer.registerVisual( Bike.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ReportingVisualMock( "Bike", parentEntity ); } } );
+		renderer.register( Chair.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ReportingVisualMock( "Chair", parentEntity ); } } );
+		renderer.register( Bike.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ReportingVisualMock( "Bike", parentEntity ); } } );
 		
 		world.addEntity( new Bike() );
 		world.addEntity( new Chair() );
@@ -167,6 +193,24 @@ public class RendererTest extends AndroidTestCase
 	
 	public void testRenderingOrder()
 	{
-		// TODO
+		World world = new World();
+		
+		// setup the renderer
+		Renderer2D renderer = new Renderer2D( new GraphicsStub() );
+		world.attachView( renderer );
+		
+		// register types
+		renderer.register( Ground.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ReportingVisualMock( "Ground", parentEntity ); } } );
+		renderer.register( Chair.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ReportingVisualMock( "Chair", parentEntity ); } } );
+		renderer.register( Cloud.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ReportingVisualMock( "Cloud", parentEntity ); } } );
+		
+		world.addEntity( new Chair() );
+		world.addEntity( new Cloud() );
+		world.addEntity( new Ground() );
+		world.addEntity( new Chair() );
+		
+		m_report = "";
+		renderer.draw();
+		assertEquals( "Ground;Chair;Chair;Cloud;", m_report );
 	}
 }

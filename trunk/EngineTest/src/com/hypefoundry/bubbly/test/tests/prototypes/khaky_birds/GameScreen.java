@@ -83,10 +83,6 @@ public class GameScreen extends Screen
 		{
 			Pedestrian pedestrian = new Pedestrian();
 			m_world.addEntity( pedestrian );
-			
-			// create a pedestrian controller and add it to the updatables
-			PedestrianAI controller = new PedestrianAI( pedestrian );
-			this.addUpdatable( controller );
 		}
 	}
 

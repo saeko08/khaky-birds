@@ -1,9 +1,8 @@
 /**
  * 
  */
-package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.controllers;
+package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.Bird;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.game.Entity;
 

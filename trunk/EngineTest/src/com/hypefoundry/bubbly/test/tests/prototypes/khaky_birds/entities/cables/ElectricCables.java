@@ -1,4 +1,4 @@
-package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities;
+package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables;
 
 import com.hypefoundry.engine.game.Entity;
 
@@ -11,11 +11,19 @@ import com.hypefoundry.engine.game.Entity;
  */
 public class ElectricCables extends Entity
 {
-
+	
+	/**
+	 * Constructor.
+	 */
+	public ElectricCables()
+	{
+		setPosition( 0, 0, 10 );
+	}
+	
 	@Override
 	public void onCollision( Entity colider ) 
 	{
 		// TODO Auto-generated method stub
 	}
-
+	
 }

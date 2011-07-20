@@ -1,4 +1,4 @@
-package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities;
+package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock;
 
 import com.hypefoundry.engine.game.Entity;
 
@@ -13,10 +13,19 @@ import com.hypefoundry.engine.game.Entity;
 public class ElectricShock extends Entity 
 {
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param cableYOffset
+	 */
+	public ElectricShock( float cableXOffset ) 
+	{
+		this.setPosition( cableXOffset, 0, 5 );
+	}
+
 	@Override
 	public void onCollision( Entity colider ) 
 	{
 		// TODO Auto-generated method stub
 	}
-
 }

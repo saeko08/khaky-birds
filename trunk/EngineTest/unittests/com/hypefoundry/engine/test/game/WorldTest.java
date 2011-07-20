@@ -52,7 +52,7 @@ public class WorldTest extends AndroidTestCase
 	
 	public void testCollisions()
 	{
-		World world = new World();
+		World world = new World( 500, 500 );
 		EntityMock e1 = new EntityMock();
 		EntityMock e2 = new EntityMock();
 		CollisionReset op = new CollisionReset();

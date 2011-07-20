@@ -1,4 +1,4 @@
-package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.visuals;
+package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.engine.core.Graphics;
 import com.hypefoundry.engine.game.Entity;
@@ -6,12 +6,12 @@ import com.hypefoundry.engine.renderer2D.EntityVisual;
 
 
 /**
- * Visual representation of an electric shock entity.
+ * Visual representation of a bird entity.
  * 
  * @author paksas
  *
  */
-public class ElectricShockVisual extends EntityVisual 
+public class BirdVisual extends EntityVisual 
 {
 
 	/**
@@ -19,7 +19,7 @@ public class ElectricShockVisual extends EntityVisual
 	 * 
 	 * @param entity
 	 */
-	public ElectricShockVisual( Entity entity ) 
+	public BirdVisual( Entity entity ) 
 	{
 		super(entity);
 	}
@@ -27,7 +27,7 @@ public class ElectricShockVisual extends EntityVisual
 	@Override
 	public void draw( Graphics graphics ) 
 	{
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub	
 	}
 
 }

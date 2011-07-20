@@ -68,7 +68,7 @@ public class ControllerTest extends AndroidTestCase
 	
 	public void testDifferentTypes()
 	{
-		World world = new World();
+		World world = new World( 500, 500 );
 		
 		// setup the renderer
 		ControllersView controllersView = new ControllersView( new UpdatesManagerStub() );

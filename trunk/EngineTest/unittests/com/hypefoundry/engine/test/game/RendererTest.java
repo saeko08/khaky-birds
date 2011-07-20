@@ -123,7 +123,7 @@ public class RendererTest extends AndroidTestCase
 	// ------------------------------------------------------------------------
 	public void testSimpleRendering()
 	{
-		World world = new World();
+		World world = new World( 500, 500 );
 		
 		// setup the renderer
 		Renderer2D renderer = new Renderer2D( new GraphicsStub() );
@@ -155,7 +155,7 @@ public class RendererTest extends AndroidTestCase
 	
 	public void testUnregisteredType()
 	{
-		World world = new World();
+		World world = new World( 500, 500 );
 		
 		// setup the renderer
 		Renderer2D renderer = new Renderer2D( new GraphicsStub() );
@@ -176,7 +176,7 @@ public class RendererTest extends AndroidTestCase
 	
 	public void testDifferentTypes()
 	{
-		World world = new World();
+		World world = new World( 500, 500 );
 		
 		// setup the renderer
 		Renderer2D renderer = new Renderer2D( new GraphicsStub() );
@@ -193,7 +193,7 @@ public class RendererTest extends AndroidTestCase
 	
 	public void testRenderingOrder()
 	{
-		World world = new World();
+		World world = new World( 500, 500 );
 		
 		// setup the renderer
 		Renderer2D renderer = new Renderer2D( new GraphicsStub() );

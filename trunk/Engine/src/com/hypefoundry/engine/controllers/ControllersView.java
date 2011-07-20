@@ -5,6 +5,8 @@ package com.hypefoundry.engine.controllers;
 
 import java.util.*;
 
+import android.util.Log;
+
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.UpdatesManager;
 import com.hypefoundry.engine.game.WorldView;
@@ -45,15 +47,18 @@ public class ControllersView extends GenericFactory< Entity, EntityController > 
 		try
 		{
 			controller = create( entity );
+			
+			// memorize the new controller
+			m_controllers.add( controller );
+			
+			// add it to the update manager
+			m_updatesMgr.addUpdatable( controller );
 		}
 		catch( IndexOutOfBoundsException e )
 		{
 			// ups... - no controller is defined - notify about it
-			throw new RuntimeException( "Controller not defined for entity '" + entity.getClass().getName() + "'" );
+			Log.d( "ControllersView", "Controller not defined for entity '" + entity.getClass().getName() + "'" );
 		}
-
-		// memorize the new controller
-		m_controllers.add( controller );
 	}
 
 	@Override
@@ -62,6 +67,10 @@ public class ControllersView extends GenericFactory< Entity, EntityController > 
 		EntityController controller = findControllerFor( entity );
 		if ( controller != null )
 		{
+			// remove it from the update manager
+			m_updatesMgr.removeUpdatable( controller );
+			
+			// remove it from the collection
 			m_controllers.remove( controller );
 		}
 	}

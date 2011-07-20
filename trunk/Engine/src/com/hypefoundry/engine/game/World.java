@@ -11,16 +11,48 @@ import java.util.*;
  */
 public class World implements Updatable
 {
+	private float		m_width;
+	private float		m_height;
 	List< Entity >		m_entities;
 	List< WorldView >	m_views;
 	
 	/**
 	 * Constructor.
+	 * 
+	 * @param width			world width
+	 * @param height		world height
 	 */
-	public World()
+	public World( float	width, float height )
 	{
+		m_width = width;
+		m_height = height;
+		
 		m_entities = new ArrayList< Entity >();
 		m_views = new ArrayList< WorldView >();
+	}
+	
+	
+	// TODO: instead of these methods being polled all the time, 
+	// send events to entities that are outside the world bounds
+	
+	/**
+	 * Returns the width of the world.
+	 * 
+	 * @return
+	 */
+	public float getWidth()
+	{
+		return m_width;
+	}
+	
+	/**
+	 * Returns the height of the world.
+	 * 
+	 * @return
+	 */
+	public float getHeight()
+	{
+		return m_height;
 	}
 	
 	/**

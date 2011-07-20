@@ -11,7 +11,7 @@ import com.hypefoundry.engine.game.Entity;
  */
 public abstract class EntityVisual 
 {
-	Entity			m_entity = null;
+	private Entity			m_entity = null;
 	
 	/**
 	 * Constructor.

@@ -32,9 +32,47 @@ public abstract class Entity
 	 * 
 	 * @param bb
 	 */
-	protected final void setBoundingBox( BoundingBox bb )
+	public final void setBoundingBox( BoundingBox bb )
 	{
 		m_bb = bb;
+		
+		updateWorldBounds();
+	}
+
+	/**
+	 * Updates the world bounds of the entity.
+	 */
+	private void updateWorldBounds() 
+	{
+		// update the world bounding box
+		m_worldBB.m_minX = m_bb.m_minX + m_pos.m_x;
+		m_worldBB.m_maxX = m_bb.m_maxX + m_pos.m_x;
+		m_worldBB.m_minY = m_bb.m_minY + m_pos.m_y;
+		m_worldBB.m_maxY = m_bb.m_maxY + m_pos.m_y;
+		m_worldBB.m_minZ = m_bb.m_minZ + m_pos.m_z;
+		m_worldBB.m_maxZ = m_bb.m_maxZ + m_pos.m_z;
+	}
+	
+	/**
+	 * Returns the world bounds of the entity.
+	 * @return
+	 */
+	public final BoundingBox getWorldBounds()
+	{
+		return m_worldBB;
+	}
+	
+	/**
+	 * Returns the position in the Z buffer. 
+	 * 
+	 * Numbers towards the negative values are closer to the screen,
+	 * and the numbers towards the positive values are farther from the screen.
+	 * 
+	 * @return
+	 */
+	public final Vector3 getPosition()
+	{
+		return m_pos;
 	}
 	
 	/**
@@ -50,26 +88,37 @@ public abstract class Entity
 		m_pos.m_y = y;
 		m_pos.m_z = z;
 		
-		// update the world bounding box
-		m_worldBB.m_minX = m_bb.m_minX + x;
-		m_worldBB.m_maxX = m_bb.m_maxX + x;
-		m_worldBB.m_minY = m_bb.m_minY + y;
-		m_worldBB.m_maxY = m_bb.m_maxY + y;
-		m_worldBB.m_minZ = m_bb.m_minZ + z;
-		m_worldBB.m_maxZ = m_bb.m_maxZ + z;
+		updateWorldBounds();
 	}
 	
 	/**
-	 * Returns the position in the Z buffer. 
+	 * Translates the entity by the specified vector.
 	 * 
-	 * Numbers towards the negative values are closer to the screen,
-	 * and the numbers towards the positive values are farther from the screen.
-	 * 
-	 * @return
+	 * @param dx
+	 * @param dy
+	 * @param dz
 	 */
-	public final Vector3 getPosition()
+	public void translate( float dx, float dy, float dz )
 	{
-		return m_pos;
+		m_pos.m_x += dx;
+		m_pos.m_y += dy;
+		m_pos.m_z += dz;
+		
+		updateWorldBounds();
+	}
+	
+	/**
+	 * Translates the entity by the specified vector.
+	 * 
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
+	public void translate( Vector3 ds )
+	{
+		m_pos.add( ds );
+		
+		updateWorldBounds();
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities;
+package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.engine.game.Entity;
 
@@ -14,6 +14,14 @@ import com.hypefoundry.engine.game.Entity;
 public class Bird extends Entity 
 {
 
+	/**
+	 * Constructor.
+	 */
+	public Bird()
+	{
+		setPosition( 0, 0, 0 );
+	}
+	
 	@Override
 	public void onCollision( Entity colider ) 
 	{

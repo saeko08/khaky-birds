@@ -59,7 +59,7 @@
 			
 		<activity android:label="KhakyBirds prototype"
 			android:name=".tests.prototypes.khaky_birds.KhakyBirds"
-			android:screenOrientation="landscape" />
+			android:screenOrientation="portrait" />
 		
 		<uses-library android:name="android.test.runner" />
 		

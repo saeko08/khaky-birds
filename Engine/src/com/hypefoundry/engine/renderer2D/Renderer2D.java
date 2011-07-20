@@ -2,6 +2,8 @@ package com.hypefoundry.engine.renderer2D;
 
 import java.util.*;
 
+import android.util.Log;
+
 import com.hypefoundry.engine.core.Graphics;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.WorldView;
@@ -58,24 +60,24 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		try
 		{
 			visual = create( entity );
+			
+			// add the visual to the render list
+			m_visuals.add( visual );
+			Collections.sort( m_visuals, new Comparator< EntityVisual >() {
+
+				@Override
+				public int compare( EntityVisual object1, EntityVisual object2) 
+				{
+					float val = object2.getZ() - object1.getZ();
+					return ( val < 1e-3 ) ? -1 : ( ( val > 1e-3 ) ? 1 : 0 ); 
+				}
+			} );
 		}
 		catch( IndexOutOfBoundsException e )
 		{
 			// ups... - no visual representation defined - notify about it
-			throw new RuntimeException( "Visual representation not defined for entity '" + entity.getClass().getName() + "'" );
+			Log.d( "Renderer2D", "Visual representation not defined for entity '" + entity.getClass().getName() + "'" );
 		}
-		
-		// add the visual to the render list
-		m_visuals.add( visual );
-		Collections.sort( m_visuals, new Comparator< EntityVisual >() {
-
-			@Override
-			public int compare( EntityVisual object1, EntityVisual object2) 
-			{
-				float val = object2.getZ() - object1.getZ();
-				return ( val < 1e-3 ) ? -1 : ( ( val > 1e-3 ) ? 1 : 0 ); 
-			}
-		} );
 	}
 
 	@Override

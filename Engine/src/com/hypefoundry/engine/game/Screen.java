@@ -17,6 +17,8 @@ public abstract class Screen implements UpdatesManager
 	/// Host game instance
 	protected final Game 			m_game;
 	private List<Updatable>			m_updatables;
+	private List<Updatable>			m_updatablesToAdd;
+	private List<Updatable>			m_updatablesToRemove;
 	
 	/**
 	 * Constructor.
@@ -29,6 +31,8 @@ public abstract class Screen implements UpdatesManager
 		
 		// create the list that will store the registered updatable objects
 		m_updatables = new ArrayList<Updatable>();
+		m_updatablesToAdd = new ArrayList<Updatable>();
+		m_updatablesToRemove = new ArrayList<Updatable>();
 	}
 	
 	/**
@@ -38,7 +42,21 @@ public abstract class Screen implements UpdatesManager
 	 */
 	public final void update( float deltaTime )
 	{
-		// update the updatable objects
+		// remove updatables			
+		for ( Updatable updatable : m_updatablesToRemove )
+		{
+			m_updatables.remove( updatable );
+		}
+		m_updatablesToRemove.clear();
+		
+		// add updatables			
+		for ( Updatable updatable : m_updatablesToAdd )
+		{
+			m_updatables.add( updatable );
+		}
+		m_updatablesToAdd.clear();
+		
+		// update updatables		
 		for ( Updatable updatable : m_updatables )
 		{
 			updatable.update( deltaTime );
@@ -74,7 +92,8 @@ public abstract class Screen implements UpdatesManager
 	{
 		if ( updatable != null )
 		{
-			m_updatables.add( updatable );
+			m_updatablesToRemove.remove( updatable );
+			m_updatablesToAdd.add( updatable );
 		}
 	}
 	
@@ -83,7 +102,8 @@ public abstract class Screen implements UpdatesManager
 	{
 		if ( updatable != null )
 		{
-			m_updatables.remove( updatable );
+			m_updatablesToAdd.remove( updatable );
+			m_updatablesToRemove.add( updatable );
 		}
 	}
 }

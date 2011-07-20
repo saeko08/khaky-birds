@@ -8,9 +8,28 @@ import com.hypefoundry.engine.core.Graphics.PixmapFormat;
  *
  */
 
-public interface Pixmap {
+public interface Pixmap 
+{
+	/**
+	 * Returns the width of a pixmap.
+	 * @return
+	 */
 	public int getWidth();
+	
+	/**
+	 * Returns the height of a pixmap.
+	 * @return
+	 */
 	public int getHeight();
+	
+	/**
+	 * Returns the pixmap format.
+	 * @return
+	 */
 	public PixmapFormat getFormat();
+	
+	/**
+	 * Releases the pixmap resource. 
+	 */
 	public void dispose();
 }

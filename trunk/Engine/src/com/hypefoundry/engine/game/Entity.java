@@ -92,6 +92,21 @@ public abstract class Entity
 	}
 	
 	/**
+	 * Sets the entity's position.
+	 * 
+	 * @param rhs
+	 */
+	public final void setPosition( Vector3 rhs )
+	{
+		m_pos.m_x = rhs.m_x;
+		m_pos.m_y = rhs.m_y;
+		m_pos.m_z = rhs.m_z;
+		
+		updateWorldBounds();
+	}
+	
+	
+	/**
 	 * Translates the entity by the specified vector.
 	 * 
 	 * @param dx

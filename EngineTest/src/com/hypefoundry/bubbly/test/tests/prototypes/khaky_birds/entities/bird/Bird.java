@@ -1,8 +1,10 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables.ElectricCables;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.util.Vector3;
 
 
 /**
@@ -15,7 +17,10 @@ import com.hypefoundry.engine.game.World;
  */
 public class Bird extends Entity 
 {
-	private ElectricCables		m_cables	= null;
+	private CableProvider		m_cables	= null;
+	private int					m_cableIdx  = 0;
+	private final float 		m_dy 		= 50;
+	private World 				m_world     = null;
 	
 	/**
 	 * Constructor.
@@ -28,7 +33,18 @@ public class Bird extends Entity
 	@Override
 	public void onAddedToWorld( World hostWorld )
 	{
-		m_cables = (ElectricCables)hostWorld.findEntity( ElectricCables.class );
+		m_world = hostWorld;
+		m_cables = (CableProvider)hostWorld.findEntity( CableProvider.class );
+		
+		if ( m_cables != null )
+		{
+			m_cableIdx = m_cables.getStartCableIdx();
+			
+			float y = hostWorld.getHeight() / 2;
+			float x = m_cables.getPositionOnCable( m_cableIdx, y );
+			
+			setPosition( x, y, 0 );
+		}
 	}
 	
 	@Override
@@ -40,55 +56,76 @@ public class Bird extends Entity
 	@Override
 	public void onCollision( Entity colider ) 
 	{
-		// TODO Auto-generated method stub
-
+		if ( ElectricShock.class.isInstance(colider))
+		{
+			m_world.removeEntity(this);
+		}
 	}
 
 	/**
 	 * Moves the bird to the next cable to its left. 
 	 */
-	public void jumpToLeftCable() 
+	public void jumpLeft() 
 	{
 		if ( m_cables == null )
 		{
 			return;
 		}
+		
+		Vector3 currPos = getPosition();
+		
+		m_cableIdx = m_cables.getLeftCable( m_cableIdx );
+		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y );
+		
+		translate( x - currPos.m_x, 0, 0 );
 	}
 
 	/**
 	 * Moves the bird to the next cable to its right. 
 	 */
-	public void jumpToRightCable() 
+	public void jumpRight() 
 	{
 		if ( m_cables == null )
 		{
 			return;
 		}
+		Vector3 currPos = getPosition();
+		
+		m_cableIdx = m_cables.getRightCable( m_cableIdx );
+		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y );
+		
+		translate( x - currPos.m_x, 0, 0 );
 		
 	}
 
 	/**
 	 * Moves the bird down the cable it's sitting on. 
 	 */
-	public void moveDownTheCable() 
+	public void jumpDown() 
 	{
 		if ( m_cables == null )
 		{
 			return;
 		}
 		
+		Vector3 currPos = getPosition();
+		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y + m_dy );
+		translate( x - currPos.m_x, m_dy, 0 );
 	}
 
 	/**
 	 * Moves the bird up the cable it's sitting on. 
 	 */
-	public void moveUpTheCable() 
+	public void jumpUp() 
 	{
 		if ( m_cables == null )
 		{
 			return;
 		}
 		
+		Vector3 currPos = getPosition();
+		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y - m_dy );
+		translate( x - currPos.m_x, -m_dy, 0 );
 	}
 
 }

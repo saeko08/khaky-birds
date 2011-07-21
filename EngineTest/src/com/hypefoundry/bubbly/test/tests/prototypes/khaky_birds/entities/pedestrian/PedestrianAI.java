@@ -21,7 +21,6 @@ public class PedestrianAI extends EntityController
 	private World 				m_world;
 	private Pedestrian			m_pedestrian;
 	
-	private Vector3 			m_direction;
 	private Vector3 			m_velocity;
 	private final float			m_speed = 25.0f;
 	

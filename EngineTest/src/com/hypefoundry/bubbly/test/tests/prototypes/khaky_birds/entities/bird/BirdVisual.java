@@ -45,7 +45,10 @@ public class BirdVisual extends EntityVisual
 	public void draw( Graphics graphics ) 
 	{
 		Vector3 pos = m_bird.getPosition();
-		graphics.drawPixmap( m_pixmap, (int)pos.m_x, (int)pos.m_y );
+		float width = m_pixmap.getWidth();
+		float height = m_pixmap.getHeight();
+		
+		graphics.drawPixmap( m_pixmap, (int)( pos.m_x - width / 2 ), (int)( pos.m_y - height / 2 ) );
 	}
 
 }

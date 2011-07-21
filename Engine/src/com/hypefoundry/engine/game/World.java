@@ -14,6 +14,8 @@ public class World implements Updatable
 	private float		m_width;
 	private float		m_height;
 	List< Entity >		m_entities;
+	List< Entity >		m_entitiesToAdd;
+	List< Entity >		m_entitiesToRemove;
 	List< WorldView >	m_views;
 	
 	/**
@@ -28,6 +30,8 @@ public class World implements Updatable
 		m_height = height;
 		
 		m_entities = new ArrayList< Entity >();
+		m_entitiesToAdd = new ArrayList< Entity >();
+		m_entitiesToRemove = new ArrayList< Entity >();
 		m_views = new ArrayList< WorldView >();
 	}
 	
@@ -62,6 +66,28 @@ public class World implements Updatable
 	 */
 	public void addEntity( Entity entity )
 	{
+		m_entitiesToRemove.remove( entity );
+		m_entitiesToAdd.add( entity );
+	}
+	
+	/**
+	 * Removes the entity from the world
+	 * 
+	 * @param entity
+	 */
+	public void removeEntity( Entity entity )
+	{
+		m_entitiesToRemove.add( entity );
+		m_entitiesToAdd.remove( entity );
+	}
+	
+	/**
+	 * Actual attachment of an entity to the world.
+	 * 
+	 * @param entity
+	 */
+	private void attachEntity( Entity entity )
+	{
 		if ( m_entities.indexOf( entity ) < 0 )
 		{
 			m_entities.add( entity );
@@ -78,11 +104,11 @@ public class World implements Updatable
 	}
 	
 	/**
-	 * Removes the entity from the world
+	 * Actual detachment of an entity to the world.
 	 * 
 	 * @param entity
 	 */
-	public void removeEntity( Entity entity )
+	public void detachEntity( Entity entity )
 	{		
 		if ( m_entities.remove( entity ) )
 		{
@@ -157,7 +183,21 @@ public class World implements Updatable
 	 */
 	@Override
 	public void update( float deltaTime )
-	{		
+	{	
+		// execute world attachment & detachment - detach first to save
+		// memory
+		for ( Entity entity : m_entitiesToRemove )
+		{
+			detachEntity( entity );
+		}
+		m_entitiesToRemove.clear();
+		
+		for ( Entity entity : m_entitiesToAdd )
+		{
+			attachEntity( entity );
+		}
+		m_entitiesToAdd.clear();
+		
 		// resolve collisions
 		resolveCollisions();
 	}

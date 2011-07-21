@@ -65,6 +65,9 @@ public class World implements Updatable
 		if ( m_entities.indexOf( entity ) < 0 )
 		{
 			m_entities.add( entity );
+			
+			// inform the entity itself
+			entity.onAddedToWorld( this );
 		}
 		
 		// notify the views
@@ -83,6 +86,9 @@ public class World implements Updatable
 	{		
 		if ( m_entities.remove( entity ) )
 		{
+			// inform the entity itself
+			entity.onRemovedFromWorld( this );
+			
 			// notify the views
 			for( WorldView view : m_views )
 			{
@@ -188,6 +194,25 @@ public class World implements Updatable
 				}
 			}
 		}
+	}
+
+	/**
+	 * Looks for the first entity of the specified type
+	 * 
+	 * @param entityType
+	 * @return
+	 */
+	public Entity findEntity( Class entityType ) 
+	{
+		for ( Entity entity : m_entities )
+		{
+			if ( entityType.isInstance( entity ) )
+			{
+				return entity;
+			}
+		}
+		
+		return null;
 	}
 }
 

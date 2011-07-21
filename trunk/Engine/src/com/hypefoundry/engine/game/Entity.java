@@ -128,6 +128,19 @@ public abstract class Entity
 	 */
 	public abstract void onCollision( Entity colider );
 
+	/**
+	 * Informs the entity that it's been added to the world.
+	 * 
+	 * @param hostWorld
+	 */
+	public void onAddedToWorld( World hostWorld ) {}
+	
+	/**
+	 * Informs the entity that it's been removed from the world.
+	 * 
+	 * @param hostWorld
+	 */
+	public void onRemovedFromWorld( World hostWorld ) {}
 
 	/**
 	 * Checks if two entities overlap

@@ -52,7 +52,7 @@ public class GameScreen extends Screen
 		m_world.attachView( m_worldRenderer );
 		
 		// register visuals
-		m_worldRenderer.register( Bird.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BirdVisual( parentEntity ); } } );
+		m_worldRenderer.register( Bird.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BirdVisual( m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( ElectricCables.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricCablesVisual( m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( ElectricShock.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricShockVisual( m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( Ground.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GroundVisual( m_game.getGraphics(), parentEntity ); } } );
@@ -62,7 +62,7 @@ public class GameScreen extends Screen
 		m_controllersView = new ControllersView( this );
 		m_world.attachView( m_controllersView );
 		
-		m_controllersView.register( Bird.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new BirdController( parentEntity ); } } );
+		m_controllersView.register( Bird.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new BirdController( m_game.getInput(), parentEntity ); } } );
 		m_controllersView.register( ElectricCables.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricCablesAI( m_world, parentEntity ); } } );
 		m_controllersView.register( ElectricShock.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricShockAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Pedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PedestrianAI( m_world, parentEntity ); } } );
@@ -91,6 +91,9 @@ public class GameScreen extends Screen
 			Pedestrian pedestrian = new Pedestrian( spawnAreaWidth, spawnAreaHeight );
 			m_world.addEntity( pedestrian );
 		}
+		
+		// finally add our main character
+		m_world.addEntity( new Bird() );
 	}
 
 	@Override

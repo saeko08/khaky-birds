@@ -5,6 +5,8 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import java.util.List;
 
+import android.util.Log;
+
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.core.Input.TouchEvent;
@@ -23,8 +25,8 @@ public class BirdController extends EntityController
 	private Bird			m_bird;
 	private Input			m_input;
 	
-	private Vector3			m_translation;
-	private final int		m_inputSensitivityThreshold = 5;
+	private Vector3			m_dragStart = new Vector3( 0, 0, 0 );
+	private final int		m_inputSensitivityThreshold = 25;
 	
 	/**
 	 * Constructor.
@@ -38,33 +40,62 @@ public class BirdController extends EntityController
 		
 		m_input = input;
 		m_bird = (Bird)entity;
-		
-		m_translation = new Vector3( 0, 0, 0 );
 	}
 
 	@Override
 	public void update( float deltaTime ) 
 	{	
 		List< TouchEvent > inputEvents = m_input.getTouchEvents();
-		TouchEvent lastEvent = inputEvents.get( inputEvents.size() - 1 );
+		for ( TouchEvent lastEvent : inputEvents )
+		{	
+			if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
+			{
+				m_dragStart.m_x = lastEvent.x;
+				m_dragStart.m_y = lastEvent.y;
 	
-		// decide where to move
-		if ( lastEvent.x > m_inputSensitivityThreshold )
-		{
-			m_bird.jumpToLeftCable();
+			}
+			if ( lastEvent.type == TouchEvent.TOUCH_UP)
+			{
+				float  dx, dy; 
+				
+				dx = lastEvent.x - m_dragStart.m_x;
+				dy = lastEvent.y - m_dragStart.m_y;
+				
+				moveBird(dx, dy);
+				
+				Log.d( "posChange", dx + ", " + dy );
+			}
 		}
-		else if ( lastEvent.x < m_inputSensitivityThreshold )
+	}
+
+	/**
+	 * Move the bird.
+	 * 
+	 * @param lastEvent
+	 */
+	private void moveBird( float dx, float dy ) 
+	{	
+		// decide where to move
+		if ( dx > m_inputSensitivityThreshold )
 		{
-			m_bird.jumpToRightCable();
+			m_bird.jumpRight();
+			Log.d( "posChange", "jumpRight" );
+		}
+		else if ( dx < -m_inputSensitivityThreshold )
+		{
+			m_bird.jumpLeft();
+			Log.d( "posChange", "jumpLeft" );
 		}
 		
-		if ( lastEvent.y > m_inputSensitivityThreshold )
+		if ( dy > m_inputSensitivityThreshold )
 		{
-			m_bird.moveDownTheCable();
+			m_bird.jumpDown();
+			Log.d( "posChange", "jumpDown" );
 		}
-		else if ( lastEvent.y < m_inputSensitivityThreshold )
+		else if ( dy < -m_inputSensitivityThreshold )
 		{
-			m_bird.moveUpTheCable();
+			m_bird.jumpUp();
+			Log.d( "posChange", "jumpUp" );
 		}
 	}
 

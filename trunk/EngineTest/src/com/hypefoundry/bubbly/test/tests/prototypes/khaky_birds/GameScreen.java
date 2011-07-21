@@ -6,6 +6,9 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bi
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables.ElectricCables;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables.ElectricCablesAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables.ElectricCablesVisual;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapAI;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.Ground;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.GroundVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
@@ -31,6 +34,7 @@ public class GameScreen extends Screen
 	World										m_world;
 	Renderer2D									m_worldRenderer;
 	ControllersView								m_controllersView;
+	EndGameMonitorView							m_endGameMonitor;
 	
 	/**
 	 * Constructor.
@@ -57,6 +61,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( ElectricShock.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricShockVisual( m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( Ground.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GroundVisual( m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( Pedestrian.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PedestrianVisual( m_game.getGraphics(), parentEntity ); } } );
+		m_worldRenderer.register( Crap.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( m_game.getGraphics(), parentEntity ); } } );
 		
 		// register controllers
 		m_controllersView = new ControllersView( this );
@@ -66,6 +71,11 @@ public class GameScreen extends Screen
 		m_controllersView.register( ElectricCables.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricCablesAI( m_world, parentEntity ); } } );
 		m_controllersView.register( ElectricShock.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricShockAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Pedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PedestrianAI( m_world, parentEntity ); } } );
+		m_controllersView.register( Crap.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new CrapAI( parentEntity ); } } );
+		
+		// end game monitor attachment 
+		m_endGameMonitor = new EndGameMonitorView( game.getGraphics() );
+		m_world.attachView( m_endGameMonitor );
 		
 		// populate the game world
 		populateGameWorld();
@@ -101,6 +111,9 @@ public class GameScreen extends Screen
 	{	
 		// draw the world contents
 		m_worldRenderer.draw();
+		
+		// show end game notifications - if any
+		m_endGameMonitor.draw();
 	}
 
 	@Override

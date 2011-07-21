@@ -40,7 +40,7 @@ public class PedestrianVisual extends EntityVisual
 		// set the bounds based on the visual representation used
 		float width = m_pixmap.getWidth();
 		float height = m_pixmap.getHeight();
-		m_pedestrian.setBoundingBox( new BoundingBox( -width / 2, -height / 2, -1, width / 2, height / 2, 1 ) );
+		m_pedestrian.setBoundingBox( new BoundingBox( 0, 0, -1, width, height, 1 ) );
 	}
 
 	@Override

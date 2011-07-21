@@ -39,7 +39,7 @@ public class ElectricShockVisual extends EntityVisual
 		// set bounds of the entity based on its graphical representation
 		float width = m_pixmap.getWidth();
 		float height = m_pixmap.getHeight();
-		m_electricShock.setBoundingBox( new BoundingBox( -width / 2, -height / 2, -1, width / 2, height / 2, 1 ) );
+		m_electricShock.setBoundingBox( new BoundingBox( 0, 0, -5, width, height, 1 ) );
 		
 		// set the position of the shock
 		Vector3 pos = m_electricShock.getPosition();

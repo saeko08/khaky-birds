@@ -19,6 +19,7 @@ public class Pedestrian extends Entity
 	Vector3 			m_direction;
 	public boolean      hitWithShit = false;
 	public boolean      isMoving    = true;
+
 	
 	
 	/**

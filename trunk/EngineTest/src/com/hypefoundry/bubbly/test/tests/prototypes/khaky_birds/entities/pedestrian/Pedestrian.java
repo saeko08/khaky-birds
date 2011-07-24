@@ -18,6 +18,7 @@ public class Pedestrian extends Entity
 {
 	Vector3 			m_direction;
 	public boolean      hitWithShit = false;
+	public boolean      isMoving    = true;
 	
 	
 	/**
@@ -45,7 +46,29 @@ public class Pedestrian extends Entity
 		if ( Crap.class.isInstance(colider))
 		{
 			hitWithShit = true;
+			stopMoving();
+		
 		}
+	}
+
+	/**
+	 *Makes pedestrian stops for a while
+	 * 
+	 *
+	 */
+	public void stopMoving() 
+	{
+		 isMoving = false;
+	}
+	
+	/**
+	 *pedestrian starts moving
+	 * 
+	 *
+	 */
+	public void startMoving() 
+	{
+		isMoving = true;
 	}
 
 }

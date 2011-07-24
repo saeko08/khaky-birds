@@ -15,7 +15,7 @@ import com.hypefoundry.engine.game.World;
  */
 public class CrapAI extends EntityController 
 {
-	private final float			m_fallingSpeed = 65.0f;
+	private final float			m_fallingSpeed = 60.0f;
 	private Crap				m_crap;
 	private World 				m_world;
 

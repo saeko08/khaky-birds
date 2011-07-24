@@ -34,6 +34,7 @@ public class Crap extends Entity
 		if ( Pedestrian.class.isInstance(colider))
 		{
 			pedestrianHit = true;
+			
 		}
 	}
 	

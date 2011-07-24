@@ -1,6 +1,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables.ElectricCables;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.World;
@@ -17,10 +18,12 @@ import com.hypefoundry.engine.util.Vector3;
  */
 public class Bird extends Entity 
 {
-	private CableProvider		m_cables	= null;
-	private int					m_cableIdx  = 0;
-	private final float 		m_dy 		= 50;
-	private World 				m_world     = null;
+	private CableProvider		m_cables			 = null;
+	private int					m_cableIdx  		 = 0;
+	private final float 		m_dy 				 = 50;
+	private World 				m_world    			 = null;
+	public 	boolean 			crosshairInitialized = false;
+	private Crap				m_crap               = null;
 	
 	/**
 	 * Constructor.
@@ -126,6 +129,26 @@ public class Bird extends Entity
 		Vector3 currPos = getPosition();
 		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y - m_dy );
 		translate( x - currPos.m_x, -m_dy, 0 );
+	}
+
+	/**
+	 * Initialize the crosshair on bird 
+	 */
+	public void crosshairOn() 
+	{
+		crosshairInitialized = true;
+	}
+	
+	/**
+	 * Bird starts shitting
+	 */
+	public void makeShit() 
+	{
+		m_crap = new Crap();
+		crosshairInitialized = false;
+		
+		m_world.addEntity(m_crap);
+		
 	}
 
 }

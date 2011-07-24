@@ -1,5 +1,6 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.util.Vector3;
 
@@ -16,6 +17,7 @@ import com.hypefoundry.engine.util.Vector3;
 public class Pedestrian extends Entity 
 {
 	Vector3 			m_direction;
+	public boolean      hitWithShit = false;
 	
 	
 	/**
@@ -40,7 +42,10 @@ public class Pedestrian extends Entity
 	@Override
 	public void onCollision( Entity colider ) 
 	{
-		// TODO Auto-generated method stub
+		if ( Crap.class.isInstance(colider))
+		{
+			hitWithShit = true;
+		}
 	}
 
 }

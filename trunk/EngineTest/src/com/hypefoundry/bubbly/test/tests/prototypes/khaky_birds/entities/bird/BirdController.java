@@ -24,9 +24,12 @@ public class BirdController extends EntityController
 {
 	private Bird			m_bird;
 	private Input			m_input;
-	
+	private float           m_touchTimer = 0.f;
 	private Vector3			m_dragStart = new Vector3( 0, 0, 0 );
 	private final int		m_inputSensitivityThreshold = 25;
+	
+	//Probably it would be better to put it in the input controller:
+	private boolean 		m_touchingScreen 				= false;
 	
 	/**
 	 * Constructor.
@@ -46,26 +49,66 @@ public class BirdController extends EntityController
 	public void update( float deltaTime ) 
 	{	
 		List< TouchEvent > inputEvents = m_input.getTouchEvents();
+		
+		//counting touching screen time
+		if(m_touchingScreen == true)
+		{
+			m_touchTimer+=deltaTime;
+			Log.d( "touchTimer", m_touchTimer + ", ");
+			
+			if (m_touchTimer > 0.4 && m_bird.crosshairInitialized == false)
+			{
+				initializeCrosshair();
+			}
+		}
+		
 		for ( TouchEvent lastEvent : inputEvents )
 		{	
 			if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
 			{
+				m_touchingScreen = true;
 				m_dragStart.m_x = lastEvent.x;
 				m_dragStart.m_y = lastEvent.y;
+				
+				//here I had a problem. This updates only once after screen is touched
+				//m_touchTimer+=deltaTime;
+				//Log.d( "touchTimer", m_touchTimer + ", ");
 	
 			}
 			if ( lastEvent.type == TouchEvent.TOUCH_UP)
 			{
 				float  dx, dy; 
+				m_touchingScreen = false;
+				m_touchTimer = 0.f;
 				
 				dx = lastEvent.x - m_dragStart.m_x;
 				dy = lastEvent.y - m_dragStart.m_y;
 				
+				
 				moveBird(dx, dy);
+				
+				if (m_bird.crosshairInitialized == true)
+				{
+					initializeShitting();
+				}
 				
 				Log.d( "posChange", dx + ", " + dy );
 			}
 		}
+	}
+
+	private void initializeShitting() 
+	{
+		
+		m_bird.makeShit();
+		
+	}
+
+	private void initializeCrosshair() 
+	{
+	
+		m_bird.crosshairOn();
+
 	}
 
 	/**

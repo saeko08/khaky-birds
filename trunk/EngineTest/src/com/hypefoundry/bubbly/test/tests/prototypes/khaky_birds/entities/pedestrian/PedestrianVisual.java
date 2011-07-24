@@ -21,6 +21,7 @@ public class PedestrianVisual extends EntityVisual
 {
 	private Pedestrian	m_pedestrian;
 	private Pixmap		m_pixmap;
+	private Pixmap		m_pixmapHit;
 	
 	
 	/**
@@ -36,7 +37,7 @@ public class PedestrianVisual extends EntityVisual
 		m_pedestrian = (Pedestrian)entity;
 		
 		m_pixmap = graphics.newPixmap( "khaky_birds_prototype/pedestrian.png", PixmapFormat.ARGB4444 );
-		
+		m_pixmapHit = graphics.newPixmap( "khaky_birds_prototype/pedestrian_hit.png", PixmapFormat.ARGB4444 );
 		// set the bounds based on the visual representation used
 		float width = m_pixmap.getWidth();
 		float height = m_pixmap.getHeight();
@@ -46,8 +47,17 @@ public class PedestrianVisual extends EntityVisual
 	@Override
 	public void draw( Graphics graphics ) 
 	{
-		Vector3 pos = m_pedestrian.getPosition();
-		graphics.drawPixmap( m_pixmap, (int)pos.m_x, (int)pos.m_y );
+		if (m_pedestrian.hitWithShit == false)
+		{
+			Vector3 pos = m_pedestrian.getPosition();
+			graphics.drawPixmap( m_pixmap, (int)pos.m_x, (int)pos.m_y );
+		}
+		else
+		{
+			Vector3 pos = m_pedestrian.getPosition();
+			graphics.drawPixmap( m_pixmapHit, (int)pos.m_x, (int)pos.m_y );
+		}
+			
 	}
 
 }

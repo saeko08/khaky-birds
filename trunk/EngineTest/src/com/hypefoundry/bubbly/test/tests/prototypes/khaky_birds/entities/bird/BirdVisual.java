@@ -19,6 +19,7 @@ import com.hypefoundry.engine.util.Vector3;
 public class BirdVisual extends EntityVisual 
 {
 	private Pixmap		m_pixmap;
+	private Pixmap		m_pixmapCrosshair;
 	private Bird		m_bird;
 	
 	
@@ -31,8 +32,9 @@ public class BirdVisual extends EntityVisual
 	public BirdVisual( Graphics graphics, Entity entity ) 
 	{
 		super(entity);
-		
+		//pixmaps below must have same width and height
 		m_pixmap = graphics.newPixmap( "khaky_birds_prototype/bird.png", PixmapFormat.ARGB4444 );
+		m_pixmapCrosshair = graphics.newPixmap( "khaky_birds_prototype/bird_cross_hair.png", PixmapFormat.ARGB4444 );
 		m_bird = (Bird)entity;
 		
 		// set the bounds based on the visual representation used
@@ -45,10 +47,21 @@ public class BirdVisual extends EntityVisual
 	public void draw( Graphics graphics ) 
 	{
 		Vector3 pos = m_bird.getPosition();
-		float width = m_pixmap.getWidth();
-		float height = m_pixmap.getHeight();
 		
-		graphics.drawPixmap( m_pixmap, (int)( pos.m_x - width / 2 ), (int)( pos.m_y - height / 2 ) );
+		if (m_bird.crosshairInitialized == false)
+		{
+			float width = m_pixmap.getWidth();
+			float height = m_pixmap.getHeight();
+			
+			graphics.drawPixmap( m_pixmap, (int)( pos.m_x - width / 2 ), (int)( pos.m_y - height / 2 ) );
+		}
+		else
+		{
+			float width = m_pixmapCrosshair.getWidth();
+			float height = m_pixmapCrosshair.getHeight();
+			
+			graphics.drawPixmap( m_pixmapCrosshair, (int)( pos.m_x - width / 2 ), (int)( pos.m_y - height / 2 ) );
+		}
 	}
 
 }

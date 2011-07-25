@@ -48,15 +48,24 @@ public class PedestrianVisual extends EntityVisual
 	@Override
 	public void draw( Graphics graphics ) 
 	{
+		
+	Vector3 pos = m_pedestrian.getPosition();
+	
 		if (m_pedestrian.hitWithShit == false)
 		{
-			Vector3 pos = m_pedestrian.getPosition();
-			graphics.drawPixmap( m_pixmap, (int)pos.m_x, (int)pos.m_y );
+		
+			float width = m_pixmap.getWidth();
+			float height = m_pixmap.getHeight();
+			
+			graphics.drawPixmap( m_pixmap, (int)( pos.m_x - width / 2 ), (int)( pos.m_y - height / 2 ));
 		}
 		else
 		{
-			Vector3 pos = m_pedestrian.getPosition();
-			graphics.drawPixmap( m_pixmapHit, (int)pos.m_x, (int)pos.m_y );
+			
+			float width = m_pixmap.getWidth();
+			float height = m_pixmap.getHeight();
+			
+			graphics.drawPixmap( m_pixmapHit, (int)( pos.m_x - width / 2 ), (int)( pos.m_y - height / 2 ));
 		}
 			
 	}

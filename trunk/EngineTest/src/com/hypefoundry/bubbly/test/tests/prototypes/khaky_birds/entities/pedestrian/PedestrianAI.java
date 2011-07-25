@@ -56,7 +56,7 @@ public class PedestrianAI extends EntityController
 			
 			Log.d( "wait", m_wait + ", ");
 			
-			if (m_wait > 0.2)
+			if (m_wait > 0.3)
 			{
 				m_pedestrian.isMoving = true;
 				m_wait = 0;

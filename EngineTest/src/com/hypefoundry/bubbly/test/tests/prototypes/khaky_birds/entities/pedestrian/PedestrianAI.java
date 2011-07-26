@@ -52,11 +52,11 @@ public class PedestrianAI extends EntityController
 		//pedestrian stops moving for a while
 		if (m_pedestrian.isMoving == false)
 		{
-			m_wait=+deltaTime;
+			m_wait+=deltaTime;
 			
 			Log.d( "wait", m_wait + ", ");
 			
-			if (m_wait > 0.3)
+			if (m_wait > 1.2)
 			{
 				m_pedestrian.isMoving = true;
 				m_wait = 0;

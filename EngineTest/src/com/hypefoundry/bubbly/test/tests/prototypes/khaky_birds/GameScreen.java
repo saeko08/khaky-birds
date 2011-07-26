@@ -9,6 +9,9 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables.
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapVisual;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.FalconAI;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.FalconVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.Ground;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.GroundVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
@@ -62,7 +65,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Ground.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GroundVisual( m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( Pedestrian.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PedestrianVisual( m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( Crap.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( m_game.getGraphics(), parentEntity ); } } );
-		
+		m_worldRenderer.register( Falcon.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FalconVisual( m_game.getGraphics(), parentEntity ); } } );
 		// register controllers
 		m_controllersView = new ControllersView( this );
 		m_world.attachView( m_controllersView );
@@ -72,6 +75,7 @@ public class GameScreen extends Screen
 		m_controllersView.register( ElectricShock.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricShockAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Pedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PedestrianAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Crap.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new CrapAI( m_world,parentEntity ); } } );
+		m_controllersView.register( Falcon.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new FalconAI( m_world,parentEntity ); } } );
 		
 		// end game monitor attachment 
 		m_endGameMonitor = new EndGameMonitorView( game.getGraphics() );
@@ -91,6 +95,9 @@ public class GameScreen extends Screen
 		
 		// create the cables the bird will move on
 		m_world.addEntity( new ElectricCables() );
+		
+		//create falcon that will hunt our bird
+		m_world.addEntity( new Falcon() );
 		
 		// next - we need the pedestrians that wander around
 		final int pedestriansCount = 10;

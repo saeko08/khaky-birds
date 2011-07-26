@@ -2,6 +2,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables.ElectricCables;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.World;
@@ -24,6 +25,7 @@ public class Bird extends Entity
 	private World 				m_world    			 = null;
 	public 	boolean 			crosshairInitialized = false;
 	private Crap				m_crap               = null;
+	private Falcon              m_falcon             = null;
 	
 	/**
 	 * Constructor.
@@ -60,6 +62,10 @@ public class Bird extends Entity
 	public void onCollision( Entity colider ) 
 	{
 		if ( ElectricShock.class.isInstance(colider))
+		{
+			m_world.removeEntity(this);
+		}
+		if ( Falcon.class.isInstance(colider))
 		{
 			m_world.removeEntity(this);
 		}

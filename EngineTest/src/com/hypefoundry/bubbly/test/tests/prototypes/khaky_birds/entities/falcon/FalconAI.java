@@ -18,7 +18,7 @@ public class FalconAI extends EntityController
 
 	private World 				m_world;
 	private Falcon				m_falcon;
-	private float 				m_speed         = 40.f;
+	private float 				m_speed         = 55.f;
 	private float              m_respawnCounter = 0;
 	/**
 	 * Constructor.

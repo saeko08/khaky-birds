@@ -19,7 +19,6 @@ public class FalconAI extends EntityController
 	private World 				m_world;
 	private Falcon				m_falcon;
 	private float 				m_speed         = 55.f;
-	private float              m_respawnCounter = 0;
 	/**
 	 * Constructor.
 	 * 
@@ -51,7 +50,7 @@ public class FalconAI extends EntityController
 			
 			if ( borderPos >= 330.0f)
 			{
-				// ok - we can remove the crap - it went out of the visibility scope
+				// ok - we can remove the falcon - it went out of the visibility scope
 				m_world.removeEntity( m_falcon );
 			}
 		}
@@ -65,7 +64,7 @@ public class FalconAI extends EntityController
 			
 			if ( borderPos <= -10.f )
 			{
-				// ok - we can remove the crap - it went out of the visibility scope
+				// ok - we can remove the falcon - it went out of the visibility scope
 				m_world.removeEntity( m_falcon );
 				
 			}

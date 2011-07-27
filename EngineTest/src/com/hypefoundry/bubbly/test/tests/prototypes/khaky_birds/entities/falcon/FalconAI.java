@@ -3,6 +3,7 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon;
 
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.game.Entity;
@@ -19,17 +20,25 @@ public class FalconAI extends EntityController
 	private World 				m_world;
 	private Falcon				m_falcon;
 	private float 				m_speed         = 55.f;
+	private float 				m_speedChaser   = 40.f;
+	private Bird                m_bird          = null;
+	
+	private Vector3 			m_direction = new Vector3();
+	
+	
 	/**
 	 * Constructor.
 	 * 
 	 * @param world
-	 * @param pedestrian			controlled pedestrian
+	 * @param falcon			controlled falcon
 	 */
 	public FalconAI( World world, Entity falcon )
 	{
 		super( falcon );
 		m_world = world;
 		m_falcon = (Falcon)falcon;
+		m_bird = (Bird) m_world.findEntity(Bird.class);
+		
 		
 	}
 
@@ -40,7 +49,23 @@ public class FalconAI extends EntityController
 	public void update(float deltaTime) 
 	{
 		// start moving the falcon
-		if (m_falcon.m_flyingFromLeft == true)
+		
+		if (m_falcon.m_isChasing == true)
+		{
+			if ( m_bird != null )
+			{
+				m_direction.set( m_bird.getPosition() ); // direction = birdPos 
+				m_direction.sub( m_falcon.getPosition() ); // direction -= falconPos
+				m_direction.normalize2D();
+				
+				float speedForThisFrame = m_speedChaser * deltaTime;
+				m_direction.scale( speedForThisFrame );
+				
+				m_falcon.translate( m_direction );
+			}
+		}
+		
+		else if (m_falcon.m_flyingFromLeft == true)
 		{
 			float translation = m_speed * deltaTime;
 			m_falcon.translate( +translation, 0, 0  );

@@ -1,8 +1,7 @@
 package com.hypefoundry.engine.game;
 
-import com.hypefoundry.engine.util.BoundingBox;
-import com.hypefoundry.engine.util.Vector3;
-
+import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.Vector3;
 
 /**
  * A game entity. Can be an agent, a piece of decoration - anything

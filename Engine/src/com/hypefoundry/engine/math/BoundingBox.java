@@ -1,4 +1,7 @@
-package com.hypefoundry.engine.util;
+package com.hypefoundry.engine.math;
+
+import com.hypefoundry.engine.math.Vector3;
+
 
 /**
  * A bounding box.
@@ -6,7 +9,7 @@ package com.hypefoundry.engine.util;
  * @author paksas
  *
  */
-final public class BoundingBox 
+final public class BoundingBox implements BoundingShape
 {
 	public float 		m_minX; 
 	public float 		m_minY;
@@ -38,17 +41,6 @@ final public class BoundingBox
 	/**
 	 * Checks if the box overlaps a point.
 	 * 
-	 * @param pos
-	 * @return
-	 */
-	final public boolean doesOverlap( Vector3 pos )
-	{
-		return m_minX <= pos.m_x && m_maxX >= pos.m_x && m_minY <= pos.m_y && m_maxY >= pos.m_y && m_minZ <= pos.m_z && m_maxZ >= pos.m_z;
-	}
-	
-	/**
-	 * Checks if the box overlaps a point.
-	 * 
 	 * @param x
 	 * @param y
 	 * @param z
@@ -59,15 +51,22 @@ final public class BoundingBox
 		return m_minX <= x && m_maxX >= x && m_minY <= y && m_maxY >= y && m_minZ <= z && m_maxZ >= z;
 	}
 	
-	/**
-	 * Checks if the box overlaps another box.
-	 * 
-	 * @param x
-	 * @param y
-	 * @return
-	 */
+	@Override
 	final public boolean doesOverlap( final BoundingBox box )
 	{
 		return !( m_minX > box.m_maxX || m_maxX < box.m_minX || m_minY > box.m_maxY || m_maxY < box.m_minY || m_minZ > box.m_maxZ || m_maxZ < box.m_minZ );
+	}
+
+	@Override
+	public boolean doesOverlap( final BoundingSphere sphere ) 
+	{
+		// the code's implemented in the BoundingSphere class - so let's use it
+		return sphere.doesOverlap( this );
+	}
+	
+	@Override
+	final public boolean doesOverlap( final Vector3 pos )
+	{
+		return m_minX <= pos.m_x && m_maxX >= pos.m_x && m_minY <= pos.m_y && m_maxY >= pos.m_y && m_minZ <= pos.m_z && m_maxZ >= pos.m_z;
 	}
 }

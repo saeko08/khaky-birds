@@ -23,6 +23,7 @@ public class BubblyTestMain extends ListActivity
 	private final String m_testClassNames[] = 
 	{ 
 			"prototypes.khaky_birds.KhakyBirds"
+			, "openGL.GLSurfaceViewTest"
 			, "apiBasics.SurfaceViewTest"
 			, "apiBasics.FontTest"
 			, "apiBasics.BitmapTest"

@@ -73,6 +73,7 @@ public class FalconAI extends EntityController
 			// once it goes out of the view scope, destroy it
 			float borderPos = m_falcon.getWorldBounds().m_minX;
 			
+			
 			if ( borderPos >= 330.0f)
 			{
 				// ok - we can remove the falcon - it went out of the visibility scope

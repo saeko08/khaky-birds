@@ -1,0 +1,13 @@
+=All you need to get coding=
+
+1. Download the latest Eclipse
+
+2. Download the latest Java JDK
+
+3. Setup an environment variable JDK_HOME to point to your JDK install directory
+
+4. Download Android SDK (if it asks you to install a Java JDK, simply press the 'Back' button and proceed again )
+
+5. Startup Eclipse, and from menu Help / Install New Software select 'All Available Sites' and search for a project called 'Subversive' - install it
+
+6. Once all that is done, download the code and get jiggy with it ;)

@@ -8,8 +8,8 @@ import com.hypefoundry.engine.core.Pixmap;
 import com.hypefoundry.engine.core.Graphics.PixmapFormat;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
-import com.hypefoundry.engine.util.BoundingBox;
-import com.hypefoundry.engine.util.Vector3;
+import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.Vector3;
 
 /**
  * Visual representation of a falcon entity.

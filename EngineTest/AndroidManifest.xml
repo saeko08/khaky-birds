@@ -56,6 +56,10 @@
 		<activity android:label="Surface View Test"
 			android:name=".tests.apiBasics.SurfaceViewTest"
 			android:screenOrientation="portrait" />
+		
+		<activity android:label="GL Surface View Test"
+			android:name=".tests.openGL.GLSurfaceViewTest"
+			android:screenOrientation="portrait" />	
 			
 		<activity android:label="KhakyBirds prototype"
 			android:name=".tests.prototypes.khaky_birds.KhakyBirds"

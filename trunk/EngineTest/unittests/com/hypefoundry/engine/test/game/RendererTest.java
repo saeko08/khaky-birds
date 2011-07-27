@@ -136,6 +136,7 @@ public class RendererTest extends AndroidTestCase
 		// we add the first entity to the world, but the view is not attached, so nothing is drawn
 		world.addEntity( new Chair() );
 		world.addEntity( new Chair() );
+		world.update( 0 );
 		renderer.draw();
 		assertEquals( 0, m_drawnEntities );
 		
@@ -148,6 +149,7 @@ public class RendererTest extends AndroidTestCase
 		// adding some more entities
 		m_drawnEntities = 0;
 		world.addEntity( new Chair() );
+		world.update( 0 );
 		renderer.draw();
 		assertEquals( 3, m_drawnEntities );
 		
@@ -166,11 +168,14 @@ public class RendererTest extends AndroidTestCase
 		try
 		{
 			world.addEntity( new Chair() );
-			assertTrue( false );
+			world.update( 0 );
+			
+			// nothing breaks :)
+			assertTrue( true );
 		}
 		catch( Exception e )
 		{
-			assertTrue( true );	
+			assertTrue( false );	
 		}
 	}
 	
@@ -188,6 +193,7 @@ public class RendererTest extends AndroidTestCase
 		
 		world.addEntity( new Bike() );
 		world.addEntity( new Chair() );
+		world.update( 0 );
 		assertEquals( "Bike;Chair;", m_report );
 	}
 	
@@ -208,6 +214,7 @@ public class RendererTest extends AndroidTestCase
 		world.addEntity( new Cloud() );
 		world.addEntity( new Ground() );
 		world.addEntity( new Chair() );
+		world.update( 0 );
 		
 		m_report = "";
 		renderer.draw();

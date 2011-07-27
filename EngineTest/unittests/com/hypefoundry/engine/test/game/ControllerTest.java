@@ -80,6 +80,7 @@ public class ControllerTest extends AndroidTestCase
 		
 		world.addEntity( new Bike() );
 		world.addEntity( new Chair() );
+		world.update( 0 );
 		assertEquals( "Bike;Chair;", m_report );
 	}
 }

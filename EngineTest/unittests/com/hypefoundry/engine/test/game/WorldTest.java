@@ -3,7 +3,7 @@ package com.hypefoundry.engine.test.game;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.EntityOperation;
 import com.hypefoundry.engine.game.World;
-import com.hypefoundry.engine.util.BoundingBox;
+import com.hypefoundry.engine.math.BoundingBox;
 
 import android.test.AndroidTestCase;
 

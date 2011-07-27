@@ -7,7 +7,7 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestr
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.World;
-import com.hypefoundry.engine.util.Vector3;
+import com.hypefoundry.engine.math.Vector3;
 
 /**
  * @author azagor

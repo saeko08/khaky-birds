@@ -8,7 +8,7 @@ import java.util.Random;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.World;
-import com.hypefoundry.engine.util.Vector3;
+import com.hypefoundry.engine.math.Vector3;
 
 /**
  * @author azagor

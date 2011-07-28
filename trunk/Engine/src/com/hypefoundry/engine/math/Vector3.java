@@ -85,6 +85,17 @@ public final class Vector3
 	}
 	
 	/**
+	 * Normalizes the vector in 2D ( x & y components ), and sets its z component to 0.
+	 */
+	public void normalize2D() 
+	{
+		float invMag = 1.0f/(float) Math.sqrt( m_x*m_x + m_y*m_y );
+		m_x *= invMag;
+		m_y *= invMag;
+		m_z = 0;
+	}
+	
+	/**
 	 * Magnitude ( length ) of the vector.
 	 * @return
 	 */

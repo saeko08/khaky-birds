@@ -1,4 +1,4 @@
-package com.hypefoundry.engine.impl.openGL;
+package com.hypefoundry.engine.core;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 
-import com.hypefoundry.engine.core.FileIO;
+import com.hypefoundry.engine.core.GLGraphics;
+import com.hypefoundry.engine.game.Game;
 
 /**
  * A texture resource.
@@ -34,9 +35,9 @@ public class Texture
 	 * @param glGame
 	 * @param fileName			texture file path
 	 */
-	public Texture( GLGame glGame, String fileName ) 
+	public Texture( Game glGame, String fileName ) 
 	{
-		m_graphics = glGame.getGLGraphics();
+		m_graphics = glGame.getGraphics();
 		m_fileIO = glGame.getFileIO();
 		m_fileName = fileName;
 		m_width = 0;

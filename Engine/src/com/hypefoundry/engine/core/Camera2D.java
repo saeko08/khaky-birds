@@ -3,8 +3,7 @@
  */
 package com.hypefoundry.engine.core;
 
-import javax.microedition.khronos.opengles.GL10;
-
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
 /**
@@ -26,4 +25,11 @@ public interface Camera2D
 	 * @param touch
 	 */
 	void touchToWorld( Vector3 touch );
+	
+	/**
+	 * Returns the camera view frustum.
+	 * 
+	 * @return
+	 */
+	BoundingBox getFrustum();
 }

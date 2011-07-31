@@ -138,6 +138,9 @@ public class World implements Updatable
 			}
 		}
 		m_views.add( view );
+
+		// inform the view that it's been attached to a world
+		view.onAttached( this );
 		
 		// inform the view about all present entities
 		for ( Entity entity : m_entities )
@@ -158,6 +161,9 @@ public class World implements Updatable
 		{
 			view.onEntityRemoved( entity );
 		}
+		
+		// inform the view that it's been detached from a world
+		view.onDetached( this );
 		
 		// remove the view
 		m_views.remove( view );
@@ -197,44 +203,11 @@ public class World implements Updatable
 			attachEntity( entity );
 		}
 		m_entitiesToAdd.clear();
-		
-		// resolve collisions
-		resolveCollisions();
 	}
 	
 	// ------------------------------------------------------------------------
 	// Utilities
 	// ------------------------------------------------------------------------
-
-	/**
-	 * TODO: The method is efficient in terms of GC,
-	 * but inefficient in terms of the number of overlap
-	 * tests being performed.
-	 */
-	private void resolveCollisions() 
-	{
-		// go through all the entities and test 
-		// their mutual overlap O(n2)
-		int count = m_entities.size();
-		for( int i = 0; i < count; ++i )
-		{
-			Entity e1 = m_entities.get(i);
-			
-			for ( int j = 0; j < count; ++j )
-			{
-				if ( i == j )
-				{
-					// don't perform the identity tests
-					continue;
-				}
-				Entity e2 = m_entities.get(j);
-				if ( e1.doesOverlap( e2 ) )
-				{
-					e1.onCollision( e2 );
-				}
-			}
-		}
-	}
 
 	/**
 	 * Looks for the first entity of the specified type

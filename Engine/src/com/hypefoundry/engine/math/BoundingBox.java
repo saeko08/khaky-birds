@@ -19,6 +19,21 @@ final public class BoundingBox implements BoundingShape
 	public float 		m_maxZ;
 	
 	/**
+	 * Default constructor.
+	 * 
+	 * @param m_shape
+	 */
+	public BoundingBox() 
+	{
+		m_minX = 0;
+		m_minY = 0;
+		m_minZ = 0;
+		m_maxX = 0;
+		m_maxY = 0;
+		m_maxZ = 0;
+	}
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param minX
@@ -38,6 +53,49 @@ final public class BoundingBox implements BoundingShape
 		m_maxZ = maxZ;
 	}
 	
+	/**
+	 * Creates a bounding box based on a bounding sphere.
+	 * 
+	 * @param sphere
+	 */
+	public void set( BoundingSphere sphere )
+	{
+		float halfSize = sphere.m_radius;
+		m_minX = sphere.m_center.m_x - halfSize;
+		m_minY = sphere.m_center.m_y - halfSize;
+		m_minZ = sphere.m_center.m_z - halfSize;
+		m_maxX = sphere.m_center.m_x + halfSize;
+		m_maxY = sphere.m_center.m_y + halfSize;
+		m_maxZ = sphere.m_center.m_z + halfSize;
+	}
+	
+	/**
+	 * Creates a bounding box based on a different bounding box
+	 * 
+	 * @param sphere
+	 */
+	public void set( BoundingBox rhs )
+	{
+		m_minX = rhs.m_minX;
+		m_minY = rhs.m_minY;
+		m_minZ = rhs.m_minZ;
+		m_maxX = rhs.m_maxX;
+		m_maxY = rhs.m_maxY;
+		m_maxZ = rhs.m_maxZ;
+	}
+	
+	@Override
+	public float getWidth()
+	{
+		return m_maxX - m_minX;
+	}
+	
+	@Override
+	public float getHeight()
+	{
+		return m_maxY - m_minY;
+	}
+
 	/**
 	 * Checks if the box overlaps a point.
 	 * 

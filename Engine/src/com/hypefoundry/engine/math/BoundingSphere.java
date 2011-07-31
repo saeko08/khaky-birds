@@ -28,6 +28,18 @@ final public class BoundingSphere implements BoundingShape
 	}
 	
 	@Override
+	public float getWidth()
+	{
+		return m_radius;
+	}
+	
+	@Override
+	public float getHeight()
+	{
+		return m_radius;
+	}
+	
+	@Override
 	public boolean doesOverlap( final BoundingSphere sphere )
 	{
 		float distance = m_center.distSq( sphere.m_center );

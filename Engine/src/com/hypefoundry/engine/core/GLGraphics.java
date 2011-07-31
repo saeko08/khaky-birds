@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.impl.openGL;
+package com.hypefoundry.engine.core;
 
 import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLSurfaceView;

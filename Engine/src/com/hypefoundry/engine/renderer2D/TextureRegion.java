@@ -1,8 +1,9 @@
 /**
  * 
  */
-package com.hypefoundry.engine.impl.openGL;
+package com.hypefoundry.engine.renderer2D;
 
+import com.hypefoundry.engine.core.Texture;
 
 /**
  * A region in an atlas that specifies a texture.

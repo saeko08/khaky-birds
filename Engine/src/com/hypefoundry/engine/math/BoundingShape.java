@@ -12,6 +12,20 @@ package com.hypefoundry.engine.math;
 public interface BoundingShape 
 {
 	/**
+	 * Returns the width of the shape.
+	 * 
+	 * @return
+	 */
+	float getWidth();
+	
+	/**
+	 * Returns the height of the shape.
+	 * 
+	 * @return
+	 */
+	float getHeight();
+	
+	/**
 	 * Checks if the shape overlaps a sphere.
 	 * 
 	 * @param sphere

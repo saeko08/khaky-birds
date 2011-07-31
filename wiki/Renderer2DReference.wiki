@@ -1,2 +1,6 @@
 #labels Renderer2D
 = Renderer 2D =
+
+The renderer gives you ability to draw 2D sprites on the screen.
+
+The drawn screen can be a lot larger than the screen. The visible portion of the screen is defined using a camera.

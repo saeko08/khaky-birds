@@ -47,7 +47,7 @@ If it's a main menu, then draw some background and buttons and implement respons
 
 If it's a game screen, create a world, hook it up with some views and fill it with entities.
 
-See [] to learn how a Screen should be implemented and what doe particular methods provide you with.
+See [] to learn how a [ScreenReference Screen] should be implemented and what does particular methods provide you with.
 
 ==Creating a world==
 

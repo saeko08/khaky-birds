@@ -7,5 +7,6 @@
  * [ Engine reference]
     * [Renderer2DReference Renderer 2D]
        * [Renderer2DReference#Sprites Sprites]
+       * [Renderer2DReference#Atlas Atlas]
     * [PhysicsViewReference Physics]
     * [ControllersViewReference Controllers]

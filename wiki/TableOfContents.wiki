@@ -1,5 +1,7 @@
 =Table of Contents=
 
+ * [ Introduction ]
+    * [Workspace_setup Workspace setup ]
  * [ How to...?]
     * [Environment_interaction Environment interaction]
  * [ Engine reference]

@@ -8,6 +8,7 @@
     * [Renderer2DReference Renderer 2D]
        * [Renderer2DReference#Sprites Sprites]
        * [Renderer2DReference#Atlas Atlas]
+       * [Renderer2DReference#Animation Animation]
        * [Renderer2DReference#Sprite_batcher Sprite batcher]
        * [Renderer2DReference#Entity_visual Entity visual]
     * [PhysicsViewReference Physics]

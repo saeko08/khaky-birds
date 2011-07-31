@@ -7,3 +7,12 @@ The drawn screen can be a lot larger than the screen. The visible portion of the
 
 
 == Sprites ==
+Sprites are 2D bitmaps.
+
+Due to an optimization issues, all sprites we want to render are located in an *atlas* texture.
+
+Sprites are drawn using the texture regions, which specify the portion of the atlas bitmap ( in pixels ) the sprite is located in.
+
+
+== Atlas ==
+An atlas is a large texture where an artist can place a lot of smaller sprite bitmaps.

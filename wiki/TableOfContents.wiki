@@ -6,5 +6,6 @@
     * [Environment_interaction Environment interaction]
  * [ Engine reference]
     * [Renderer2DReference Renderer 2D]
+       *[Renderer2DReference#Sprites Sprites]
     * [PhysicsViewReference Physics]
     * [ControllersViewReference Controllers]

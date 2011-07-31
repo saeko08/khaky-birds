@@ -57,7 +57,7 @@ Both allow to specify the size of the sprite, so we can scale the images to our 
 
 == Entity visual ==
 
-Entity's visual aspects are represented using an EntityVisual abstract class.
+Entity's visual aspects are represented using an `EntityVisual` abstract class.
 The class contains a method:
 
 {{{
@@ -69,9 +69,9 @@ The class contains a method:
 public abstract void draw( SpriteBatcher batcher );
 }}}
 
-Override this method in your custom implementation to get access to the SpriteBatcher instance which you can use to render your objects.
+Override this method in your custom implementation to get access to the `SpriteBatcher` instance which you can use to render your objects.
 
-The class should contain the description of TextureRegions or Animations from the shared atlas that describe where the desired sprite is.
+The class should contain applicable `TextureRegion` or `Animation` fields that describe the graphics features you want to draw.
 
 
 *CAUTION*: The renderer currently uses just a single atlas texture, so you can't specify which texture to select.

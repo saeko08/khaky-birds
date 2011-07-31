@@ -16,3 +16,38 @@ Sprites are drawn using the texture regions, which specify the portion of the at
 
 == Atlas ==
 An atlas is a large texture where an artist can place a lot of smaller sprite bitmaps.
+
+== Sprite batcher ==
+A device used to draw sprites on the screen.
+It uses two methods:
+
+{{{
+/**
+ * Draws a sprite with the texture defined for the batch.
+ * 
+ * @param x				sprite center X coordinate
+ * @param y				sprite center Y coordinate
+ * @param width			desired sprite width
+ * @param height		desired sprite height
+ * @param region		texture region to draw the sprite with
+ */
+public void drawSprite( float x, float y, float width, float height, TextureRegion region );
+
+/**
+ * Draws a rotated sprite with the texture defined for the batch.
+ * 
+ * @param x				sprite center X coordinate
+ * @param y				sprite center Y coordinate
+ * @param width			desired sprite width
+ * @param height		desired sprite height
+ * @param angle			rotation angle in degrees
+ * @param region		texture region to draw the sprite with
+ */
+public void drawSprite( float x, float y, float width, float height, float angle, TextureRegion region );
+
+}}}
+
+The latter allows to draw rotated sprites.
+Both allow to specify the size of the sprite, so we can scale the images to our hearts contents.
+
+== Entity visual ==

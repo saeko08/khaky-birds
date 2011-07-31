@@ -54,9 +54,6 @@ public class GameScreen extends Screen
 		
 		// create the game world
 		m_world = new World( game.getGraphics().getWidth(), game.getGraphics().getHeight() );
-
-		// register the updatables
-		addUpdatable( m_world );
 		
 		// create the renderer
 		m_worldRenderer = new Renderer2D( game, "khaky_birds_prototype/atlas.png" );
@@ -92,6 +89,10 @@ public class GameScreen extends Screen
 		m_physicsView.register( Crap.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity ); } } );
 		m_physicsView.register( Falcon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity ); } } );
 		
+		// register the updatables
+		addUpdatable( m_world );
+		addUpdatable( m_physicsView );
+				
 		// populate the game world
 		populateGameWorld();
 	}

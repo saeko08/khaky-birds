@@ -96,7 +96,7 @@ public class PhysicsTests extends AndroidTestCase
 		e1.setPosition( 1, 1, 0 );
 		e2.setPosition( 3, 3, 0 );
 		world.update( 0 );
-		physics.simulate( 0 );
+		physics.update( 0 );
 		assertEquals( 0, e1.m_collisions );
 		assertEquals( 0, e2.m_collisions );
 		world.executeOperation( op );
@@ -104,7 +104,7 @@ public class PhysicsTests extends AndroidTestCase
 		e1.setPosition( 3.5f, 3.5f, 0 );
 		e2.setPosition( 3.4f, 3.4f, 0 );
 		world.update( 0 );
-		physics.simulate( 0 );
+		physics.update( 0 );
 		assertEquals( 1, e1.m_collisions );
 		assertEquals( 1, e2.m_collisions );
 	}
@@ -131,7 +131,7 @@ public class PhysicsTests extends AndroidTestCase
 		for ( int i = 0; i < 10; ++i )
 		{
 			world.update( 1 );
-			physics.simulate( 1 );
+			physics.update( 1 );
 			assertTrue( 0.1f < e1.getPosition().dist( new Vector3( i, 10, 0 ) ) );
 			assertTrue( 0.1f < e1.getPosition().dist( new Vector3( 10, i, 0 ) ) );
 		}

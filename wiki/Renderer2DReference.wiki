@@ -1,4 +1,4 @@
-#labels Renderer2D
+#labels renderer,texture,atlas,sprite,drawing,animation
 = Renderer 2D =
 
 The renderer gives you ability to draw 2D sprites on the screen.
@@ -16,6 +16,11 @@ Sprites are drawn using the texture regions, which specify the portion of the at
 
 == Atlas ==
 An atlas is a large texture where an artist can place a lot of smaller sprite bitmaps.
+
+*CAUTION* an atlas texture has to have a ^2 ( power of two ) dimensions, and the largest supported dimensions are 1024x1024.
+
+== Animation ==
+*TODO*
 
 == Sprite batcher ==
 A device used to draw sprites on the screen.
@@ -51,3 +56,22 @@ The latter allows to draw rotated sprites.
 Both allow to specify the size of the sprite, so we can scale the images to our hearts contents.
 
 == Entity visual ==
+
+Entity's visual aspects are represented using an *EntityVisual* abstract class.
+The class contains a method:
+
+{{{
+/**
+ * Draw self.
+ * 
+ * @param batcher
+ */
+public abstract void draw( SpriteBatcher batcher );
+}}}
+
+Override this method in your custom implementation to get access to the SpriteBatcher instance which you can use to render your objects.
+
+The class should contain the description of TextureRegions or Animations from the shared atlas that describe where the desired sprite is.
+
+
+*CAUTION*: The renderer currently uses just a single atlas texture, so you can't specify which texture to select.

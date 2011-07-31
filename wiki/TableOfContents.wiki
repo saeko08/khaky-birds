@@ -2,7 +2,11 @@
 
  * [ Introduction ]
     * [Workspace_setup Workspace setup ]
- * [ How to...?]
+ * [ Sandbox how to...?]
+    * [Create_new_functional_test Create new functional test]
+    * [Create_new_unit_test Create new unit test]
+ * [ Game how to...?]
+    * [Create_new_game Create new game]
     * [Create_world_inhabitants Create new world ihabitants]
     * [Draw_entities Draw entities]
     * [Make_entities_move Make entities move]

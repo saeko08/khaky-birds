@@ -1,0 +1,56 @@
+#labels Interactions,Environment
+=How to implement interactions with the environment?=
+
+Basically, we have a simple mechanism in place that can tell you whether you're interacting with the environment - and those are collisions.
+
+The collision system calls the Entity.onCollision method, passing it an instance of an entity you collided with.
+
+What is advisable, is to create an interface that describes an interaction, check if the entity you collided with implements that interface, and invoke the interaction method.
+
+Here's a simple example:
+
+We want to have a bird being killed by an electric shock.
+
+So what we really want is to have an electric current calling a shock reaction *(2)* upon a collision *(1)* on an entity that can be shocked *(3)*. That entity would take responsibility for implementing the behavior applicable to it being shocked *(4)* - sounds natural, doesn't it?
+
+Here's how you want to write it - the numbers from the paragraph above correspond to the applicable lines of code.
+
+{{{
+public class ElectricShock extends Entity 
+{
+   // ..............
+
+   @Override
+   public void onCollision( Entity collider )   // (1)
+   {
+      if ( collider instanceof Shockable )
+      {
+         ( (Shockable)collider ).shock();        // (2)
+      }
+   }
+
+   // ..............
+}
+
+interface Shockable
+{
+   /**
+    * You just got shocked - react.
+    */
+   void shock();
+}
+
+class Bird extends Entity implements Shockable // (3)
+{
+
+   // ..............
+
+   @Override
+   public void shock() 
+   {
+      m_world.removeEntity(this);  // (4)
+   }
+
+   // ..............
+}
+}}}

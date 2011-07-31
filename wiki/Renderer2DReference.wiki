@@ -57,7 +57,7 @@ Both allow to specify the size of the sprite, so we can scale the images to our 
 
 == Entity visual ==
 
-Entity's visual aspects are represented using an *EntityVisual* abstract class.
+Entity's visual aspects are represented using an EntityVisual abstract class.
 The class contains a method:
 
 {{{

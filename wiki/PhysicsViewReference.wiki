@@ -1,2 +1,8 @@
 #labels Physics
 =Physics=
+
+The physics view is responsible for running a physical simulation of the game world as well as for performing the collision detection.
+
+
+==Physical Body==
+Entities are represented using `PhysicalBody` abstract class.

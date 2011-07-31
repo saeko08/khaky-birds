@@ -4,13 +4,13 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
-import com.hypefoundry.engine.core.Graphics;
-import com.hypefoundry.engine.core.Graphics.PixmapFormat;
-import com.hypefoundry.engine.core.Pixmap;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
+import com.hypefoundry.engine.renderer2D.SpriteBatcher;
+import com.hypefoundry.engine.renderer2D.TextureRegion;
 
 /**
  * Crap visualisation
@@ -20,8 +20,8 @@ import com.hypefoundry.engine.renderer2D.EntityVisual;
 public class CrapVisual extends EntityVisual 
 {
 
-	private Pixmap m_pixmap;
-	private Pixmap m_pixmapHit;
+	private TextureRegion m_pixmap;
+	private TextureRegion m_pixmapHit;
 	private Crap m_crap;
 
 	/**
@@ -30,38 +30,25 @@ public class CrapVisual extends EntityVisual
 	 * @param graphics 
 	 * @param entity
 	 */
-	public CrapVisual( Graphics graphics, Entity entity ) 
+	public CrapVisual( Entity entity ) 
 	{
 		super(entity);
-		//pixmaps below must have same width and height
-		m_pixmap = graphics.newPixmap( "khaky_birds_prototype/crap.png", PixmapFormat.ARGB4444 );
-		m_pixmapHit = graphics.newPixmap( "khaky_birds_prototype/crap_hit.png", PixmapFormat.ARGB4444 );
 		m_crap = (Crap)entity;
-		
-		// set the bounds based on the visual representation used
-		float width = m_pixmap.getWidth();
-		float height = m_pixmap.getHeight();
-		m_crap.setBoundingBox( new BoundingBox( -width / 2, -height / 2, -1, width / 2, height / 2, 1 ) );
 	}
 
 	@Override
-	public void draw( Graphics graphics ) 
+	public void draw( SpriteBatcher batcher) 
 	{
-	Vector3 pos = m_crap.getPosition();
+		Vector3 pos = m_crap.getPosition();
+		BoundingShape bs = m_crap.getBoundingShape();
 		
 		if (m_crap.pedestrianHit == false)
 		{
-			float width = m_pixmap.getWidth();
-			float height = m_pixmap.getHeight();
-			
-			graphics.drawPixmap( m_pixmap, (int)( pos.m_x - width / 2 ), (int)( pos.m_y - height / 2 ) );
+			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
 		}
 		else
 		{
-			float width = m_pixmapHit.getWidth();
-			float height = m_pixmapHit.getHeight();
-			
-			graphics.drawPixmap( m_pixmapHit, (int)( pos.m_x - width / 2 ), (int)( pos.m_y - height / 2 ) );
+			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmapHit );
 		}
 
 	}

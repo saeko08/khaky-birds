@@ -2,6 +2,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedest
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
 
@@ -35,6 +36,7 @@ public class Pedestrian extends Entity
 		x = (float) Math.random() * spawnAreaWidth;
 		y = (float) Math.random() * spawnAreaHeight;
 		setPosition( x, y, 80 );
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
 		
 		// set initial movement direction
 		m_direction = new Vector3( (float)Math.random(), (float)Math.random(), 0);

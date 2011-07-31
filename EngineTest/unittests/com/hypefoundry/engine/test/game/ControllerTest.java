@@ -3,16 +3,10 @@ package com.hypefoundry.engine.test.game;
 import com.hypefoundry.engine.controllers.ControllersView;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.EntityControllerFactory;
-import com.hypefoundry.engine.core.Graphics;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.Updatable;
 import com.hypefoundry.engine.game.UpdatesManager;
 import com.hypefoundry.engine.game.World;
-import com.hypefoundry.engine.renderer2D.EntityVisual;
-import com.hypefoundry.engine.test.game.RendererTest.Bike;
-import com.hypefoundry.engine.test.game.RendererTest.Chair;
-import com.hypefoundry.engine.test.game.RendererTest.GraphicsStub;
-import com.hypefoundry.engine.test.game.RendererTest.ReportingVisualMock;
 
 import android.test.AndroidTestCase;
 

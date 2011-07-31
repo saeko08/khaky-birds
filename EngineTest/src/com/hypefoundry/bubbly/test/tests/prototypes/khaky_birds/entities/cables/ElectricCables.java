@@ -1,10 +1,11 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables;
 
 import java.util.*;
-import java.util.Arrays;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.CableProvider;
 import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.math.BoundingBox;
 
 
 /**
@@ -23,7 +24,11 @@ public class ElectricCables extends Entity implements CableProvider
 	 */
 	public ElectricCables()
 	{
-		setPosition( 0, 0, 10 );
+		float halfWidth = 12.0f; // TODO: config
+		float halfHeight = 10.0f; // TODO: config
+		
+		setPosition( halfWidth, halfHeight, 10 );
+		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, 0, halfWidth, halfHeight, 0 ) );	
 	}
 	
 	/**

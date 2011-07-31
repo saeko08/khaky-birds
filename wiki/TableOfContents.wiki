@@ -12,4 +12,5 @@
        * [Renderer2DReference#Sprite_batcher Sprite batcher]
        * [Renderer2DReference#Entity_visual Entity visual]
     * [PhysicsViewReference Physics]
+       * [PhysicsViewReference#Physical_Body Physical Body]
     * [ControllersViewReference Controllers]

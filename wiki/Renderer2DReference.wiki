@@ -7,4 +7,4 @@ The drawn screen can be a lot larger than the screen. The visible portion of the
 
 
 == Sprites ==
-#Wiki-style_markup
+[SpritesX#Sprites]

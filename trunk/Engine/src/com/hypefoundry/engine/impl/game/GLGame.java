@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.impl.openGL;
+package com.hypefoundry.engine.impl.game;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -18,14 +18,13 @@ import android.view.WindowManager;
 
 import com.hypefoundry.engine.core.Audio;
 import com.hypefoundry.engine.core.FileIO;
-import com.hypefoundry.engine.core.Graphics;
+import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.impl.core.AndroidAudio;
 import com.hypefoundry.engine.impl.core.AndroidFileIO;
 import com.hypefoundry.engine.impl.core.AndroidInput;
-
 
 /**
  * A game that uses openGL renderer.
@@ -227,23 +226,13 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	}
 
 	@Override
-	public Graphics getGraphics() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Audio getAudio() 
 	{
 		return m_audio;
 	}
 	
-	/**
-	 * TODO change this to @Override
-	 * @return
-	 */
-	public GLGraphics getGLGraphics() 
+	@Override
+	public GLGraphics getGraphics() 
 	{
 		return m_graphics;
 	}

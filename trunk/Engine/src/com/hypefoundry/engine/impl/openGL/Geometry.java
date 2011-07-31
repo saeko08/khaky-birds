@@ -6,11 +6,12 @@ package com.hypefoundry.engine.impl.openGL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import com.hypefoundry.engine.impl.openGL.GLGraphics;
+import com.hypefoundry.engine.core.GLGraphics;
 
 /**
  * The class instance contains geometry that can be rendered using an OpenGL context.
@@ -23,7 +24,8 @@ public class Geometry
 	private final boolean 			m_hasColor;
 	private final boolean 			m_hasTexCoords;
 	private final int 				m_vertexSize;
-	private final FloatBuffer 		m_vertices;
+	private final int[]				m_tmpBuffer;
+	private final IntBuffer 		m_vertices;
 	private final ShortBuffer 		m_indices;
 	
 	/**
@@ -41,11 +43,12 @@ public class Geometry
 		m_hasColor = hasColor;
 		m_hasTexCoords = hasTexCoords;
 		m_vertexSize = ( 2 + ( hasColor ? 4 : 0 ) + ( hasTexCoords ? 2 : 0 ) ) * 4;
-			
+		m_tmpBuffer = new int[ maxVertices * m_vertexSize / 4 ];
+		
 		// allocate the vertex buffer
 		ByteBuffer buffer = ByteBuffer.allocateDirect( maxVertices * m_vertexSize );
 		buffer.order( ByteOrder.nativeOrder() );
-		m_vertices = buffer.asFloatBuffer();
+		m_vertices = buffer.asIntBuffer();
 			
 		// allocate the index buffer, if needed
 		if( maxIndices > 0 ) 
@@ -70,7 +73,14 @@ public class Geometry
 	public void setVertices( float[] vertices, int offset, int length )
 	{
 		m_vertices.clear();
-		m_vertices.put(vertices, offset, length);
+		
+		int len = offset + length;
+		for( int i = offset, j = 0; i < len; ++i, ++j )
+		{
+			m_tmpBuffer[j] = Float.floatToRawIntBits( vertices[i] );
+		}
+		m_vertices.put( m_tmpBuffer, 0, length );
+		m_vertices.flip();
 	}
 	
 	/**

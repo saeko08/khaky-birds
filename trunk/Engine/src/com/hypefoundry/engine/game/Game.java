@@ -2,9 +2,7 @@ package com.hypefoundry.engine.game;
 
 import com.hypefoundry.engine.core.*;
 
-/**
- * The interface responsible for running the game and providing
- * the ability to query the core engine systems.
+/** Main game interface, providing the ability to query the core engine systems.
  * 
  * The game manages the game screens @see Screen.
  * 
@@ -29,7 +27,7 @@ public interface Game
 	 * Returns an instance of the graphics system.
 	 * @return
 	 */
-	public Graphics getGraphics();
+	public GLGraphics getGraphics();
 	
 	/**
 	 * Returns an instance of the sound system. 

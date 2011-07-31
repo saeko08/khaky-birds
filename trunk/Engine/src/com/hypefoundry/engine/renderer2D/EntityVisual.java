@@ -1,17 +1,18 @@
 package com.hypefoundry.engine.renderer2D;
 
-import com.hypefoundry.engine.core.Graphics;
 import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.util.SpatialGridObject;
 
-/**
- * The visuals of an entity.
+
+/* The visuals of an entity.
  * 
  * @author paksas
  *
  */
-public abstract class EntityVisual 
+public abstract class EntityVisual implements SpatialGridObject
 {
-	private Entity			m_entity = null;
+	protected Entity			m_entity = null;
 	
 	/**
 	 * Constructor.
@@ -37,9 +38,9 @@ public abstract class EntityVisual
 	/**
 	 * Draw self.
 	 * 
-	 * @param graphics
+	 * @param batcher
 	 */
-	public abstract void draw( Graphics graphics );
+	public abstract void draw( SpriteBatcher batcher );
 
 	/**
 	 * Returns the position in the Z buffer. 
@@ -52,5 +53,11 @@ public abstract class EntityVisual
 	final float getZ()
 	{
 		return m_entity.getPosition().m_z;
+	}
+	
+	@Override
+	public BoundingBox getBounds()
+	{
+		return m_entity.getWorldBounds();
 	}
 }

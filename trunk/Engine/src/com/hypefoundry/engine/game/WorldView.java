@@ -9,6 +9,20 @@ package com.hypefoundry.engine.game;
 public interface WorldView 
 {
 	/**
+	 * Called when the view is attached to the world.
+	 *  
+	 * @param world
+	 */
+	void onAttached( World world );
+	
+	/**
+	 * Called when the view is detached to the world.
+	 *  
+	 * @param world
+	 */
+	void onDetached( World world );
+	
+	/**
 	 * Called whenever a new entity is added.
 	 * 
 	 * @param entity

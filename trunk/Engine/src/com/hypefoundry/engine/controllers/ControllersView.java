@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.UpdatesManager;
+import com.hypefoundry.engine.game.World;
 import com.hypefoundry.engine.game.WorldView;
 import com.hypefoundry.engine.util.GenericFactory;
 
@@ -92,5 +93,17 @@ public class ControllersView extends GenericFactory< Entity, EntityController > 
 		}
 		
 		return null;
+	}
+
+	@Override
+	public void onAttached( World world ) 
+	{
+		// nothing to do here	
+	}
+
+	@Override
+	public void onDetached( World world ) 
+	{
+		// nothing to do here
 	}
 }

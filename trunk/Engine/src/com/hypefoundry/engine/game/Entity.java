@@ -1,7 +1,12 @@
 package com.hypefoundry.engine.game;
 
+import java.util.*;
+
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.physics.DynamicObject;
+import com.hypefoundry.engine.util.SpatialGridObject;
 
 /**
  * A game entity. Can be an agent, a piece of decoration - anything
@@ -10,11 +15,12 @@ import com.hypefoundry.engine.math.Vector3;
  * @author paksas
  *
  */
-public abstract class Entity 
+public abstract class Entity
 {
 	private BoundingBox			m_bb;
 	private BoundingBox			m_worldBB;
 	private Vector3				m_pos;
+	private List< Aspect >		m_aspects;
 	
 	/**
 	 * Constructor.
@@ -24,6 +30,7 @@ public abstract class Entity
 		m_bb = new BoundingBox( 0, 0, 0, 0, 0, 0 );
 		m_worldBB = new BoundingBox( 0, 0, 0, 0, 0, 0 );
 		m_pos = new Vector3();
+		m_aspects = new ArrayList< Aspect >();
 	}
 	
 	/**
@@ -36,6 +43,16 @@ public abstract class Entity
 		m_bb = bb;
 		
 		updateWorldBounds();
+	}
+	
+	/**
+	 * Returns the entity's bounding shape.
+	 * 
+	 * @return
+	 */
+	public final BoundingShape getBoundingShape()
+	{
+		return m_bb;
 	}
 
 	/**
@@ -140,7 +157,7 @@ public abstract class Entity
 	 * 
 	 * @param colider		who did the entity collide with
 	 */
-	public abstract void onCollision( Entity colider );
+	public void onCollision( Entity colider ) {}
 
 	/**
 	 * Informs the entity that it's been added to the world.
@@ -155,15 +172,71 @@ public abstract class Entity
 	 * @param hostWorld
 	 */
 	public void onRemovedFromWorld( World hostWorld ) {}
-
+	
+	// ------------------------------------------------------------------------
+	// Aspects management
+	// ------------------------------------------------------------------------
 	/**
-	 * Checks if two entities overlap
+	 * Defines a new aspect of the entity.
+	 * It's protected - aspects can only be defined in the entity's implementation
+	 * as a part of its state definition.
 	 * 
-	 * @param e2
+	 * @param newAspect
+	 */
+	protected void defineAspect( Aspect newAspect )
+	{
+		// check if we're not overriding an existing aspect - we can't do that, we can replace
+		// an existing one though
+		int count = m_aspects.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			Aspect aspect = m_aspects.get(i);
+			if ( newAspect.getClass().isInstance( aspect ) )
+			{
+				m_aspects.set( i, newAspect );
+				return;
+			}
+		}
+		
+		// this is a brand new aspect
+		m_aspects.add( newAspect );
+	}
+	
+	/**
+	 * Queries for a specific aspect type
+	 * 
+	 * @param type
 	 * @return
 	 */
-	public final boolean doesOverlap( Entity e2 ) 
+	public < T extends Aspect > T query( Class< T > type )
 	{
-		return m_worldBB.doesOverlap( e2.m_worldBB );
+		for ( Aspect aspect : m_aspects )
+		{
+			if ( type.isInstance( aspect ) )
+			{
+				return (T)aspect;
+			}
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Checks if the entity has the specified aspect.
+	 * 
+	 * @param class1
+	 * @return
+	 */
+	public < T extends Aspect >boolean hasAspect( Class< T > type ) 
+	{
+		for ( Aspect aspect : m_aspects )
+		{
+			if ( type.isInstance( aspect ) )
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

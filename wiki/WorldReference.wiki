@@ -1,0 +1,6 @@
+#labels world,entity
+=World=
+
+= Introduction =
+
+A world provides a means to poopulate of games with all sorts of entities - trees, ground, living creatures etc.

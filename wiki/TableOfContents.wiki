@@ -1,6 +1,6 @@
 =Table of Contents=
 
- * [HOWTO How to...?]
+ * [ How to...?]
     * [Environment_interaction Environment interaction]
  * [EngineReference Engine reference]
     * [Renderer2DReference Renderer 2D]

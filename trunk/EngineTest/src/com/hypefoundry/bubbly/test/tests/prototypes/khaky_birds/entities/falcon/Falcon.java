@@ -8,15 +8,17 @@ import java.util.Random;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shockable;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
 /**
  * @author azagor
  *
  */
-public class Falcon extends Entity 
+public class Falcon extends Entity implements Shockable
 {
 	public boolean   m_flyingFromLeft 			 = true;
 	public boolean   m_isChasing 			     = false;
@@ -28,19 +30,18 @@ public class Falcon extends Entity
 	private Bird m_bird                          = null;
 
 	
+	public Falcon()
+	{
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+	}
 	
 	@Override
-	public void onCollision(Entity colider) 
+	public void onCollision( Entity collider ) 
 	{
-		if ( ElectricShock.class.isInstance(colider))
+		if ( collider instanceof Prey )
 		{
-			if (m_isChasing == true)
-			{
-				m_world.removeEntity( this );
-			}
-		
+			((Prey)collider).getEaten();
 		}
-
 	}
 	
 	/**
@@ -90,9 +91,21 @@ public class Falcon extends Entity
 	@Override
 	public void onRemovedFromWorld( World hostWorld ) 
 	{
-		m_falcon =new Falcon();
+		m_falcon = new Falcon();
 		
 		m_world.addEntity(m_falcon);
+	}
+
+	// ------------------------------------------------------------------------
+	// Environment interactions
+	// ------------------------------------------------------------------------
+	@Override
+	public void getShocked() 
+	{
+		if ( m_isChasing == true )
+		{
+			m_world.removeEntity( this );
+		}
 	}
 
 }

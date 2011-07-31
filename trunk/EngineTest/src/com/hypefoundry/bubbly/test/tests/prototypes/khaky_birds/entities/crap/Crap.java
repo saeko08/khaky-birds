@@ -6,6 +6,7 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestr
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
 /**
@@ -26,6 +27,7 @@ public class Crap extends Entity
 	public Crap()
 	{
 		setPosition( 0, 0, 0 );
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
 	}
 
 	@Override

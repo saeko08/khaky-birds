@@ -1,12 +1,11 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock;
 
-import com.hypefoundry.engine.core.Graphics;
-import com.hypefoundry.engine.core.Pixmap;
-import com.hypefoundry.engine.core.Graphics.PixmapFormat;
 import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
+import com.hypefoundry.engine.renderer2D.SpriteBatcher;
+import com.hypefoundry.engine.renderer2D.TextureRegion;
 
 
 /**
@@ -18,40 +17,28 @@ import com.hypefoundry.engine.renderer2D.EntityVisual;
 public class ElectricShockVisual extends EntityVisual 
 {
 	private ElectricShock	m_electricShock;
-	private Pixmap			m_pixmap;
+	private TextureRegion	m_pixmap;
 	
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param graphics
-	 * @param screenHeight
 	 * @param entity
 	 */
-	public ElectricShockVisual( Graphics graphics, Entity entity ) 
+	public ElectricShockVisual( Entity entity ) 
 	{
 		super( entity );
 		
-		// TODO: extremely slow introduce a resources manager
 		m_electricShock = (ElectricShock)entity;
-		m_pixmap = graphics.newPixmap( "khaky_birds_prototype/shock.png", PixmapFormat.ARGB4444  );
-		
-		// set bounds of the entity based on its graphical representation
-		float width = m_pixmap.getWidth();
-		float height = m_pixmap.getHeight();
-		m_electricShock.setBoundingBox( new BoundingBox( 0, 0, -5, width, height, 1 ) );
-		
-		// set the position of the shock
-		Vector3 pos = m_electricShock.getPosition();
-		float screenHeight = graphics.getHeight();
-		m_electricShock.setPosition( pos.m_x - width / 2, screenHeight + height / 2, pos.m_z );
 	}
 
 	@Override
-	public void draw( Graphics graphics ) 
+	public void draw( SpriteBatcher batcher ) 
 	{
 		Vector3 pos = m_electricShock.getPosition();
-		graphics.drawPixmap( m_pixmap, (int)pos.m_x, (int)pos.m_y );
+		BoundingShape bs = m_electricShock.getBoundingShape();
+		
+		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
 	}
 
 }

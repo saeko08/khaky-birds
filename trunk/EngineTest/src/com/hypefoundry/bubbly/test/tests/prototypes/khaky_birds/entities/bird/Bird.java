@@ -2,9 +2,12 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Prey;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shockable;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
 
@@ -16,15 +19,16 @@ import com.hypefoundry.engine.math.Vector3;
  * @author paksas
  *
  */
-public class Bird extends Entity 
+public class Bird extends Entity implements Shockable, Prey
 {
 	private CableProvider		m_cables			 = null;
 	private int					m_cableIdx  		 = 0;
-	private final float 		m_dy 				 = 50;
+	private final float 		m_dy 				 = 1;		// the distance the bird can jump up or down
 	private World 				m_world    			 = null;
 	public 	boolean 			crosshairInitialized = false;
 	private Crap				m_crap               = null;
-	private Falcon              m_falcon             = null;
+	
+	
 	
 	/**
 	 * Constructor.
@@ -32,6 +36,7 @@ public class Bird extends Entity
 	public Bird()
 	{
 		setPosition( 0, 0, 0 );
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
 	}
 	
 	@Override
@@ -60,14 +65,6 @@ public class Bird extends Entity
 	@Override
 	public void onCollision( Entity colider ) 
 	{
-		if ( ElectricShock.class.isInstance(colider))
-		{
-			m_world.removeEntity(this);
-		}
-		if ( Falcon.class.isInstance(colider))
-		{
-			m_world.removeEntity(this);
-		}
 	}
 
 	/**
@@ -153,7 +150,21 @@ public class Bird extends Entity
 		crosshairInitialized = false;
 		
 		m_world.addEntity(m_crap);
-		
+	}
+
+	// ------------------------------------------------------------------------
+	// Environment interactions
+	// ------------------------------------------------------------------------
+	@Override
+	public void getShocked() 
+	{
+		m_world.removeEntity( this );
+	}
+
+	@Override
+	public void getEaten() 
+	{
+		m_world.removeEntity( this );
 	}
 
 }

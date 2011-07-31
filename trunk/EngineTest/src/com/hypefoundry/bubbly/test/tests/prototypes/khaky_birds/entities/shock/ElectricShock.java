@@ -20,12 +20,15 @@ public class ElectricShock extends Entity
 	 */
 	public ElectricShock( float cableXOffset ) 
 	{
-		this.setPosition( cableXOffset, 0, 5 );
+		setPosition( cableXOffset, 0, 5 );
 	}
 
 	@Override
-	public void onCollision( Entity colider ) 
+	public void onCollision( Entity collider ) 
 	{
-		// TODO Auto-generated method stub
+		if ( collider instanceof Shockable )
+		{
+			( (Shockable)collider ).getShocked();
+		}
 	}
 }

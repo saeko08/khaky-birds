@@ -34,6 +34,6 @@
     * [PhysicsViewReference Physics]
        * [PhysicsViewReference#Physical_Body Physical Body]
     * [ControllersViewReference Controllers]
-    * [MathReference Math]
+    * [ Math ]
        * [Vector3Reference Vector]
        * [BoundingShapeReference BoundingShape]

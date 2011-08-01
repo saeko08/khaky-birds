@@ -1,6 +1,258 @@
 #labels world,entity
 =World=
 
-= Introduction =
+==Introduction==
 
 A world provides a means to poopulate of games with all sorts of entities - trees, ground, living creatures etc.
+
+The basic world building block is an `Entity`. Build the stuff you want to populate the world with by extending this class.
+
+
+==Entities management==
+Basic methods you can populate your world with are described here:
+
+{{{
+/**
+ * Adds a new entity to the world.
+ * 
+ * @param entity
+ */
+public void addEntity( Entity entity );
+       
+/**
+ * Removes the entity from the world
+ * 
+ * @param entity
+ */
+ public void removeEntity( Entity entity );
+
+/**
+ * Executes an operation on all registered entities.
+ * 
+ * @param operation
+ */
+public void executeOperation( EntityOperation operation );
+
+/**
+ * Looks for the first entity of the specified type
+ * 
+ * @param entityType
+ * @return
+ */
+public Entity findEntity( Class entityType );
+}}}
+
+*addEntity* and *removeEntity* simply add and remove an entity to the world, populating it.
+
+*executeOperation* allows you to define an operation that will be executed on *ALL* entities in the world. The operation interface looks like this:
+{{{
+public interface EntityOperation
+{
+        /**
+         * This is where you put the operation that will alter entity's state.
+         * 
+         * @param entity
+         */
+        void visit( Entity entity );
+}
+}}}
+You simply need to implement the *visit* method and tell it what you want to do with an entity.
+
+*findEntity* looks for the first entity of the specified type and returns a reference to it - it may come in handy when you want to reference another entity in the world from some part of the code.
+
+== Entity responsibilities==
+The engine features an MVC architecture, and this imposes certain way you need to treat things.
+
+An entity is a part of the model - meaning that it should feature the state of a particular world object as well as methods to change that state - but that's it.
+
+The world can have multiple views attached - views such as a renderer or the controllers factory. The world ensures that all attached views will learn about all the entities that populate it and will be able to create their own representations.
+
+I.e. a renderer will create a renderable representation of an entity etc.
+
+===Basic state of an entity===
+This is a game engine - so we know that our entities will populate worlds that have some metric set.
+
+For that very purpose, each entity contains two state variables:
+  * a position
+  * a bounding shape
+
+They specify where an entity is located an how much space it takes.
+
+`Entity` class features several methods that allow you to change and query that state:
+
+{{{
+/**
+ * Sets the bounding box of the entity.
+ * 
+ * @param bb
+ */
+public final void setBoundingBox( BoundingBox bb );
+        
+/**
+ * Returns the entity's bounding shape.
+ * 
+ * @return
+ */
+public final BoundingShape getBoundingShape();
+
+/**
+ * Returns the world bounds of the entity.
+ * @return
+ */
+public final BoundingBox getWorldBounds();
+        
+/**
+ * Returns the position in the Z buffer. 
+ * 
+ * Numbers towards the negative values are closer to the screen,
+ * and the numbers towards the positive values are farther from the screen.
+ * 
+ * @return
+ */
+public final Vector3 getPosition();
+        
+/**
+ * Sets the entity's position.
+ * 
+ * @param x
+ * @param y
+ * @param z
+ */
+public final void setPosition( float x, float y, float z );
+        
+/**
+ * Sets the entity's position.
+ * 
+ * @param rhs
+ */
+public final void setPosition( Vector3 rhs );
+               
+/**
+ * Translates the entity by the specified vector.
+ * 
+ * @param dx
+ * @param dy
+ * @param dz
+ */
+public void translate( float dx, float dy, float dz );
+        
+/**
+ * Translates the entity by the specified vector.
+ * 
+ * @param dx
+ * @param dy
+ * @param dz
+ */
+public void translate( Vector3 ds );
+}}}
+
+===Setting an entity up===
+The entity operates from the world context. You may want to set up certain inter-entity dependencies in your implementations, or set up some world-dependent stuff. `Entity` class features two methods that allow you to do that:
+{{{
+/**
+ * Informs the entity that it's been added to the world.
+ * 
+ * @param hostWorld
+ */
+public void onAddedToWorld( World hostWorld );
+        
+/**
+ * Informs the entity that it's been removed from the world.
+ * 
+ * @param hostWorld
+ */
+public void onRemovedFromWorld( World hostWorld );
+}}}
+
+Implement them with the setup/release code you require.
+
+
+==Views==
+The world on its own is just a large storage of entities. It doesn't feature an `update` or `draw` methods for instance, because we want to be able to define different ways our entities will be updated or drawn in.
+
+In order to achieve that, we introduced the views that will operate on the entities in the world.
+
+The following methods allow you to attach and detach a view from the world.
+
+{{{
+/**
+ * Attaches a new view to the world.
+ * 
+ * @param newView
+ */
+public void attachView( WorldView view );
+
+/**
+ * Attaches a new view to the world.
+ * 
+ * @param newView
+ */
+public void detachView( WorldView view );
+}}}
+
+The view interface is called `WorldView` and here's how it looks:
+{{{
+public interface WorldView 
+{
+        /**
+         * Called when the view is attached to the world.
+         *  
+         * @param world
+         */
+        void onAttached( World world );
+        
+        /**
+         * Called when the view is detached to the world.
+         *  
+         * @param world
+         */
+        void onDetached( World world );
+        
+        /**
+         * Called whenever a new entity is added.
+         * 
+         * @param entity
+         */
+        void onEntityAdded( Entity entity );
+        
+        /**
+         * Called whenever a new entity is removed.
+         * 
+         * @param entity
+         */
+        void onEntityRemoved( Entity entity );
+}
+}}}
+
+It gets informed about it being attached or detached from a world - this is the place where you might want to set up some world-dependent stuff.
+
+The two latter methods are called when an entity is added or removed from the view.
+Those allow you to register them in the view, create some representations for them etc.
+
+There already are some views implemented, check out the [Renderer2DReference renderer] and the [ControllersViewReference controllers view]
+
+==World size==
+The game world has a fixed size defined upon its instantiation.
+You can query that size using the following methods:
+
+{{{
+/**
+ * Returns the width of the world.
+ * 
+ * @return
+ */
+public float getWidth();
+        
+/**
+ * Returns the height of the world.
+ * 
+ * @return
+ */
+public float getHeight();
+}}}
+
+Keep in mind that although our position representation with the `Vector3` class supports negative numbers, the `World` class and the existing views were designed not to support them.
+
+So in other words - try putting your entities on the positive side of the axes, 'cause the world span is expressed as (0, 0)->(worldWidth, worldHeight).
+
+Another cautious thing - even though we support 3D rendering and operations, the world is a 2D concept. What it means is that we assume that it spans into infinity on the Z axis.

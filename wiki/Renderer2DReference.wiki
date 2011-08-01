@@ -77,3 +77,32 @@ The class should contain applicable `TextureRegion` or `Animation` fields that d
 *CAUTION*: The renderer currently uses just a single atlas texture, so you can't specify which texture to select.
 
 ==Visuals factory==
+You need to set up the `Renderer2DView` instance so that it knows what visual representations it should create for the specific entities.
+
+You achieve that by registering a factory.
+
+Here's a sample registration:
+
+{{{
+m_rendererView.register( Bird.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BirdVisual( parentEntity ); } } );
+}}}
+
+The *register* method takes a class of an entity as its first argument, and the factory that should be used to create the visual representation as the second one.
+
+The factory itself is an interface with a single method *instantiate*:
+{{{
+public interface EntityVisualFactory extends ObjectFactory< Entity, EntityVisual >
+{
+        /**
+         * The factory method.
+         * 
+         * @param parentEntity
+         * @return
+         */
+        EntityVisual instantiate( Entity parentEntity );
+}
+}}}
+
+Implement it as you see above in order to create a representation you desire.
+
+The factory concept this view uses is described in section [GenericFactory Generic factory].

@@ -6,3 +6,5 @@ The physics view is responsible for running a physical simulation of the game wo
 
 ==Physical Body==
 Entities are represented using `PhysicalBody` abstract class.
+
+==Bodies factory==

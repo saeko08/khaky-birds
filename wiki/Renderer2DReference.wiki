@@ -75,3 +75,5 @@ The class should contain applicable `TextureRegion` or `Animation` fields that d
 
 
 *CAUTION*: The renderer currently uses just a single atlas texture, so you can't specify which texture to select.
+
+==Visuals factory==

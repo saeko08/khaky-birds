@@ -3,11 +3,12 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon;
 
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
-import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
 
@@ -25,14 +26,16 @@ public class FalconVisual extends EntityVisual
 	/**
 	 * Constructor.
 	 * 
-	 * @param graphics
+	 * @param resMgr
 	 * @param entity
 	 */
-	public FalconVisual( Entity entity ) 
+	public FalconVisual( ResourceManager resMgr, Entity entity ) 
 	{
 		super(entity);
-		
 		m_falcon = (Falcon)entity;
+		
+		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
+		m_pixmap = new TextureRegion( atlas, 620, 88, 40, 60 );
 	}
 
 	@Override

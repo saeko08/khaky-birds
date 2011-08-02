@@ -3,6 +3,8 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.BoundingShape;
@@ -27,14 +29,18 @@ public class PedestrianVisual extends EntityVisual
 	/**
 	 * Constructor.
 	 * 
-	 * @param graphics
+	 * @param resMgr
 	 * @param entity
 	 */
-	public PedestrianVisual( Entity entity ) 
+	public PedestrianVisual( ResourceManager resMgr, Entity entity ) 
 	{
 		super( entity );
 		
 		m_pedestrian = (Pedestrian)entity;
+		
+		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
+		m_pixmap = new TextureRegion( atlas, 719, 91, 43, 43 );
+		m_pixmapHit = new TextureRegion( atlas, 668, 91, 43, 43 );
 	}
 
 	@Override

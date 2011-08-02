@@ -1,5 +1,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock;
 
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
@@ -23,13 +25,17 @@ public class ElectricShockVisual extends EntityVisual
 	/**
 	 * Constructor.
 	 * 
+	 * @param resMgr
 	 * @param entity
 	 */
-	public ElectricShockVisual( Entity entity ) 
+	public ElectricShockVisual( ResourceManager resMgr, Entity entity ) 
 	{
 		super( entity );
 		
 		m_electricShock = (ElectricShock)entity;
+		
+		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
+		m_pixmap = new TextureRegion( atlas, 627, 169, 31, 92 );
 	}
 
 	@Override

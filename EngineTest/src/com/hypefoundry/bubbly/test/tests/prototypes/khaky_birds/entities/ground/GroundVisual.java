@@ -3,6 +3,8 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground;
 
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
@@ -24,12 +26,15 @@ public class GroundVisual extends EntityVisual
 	/**
 	 * Constructor.
 	 * 
-	 * @param graphics
+	 * @param resMgr
 	 * @param entity
 	 */
-	public GroundVisual( Entity entity ) 
+	public GroundVisual( ResourceManager resMgr, Entity entity ) 
 	{
 		super( entity );
+		
+		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
+		m_pixmap = new TextureRegion( atlas, 0, 0, 320, 480 );
 	}
 
 	@Override

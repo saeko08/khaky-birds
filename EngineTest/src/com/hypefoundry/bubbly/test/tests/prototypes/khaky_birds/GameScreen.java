@@ -53,20 +53,20 @@ public class GameScreen extends Screen
 		super( game );
 		
 		// create the game world
-		m_world = new World( game.getGraphics().getWidth(), game.getGraphics().getHeight() );
+		m_world = new World( 8.0f, 4.8f );
 		
 		// create the renderer
-		m_worldRenderer = new Renderer2D( game, "khaky_birds_prototype/atlas.png" );
+		m_worldRenderer = new Renderer2D( game );
 		m_world.attachView( m_worldRenderer );
 		
 		// register visuals
-		m_worldRenderer.register( Bird.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BirdVisual( parentEntity ); } } );
-		m_worldRenderer.register( ElectricCables.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricCablesVisual( parentEntity ); } } );
-		m_worldRenderer.register( ElectricShock.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricShockVisual( parentEntity ); } } );
-		m_worldRenderer.register( Ground.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GroundVisual( parentEntity ); } } );
-		m_worldRenderer.register( Pedestrian.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PedestrianVisual( parentEntity ); } } );
-		m_worldRenderer.register( Crap.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( parentEntity ); } } );
-		m_worldRenderer.register( Falcon.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FalconVisual( parentEntity ); } } );
+		m_worldRenderer.register( Bird.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BirdVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( ElectricCables.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricCablesVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( ElectricShock.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricShockVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Ground.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GroundVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Pedestrian.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PedestrianVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Crap.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Falcon.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FalconVisual( m_resourceManager, parentEntity ); } } );
 		
 		// register controllers
 		m_controllersView = new ControllersView( this );
@@ -81,7 +81,7 @@ public class GameScreen extends Screen
 		
 		// register physics
 		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
-		m_world.attachView( m_controllersView );
+		m_world.attachView( m_physicsView );
 		
 		m_physicsView.register( Bird.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity ); } } );
 		m_physicsView.register( ElectricShock.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity ); } } );
@@ -135,19 +135,18 @@ public class GameScreen extends Screen
 	@Override
 	public void pause() 
 	{
-		m_worldRenderer.deinitialize();
+		m_resourceManager.releaseResources();
 	}
 
 	@Override
 	public void resume() 
 	{
-		m_worldRenderer.initialize();
+		m_resourceManager.loadResources();
 	}
 
 	@Override
 	public void dispose() 
 	{
-		// TODO Auto-generated method stub
 	}
 
 }

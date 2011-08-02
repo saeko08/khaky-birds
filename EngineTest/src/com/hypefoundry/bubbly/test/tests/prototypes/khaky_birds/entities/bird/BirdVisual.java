@@ -1,5 +1,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
@@ -23,14 +25,18 @@ public class BirdVisual extends EntityVisual
 	/**
 	 * Constructor.
 	 * 
-	 * @param graphics
+	 * @param resMgr
 	 * @param entity
 	 */
-	public BirdVisual( Entity entity ) 
+	public BirdVisual( ResourceManager resMgr, Entity entity ) 
 	{
 		super(entity);
 
 		m_bird = (Bird)entity;
+		
+		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
+		m_pixmapCrosshair = new TextureRegion( atlas, 619, 0, 40, 73 );
+		m_pixmap = new TextureRegion( atlas, 662, 0, 40, 57 );
 	}
 
 	@Override

@@ -22,6 +22,9 @@ import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.SpatialGrid2D;
 import com.hypefoundry.engine.util.SpatialGridObject;
 
+// TODO sorting by distance from the screen
+
+
 
 /**
  * An operation that renders the world contents.
@@ -42,23 +45,20 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	private List< EntityVisual >				m_visuals;
 	private SpriteBatcher						m_batcher = null;
 	
-	private Texture								m_atlasTexture = null;
 	private Camera2D							m_camera = null;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @param game
-	 * @param atlasTexture
 	 */
-	public Renderer2D( Game game, String atlasTextureName )
+	public Renderer2D( Game game )
 	{
 		m_game = game;
 		m_graphics = game.getGraphics();
 		m_batcher = new SpriteBatcher( m_graphics, MAX_SPRITES );
 		
 		m_camera = new GLCamera2D( m_graphics, VIEWPORT_WIDTH, VIEWPORT_HEIGHT );
-		m_atlasTexture = new Texture( m_game, atlasTextureName );
 		
 		m_visuals = new ArrayList< EntityVisual >( MAX_ENTITIES );
 	}
@@ -74,22 +74,6 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	public void onDetached( World world )
 	{
 		m_visualsGrid = null;
-	}
-	
-	/**
-	 * Initializes the renderer.
-	 */
-	public void initialize( ) 
-	{
-		m_atlasTexture.reload();
-	}
-	
-	/**
-	 * Initializes the renderer.
-	 */
-	public void deinitialize() 
-	{
-		m_atlasTexture.dispose();
 	}
 	
 	/**
@@ -126,8 +110,10 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		
+		// TODO: rendering with multiple atlases and with Z sorting
+		
 		// begin the rendering batch
-		m_batcher.beginBatch( m_atlasTexture );
+		/*m_batcher.beginBatch( m_atlasTexture );
 		
 		// draw the visuals
 		List< EntityVisual > visuals = m_visualsGrid.getPotentialColliders( m_camera.getFrustum() );
@@ -136,7 +122,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 			visual.draw( m_batcher );
 		}
 		
-		m_batcher.endBatch();
+		m_batcher.endBatch();*/
 	}
 	
 	

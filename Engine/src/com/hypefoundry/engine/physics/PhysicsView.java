@@ -41,6 +41,11 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	@Override
 	public void update( float deltaTime )
 	{	
+		if ( m_bodiesGrid == null )
+		{
+			return;
+		}
+		
 		// run physics simulation
 		simulateForces( deltaTime );
 		
@@ -54,7 +59,9 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	@Override
 	public void onAttached( World world ) 
 	{
-		m_bodiesGrid = new SpatialGrid2D< PhysicalBody >( world.getWidth(), world.getHeight(), m_cellSize );
+		float width = world.getWidth();
+		float height = world.getHeight();
+		m_bodiesGrid = new SpatialGrid2D< PhysicalBody >( width, height, m_cellSize );
 	}
 
 	@Override

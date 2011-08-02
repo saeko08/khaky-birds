@@ -17,34 +17,17 @@ import com.hypefoundry.engine.game.Game;
  * 
  * @author paksas
  */
-public class Texture 
+public class Texture extends Resource
 {
-	private float			m_width;
-	private float			m_height;
+	private float			m_width 			= 0;
+	private float			m_height 			= 0;
 	
-	private GLGraphics 		m_graphics;
-	private FileIO 			m_fileIO;
-	private String 			m_fileName;
+	private GLGraphics 		m_graphics			= null;
+	private FileIO 			m_fileIO			= null;
 	private int 			m_textureId;
 	private int 			m_minFilter;
 	private int 			m_magFilter;
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param glGame
-	 * @param fileName			texture file path
-	 */
-	public Texture( Game glGame, String fileName ) 
-	{
-		m_graphics = glGame.getGraphics();
-		m_fileIO = glGame.getFileIO();
-		m_fileName = fileName;
-		m_width = 0;
-		m_height = 0;
-		load();
-	}
-	
+		
 	/**
 	 * Returns width of the texture.
 	 * @return
@@ -63,11 +46,12 @@ public class Texture
 		return m_height;
 	}
 	
-	/**
-	 * Loads the texture into memory.
-	 */
-	private void load() 
+	@Override
+	public void load() 
 	{
+		m_graphics = m_game.getGraphics();
+		m_fileIO = m_game.getFileIO();
+		
 		GL10 gl = m_graphics.getGL();
 		
 		int[] textureIds = new int[1];
@@ -78,7 +62,7 @@ public class Texture
 		try 
 		{
 			// load the bitmap and bind it to the texture
-			in = m_fileIO.readAsset( m_fileName );
+			in = m_fileIO.readAsset( m_assetPath );
 			Bitmap bitmap = BitmapFactory.decodeStream( in );
 			gl.glBindTexture( GL10.GL_TEXTURE_2D, m_textureId );
 			GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, bitmap, 0 );
@@ -94,7 +78,7 @@ public class Texture
 		} 
 		catch( IOException e ) 
 		{
-			throw new RuntimeException( "Couldn't load texture '" + m_fileName + "'", e );
+			throw new RuntimeException( "Couldn't load texture '" + m_assetPath + "'", e );
 		} 
 		finally 
 		{
@@ -109,16 +93,19 @@ public class Texture
 			}
 		}
 	}
+
 	
-	/**
-	 * Reload the texture after the GL context's been lost.
-	 */
-	public void reload() 
+	@Override
+	public void release() 
 	{
-		load();
-		bind();
-		setFilters( m_minFilter, m_magFilter );
-		m_graphics.getGL().glBindTexture( GL10.GL_TEXTURE_2D, 0 );
+		GL10 gl = m_graphics.getGL();
+		gl.glBindTexture( GL10.GL_TEXTURE_2D, m_textureId );
+		int[] textureIds = { m_textureId };
+		gl.glDeleteTextures( 1, textureIds, 0 );
+		gl.glBindTexture( GL10.GL_TEXTURE_2D, 0 );
+		
+		m_graphics = null;
+		m_fileIO = null;
 	}
 	
 	/**
@@ -132,9 +119,12 @@ public class Texture
 		m_minFilter = minFilter;
 		m_magFilter = magFilter;
 		
-		GL10 gl = m_graphics.getGL();
-		gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, minFilter );
-		gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, magFilter );
+		if ( m_graphics != null )
+		{
+			GL10 gl = m_graphics.getGL();
+			gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, minFilter );
+			gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, magFilter );
+		}
 	}
 	
 	/**
@@ -142,18 +132,12 @@ public class Texture
 	 */
 	public void bind() 
 	{
-		GL10 gl = m_graphics.getGL();
-		gl.glBindTexture( GL10.GL_TEXTURE_2D, m_textureId );
-	}
-	
-	/**
-	 * Release the texture resource.
-	 */
-	public void dispose() 
-	{
-		GL10 gl = m_graphics.getGL();
-		gl.glBindTexture( GL10.GL_TEXTURE_2D, m_textureId );
-		int[] textureIds = { m_textureId };
-		gl.glDeleteTextures( 1, textureIds, 0 );	
+		if ( m_graphics != null )
+		{
+			GL10 gl = m_graphics.getGL();
+			gl.glBindTexture( GL10.GL_TEXTURE_2D, m_textureId );
+			gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, m_minFilter );
+			gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, m_magFilter );
+		}
 	}
 }

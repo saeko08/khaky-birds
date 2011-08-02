@@ -20,6 +20,7 @@ import com.hypefoundry.engine.core.Audio;
 import com.hypefoundry.engine.core.FileIO;
 import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.core.Input;
+import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.impl.core.AndroidAudio;
@@ -60,7 +61,6 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	 */
 	public GLGame() 
 	{
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -79,7 +79,8 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		
 		// create the subsystems
 		m_graphics = new GLGraphics( m_glView );
-		m_fileIO = new AndroidFileIO( getAssets() );
+		AndroidFileIO fileIOImpl = new AndroidFileIO( getAssets() );
+		m_fileIO = fileIOImpl;
 		m_audio = new AndroidAudio( this );
 		m_input = new AndroidInput( this, m_glView, 1, 1 );
 		

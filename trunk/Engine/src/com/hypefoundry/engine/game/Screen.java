@@ -2,6 +2,8 @@ package com.hypefoundry.engine.game;
 
 import java.util.*;
 
+import com.hypefoundry.engine.core.ResourceManager;
+
 /**
  * This abstract class represents a single screen of the running game.
  * 
@@ -15,10 +17,11 @@ public abstract class Screen implements UpdatesManager
 {
 	
 	/// Host game instance
-	protected final Game 			m_game;
-	private List<Updatable>			m_updatables;
-	private List<Updatable>			m_updatablesToAdd;
-	private List<Updatable>			m_updatablesToRemove;
+	protected final Game 				m_game;
+	protected final ResourceManager		m_resourceManager;
+	private List<Updatable>				m_updatables;
+	private List<Updatable>				m_updatablesToAdd;
+	private List<Updatable>				m_updatablesToRemove;
 	
 	/**
 	 * Constructor.
@@ -27,7 +30,8 @@ public abstract class Screen implements UpdatesManager
 	 */
 	public Screen( Game game ) 
 	{
-		this.m_game = game;
+		m_game = game;
+		m_resourceManager = new ResourceManager( m_game );
 		
 		// create the list that will store the registered updatable objects
 		m_updatables = new ArrayList<Updatable>();

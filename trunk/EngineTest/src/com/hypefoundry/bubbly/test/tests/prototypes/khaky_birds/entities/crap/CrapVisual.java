@@ -3,9 +3,9 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
@@ -27,13 +27,17 @@ public class CrapVisual extends EntityVisual
 	/**
 	 * Constructor.
 	 * 
-	 * @param graphics 
+	 * @param resMgr 
 	 * @param entity
 	 */
-	public CrapVisual( Entity entity ) 
+	public CrapVisual( ResourceManager resMgr, Entity entity ) 
 	{
 		super(entity);
 		m_crap = (Crap)entity;
+		
+		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
+		m_pixmap = new TextureRegion( atlas, 713, 0, 30, 30 );
+		m_pixmapHit = new TextureRegion( atlas, 751, 0, 30, 30 );
 	}
 
 	@Override

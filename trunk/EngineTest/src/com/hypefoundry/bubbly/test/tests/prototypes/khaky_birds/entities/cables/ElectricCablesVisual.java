@@ -1,6 +1,8 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.CableProvider;
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
@@ -21,12 +23,15 @@ public class ElectricCablesVisual extends EntityVisual
 	/**
 	 * Constructor.
 	 * 
-	 * @param graphics
+	 * @param resMgr
 	 * @param entity
 	 */
-	public ElectricCablesVisual( Entity entity )
+	public ElectricCablesVisual( ResourceManager resMgr, Entity entity )
 	{
 		super( entity );
+		
+		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
+		m_pixmap = new TextureRegion( atlas, 340, 0, 275, 480 );
 		
 		// define cable positions
 		ElectricCables cables = (ElectricCables)entity;

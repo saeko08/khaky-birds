@@ -1,4 +1,4 @@
-=BoundingShape=
+=Bounding shape=
 
 Bounding shapes come in two varieties:
   * `BoundingBox`

@@ -1,0 +1,18 @@
+#labels entity
+=How to populate your game world?=
+
+You use [WorldReference#Entities_management entities] for that.
+
+Simply extend the `Entity` class, and off you go. 
+An entity should only describe the state of you world's object and provide methods that allow to change that state. If you want to display it, give it some AI capabilities etc. - `Entity` class is not a good place for that.
+
+Depending on your entity's profile, you may want to display it on the screen or give it some kind of AI, or control it with the user input.
+
+For that you need to use the views.
+
+  * displaying - use the [Renderer2DReference renderer view] for that.
+  * AI - you can implement it by giving the entity a [ControllersViewReference controller]
+  * want the entity to be notified about collisions with other entities - give it a simple [PhysicsViewReference#Physical_Body physical body]
+  * want the entity to bounce off the walls and do other cool physical stuff - implement a decent collision response mechanism using a [PhysicsViewReference#Physical_Body physical body]
+
+If you need some custom things, you may want to come up with a view of your own, create a representation of an entity in that view and control it from there.

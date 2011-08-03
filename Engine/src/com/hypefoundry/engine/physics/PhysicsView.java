@@ -27,6 +27,8 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	private final int							MAX_ENTITIES = 512;		// TODO: config
 	private SpatialGrid2D< PhysicalBody >		m_bodiesGrid = null;
 	private List< PhysicalBody > 				m_bodies;
+	private List< Entity >		 				m_bodiesToAdd;
+	private List< Entity > 						m_bodiesToRemove;
 	
 	
 	/**
@@ -36,6 +38,8 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	{
 		m_cellSize = cellSize;
 		m_bodies = new ArrayList< PhysicalBody >( MAX_ENTITIES );
+		m_bodiesToAdd = new ArrayList< Entity >();
+		m_bodiesToRemove = new ArrayList< Entity >();
 	}
 	
 	@Override
@@ -45,6 +49,8 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 		{
 			return;
 		}
+		
+		manageBodies();
 		
 		// run physics simulation
 		simulateForces( deltaTime );
@@ -71,7 +77,46 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	}
 
 	@Override
-	public void onEntityAdded( Entity entity ) 
+	public void onEntityAdded( Entity entity )
+	{
+		m_bodiesToRemove.remove( entity );
+		m_bodiesToAdd.add( entity );
+	}
+
+	@Override
+	public void onEntityRemoved( Entity entity )
+	{
+		m_bodiesToAdd.remove( entity );
+		m_bodiesToRemove.add( entity );
+	}
+	
+	/**
+	 * Adds or removes bodies to the view - such intermediate addition/removal
+	 * mechanism is needed, because the bodies may be added from a different
+	 * thread than the one that's running all the methods that operate
+	 * on the bodies.
+	 */
+	private void manageBodies()
+	{
+		for ( Entity entity : m_bodiesToRemove )
+		{
+			detachBody( entity );
+		}
+		m_bodiesToRemove.clear();
+		
+		for ( Entity entity : m_bodiesToAdd )
+		{
+			attachBody( entity );
+		}
+		m_bodiesToAdd.clear();
+	}
+	
+	/**
+	 * Performs the actual addition of an entity and creation of a body.
+	 * 
+	 * @param entity
+	 */
+	private void attachBody( Entity entity )
 	{
 		PhysicalBody body = findBodyFor( entity );
 		if ( body != null )
@@ -101,9 +146,13 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 			Log.d( "PhysicsView", "Physical representation not defined for entity '" + entity.getClass().getName() + "'" );
 		}
 	}
-
-	@Override
-	public void onEntityRemoved( Entity entity ) 
+	
+	/**
+	 * Performs the actual removal of an entity and associated body from the view.
+	 * 
+	 * @param entity
+	 */
+	private void detachBody( Entity entity )
 	{
 		PhysicalBody body = findBodyFor( entity );
 		if ( body != null )
@@ -137,18 +186,19 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	 */
 	private void resolveCollisions() 
 	{
-		// go through all the entities and test 
-		// their mutual overlap O(n2)
+		// go through all the entities and test their mutual overlap
 		int count = m_bodies.size();
 		for( int i = 0; i < count; ++i )
 		{
 			PhysicalBody body = m_bodies.get(i);
+			
 			List< PhysicalBody > collidingBodies = m_bodiesGrid.getPotentialColliders( body );
 			
 			int collidersCount = collidingBodies.size();
 			for ( int j = 0; j < collidersCount; ++j )
 			{
 				PhysicalBody collider = collidingBodies.get(j);
+				
 				if ( body.doesOverlap( collider ) )
 				{
 					body.onCollision( collider );

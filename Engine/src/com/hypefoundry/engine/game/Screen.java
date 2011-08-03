@@ -2,6 +2,8 @@ package com.hypefoundry.engine.game;
 
 import java.util.*;
 
+import android.util.Log;
+
 import com.hypefoundry.engine.core.ResourceManager;
 
 /**
@@ -43,6 +45,7 @@ public abstract class Screen implements UpdatesManager
 	 * Update the state of the screen.
 	 * 
 	 * @param deltaTime
+	 * @throws Exception 
 	 */
 	public final void update( float deltaTime )
 	{

@@ -39,8 +39,9 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	private final float 						VIEWPORT_WIDTH = 9.6f;		// TODO: config
 	private final float 						VIEWPORT_HEIGHT = 4.8f;		// TODO: config
 	
-	private Game								m_game;
 	private GLGraphics 							m_graphics;
+	private List< Entity >						m_entitiesToAdd;
+	private List< Entity >						m_entitiesToRemove;
 	private SpatialGrid2D< EntityVisual >		m_visualsGrid;
 	private List< EntityVisual >				m_visuals;
 	private SpriteBatcher						m_batcher = null;
@@ -54,8 +55,11 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	 */
 	public Renderer2D( Game game )
 	{
-		m_game = game;
 		m_graphics = game.getGraphics();
+		
+		m_entitiesToAdd = new ArrayList< Entity >();
+		m_entitiesToRemove = new ArrayList< Entity >();
+		
 		m_batcher = new SpriteBatcher( m_graphics, MAX_SPRITES );
 		
 		m_camera = new GLCamera2D( m_graphics, VIEWPORT_WIDTH, VIEWPORT_HEIGHT );
@@ -97,6 +101,9 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 			return;
 		}
 		
+		// manage the incoming and outgoing entities
+		manageEntities();
+		
 		// update the grid
 		m_visualsGrid.update();
 		
@@ -127,7 +134,43 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	
 	
 	@Override
-	public void onEntityAdded( Entity entity ) 
+	public void onEntityAdded( Entity entity )
+	{
+		m_entitiesToRemove.remove( entity );
+		m_entitiesToAdd.add( entity );
+	}
+
+	@Override
+	public void onEntityRemoved( Entity entity ) 
+	{
+		m_entitiesToAdd.remove( entity );
+		m_entitiesToRemove.add( entity );
+	}
+	
+	/**
+	 * Manages the addition and removal of the entities.
+	 */
+	private void manageEntities()
+	{
+		for ( Entity entity : m_entitiesToRemove )
+		{
+			detachEntity( entity );
+		}
+		m_entitiesToRemove.clear();
+		
+		for ( Entity entity : m_entitiesToAdd )
+		{
+			attachEntity( entity );
+		}
+		m_entitiesToAdd.clear();
+	}
+	
+	/**
+	 * Actual addition of the entity and its representation to the view.
+	 * 
+	 * @param entity
+	 */
+	private void attachEntity( Entity entity )
 	{
 		EntityVisual visual = findVisualFor( entity );
 		if ( visual != null )
@@ -157,9 +200,13 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 			Log.d( "Renderer2D", "Visual representation not defined for entity '" + entity.getClass().getName() + "'" );
 		}
 	}
-
-	@Override
-	public void onEntityRemoved( Entity entity ) 
+	
+	/**
+	 * Actual removal of the entity and its representation from the view.
+	 * 
+	 * @param entity
+	 */
+	private void detachEntity( Entity entity )
 	{
 		EntityVisual visual = findVisualFor( entity );
 		if ( visual != null )

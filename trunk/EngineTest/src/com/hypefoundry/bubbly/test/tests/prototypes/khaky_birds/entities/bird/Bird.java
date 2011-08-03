@@ -50,7 +50,15 @@ public class Bird extends Entity implements Shockable, Prey
 			m_cableIdx = m_cables.getStartCableIdx();
 			
 			float y = hostWorld.getHeight() / 2;
-			float x = m_cables.getPositionOnCable( m_cableIdx, y );
+			float x = 0;
+			try
+			{
+				x = m_cables.getPositionOnCable( m_cableIdx, y );
+			}
+			catch( RuntimeException ex )
+			{
+				// TODO: there are no cables - fly
+			}
 			
 			setPosition( x, y, 0 );
 		}

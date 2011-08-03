@@ -2,6 +2,8 @@ package com.hypefoundry.engine.game;
 
 import java.util.*;
 
+import android.util.Log;
+
 
 /**
  * Represents the game world.

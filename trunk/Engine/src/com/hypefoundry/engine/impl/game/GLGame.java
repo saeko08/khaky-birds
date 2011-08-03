@@ -13,6 +13,7 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -145,7 +146,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		{
 			state = m_state;
 		}
-		
+			
 		if ( state == GLGameState.Running )
 		{
 			// update and draw the screen, if the game's running, providing it with a proper time delta
@@ -154,7 +155,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			m_screen.update( deltaTime );
 			m_screen.present( deltaTime );
 		}
-		
+			
 		if( state == GLGameState.Paused ) 
 		{
 			// pause the screen - this can take a while and since
@@ -169,7 +170,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 				m_stateChanged.notifyAll();
 			}
 		}
-		
+			
 		if( state == GLGameState.Finished ) 
 		{
 			// stop and release the screen - also wait for that activity
@@ -178,7 +179,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			// the onPause method ), that it's safe to proceed
 			m_screen.pause();
 			m_screen.dispose();
-			
+				
 			synchronized( m_stateChanged ) 
 			{
 				m_state = GLGameState.Idle;

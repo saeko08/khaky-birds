@@ -6,7 +6,6 @@ package com.hypefoundry.engine.util;
 import java.util.*;
 
 import com.hypefoundry.engine.math.BoundingBox;
-
 import android.util.FloatMath;
 import android.util.Log;
 
@@ -163,9 +162,9 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 		int[] cellIds = getCellIds( obj.getBounds() );
 		int i = 0;
 		int cellId = -1;
+		
 		while( i <= 3 && ( cellId = cellIds[i++] ) != -1 ) 
 		{
-			// TODO
 			m_dynamicCells[cellId].remove( obj );
 			m_staticCells[cellId].remove( obj );
 		}
@@ -176,8 +175,10 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 			if ( objData.m_obj == obj )
 			{
 				m_dynamicObjects.remove( objData );
+				break;
 			}
 		}
+	
 		
 		// find the object and remove it
 		for ( StaticObjectData objData : m_staticObjects )
@@ -185,8 +186,10 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 			if ( objData.m_obj == obj )
 			{
 				m_staticObjects.remove( objData );
+				break;
 			}
 		}
+	
 	}
 	
 	/**
@@ -351,13 +354,13 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	 */
 	public int[] getCellIds( BoundingBox shape ) 
 	{		
-		int minX = (int) (shape.m_minX / m_cellSize);
-		int maxX = (int) (shape.m_maxX / m_cellSize);
-		int minY = (int) (shape.m_minY / m_cellSize);
-		int maxY = (int) (shape.m_maxY / m_cellSize);
+		int minX = (int)FloatMath.ceil(shape.m_minX / m_cellSize);
+		int maxX = (int)FloatMath.ceil(shape.m_maxX / m_cellSize);
+		int minY = (int)FloatMath.ceil(shape.m_minY / m_cellSize);
+		int maxY = (int)FloatMath.ceil(shape.m_maxY / m_cellSize);
 		
-		if ( minX < 0 || minX > m_cellsPerCol || maxX < 0 || maxX > m_cellsPerCol || 
-				minY < 0 || minY > m_cellsPerRow || maxY < 0 || maxY > m_cellsPerRow )
+		if ( minX < 0 || minX >= m_cellsPerRow || maxX < 0 || maxX >= m_cellsPerRow || 
+				minY < 0 || minY >= m_cellsPerCol || maxY < 0 || maxY >= m_cellsPerCol )
 		{
 			// the object is outside the world's bounds
 			m_cellIds[0] = -1;
@@ -368,10 +371,10 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 		else
 		{
 			// the object can span onto maximum four different cells - let's calculate their indices 
-			m_cellIds[0] = minY * m_cellsPerCol + minX;
-			m_cellIds[1] = minY * m_cellsPerCol + maxX;
-			m_cellIds[2] = maxY * m_cellsPerCol + minX;
-			m_cellIds[3] = maxY * m_cellsPerCol + maxX;
+			m_cellIds[0] = minY * m_cellsPerRow + minX;
+			m_cellIds[1] = minY * m_cellsPerRow + maxX;
+			m_cellIds[2] = maxY * m_cellsPerRow + minX;
+			m_cellIds[3] = maxY * m_cellsPerRow + maxX;
 			
 			// compact the data - the cells were calculated in such an order
 			// that if the object lies in just two cells, the adjacent

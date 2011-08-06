@@ -37,7 +37,7 @@ Those requirements give you some hints as to which place is the best to do that:
 
 ==Event transmission==
 
-Now - how do we send it to an entity? That's simple - use [Entity.sendEvent] method. It will return an instance of the event, so that you can fill it with data.
+Now - how do we send it to an entity? That's simple - use `Entity.sendEvent` method. It will return an instance of the event, so that you can fill it with data.
 
 {{{
 GrenadeExplosion event = affectedEntity.sendEvent( GrenadeExplosion.class );

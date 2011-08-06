@@ -1,56 +1,75 @@
-#labels Interactions,Environment
+#labels Environment
 =How to implement interactions with the environment?=
 
-Basically, we have a simple mechanism in place that can tell you whether you're interacting with the environment - and those are collisions.
 
-The collision system calls the Entity.onCollision method, passing it an instance of an entity you collided with.
+What you typically would like to achive when asking this question is:
+"So I have my agent, and I want him to run when a grenade explodes nearby. How can tell him abou the granade blast?".
 
-What is advisable, is to create an interface that describes an interaction, check if the entity you collided with implements that interface, and invoke the interaction method.
+And the answer is - you use [EntityEvents] for those.
 
-Here's a simple example:
+==Event definition==
+A grenade explosion is an event, same as getting hit with a rotten tomato, being crapped on etc.
 
-We want to have a bird being killed by an electric shock.
-
-So what we really want is to have an electric current calling a shock reaction *(2)* upon a collision *(1)* on an entity that can be shocked *(3)*. That entity would take responsibility for implementing the behavior applicable to it being shocked *(4)* - sounds natural, doesn't it?
-
-Here's how you want to write it - the numbers from the paragraph above correspond to the applicable lines of code.
+So what you need to do first is to define your event:
 
 {{{
-public class ElectricShock extends Entity 
+class GrenadeExplosion implements EntityEvent 
 {
-   // ..............
-
-   @Override
-   public void onCollision( Entity collider )   // (1)
-   {
-      if ( collider instanceof Shockable )
-      {
-         ( (Shockable)collider ).shock();        // (2)
-      }
-   }
-
-   // ..............
+     private float m_blastStrength;
 }
+}}}
 
-interface Shockable
+An event should contain data relevant to the information it wants to convey.
+If we wanted to inform about the type of grenade that exploded or its  strength, we could add a field in the event and fill it with the data.
+
+
+The most important thing is to tell the entity that it should process the events of this type.
+
+In order to do that, you need to invoke the `registerEvent` method on an entity *BEFORE* you send any events of that type to it, or before you attach any events listeners of that type to it.
+
+{{{
+entity.registerEvent( GrenadeExplosion.class, new EventFactory< GrenadeExplosion >() { @Override public GrenadeExplosion createObject() { return new GrenadeExplosion (); } } );
+}}}
+
+Those requirements give you some hints as to which place is the best to do that:
+  * if the events apply to the entity type ALWAYS, no matter what representations represent it, simply put the code in its constructor.
+  * if the event is specific to some representation type ( i.e. `CollisionEvent` ), register it *ON THE ENTITY* in the representation's constructor.
+
+==Event transmission==
+
+Now - how do we send it to an entity? That's simple - use [Entity.sendEvent] method. It will return an instance of the event, so that you can fill it with data.
+
+{{{
+GrenadeExplosion event = affectedEntity.sendEvent( GrenadeExplosion.class );
+event.m_blastStrength( 10.0f );
+}}}
+
+The method accepts a single parameter - the event type. You need to fill the relevant data on the returned instance.
+
+And that's it - the entity will receive the event in the next tick.
+
+==Event reception==
+It's obvious that the entity itslef is not interested in the event. After all - it's just a data bundle.
+
+What might be interested in the explosion are its representations:
+  * you may want to change entity's looks
+  * you may want to change entity's behavior
+etc.
+
+That means you want to customize your representation classes so that they are able to receive the events.
+You can do that by implementing the `EntityEventListener` interface
+
+{{{
+class MyEntityAI extends EntityController implements EntityEventListener< GrenadeExplosion >
 {
-   /**
-    * You just got shocked - react.
-    */
-   void shock();
-}
+     // ....
 
-class Bird extends Entity implements Shockable // (3)
-{
+     @Override
+     public void onEvent( GrenadeExplosion event )
+     {
+          // implement the explosion results here
+     }
 
-   // ..............
-
-   @Override
-   public void shock() 
-   {
-      m_world.removeEntity(this);  // (4)
-   }
-
-   // ..............
+     // ....
 }
 }}}

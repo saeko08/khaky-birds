@@ -6,19 +6,21 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon
 import java.util.Random;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shockable;
-import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shocked;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EntityEvent;
+import com.hypefoundry.engine.world.EntityEventException;
+import com.hypefoundry.engine.world.EntityEventListener;
+import com.hypefoundry.engine.world.EventFactory;
+import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
-import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.physics.events.CollisionEvent;
 
 /**
  * @author azagor
  *
  */
-public class Falcon extends Entity implements Shockable
+public class Falcon extends Entity implements EntityEventListener
 {
 	public boolean   m_flyingFromLeft 			 = true;
 	public boolean   m_isChasing 			     = false;
@@ -33,15 +35,12 @@ public class Falcon extends Entity implements Shockable
 	public Falcon()
 	{
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
-	}
-	
-	@Override
-	public void onCollision( Entity collider ) 
-	{
-		if ( collider instanceof Prey )
-		{
-			((Prey)collider).getEaten();
-		}
+		
+		// define events the entity responds to
+		registerEvent( Shocked.class, new EventFactory< Shocked >() { @Override public Shocked createObject() { return new Shocked (); } } );
+				
+		// register events listeners
+		attachEventListener( this );
 	}
 	
 	/**
@@ -93,18 +92,26 @@ public class Falcon extends Entity implements Shockable
 	{
 		m_falcon = new Falcon();
 		
-		m_world.addEntity(m_falcon);
+		m_world.addEntity( m_falcon );
 	}
 
 	// ------------------------------------------------------------------------
 	// Environment interactions
-	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------	
 	@Override
-	public void getShocked() 
+	public void onEvent( EntityEvent event ) 
 	{
-		if ( m_isChasing == true )
+		if ( event instanceof Shocked && m_isChasing == true )
 		{
+			// when the falcon gets shocked, it dies
 			m_world.removeEntity( this );
+		}
+		else if ( event instanceof CollisionEvent )
+		{
+			// if it collides with another entity, it attempts eating it
+			Entity collider = ( (CollisionEvent)event ).m_collider;
+			collider.sendEvent( Eaten.class );
+
 		}
 	}
 

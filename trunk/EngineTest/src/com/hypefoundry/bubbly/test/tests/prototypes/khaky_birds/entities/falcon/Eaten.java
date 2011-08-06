@@ -3,16 +3,14 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon;
 
+import com.hypefoundry.engine.world.EntityEvent;
+
 /**
- * Prey of the falcon.
+ * You just got eaten by a falcon.
  * 
  * @author Paksas
  *
  */
-public interface Prey 
+public class Eaten implements EntityEvent 
 {
-	/**
-	 * Prey gets eaten by a falcon.
-	 */
-	void getEaten();
 }

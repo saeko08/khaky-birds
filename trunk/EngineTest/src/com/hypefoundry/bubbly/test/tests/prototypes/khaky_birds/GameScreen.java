@@ -23,11 +23,10 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.E
 import com.hypefoundry.engine.controllers.ControllersView;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.EntityControllerFactory;
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
-import com.hypefoundry.engine.game.Updatable;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.physics.PhysicalBody;
 import com.hypefoundry.engine.physics.PhysicalBodyFactory;
 import com.hypefoundry.engine.physics.PhysicsView;
@@ -53,7 +52,7 @@ public class GameScreen extends Screen
 		super( game );
 		
 		// create the game world
-		m_world = new World( 8.0f, 4.8f );
+		m_world = new World( 9.6f, 4.8f );
 		
 		// create the renderer
 		m_worldRenderer = new Renderer2D( game );
@@ -75,7 +74,7 @@ public class GameScreen extends Screen
 		m_controllersView.register( Bird.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new BirdController( m_game.getInput(), parentEntity ); } } );
 		m_controllersView.register( ElectricCables.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricCablesAI( m_world, parentEntity ); } } );
 		m_controllersView.register( ElectricShock.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricShockAI( m_world, parentEntity ); } } );
-		m_controllersView.register( Pedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PedestrianAI( m_world, parentEntity ); } } );
+		m_controllersView.register( Pedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PedestrianAI( parentEntity ); } } );
 		m_controllersView.register( Crap.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new CrapAI( m_world,parentEntity ); } } );
 		m_controllersView.register( Falcon.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new FalconAI( m_world,parentEntity ); } } );
 		

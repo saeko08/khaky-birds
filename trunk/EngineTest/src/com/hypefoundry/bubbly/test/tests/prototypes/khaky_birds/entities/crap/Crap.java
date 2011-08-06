@@ -1,13 +1,14 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.CableProvider;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
-import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EntityEvent;
+import com.hypefoundry.engine.world.EntityEventListener;
+import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.physics.events.CollisionEvent;
 
 /**
  * Crap a bird makes.
@@ -15,7 +16,7 @@ import com.hypefoundry.engine.math.Vector3;
  * @author azagor
  *
  */
-public class Crap extends Entity 
+public class Crap extends Entity implements EntityEventListener
 {
 	private World 	m_world    			 = null;
 	public boolean pedestrianHit         = false;
@@ -28,17 +29,11 @@ public class Crap extends Entity
 	{
 		setPosition( 0, 0, 0 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+		
+		// register events listeners
+		attachEventListener( this );
 	}
 
-	@Override
-	public void onCollision( Entity colider ) 
-	{
-		if ( Pedestrian.class.isInstance(colider))
-		{
-			pedestrianHit = true;
-			
-		}
-	}
 	
 	/**
 	 * Setting starting position of crap
@@ -59,6 +54,17 @@ public class Crap extends Entity
 			setPosition( x, y + 26, 1 );
 		}
 	}
-	
 
+	@Override
+	public void onEvent( EntityEvent event ) 
+	{
+		if ( event instanceof CollisionEvent )
+		{
+			if ( ((CollisionEvent)event).m_collider instanceof Pedestrian )
+			{
+				((CollisionEvent)event).m_collider.sendEvent( Crapped.class );
+				pedestrianHit = true;
+			}
+		}
+	}
 }

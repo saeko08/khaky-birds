@@ -6,8 +6,8 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.engine.controllers.EntityController;
-import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.Vector3;
 
 /**

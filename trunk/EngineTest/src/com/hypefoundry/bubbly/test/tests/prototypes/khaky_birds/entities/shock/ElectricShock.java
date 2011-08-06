@@ -1,6 +1,9 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock;
 
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.physics.events.CollisionEvent;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EntityEvent;
+import com.hypefoundry.engine.world.EntityEventListener;
 
 
 /**
@@ -10,7 +13,7 @@ import com.hypefoundry.engine.game.Entity;
  * @author paksas
  *
  */
-public class ElectricShock extends Entity 
+public class ElectricShock extends Entity implements EntityEventListener
 {
 
 	/**
@@ -21,14 +24,17 @@ public class ElectricShock extends Entity
 	public ElectricShock( float cableXOffset ) 
 	{
 		setPosition( cableXOffset, 0, 5 );
+		
+		// register events listeners
+		attachEventListener( this );
 	}
 
 	@Override
-	public void onCollision( Entity collider ) 
+	public void onEvent( EntityEvent event ) 
 	{
-		if ( collider instanceof Shockable )
+		if ( event instanceof CollisionEvent )
 		{
-			( (Shockable)collider ).getShocked();
+			((CollisionEvent)event).m_collider.sendEvent( Shocked.class );
 		}
 	}
 }

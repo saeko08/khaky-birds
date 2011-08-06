@@ -5,7 +5,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon
 
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.core.Texture;
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;

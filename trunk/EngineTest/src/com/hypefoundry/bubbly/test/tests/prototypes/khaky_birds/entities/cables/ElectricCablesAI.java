@@ -5,8 +5,8 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
 import com.hypefoundry.engine.controllers.EntityController;
-import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.World;
 
 /**
  * Electric cables entity controller.

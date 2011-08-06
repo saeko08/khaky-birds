@@ -63,6 +63,15 @@ You can do that by implementing the `EntityEventListener` interface
 class MyEntityAI extends EntityController implements EntityEventListener
 {
      // ....
+     public MyEntityAI( Entity entity )
+     {
+          super( entity );
+          entity.attachEventListener( this );
+
+          // remaining init code
+     }
+
+     // ....
 
      @Override
      public void onEvent( EntityEvent event )

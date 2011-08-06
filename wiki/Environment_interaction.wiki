@@ -25,7 +25,7 @@ If we wanted to inform about the type of grenade that exploded or its  strength,
 
 The most important thing is to tell the entity that it should process the events of this type.
 
-In order to do that, you need to invoke the `registerEvent` method on an entity *BEFORE* you send any events of that type to it, or before you attach any events listeners of that type to it.
+In order to do that, you need to invoke the `registerEvent` method on an entity *BEFORE* you send any events of that type to it - otherwise it won't receive them.
 
 {{{
 entity.registerEvent( GrenadeExplosion.class, new EventFactory< GrenadeExplosion >() { @Override public GrenadeExplosion createObject() { return new GrenadeExplosion (); } } );

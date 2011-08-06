@@ -1,6 +1,8 @@
-package com.hypefoundry.engine.game;
+package com.hypefoundry.engine.world;
 
 import java.util.*;
+
+import com.hypefoundry.engine.game.Updatable;
 
 import android.util.Log;
 
@@ -205,6 +207,12 @@ public class World implements Updatable
 			attachEntity( entity );
 		}
 		m_entitiesToAdd.clear();
+		
+		// process the entity events
+		for ( Entity entity : m_entities )
+		{
+			entity.processEvents();
+		}
 	}
 	
 	// ------------------------------------------------------------------------

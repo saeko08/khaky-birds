@@ -1,4 +1,4 @@
-package com.hypefoundry.engine.game;
+package com.hypefoundry.engine.world;
 
 
 /**

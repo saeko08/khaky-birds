@@ -3,8 +3,11 @@
  */
 package com.hypefoundry.engine.physics;
 
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EntityEventException;
+import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.physics.events.CollisionEvent;
 import com.hypefoundry.engine.util.SpatialGridObject;
 
 
@@ -32,6 +35,9 @@ public abstract class PhysicalBody implements SpatialGridObject
 	{
 		m_entity = entity;
 		m_dynamicObjectAspect = m_entity.query( DynamicObject.class );
+		
+		// register events
+		m_entity.registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent(); } } );
 	}
 
 	@Override
@@ -60,7 +66,15 @@ public abstract class PhysicalBody implements SpatialGridObject
 	 */
 	public final void onCollision( PhysicalBody collider ) 
 	{
-		m_entity.onCollision( collider.m_entity );	
+		try
+		{
+			CollisionEvent event = m_entity.sendEvent( CollisionEvent.class );
+			event.m_collider = collider.m_entity;
+		}
+		catch ( EntityEventException ex )
+		{
+			// too many events - don't process
+		}
 		respondToCollision( collider );
 	}
 

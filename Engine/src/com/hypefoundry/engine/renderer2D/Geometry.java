@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.impl.openGL;
+package com.hypefoundry.engine.renderer2D;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -10,6 +10,8 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import android.util.Log;
 
 import com.hypefoundry.engine.core.GLGraphics;
 
@@ -24,8 +26,7 @@ public class Geometry
 	private final boolean 			m_hasColor;
 	private final boolean 			m_hasTexCoords;
 	private final int 				m_vertexSize;
-	private final int[]				m_tmpBuffer;
-	private final IntBuffer 		m_vertices;
+	private final FloatBuffer 		m_vertices;
 	private final ShortBuffer 		m_indices;
 	
 	/**
@@ -43,12 +44,11 @@ public class Geometry
 		m_hasColor = hasColor;
 		m_hasTexCoords = hasTexCoords;
 		m_vertexSize = ( 2 + ( hasColor ? 4 : 0 ) + ( hasTexCoords ? 2 : 0 ) ) * 4;
-		m_tmpBuffer = new int[ maxVertices * m_vertexSize / 4 ];
 		
 		// allocate the vertex buffer
 		ByteBuffer buffer = ByteBuffer.allocateDirect( maxVertices * m_vertexSize );
 		buffer.order( ByteOrder.nativeOrder() );
-		m_vertices = buffer.asIntBuffer();
+		m_vertices = buffer.asFloatBuffer();
 			
 		// allocate the index buffer, if needed
 		if( maxIndices > 0 ) 
@@ -73,13 +73,7 @@ public class Geometry
 	public void setVertices( float[] vertices, int offset, int length )
 	{
 		m_vertices.clear();
-		
-		int len = offset + length;
-		for( int i = offset, j = 0; i < len; ++i, ++j )
-		{
-			m_tmpBuffer[j] = Float.floatToRawIntBits( vertices[i] );
-		}
-		m_vertices.put( m_tmpBuffer, 0, length );
+		m_vertices.put( vertices, 0, length );
 		m_vertices.flip();
 	}
 	
@@ -114,11 +108,18 @@ public class Geometry
 			gl.glColorPointer( 4, GL10.GL_FLOAT, m_vertexSize, m_vertices );
 		}
 		
-		if( m_hasTexCoords ) 
+		try
 		{
-			gl.glEnableClientState( GL10.GL_TEXTURE_COORD_ARRAY );
-			m_vertices.position( m_hasColor ? 6 : 2 );
-			gl.glTexCoordPointer( 2, GL10.GL_FLOAT, m_vertexSize, m_vertices );
+			if( m_hasTexCoords ) 
+			{
+				gl.glEnableClientState( GL10.GL_TEXTURE_COORD_ARRAY );
+				m_vertices.position( m_hasColor ? 6 : 2 );
+				gl.glTexCoordPointer( 2, GL10.GL_FLOAT, m_vertexSize, m_vertices );
+			}
+		}
+		catch( Exception ex )
+		{
+			Log.d( "", "" );
 		}
 	}
 	

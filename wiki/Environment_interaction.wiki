@@ -5,7 +5,7 @@
 What you typically would like to achive when asking this question is:
 "So I have my agent, and I want him to run when a grenade explodes nearby. How can tell him abou the granade blast?".
 
-And the answer is - you use [EntityEvents] for those.
+And the answer is - you use [ EntityEvents] for those.
 
 ==Event definition==
 A grenade explosion is an event, same as getting hit with a rotten tomato, being crapped on etc.

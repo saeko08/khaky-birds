@@ -14,5 +14,5 @@ public interface Updatable
 	 * 
 	 * @param deltaTime
 	 */
-	public void update( float deltaTime );
+	void update( float deltaTime );
 }

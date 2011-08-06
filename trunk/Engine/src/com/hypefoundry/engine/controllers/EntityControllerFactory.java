@@ -1,7 +1,7 @@
 package com.hypefoundry.engine.controllers;
 
 
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.util.ObjectFactory;
 
 /**

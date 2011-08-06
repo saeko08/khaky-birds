@@ -19,7 +19,6 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	private class DynamicObjectData
 	{
 		public int[] 	m_cellIds 		= new int[4];
-		public int[] 	m_posIds 		= new int[4];
 		public final T  m_obj;
 		public boolean	m_queried;
 		
@@ -28,7 +27,6 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 			m_obj = obj;
 			
 			m_cellIds[0] = m_cellIds[1] = m_cellIds[2] = m_cellIds[3] = -1;
-			m_posIds[0] = m_posIds[1] = m_posIds[2] = m_posIds[3] = -1;
 			m_queried = false;
 		}
 		
@@ -109,11 +107,15 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	{
 		StaticObjectData objData = new StaticObjectData( obj );
 		int[] cellIds = getCellIds( obj.getBounds() );
-		int i = 0;
-		int cellId = -1;
-		while( i <= 3 && ( cellId = cellIds[i++] ) != -1 ) 
+		int cellAddr = cellIds[2] * m_cellsPerRow + cellIds[0];
+		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
 		{
-			m_staticCells[cellId].add( objData );
+			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
+			{
+				assert( cellAddr < m_cellsCount );	// invalid cell address check
+				
+				m_staticCells[cellAddr].add( objData );
+			}
 		}
 		
 		m_staticObjects.add( objData );
@@ -128,24 +130,25 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 		DynamicObjectData objData = new DynamicObjectData( obj );
 		
 		int[] cellIds = getCellIds( obj.getBounds() );
-		int i = 0;
-		int cellId = -1;
 		int existingIdx = -1;
-		while( i <= 3 && ( cellId = cellIds[i] ) != -1 ) 
+		int cellAddr = cellIds[2] * m_cellsPerRow + cellIds[0];
+		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
 		{
-			existingIdx = m_dynamicCells[cellId].indexOf( null );
+			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
+			{
+				assert( cellAddr < m_cellsCount );	// invalid cell address check
+				
+				existingIdx = m_dynamicCells[cellAddr].indexOf( null );
 			
-			if ( existingIdx >= 0)
-			{
-				objData.m_posIds[i] = existingIdx;
-				m_dynamicCells[cellId].set( existingIdx, objData );
+				if ( existingIdx >= 0)
+				{
+					m_dynamicCells[cellAddr].set( existingIdx, objData );
+				}
+				else
+				{
+					m_dynamicCells[cellAddr].add( objData );
+				}
 			}
-			else
-			{
-				objData.m_posIds[i] = m_dynamicCells[cellId].size();
-				m_dynamicCells[cellId].add( objData );
-			}
-			++i;
 		}
 		objData.setCells( cellIds );
 		
@@ -160,13 +163,17 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	public void removeObject( T obj ) 
 	{
 		int[] cellIds = getCellIds( obj.getBounds() );
-		int i = 0;
-		int cellId = -1;
-		
-		while( i <= 3 && ( cellId = cellIds[i++] ) != -1 ) 
+		int cellAddr = cellIds[2] * m_cellsPerRow + cellIds[0];
+		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
 		{
-			m_dynamicCells[cellId].remove( obj );
-			m_staticCells[cellId].remove( obj );
+			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
+			{
+				assert( cellAddr < m_cellsCount );	// invalid cell address check
+				
+				m_dynamicCells[cellAddr].remove( obj );
+				m_staticCells[cellAddr].remove( obj );
+				
+			}	
 		}
 		
 		// find the object and remove it
@@ -199,36 +206,37 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	{
 		for ( DynamicObjectData objData : m_dynamicObjects )
 		{
-			int i = 0;
-			int cellId = -1;
-			while( i <= 3 && ( cellId = objData.m_cellIds[i] ) != -1 ) 
+			int cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
+			for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
 			{
-				int idx = objData.m_posIds[i];
-				if ( idx >= 0 )
+				for ( int x = objData.m_cellIds[0]; x <= objData.m_cellIds[1]; ++x, ++cellAddr )
 				{
-					m_dynamicCells[cellId].set( idx, null );
+					assert( cellAddr < m_cellsCount );	// invalid cell address check
+					int idx = m_dynamicCells[cellAddr].indexOf( objData );
+					if ( idx >= 0 )
+					{
+						m_dynamicCells[cellAddr].set( idx, null );
+					}
 				}
-				++i;
 			}
 
 			objData.setCells( getCellIds( objData.m_obj.getBounds() ) );
 
-			i = 0;
-			cellId = -1;
-			while( i <= 3 && ( cellId = objData.m_cellIds[i] ) != -1 ) 
+			cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
+			for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
 			{
-				int idx = m_dynamicCells[cellId].indexOf( null );
-				
-				if ( idx < 0 )
+				for ( int x = objData.m_cellIds[0]; x <= objData.m_cellIds[1]; ++x, ++cellAddr )
 				{
-					idx = m_dynamicCells[cellId].size();
-					m_dynamicCells[cellId].add( null );
+					int idx = m_dynamicCells[cellAddr].indexOf( null );
+					
+					if ( idx < 0 )
+					{
+						idx = m_dynamicCells[cellAddr].size();
+						m_dynamicCells[cellAddr].add( null );
+					}
+					
+					m_dynamicCells[cellAddr].set( idx, objData );
 				}
-				
-				objData.m_posIds[i] = idx;
-				m_dynamicCells[cellId].set( idx, objData );
-				
-				++i;
 			}
 		}
 	}
@@ -252,35 +260,37 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 		}
 		
 		int[] cellIds = getCellIds( box );
-		int i = 0;
-		int cellId = -1;
-		while( i <= 3 && ( cellId = cellIds[i++] ) != -1 ) 
+		int cellAddr = cellIds[2] * m_cellsPerRow + cellIds[0];
+		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
 		{
-			// compare against the dynamic objects
-			int len = m_dynamicCells[cellId].size();
-			for( int j = 0; j < len; ++j ) 
+			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
 			{
-				DynamicObjectData collider = m_dynamicCells[cellId].get(j);
-				
-				// check for duplicates
-				if( collider != null && !collider.m_queried )
+				// compare against the dynamic objects
+				int len = m_dynamicCells[cellAddr].size();
+				for( int j = 0; j < len; ++j ) 
 				{
-					m_foundObjects.add( collider.m_obj );
-					collider.m_queried = true;
+					DynamicObjectData collider = m_dynamicCells[cellAddr].get(j);
+					
+					// check for duplicates
+					if( collider != null && !collider.m_queried )
+					{
+						m_foundObjects.add( collider.m_obj );
+						collider.m_queried = true;
+					}
 				}
-			}
-			
-			// compare against the static objects
-			len = m_staticCells[cellId].size();
-			for( int j = 0; j < len; ++j ) 
-			{
-				StaticObjectData collider = m_staticCells[cellId].get(j);
 				
-				// check for duplicates
-				if( collider != null && !collider.m_queried )
+				// compare against the static objects
+				len = m_staticCells[cellAddr].size();
+				for( int j = 0; j < len; ++j ) 
 				{
-					m_foundObjects.add( collider.m_obj );
-					collider.m_queried = true;
+					StaticObjectData collider = m_staticCells[cellAddr].get(j);
+					
+					// check for duplicates
+					if( collider != null && !collider.m_queried )
+					{
+						m_foundObjects.add( collider.m_obj );
+						collider.m_queried = true;
+					}
 				}
 			}
 		}
@@ -310,41 +320,44 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 		BoundingBox shape = obj.getBounds();
 		
 		int[] cellIds = getCellIds( shape );
-		int i = 0;
-		int cellId = -1;
-		while( i <= 3 && ( cellId = cellIds[i++] ) != -1 ) 
+		int cellAddr = cellIds[2] * m_cellsPerRow + cellIds[0];
+		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
 		{
-			// compare against the dynamic objects
-			int len = m_dynamicCells[cellId].size();
-			for( int j = 0; j < len; ++j ) 
+			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
 			{
-				DynamicObjectData collider = m_dynamicCells[cellId].get(j);
-				
-				// check for duplicates
-				if( collider != null && collider.m_obj != obj && !collider.m_queried )
+				// compare against the dynamic objects
+				int len = m_dynamicCells[cellAddr].size();
+				for( int j = 0; j < len; ++j ) 
 				{
-					m_foundObjects.add( collider.m_obj );
-					collider.m_queried = true;
+					DynamicObjectData collider = m_dynamicCells[cellAddr].get(j);
+					
+					// check for duplicates
+					if( collider != null && collider.m_obj != obj && !collider.m_queried )
+					{
+						m_foundObjects.add( collider.m_obj );
+						collider.m_queried = true;
+					}
 				}
-			}
-			
-			// compare against the static objects
-			len = m_staticCells[cellId].size();
-			for( int j = 0; j < len; ++j ) 
-			{
-				StaticObjectData collider = m_staticCells[cellId].get(j);
 				
-				// check for duplicates
-				if( collider != null && collider.m_obj != obj && !collider.m_queried )
+				// compare against the static objects
+				len = m_staticCells[cellAddr].size();
+				for( int j = 0; j < len; ++j ) 
 				{
-					m_foundObjects.add( collider.m_obj );
-					collider.m_queried = true;
+					StaticObjectData collider = m_staticCells[cellAddr].get(j);
+					
+					// check for duplicates
+					if( collider != null && collider.m_obj != obj && !collider.m_queried )
+					{
+						m_foundObjects.add( collider.m_obj );
+						collider.m_queried = true;
+					}
 				}
 			}
 		}
 		
 		return m_foundObjects;
 	}
+	
 	
 	/**
 	 * Finds out in which grid cells does the specified object reside at the moment.
@@ -354,51 +367,21 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	 */
 	public int[] getCellIds( BoundingBox shape ) 
 	{		
-		int minX = (int)FloatMath.ceil(shape.m_minX / m_cellSize);
-		int maxX = (int)FloatMath.ceil(shape.m_maxX / m_cellSize);
-		int minY = (int)FloatMath.ceil(shape.m_minY / m_cellSize);
-		int maxY = (int)FloatMath.ceil(shape.m_maxY / m_cellSize);
+		int minX = (int)(shape.m_minX / m_cellSize);
+		int maxX = (int)(shape.m_maxX / m_cellSize);
+		int minY = (int)(shape.m_minY / m_cellSize);
+		int maxY = (int)(shape.m_maxY / m_cellSize);
 		
-		if ( minX < 0 || minX >= m_cellsPerRow || maxX < 0 || maxX >= m_cellsPerRow || 
-				minY < 0 || minY >= m_cellsPerCol || maxY < 0 || maxY >= m_cellsPerCol )
-		{
-			// the object is outside the world's bounds
-			m_cellIds[0] = -1;
-			m_cellIds[1] = -1;
-			m_cellIds[2] = -1;
-			m_cellIds[3] = -1;
-		}
-		else
-		{
-			// the object can span onto maximum four different cells - let's calculate their indices 
-			m_cellIds[0] = minY * m_cellsPerRow + minX;
-			m_cellIds[1] = minY * m_cellsPerRow + maxX;
-			m_cellIds[2] = maxY * m_cellsPerRow + minX;
-			m_cellIds[3] = maxY * m_cellsPerRow + maxX;
-			
-			// compact the data - the cells were calculated in such an order
-			// that if the object lies in just two cells, the adjacent
-			// entries will have the same value - so we can simply go
-			// through them and erase duplicated values
-			for ( int i = 3; i >= 1; --i )
-			{
-				if ( m_cellIds[i] == m_cellIds[i - 1] )
-				{
-					// this cell has the same id as the previous one - set it to -1 then
-					m_cellIds[i] = -1;
-				}
-			}
-			
-			for ( int i = 2; i >= 0; --i )
-			{
-				if ( m_cellIds[i] == -1 )
-				{
-					m_cellIds[i] = m_cellIds[i + 1];
-					m_cellIds[i + 1] = -1;
-				}
-			}
-		}
-		
+		if ( minX < 0 ) { minX = 0; } else if ( minX >= m_cellsPerRow ) { minX = m_cellsPerRow - 1; }
+		if ( maxX < 0 ) { maxX = 0; } else if ( maxX >= m_cellsPerRow ) { maxX = m_cellsPerRow - 1; }
+		if ( minY < 0 ) { minY = 0; } else if ( minY >= m_cellsPerCol ) { minY = m_cellsPerCol - 1; }
+		if ( maxY < 0 ) { maxY = 0; } else if ( maxY >= m_cellsPerCol ) { maxY = m_cellsPerCol - 1; }
+
+		m_cellIds[0] = minX;
+		m_cellIds[1] = maxX;
+		m_cellIds[2] = minY;
+		m_cellIds[3] = maxY;
+				
 		return m_cellIds;
 	}
 	

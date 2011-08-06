@@ -7,10 +7,10 @@ import java.util.*;
 
 import android.util.Log;
 
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Updatable;
-import com.hypefoundry.engine.game.World;
-import com.hypefoundry.engine.game.WorldView;
+import com.hypefoundry.engine.world.World;
+import com.hypefoundry.engine.world.WorldView;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.util.GenericFactory;
 import com.hypefoundry.engine.util.SpatialGrid2D;

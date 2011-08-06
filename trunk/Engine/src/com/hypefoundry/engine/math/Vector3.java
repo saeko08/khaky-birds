@@ -96,6 +96,33 @@ public final class Vector3
 	}
 	
 	/**
+	 * Normalizes the vector and places the result in the specified vector.
+	 * 
+	 * @param outVec
+	 */
+	public void normalized( Vector3 outVec )
+	{
+		float invMag = 1.0f/(float) Math.sqrt( m_x*m_x + m_y*m_y + m_z*m_z );
+		outVec.m_x = m_x * invMag;
+		outVec.m_y = m_y * invMag;
+		outVec.m_z = m_z * invMag;
+	}
+	
+	/**
+	 * Normalizes the vector in 2D ( x & y components ), sets its z component to 0
+	 * and places the result in the specified vector.
+	 * 
+	 * @param outVec
+	 */
+	public void normalized2D( Vector3 outVec )
+	{
+		float invMag = 1.0f/(float) Math.sqrt( m_x*m_x + m_y*m_y );
+		outVec.m_x = m_x * invMag;
+		outVec.m_y = m_y * invMag;
+		outVec.m_z = 0;
+	}
+	
+	/**
 	 * Magnitude ( length ) of the vector.
 	 * @return
 	 */
@@ -285,5 +312,47 @@ public final class Vector3
 		float distY = m_y - y;
 		float distZ = m_z - z;
 		return distX * distX + distY * distY + distZ * distZ;
+	}
+	
+	/**
+	 * Limits vector's length to the specified value without changing its direction.  
+	 * 
+	 * @param newLen
+	 */
+	public void clamp( float newLen )
+	{
+		float newLenSq = newLen * newLen; 
+		float lenSq = m_x*m_x + m_y*m_y + m_z*m_z;
+		if ( newLenSq < lenSq )
+		{
+			float invMag = (float) Math.sqrt( newLenSq / lenSq );
+			m_x *= invMag;
+			m_y *= invMag;
+			m_z *= invMag;
+		}
+	}
+
+	/**
+	 * Returns an angle between two vectors.
+	 * 
+	 * @param rhs
+	 * @return
+	 */
+	public float getAngleBetween( Vector3 rhs ) 
+	{
+		float angle1 = angleXY();
+		float angle2 = rhs.angleXY();
+		float angle = angle1 - angle2;
+		
+		if ( angle > 180.0f )
+		{
+			angle = 360.0f - angle;
+		}
+		else if ( angle < -180.0f )
+		{
+			angle = 360.0f + angle;
+		}
+
+		return angle;
 	}
 }

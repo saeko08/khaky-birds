@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.game;
+package com.hypefoundry.engine.world;
 
 /**
  * An aspect contains additional informations about an entity's state.

@@ -3,7 +3,7 @@
  */
 package com.hypefoundry.engine.physics;
 
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 
 /**
  * This is the simplest representation of a static physical body

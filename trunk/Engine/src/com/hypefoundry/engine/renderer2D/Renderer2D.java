@@ -8,19 +8,15 @@ import android.util.Log;
 
 import com.hypefoundry.engine.core.Camera2D;
 import com.hypefoundry.engine.core.GLGraphics;
-import com.hypefoundry.engine.core.Texture;
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Game;
-import com.hypefoundry.engine.game.World;
-import com.hypefoundry.engine.game.WorldView;
+import com.hypefoundry.engine.world.World;
+import com.hypefoundry.engine.world.WorldView;
 import com.hypefoundry.engine.impl.openGL.GLCamera2D;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
-import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.GenericFactory;
-import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.SpatialGrid2D;
-import com.hypefoundry.engine.util.SpatialGridObject;
 
 // TODO sorting by distance from the screen
 
@@ -118,18 +114,13 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		
 		// TODO: rendering with multiple atlases and with Z sorting
-		
-		// begin the rendering batch
-		/*m_batcher.beginBatch( m_atlasTexture );
-		
 		// draw the visuals
 		List< EntityVisual > visuals = m_visualsGrid.getPotentialColliders( m_camera.getFrustum() );
 		for ( EntityVisual visual : visuals )
 		{
 			visual.draw( m_batcher );
 		}
-		
-		m_batcher.endBatch();*/
+		m_batcher.flush();
 	}
 	
 	

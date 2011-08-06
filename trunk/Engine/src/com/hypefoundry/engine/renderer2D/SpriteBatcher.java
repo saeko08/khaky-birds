@@ -6,11 +6,12 @@ package com.hypefoundry.engine.renderer2D;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.FloatMath;
+import android.util.Log;
 
 import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.core.Texture;
-import com.hypefoundry.engine.impl.openGL.Geometry;
 import com.hypefoundry.engine.math.Vector3;
+
 
 /**
  * Main workhorse behind the sprites rendering.
@@ -20,10 +21,12 @@ import com.hypefoundry.engine.math.Vector3;
  */
 public class SpriteBatcher 
 {
-	final float[] 		m_verticesBuffer;
-	int 				m_bufferIndex;
-	final Geometry 		m_geometry;
-	int 				m_numSprites;
+	private final float[] 		m_verticesBuffer;
+	private int 				m_bufferIndex;
+	private final Geometry 		m_geometry;
+	private int 				m_numSprites;
+	
+	private Texture				m_currentTexture = null;
 	
 	
 	/**
@@ -57,26 +60,11 @@ public class SpriteBatcher
 	}
 	
 	/**
-	 * Begins the batch rendering with the specified texture.
-	 * 
-	 * @param texture
+	 * Flushes the batch.
 	 */
-	public void beginBatch( Texture texture ) 
+	public void flush()
 	{
-		texture.bind();
-		m_numSprites = 0;
-		m_bufferIndex = 0;
-	}
-	
-	/**
-	 * Finishes the batch rendering.
-	 */
-	public void endBatch() 
-	{
-		m_geometry.setVertices( m_verticesBuffer, 0, m_bufferIndex );
-		m_geometry.bind();
-		m_geometry.draw( GL10.GL_TRIANGLES, 0, m_numSprites * 6 );
-		m_geometry.unbind();
+		setTexture( null );
 	}
 	
 	/**
@@ -90,6 +78,10 @@ public class SpriteBatcher
 	 */
 	public void drawSprite( float x, float y, float width, float height, TextureRegion region ) 
 	{
+		// set a texture first
+		setTexture( region.m_texture );
+				
+		// add the new sprite to the batcher
 		float halfWidth = width / 2;
 		float halfHeight = height / 2;
 		float x1 = x - halfWidth;
@@ -128,6 +120,10 @@ public class SpriteBatcher
 	 */
 	public void drawSprite( float x, float y, float width, float height, float angle, TextureRegion region ) 
 	{
+		// set a texture first
+		setTexture( region.m_texture );
+		
+		// add the new sprite to the batcher
 		float halfWidth = width / 2;
 		float halfHeight = height / 2;
 		float rad = angle * Vector3.TO_RADIANS;
@@ -169,5 +165,34 @@ public class SpriteBatcher
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
 		
 		m_numSprites++;
+	}
+	
+	/**
+	 * Sets a texture for the batch rendering
+	 * 
+	 * @param texture
+	 */
+	private void setTexture( Texture texture ) 
+	{
+		if ( m_currentTexture != texture )
+		{
+			// this is a new batch - draw the stuff that's in the buffer
+			// and prepare it for the new batch
+			
+			// draw what's in the buffer
+			m_geometry.setVertices( m_verticesBuffer, 0, m_bufferIndex );
+			m_geometry.bind();
+			m_geometry.draw( GL10.GL_TRIANGLES, 0, m_numSprites * 6 );
+			m_geometry.unbind();
+				
+			// prepare the new texture
+			m_currentTexture = texture;
+			if ( m_currentTexture != null )
+			{
+				m_currentTexture.bind();
+			}
+			m_numSprites = 0;
+			m_bufferIndex = 0;
+		}
 	}
 }

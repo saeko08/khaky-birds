@@ -1,6 +1,6 @@
 package com.hypefoundry.engine.renderer2D;
 
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.util.SpatialGridObject;
 

@@ -3,7 +3,7 @@
  */
 package com.hypefoundry.engine.controllers;
 
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Updatable;
 
 /**
@@ -27,7 +27,7 @@ public abstract class EntityController implements Updatable
 	}
 	
 	/**
-	 * Checks if this controller controlls the specified entity.
+	 * Checks if this controller controls the specified entity.
 	 * 
 	 * @param entity
 	 * @return

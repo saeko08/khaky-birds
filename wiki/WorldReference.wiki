@@ -1,4 +1,4 @@
-#labels world,entity
+#labels world,entity,aspects,EntityEvents
 =World=
 
 ==Introduction==
@@ -166,6 +166,9 @@ public void onRemovedFromWorld( World hostWorld );
 
 Implement them with the setup/release code you require.
 
+==Entity events===
+
+==Aspects===
 
 ==Views==
 The world on its own is just a large storage of entities. It doesn't feature an `update` or `draw` methods for instance, because we want to be able to define different ways our entities will be updated or drawn in.

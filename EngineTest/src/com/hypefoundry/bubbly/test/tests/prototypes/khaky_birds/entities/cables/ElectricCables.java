@@ -3,8 +3,8 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables
 import java.util.*;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.CableProvider;
-import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
 
 
@@ -24,8 +24,8 @@ public class ElectricCables extends Entity implements CableProvider
 	 */
 	public ElectricCables()
 	{
-		float halfWidth = 12.0f; // TODO: config
-		float halfHeight = 10.0f; // TODO: config
+		float halfWidth = 4.8f; // TODO: config
+		float halfHeight = 4.8f; // TODO: config
 		
 		setPosition( halfWidth, halfHeight, 10 );
 		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, 0, halfWidth, halfHeight, 0 ) );	
@@ -44,17 +44,10 @@ public class ElectricCables extends Entity implements CableProvider
 			cablePositions[i] = m_cablePositions[i];
 		}
 		
-		// Arrays.copyOf( m_cablePositions, m_cablePositions.length + 1 );
 		cablePositions[ m_cablePositions.length ] = x;
 		m_cablePositions = cablePositions;
 		
 		Arrays.sort(m_cablePositions );
-	}
-	
-	@Override
-	public void onCollision( Entity colider ) 
-	{
-		// TODO Auto-generated method stub
 	}
 	
 	@Override

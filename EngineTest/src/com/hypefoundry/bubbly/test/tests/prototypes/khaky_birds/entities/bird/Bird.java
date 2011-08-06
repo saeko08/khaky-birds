@@ -1,12 +1,13 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Prey;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shockable;
-import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Eaten;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shocked;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EntityEvent;
+import com.hypefoundry.engine.world.EntityEventListener;
+import com.hypefoundry.engine.world.EventFactory;
+import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
@@ -19,7 +20,7 @@ import com.hypefoundry.engine.math.Vector3;
  * @author paksas
  *
  */
-public class Bird extends Entity implements Shockable, Prey
+public class Bird extends Entity implements EntityEventListener
 {
 	private CableProvider		m_cables			 = null;
 	private int					m_cableIdx  		 = 0;
@@ -37,6 +38,13 @@ public class Bird extends Entity implements Shockable, Prey
 	{
 		setPosition( 0, 0, 0 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+		
+		// define events the entity responds to
+		registerEvent( Eaten.class, new EventFactory< Eaten >() { @Override public Eaten createObject() { return new Eaten (); } } );
+		registerEvent( Shocked.class, new EventFactory< Shocked >() { @Override public Shocked createObject() { return new Shocked (); } } );
+		
+		// register events listeners
+		attachEventListener( this );
 	}
 	
 	@Override
@@ -68,11 +76,6 @@ public class Bird extends Entity implements Shockable, Prey
 	public void onRemovedFromWorld( World hostWorld ) 
 	{
 		m_cables = null;
-	}
-	
-	@Override
-	public void onCollision( Entity colider ) 
-	{
 	}
 
 	/**
@@ -163,16 +166,14 @@ public class Bird extends Entity implements Shockable, Prey
 	// ------------------------------------------------------------------------
 	// Environment interactions
 	// ------------------------------------------------------------------------
-	@Override
-	public void getShocked() 
-	{
-		m_world.removeEntity( this );
-	}
 
 	@Override
-	public void getEaten() 
+	public void onEvent( EntityEvent event ) 
 	{
-		m_world.removeEntity( this );
+		if ( event instanceof Eaten || event instanceof Shocked )
+		{
+			m_world.removeEntity( this );
+		}
 	}
 
 }

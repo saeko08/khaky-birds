@@ -1,7 +1,8 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
@@ -15,13 +16,9 @@ import com.hypefoundry.engine.math.Vector3;
  * @author paksas
  *
  */
-public class Pedestrian extends Entity 
+public class Pedestrian extends Entity
 {
-	Vector3 			m_direction;
-	public boolean      hitWithShit = false;
-	public boolean      isMoving    = true;
-
-	
+	boolean				m_hitWithShit;
 	
 	/**
 	 * Constructor.
@@ -38,39 +35,21 @@ public class Pedestrian extends Entity
 		setPosition( x, y, 80 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
 		
-		// set initial movement direction
-		m_direction = new Vector3( (float)Math.random(), (float)Math.random(), 0);
-		m_direction.normalize();
-	}
-	
-	@Override
-	public void onCollision( Entity colider ) 
-	{
-		if ( Crap.class.isInstance(colider))
-		{
-			hitWithShit = true;
-			stopMoving();
-		}
+		m_hitWithShit = false;
+		
+		// define events the entity responds to
+		registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
 	}
 
+
 	/**
-	 *Makes pedestrian stops for a while
+	 * Tells that the pedestrian was hit with shit.
 	 * 
-	 *
+	 * @param flag
 	 */
-	public void stopMoving() 
+	public void setHitWithShit( boolean flag ) 
 	{
-		 isMoving = false;
-	}
-	
-	/**
-	 *pedestrian starts moving
-	 * 
-	 *
-	 */
-	public void startMoving() 
-	{
-		isMoving = true;
+		m_hitWithShit = flag;
 	}
 
 }

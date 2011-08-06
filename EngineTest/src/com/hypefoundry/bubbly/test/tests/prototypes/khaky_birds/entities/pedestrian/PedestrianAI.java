@@ -3,13 +3,17 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
-import android.util.Log;
 
-import com.hypefoundry.engine.controllers.EntityController;
-import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.game.World;
-import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
+import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
+import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.physics.DynamicObject;
+import com.hypefoundry.engine.physics.SteeringBehaviors;
+import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EntityEvent;
+import com.hypefoundry.engine.world.EntityEventListener;
 
 
 /**
@@ -18,15 +22,112 @@ import com.hypefoundry.engine.math.Vector3;
  * @author paksas
  *
  */
-public class PedestrianAI extends EntityController
+public class PedestrianAI extends FiniteStateMachine
 {
-	private World 				m_world;
 	private Pedestrian			m_pedestrian;
-	private float 				m_wait 			= 0.f;
-	
-	private Vector3 			m_velocity;
-	private final float			m_speed 		= 25.0f;
+	private SteeringBehaviors 	m_sb;
 
+	// ------------------------------------------------------------------------
+	
+	class Wander extends FSMState implements EntityEventListener
+	{	
+		private Vector3 m_tmpDirVec 		= new Vector3();
+		
+		Wander()
+		{
+			// register events listeners
+			m_pedestrian.attachEventListener( this );
+		}
+		
+		@Override
+		public void activate()
+		{
+			m_sb.reset().wander().faceMovementDirection();
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.reset();
+		}
+
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				m_pedestrian.setHitWithShit( true );
+				transitTo( Observe.class );
+			}
+			else if ( event instanceof OutOfWorldBounds )
+			{
+				TurnBack state = transitTo( TurnBack.class );
+						
+				OutOfWorldBounds oowb = (OutOfWorldBounds)event;
+				
+				DynamicObject dynObject = m_pedestrian.query( DynamicObject.class );
+				dynObject.m_velocity.normalized2D( m_tmpDirVec );
+				oowb.reflectVector( state.m_targetDirection, m_tmpDirVec );				
+			}
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	class TurnBack extends FSMState
+	{
+		public Vector3 m_targetDirection 	= new Vector3();
+		public Vector3 m_tmpDirVec 			= new Vector3();
+		
+		@Override
+		public void activate()
+		{
+			m_sb.reset().lookAt( m_targetDirection );
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.reset();
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{	
+			m_tmpDirVec.set( 1.0f, 0.0f, 0.0f ).rotateZ( m_pedestrian.getFacing() );
+			float angleDist = m_targetDirection.getAngleBetween( m_tmpDirVec );
+			if ( angleDist < 5.0f )
+			{
+				// when we're close to the desired facing, switch to wandering state
+				transitTo( Wander.class );
+			}
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	class Observe extends FSMState
+	{
+		private float 				m_wait 			= 0.f;
+		
+		@Override
+		public void activate()
+		{
+			m_wait = 10.0f;
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			m_wait -= deltaTime;
+			if ( m_wait > 0 )
+			{
+				transitTo( Wander.class );
+			}				
+		}
+	}
+	
+	// ------------------------------------------------------------------------
 	
 	/**
 	 * Constructor.
@@ -34,52 +135,23 @@ public class PedestrianAI extends EntityController
 	 * @param world
 	 * @param pedestrian			controlled pedestrian
 	 */
-	public PedestrianAI( World world, Entity pedestrian )
+	public PedestrianAI( Entity pedestrian )
 	{
 		super( pedestrian );
 		
-		m_world = world;
 		m_pedestrian = (Pedestrian)pedestrian;
-		
-		m_velocity = new Vector3( 0, 0, 0 );
+		m_sb = new SteeringBehaviors( m_pedestrian );
+
+		// setup the state machine
+		register( new Wander() );
+		register( new TurnBack() );
+		register( new Observe() );
+		begin( Wander.class );
 	}
 	
 	@Override
-	public void update( float deltaTime ) 
+	public void onUpdate( float deltaTime )
 	{
-		// TODO: create steering behaviors library
-		
-		//pedestrian stops moving for a while
-		if (m_pedestrian.isMoving == false)
-		{
-			m_wait += deltaTime;
-			
-			Log.d( "wait", m_wait + ", ");
-			
-			if (m_wait > 0.2)
-			{
-				m_pedestrian.isMoving = true;
-				m_wait = 0;
-			}
-			
-		}
-		else 
-		{
-			// wander around aimlessly
-			m_velocity.scale( m_pedestrian.m_direction, m_speed * deltaTime );
-			m_pedestrian.translate( m_velocity );
-			
-			// if the pedestrian got outside the screen, change its movement direction
-			BoundingBox bb = m_pedestrian.getWorldBounds();
-			if ( bb.m_minX < 0 || bb.m_maxX >= m_world.getWidth() )
-			{
-				m_pedestrian.m_direction.m_x = -m_pedestrian.m_direction.m_x; 
-			}
-			if ( bb.m_minY < 0 || bb.m_maxY >= m_world.getHeight() )
-			{
-				m_pedestrian.m_direction.m_y = -m_pedestrian.m_direction.m_y; 
-			}
-		}
+		m_sb.update();
 	}
-
 }

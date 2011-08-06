@@ -1,4 +1,4 @@
-package com.hypefoundry.engine.test.util;
+package com.hypefoundry.engine.test.math;
 
 import junit.framework.Assert;
 import android.test.AndroidTestCase;

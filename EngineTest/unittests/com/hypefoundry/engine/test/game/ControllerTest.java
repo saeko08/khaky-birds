@@ -3,10 +3,10 @@ package com.hypefoundry.engine.test.game;
 import com.hypefoundry.engine.controllers.ControllersView;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.EntityControllerFactory;
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Updatable;
 import com.hypefoundry.engine.game.UpdatesManager;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.world.World;
 
 import android.test.AndroidTestCase;
 
@@ -29,14 +29,10 @@ public class ControllerTest extends AndroidTestCase
 	
 	class Chair extends Entity
 	{
-		@Override
-		public void onCollision(Entity colider) {}	
 	}
 	
 	class Bike extends Entity
 	{
-		@Override
-		public void onCollision(Entity colider) {}	
 	}
 	
 	String m_report = "";

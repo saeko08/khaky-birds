@@ -5,7 +5,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedest
 
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.core.Texture;
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
@@ -49,7 +49,7 @@ public class PedestrianVisual extends EntityVisual
 		Vector3 pos = m_pedestrian.getPosition();
 		BoundingShape bs = m_pedestrian.getBoundingShape();
 	
-		if (m_pedestrian.hitWithShit == false)
+		if ( m_pedestrian.m_hitWithShit == false )
 		{
 			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
 		}

@@ -1,14 +1,17 @@
 package com.hypefoundry.engine.test.game;
 
-import com.hypefoundry.engine.game.Entity;
-import com.hypefoundry.engine.game.EntityOperation;
-import com.hypefoundry.engine.game.World;
+import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EntityEvent;
+import com.hypefoundry.engine.world.EntityEventListener;
+import com.hypefoundry.engine.world.EntityOperation;
+import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.PhysicalBody;
 import com.hypefoundry.engine.physics.PhysicalBodyFactory;
 import com.hypefoundry.engine.physics.PhysicsView;
+import com.hypefoundry.engine.physics.events.CollisionEvent;
 
 
 import android.test.AndroidTestCase;
@@ -19,7 +22,7 @@ public class PhysicsTests extends AndroidTestCase
 {
 	// ------------------------------------------------------------------------
 	
-	private class EntityMock extends Entity
+	private class EntityMock extends Entity implements EntityEventListener
 	{
 		int				m_collisions;
 			
@@ -27,16 +30,19 @@ public class PhysicsTests extends AndroidTestCase
 		{
 			super();
 			
-			defineAspect( new DynamicObject() );
+			defineAspect( new DynamicObject( 1.0f, 180.0f ) );
 			
 			setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.2f, 0.2f, 0.2f, 0.2f ) );
 			m_collisions = 0;
 		}
 			
 		@Override
-		public void onCollision( Entity colider )
+		public void onEvent( EntityEvent event )
 		{
-			m_collisions++;
+			if ( event instanceof CollisionEvent )
+			{
+				m_collisions++;
+			}
 		}
 			
 		public void reset()
@@ -53,6 +59,9 @@ public class PhysicsTests extends AndroidTestCase
 		public PhysicalBodyMock( Entity entity ) 
 		{
 			super(entity);
+			EntityMock mock = (EntityMock)entity;
+			
+			mock.attachEventListener( mock );
 		}
 		
 		@Override
@@ -105,6 +114,11 @@ public class PhysicsTests extends AndroidTestCase
 		e2.setPosition( 3.4f, 3.4f, 0 );
 		world.update( 0 );
 		physics.update( 0 );
+		// not yet - the events will be processed at the beginng of the next frame
+		assertEquals( 0, e1.m_collisions );
+		assertEquals( 0, e2.m_collisions );
+		
+		world.update( 0 );
 		assertEquals( 1, e1.m_collisions );
 		assertEquals( 1, e2.m_collisions );
 	}

@@ -92,4 +92,22 @@ public class SpatialGrid2DTests extends AndroidTestCase
 		potentialColliders = grid.getPotentialColliders( movable );
 		assertEquals( 0, potentialColliders.size() );
 	}
+	
+	public void testMarkingLargeArea()
+	{
+		SpatialGrid2D< GridObjectMock > grid = new SpatialGrid2D< GridObjectMock >( 10, 10, 2 );
+		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
+		
+		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) );
+		grid.insertDynamicObject( movable );
+		
+		grid.update();
+		List< GridObjectMock > potentialColliders = grid.getPotentialColliders( movable );
+		assertEquals( 0, potentialColliders.size() );
+		
+		
+		grid.update();
+		potentialColliders = grid.getPotentialColliders( new BoundingBox( -100, -100, -100, 100, 100, 100 ) );
+		assertEquals( 2, potentialColliders.size() );
+	}
 }

@@ -10,7 +10,7 @@ import android.util.Log;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.core.Input.TouchEvent;
-import com.hypefoundry.engine.game.Entity;
+import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.Vector3;
 
 

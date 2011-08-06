@@ -60,14 +60,17 @@ That means you want to customize your representation classes so that they are ab
 You can do that by implementing the `EntityEventListener` interface
 
 {{{
-class MyEntityAI extends EntityController implements EntityEventListener< GrenadeExplosion >
+class MyEntityAI extends EntityController implements EntityEventListener
 {
      // ....
 
      @Override
-     public void onEvent( GrenadeExplosion event )
+     public void onEvent( EntityEvent event )
      {
-          // implement the explosion results here
+          if ( event instanceof GrenadeExplosion )
+          {
+               // implement the explosion results here
+          }
      }
 
      // ....

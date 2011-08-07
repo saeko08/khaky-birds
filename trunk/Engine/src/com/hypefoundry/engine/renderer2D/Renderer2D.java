@@ -6,15 +6,13 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
 
-import com.hypefoundry.engine.core.Camera2D;
 import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.WorldView;
-import com.hypefoundry.engine.impl.openGL.GLCamera2D;
-import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.physics.DynamicObject;
+import com.hypefoundry.engine.renderer2D.impl.GLCamera2D;
 import com.hypefoundry.engine.util.GenericFactory;
 import com.hypefoundry.engine.util.SpatialGrid2D;
 
@@ -43,6 +41,16 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	private SpriteBatcher						m_batcher = null;
 	
 	private Camera2D							m_camera = null;
+	
+	private Comparator< EntityVisual >			m_comparator = new Comparator< EntityVisual >()
+			{
+				@Override
+				public int compare( EntityVisual arg0, EntityVisual arg1 ) 
+				{
+					return (int) (arg1.getZ() - arg0.getZ());
+				}
+		
+			};
 	
 	/**
 	 * Constructor.
@@ -108,14 +116,15 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
 		m_camera.setViewportAndMatrices();
 		
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable( GL10.GL_BLEND );
+		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );
 		
-		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glEnable( GL10.GL_TEXTURE_2D );
+		gl.glDisable( GL10.GL_DEPTH_TEST );
 		
-		// TODO: rendering with multiple atlases and with Z sorting
-		// draw the visuals
+		// draw the visuals, sorting them first in their Z order
 		List< EntityVisual > visuals = m_visualsGrid.getPotentialColliders( m_camera.getFrustum() );
+		Collections.sort( visuals, m_comparator );
 		for ( EntityVisual visual : visuals )
 		{
 			visual.draw( m_batcher );

@@ -11,6 +11,8 @@ import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Updatable;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.WorldView;
+import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.util.GenericFactory;
 import com.hypefoundry.engine.util.SpatialGrid2D;
@@ -25,6 +27,8 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 {
 	private float								m_cellSize = 2.0f;
 	private final int							MAX_ENTITIES = 512;		// TODO: config
+	private float								m_worldWidth = 0;
+	private float								m_worldHeight = 0;
 	private SpatialGrid2D< PhysicalBody >		m_bodiesGrid = null;
 	private List< PhysicalBody > 				m_bodies;
 	private List< Entity >		 				m_bodiesToAdd;
@@ -65,15 +69,17 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	@Override
 	public void onAttached( World world ) 
 	{
-		float width = world.getWidth();
-		float height = world.getHeight();
-		m_bodiesGrid = new SpatialGrid2D< PhysicalBody >( width, height, m_cellSize );
+		m_worldWidth = world.getWidth();
+		m_worldHeight = world.getHeight();
+		m_bodiesGrid = new SpatialGrid2D< PhysicalBody >( m_worldWidth, m_worldHeight, m_cellSize );
 	}
 
 	@Override
 	public void onDetached( World world ) 
 	{
 		m_bodiesGrid = null;
+		m_worldWidth = 0;
+		m_worldHeight = 0;
 	}
 
 	@Override
@@ -186,12 +192,13 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	 */
 	private void resolveCollisions() 
 	{
-		// go through all the entities and test their mutual overlap
+		// go through all the entities
 		int count = m_bodies.size();
 		for( int i = 0; i < count; ++i )
 		{
 			PhysicalBody body = m_bodies.get(i);
-			
+
+			// test the collisions with other nearby objects
 			List< PhysicalBody > collidingBodies = m_bodiesGrid.getPotentialColliders( body );
 			
 			int collidersCount = collidingBodies.size();
@@ -204,6 +211,26 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 					body.onCollision( collider );
 				}
 			}
+			
+			// check if the entity didn't roam outside world's bounds
+			BoundingBox bb = body.getBounds();
+			if ( bb.m_minX <= 0.0f || bb.m_maxX >= m_worldWidth )
+			{
+				OutOfWorldBounds event = body.m_entity.sendEvent( OutOfWorldBounds.class );
+				if ( event != null )
+				{
+					event.m_side = OutOfWorldBounds.ExitSide.ES_X;
+				}
+			}
+			if ( bb.m_minY <= 0.0f || bb.m_maxY >= m_worldHeight )
+			{
+				OutOfWorldBounds event = body.m_entity.sendEvent( OutOfWorldBounds.class );
+				if ( event != null )
+				{
+					event.m_side = OutOfWorldBounds.ExitSide.ES_Y;
+				}
+			}
+
 		}
 	}
 	

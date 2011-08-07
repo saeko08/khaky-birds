@@ -26,7 +26,8 @@ public class Geometry
 	private final boolean 			m_hasColor;
 	private final boolean 			m_hasTexCoords;
 	private final int 				m_vertexSize;
-	private final FloatBuffer 		m_vertices;
+	private int[]					m_tmpBuffer;
+	private final IntBuffer 		m_vertices;
 	private final ShortBuffer 		m_indices;
 	
 	/**
@@ -48,8 +49,9 @@ public class Geometry
 		// allocate the vertex buffer
 		ByteBuffer buffer = ByteBuffer.allocateDirect( maxVertices * m_vertexSize );
 		buffer.order( ByteOrder.nativeOrder() );
-		m_vertices = buffer.asFloatBuffer();
-			
+		m_vertices = buffer.asIntBuffer();
+		m_tmpBuffer = new int[ maxVertices * m_vertexSize / 4 ];
+		
 		// allocate the index buffer, if needed
 		if( maxIndices > 0 ) 
 		{
@@ -73,7 +75,14 @@ public class Geometry
 	public void setVertices( float[] vertices, int offset, int length )
 	{
 		m_vertices.clear();
-		m_vertices.put( vertices, 0, length );
+		
+		int len = offset + length;
+		for( int i = offset, j = 0; i < len; ++i, ++j )
+		{
+			m_tmpBuffer[j] = Float.floatToRawIntBits( vertices[i] );
+		}
+		
+		m_vertices.put( m_tmpBuffer, 0, length );
 		m_vertices.flip();
 	}
 	
@@ -96,11 +105,18 @@ public class Geometry
 	 */
 	public void bind()
 	{
+		int verticesCount = m_vertices.limit();
+		if ( verticesCount <= 0 )
+		{
+			return;
+		}
+		
 		GL10 gl = m_graphics.getGL();
 		
 		gl.glEnableClientState( GL10.GL_VERTEX_ARRAY );
 		m_vertices.position(0);
 		gl.glVertexPointer(2, GL10.GL_FLOAT, m_vertexSize, m_vertices);
+		
 		if( m_hasColor ) 
 		{
 			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
@@ -108,18 +124,11 @@ public class Geometry
 			gl.glColorPointer( 4, GL10.GL_FLOAT, m_vertexSize, m_vertices );
 		}
 		
-		try
+		if( m_hasTexCoords ) 
 		{
-			if( m_hasTexCoords ) 
-			{
-				gl.glEnableClientState( GL10.GL_TEXTURE_COORD_ARRAY );
-				m_vertices.position( m_hasColor ? 6 : 2 );
-				gl.glTexCoordPointer( 2, GL10.GL_FLOAT, m_vertexSize, m_vertices );
-			}
-		}
-		catch( Exception ex )
-		{
-			Log.d( "", "" );
+			gl.glEnableClientState( GL10.GL_TEXTURE_COORD_ARRAY );
+			m_vertices.position( m_hasColor ? 6 : 2 );
+			gl.glTexCoordPointer( 2, GL10.GL_FLOAT, m_vertexSize, m_vertices );
 		}
 	}
 	
@@ -128,8 +137,13 @@ public class Geometry
 	 */
 	public void draw( int primitiveType, int offset, int numVertices ) 
 	{
-		GL10 gl = m_graphics.getGL();
-				
+		int verticesCount = m_vertices.limit();
+		if ( verticesCount <= 0 )
+		{
+			return;
+		}
+		
+		GL10 gl = m_graphics.getGL();			
 		if( m_indices != null ) 
 		{
 			m_indices.position( offset );
@@ -139,16 +153,6 @@ public class Geometry
 		{
 			gl.glDrawArrays( primitiveType, offset, numVertices );
 		}
-		
-		if( m_hasTexCoords )
-		{
-			gl.glDisableClientState( GL10.GL_TEXTURE_COORD_ARRAY );
-		}
-		
-		if( m_hasColor )
-		{
-			gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-		}
 	}
 	
 	/**
@@ -156,8 +160,13 @@ public class Geometry
 	 */
 	public void unbind()
 	{
-		GL10 gl = m_graphics.getGL();
+		int verticesCount = m_vertices.limit();
+		if ( verticesCount <= 0 )
+		{
+			return;
+		}
 		
+		GL10 gl = m_graphics.getGL();
 		if( m_hasTexCoords )
 		{
 			gl.glDisableClientState( GL10.GL_TEXTURE_COORD_ARRAY );

@@ -84,11 +84,12 @@ public class SpriteBatcher
 		// add the new sprite to the batcher
 		float halfWidth = width / 2;
 		float halfHeight = height / 2;
+		
 		float x1 = x - halfWidth;
 		float y1 = y - halfHeight;
-
 		float x2 = x + halfWidth;
 		float y2 = y + halfHeight;
+		
 		m_verticesBuffer[ m_bufferIndex++ ] = x1;
 		m_verticesBuffer[ m_bufferIndex++ ] = y1;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;

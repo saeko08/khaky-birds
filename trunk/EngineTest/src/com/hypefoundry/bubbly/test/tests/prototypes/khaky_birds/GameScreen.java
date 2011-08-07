@@ -105,23 +105,23 @@ public class GameScreen extends Screen
 	private void populateGameWorld() 
 	{
 		// first - create the ground
-		m_world.addEntity( new Ground() );
+		//m_world.addEntity( new Ground() );
 		
 		// create the cables the bird will move on
-		m_world.addEntity( new ElectricCables() );
+		//m_world.addEntity( new ElectricCables() );
 		
 		//create falcon that will hunt our bird
 		//m_world.addEntity( new Falcon() );
 		
 		// next - we need the pedestrians that wander around
-		/*final int pedestriansCount = 100;
+		final int pedestriansCount = 100;
 		final float spawnAreaWidth = m_world.getWidth();
 		final float spawnAreaHeight = m_world.getHeight();
 		for ( int i = 0; i < pedestriansCount; ++i )
 		{
 			Pedestrian pedestrian = new Pedestrian( spawnAreaWidth, spawnAreaHeight );
 			m_world.addEntity( pedestrian );
-		}*/
+		}
 		
 		// finally add our main character
 		//m_world.addEntity( new Bird() );

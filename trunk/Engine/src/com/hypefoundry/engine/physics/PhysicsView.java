@@ -104,15 +104,17 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	 */
 	private void manageBodies()
 	{
-		for ( Entity entity : m_bodiesToRemove )
+		int count = m_bodiesToRemove.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			detachBody( entity );
+			detachBody( m_bodiesToRemove.get(i) );
 		}
 		m_bodiesToRemove.clear();
 		
-		for ( Entity entity : m_bodiesToAdd )
+		count = m_bodiesToAdd.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			attachBody( entity );
+			attachBody( m_bodiesToAdd.get(i) );
 		}
 		m_bodiesToAdd.clear();
 	}
@@ -176,8 +178,10 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	 */
 	private PhysicalBody findBodyFor( Entity entity )
 	{
-		for ( PhysicalBody body : m_bodies )
+		int count = m_bodies.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			PhysicalBody body = m_bodies.get(i);
 			if ( body.isBodyOf( entity ) )
 			{
 				return body;
@@ -241,9 +245,10 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	 */
 	private void simulateForces( float deltaTime )
 	{
-		for( PhysicalBody body : m_bodies )
+		int count = m_bodies.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			body.simulate( deltaTime );
+			m_bodies.get(i).simulate( deltaTime );
 		}
 	}
 

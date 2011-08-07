@@ -125,9 +125,10 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		// draw the visuals, sorting them first in their Z order
 		List< EntityVisual > visuals = m_visualsGrid.getPotentialColliders( m_camera.getFrustum() );
 		Collections.sort( visuals, m_comparator );
-		for ( EntityVisual visual : visuals )
+		int count = visuals.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			visual.draw( m_batcher );
+			visuals.get(i).draw( m_batcher );
 		}
 		m_batcher.flush();
 	}
@@ -152,15 +153,17 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	 */
 	private void manageEntities()
 	{
-		for ( Entity entity : m_entitiesToRemove )
+		int count = m_entitiesToRemove.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			detachEntity( entity );
+			detachEntity( m_entitiesToRemove.get(i) );
 		}
 		m_entitiesToRemove.clear();
 		
-		for ( Entity entity : m_entitiesToAdd )
+		count = m_entitiesToAdd.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			attachEntity( entity );
+			attachEntity( m_entitiesToAdd.get(i) );
 		}
 		m_entitiesToAdd.clear();
 	}
@@ -224,8 +227,10 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	 */
 	private EntityVisual findVisualFor( Entity entity )
 	{
-		for ( EntityVisual visual : m_visuals )
+		int count = m_visuals.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			EntityVisual visual = m_visuals.get(i);
 			if ( visual.isVisualOf( entity ) )
 			{
 				return visual;

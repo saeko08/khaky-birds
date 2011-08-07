@@ -125,6 +125,7 @@ public abstract class Entity
 				// release the event back into the pool
 				m_pool.free( event );
 			}
+			m_sentEventsCount = 0;
 		}
 	}
 	
@@ -281,6 +282,14 @@ public abstract class Entity
 	public final void setFacing( float facing )
 	{
 		m_facing = facing;
+		while ( m_facing < 0 )
+		{
+			m_facing += 360.0f;
+		}
+		while ( m_facing > 360.0f )
+		{
+			m_facing -= 360.0f;
+		}
 	}
 	
 	/**
@@ -291,6 +300,14 @@ public abstract class Entity
 	public final void rotate( float angle )
 	{
 		m_facing += angle;
+		while ( m_facing < 0 )
+		{
+			m_facing += 360.0f;
+		}
+		while ( m_facing > 360.0f )
+		{
+			m_facing -= 360.0f;
+		}
 	}
 
 	/**
@@ -391,6 +408,14 @@ public abstract class Entity
 		if ( listener != null )
 		{
 			m_eventListeners.add( listener );
+		}
+	}
+	
+	public final void detachEventListener( EntityEventListener listener )
+	{
+		if ( listener != null )
+		{
+			m_eventListeners.remove( listener );
 		}
 	}
 	

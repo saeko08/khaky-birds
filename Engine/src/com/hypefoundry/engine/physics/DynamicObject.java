@@ -46,7 +46,7 @@ public final class DynamicObject implements Aspect
 		float rotMag = Math.abs( m_rotation );
 		if ( rotMag > m_rotationSpeed )
 		{
-			m_rotation = Math.copySign( rotMag, m_rotation );
+			m_rotation = ( m_rotation > 0 ) ? rotMag : -rotMag;
 		}
 	}
 	
@@ -61,6 +61,10 @@ public final class DynamicObject implements Aspect
 		m_currTranslation.scale( deltaTime );
 		entity.translate( m_currTranslation );
 		entity.rotate( m_rotation * deltaTime );
+		
+		// slow down
+		m_velocity.set( 0, 0, 0 );
+		m_rotation = 0;
 	}
 		
 }

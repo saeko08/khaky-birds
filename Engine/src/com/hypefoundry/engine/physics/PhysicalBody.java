@@ -69,7 +69,10 @@ public abstract class PhysicalBody implements SpatialGridObject
 		try
 		{
 			CollisionEvent event = m_entity.sendEvent( CollisionEvent.class );
-			event.m_collider = collider.m_entity;
+			if ( event != null )
+			{
+				event.m_collider = collider.m_entity;
+			}
 		}
 		catch ( EntityEventException ex )
 		{

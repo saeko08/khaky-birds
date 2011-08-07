@@ -37,6 +37,7 @@ public class OutOfWorldBounds implements EntityEvent
 	 */
 	public void reflectVector( Vector3 targetDirection, Vector3 sourceDirection )
 	{
+		targetDirection.set( sourceDirection );
 		switch( m_side )
 		{
 			case ES_X:

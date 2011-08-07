@@ -64,7 +64,14 @@ public class SpriteBatcher
 	 */
 	public void flush()
 	{
-		setTexture( null );
+		// draw what's in the buffer
+		m_geometry.setVertices( m_verticesBuffer, 0, m_bufferIndex );
+		m_geometry.bind();
+		m_geometry.draw( GL10.GL_TRIANGLES, 0, m_numSprites * 6 );
+		m_geometry.unbind();
+		
+		m_numSprites = 0;
+		m_bufferIndex = 0;
 	}
 	
 	/**
@@ -181,10 +188,7 @@ public class SpriteBatcher
 			// and prepare it for the new batch
 			
 			// draw what's in the buffer
-			m_geometry.setVertices( m_verticesBuffer, 0, m_bufferIndex );
-			m_geometry.bind();
-			m_geometry.draw( GL10.GL_TRIANGLES, 0, m_numSprites * 6 );
-			m_geometry.unbind();
+			flush();
 				
 			// prepare the new texture
 			m_currentTexture = texture;
@@ -192,8 +196,6 @@ public class SpriteBatcher
 			{
 				m_currentTexture.bind();
 			}
-			m_numSprites = 0;
-			m_bufferIndex = 0;
 		}
 	}
 }

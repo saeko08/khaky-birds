@@ -84,8 +84,10 @@ public class ControllersView extends GenericFactory< Entity, EntityController > 
 	 */
 	private EntityController findControllerFor( Entity entity )
 	{
-		for ( EntityController controller : m_controllers )
+		int count = m_controllers.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			EntityController controller = m_controllers.get(i);
 			if ( controller.isControllerOf( entity ) )
 			{
 				return controller;

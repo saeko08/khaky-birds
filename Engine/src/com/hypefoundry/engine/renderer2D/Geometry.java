@@ -77,7 +77,7 @@ public class Geometry
 		m_vertices.clear();
 		
 		int len = offset + length;
-		for( int i = offset, j = 0; i < len; ++i, ++j )
+		for( int i = offset, j = 0; i < len; i++, j++ )
 		{
 			m_tmpBuffer[j] = Float.floatToRawIntBits( vertices[i] );
 		}

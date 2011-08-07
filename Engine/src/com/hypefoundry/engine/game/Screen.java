@@ -55,24 +55,27 @@ public abstract class Screen implements UpdatesManager
 			deltaTime = 0.1f;
 		}
 		
-		// remove updatables			
-		for ( Updatable updatable : m_updatablesToRemove )
+		// remove updatables
+		int count = m_updatablesToRemove.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			m_updatables.remove( updatable );
+			m_updatables.remove( m_updatablesToRemove.get(i) );
 		}
 		m_updatablesToRemove.clear();
 		
-		// add updatables			
-		for ( Updatable updatable : m_updatablesToAdd )
+		// add updatables
+		count = m_updatablesToAdd.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			m_updatables.add( updatable );
+			m_updatables.add( m_updatablesToAdd.get(i) );
 		}
 		m_updatablesToAdd.clear();
 		
-		// update updatables		
-		for ( Updatable updatable : m_updatables )
+		// update updatables	
+		count = m_updatables.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			updatable.update( deltaTime );
+			m_updatables.get(i).update( deltaTime );
 		}
 	}
 	

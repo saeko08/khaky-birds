@@ -47,6 +47,7 @@ public class FiniteStateMachine extends EntityController
 			
 			// activate the new state
 			m_activeState = m_stateToActivate;
+			m_stateToActivate = null;
 			if ( m_activeState != null )
 			{
 				m_activeState.activate();
@@ -69,6 +70,14 @@ public class FiniteStateMachine extends EntityController
 	 */
 	public final void register( FSMState newState ) 
 	{
+		if ( newState == null )
+		{
+			return;
+		}
+		
+		// set the parent FSM on the state
+		newState.setHostFSM( this );
+		
 		// make sure the state doesn't exist already - if it does, replace it
 		int count = m_states.size();
 		for( int i = 0; i < count; ++i )

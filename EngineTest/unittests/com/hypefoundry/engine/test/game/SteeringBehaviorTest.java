@@ -3,7 +3,7 @@ package com.hypefoundry.engine.test.game;
 
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
-import com.hypefoundry.engine.physics.SteeringBehaviors;
+import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
 import com.hypefoundry.engine.world.Entity;
 
 import android.test.AndroidTestCase;

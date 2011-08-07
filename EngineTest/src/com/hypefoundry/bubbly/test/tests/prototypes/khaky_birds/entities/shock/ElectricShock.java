@@ -1,5 +1,6 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock;
 
+import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.events.CollisionEvent;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
@@ -27,6 +28,11 @@ public class ElectricShock extends Entity implements EntityEventListener
 		
 		// register events listeners
 		attachEventListener( this );
+		
+		// add movement capabilities
+		final float maxLinearSpeed = 1.0f;
+		final float maxRotationSpeed = 180.0f;
+		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
 
 	@Override

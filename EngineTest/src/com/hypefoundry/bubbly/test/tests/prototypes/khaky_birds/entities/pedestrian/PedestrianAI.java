@@ -9,11 +9,12 @@ import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
-import com.hypefoundry.engine.physics.SteeringBehaviors;
+import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
+import com.hypefoundry.engine.world.EventFactory;
 
 
 /**
@@ -33,22 +34,23 @@ public class PedestrianAI extends FiniteStateMachine
 	{	
 		private Vector3 m_tmpDirVec 		= new Vector3();
 		
-		Wander()
-		{
-			// register events listeners
-			m_pedestrian.attachEventListener( this );
-		}
-		
 		@Override
 		public void activate()
 		{
+			// register events listeners
+			m_pedestrian.attachEventListener( this );
+			
 			m_sb.reset().wander().faceMovementDirection();
+
 		}
 		
 		@Override
 		public void deactivate()
 		{
 			m_sb.reset();
+			
+			// remove events listeners
+			m_pedestrian.detachEventListener( this );
 		}
 
 		@Override
@@ -56,33 +58,35 @@ public class PedestrianAI extends FiniteStateMachine
 		{
 			if ( event instanceof Crapped )
 			{
+				// a bird crapped on us
 				m_pedestrian.setHitWithShit( true );
-				transitTo( Observe.class );
+				transitionTo( Observe.class );
 			}
 			else if ( event instanceof OutOfWorldBounds )
-			{
-				TurnBack state = transitTo( TurnBack.class );
-						
+			{					
 				OutOfWorldBounds oowb = (OutOfWorldBounds)event;
 				
 				DynamicObject dynObject = m_pedestrian.query( DynamicObject.class );
-				dynObject.m_velocity.normalized2D( m_tmpDirVec );
-				oowb.reflectVector( state.m_targetDirection, m_tmpDirVec );				
+				oowb.reflectVector( m_tmpDirVec, dynObject.m_velocity );
+				m_tmpDirVec.normalize2D().add( m_pedestrian.getPosition() );
+				
+				transitionTo( TurnAround.class ).m_safePos.set( m_tmpDirVec );
+				
 			}
 		}
 	}
 	
 	// ------------------------------------------------------------------------
 	
-	class TurnBack extends FSMState
-	{
-		public Vector3 m_targetDirection 	= new Vector3();
-		public Vector3 m_tmpDirVec 			= new Vector3();
+	class TurnAround extends FSMState
+	{	
+		private Vector3 m_safePos 		= new Vector3();
+		
 		
 		@Override
 		public void activate()
 		{
-			m_sb.reset().lookAt( m_targetDirection );
+			m_sb.reset().seek( m_safePos ).faceMovementDirection();
 		}
 		
 		@Override
@@ -93,14 +97,13 @@ public class PedestrianAI extends FiniteStateMachine
 		
 		@Override
 		public void execute( float deltaTime )
-		{	
-			m_tmpDirVec.set( 1.0f, 0.0f, 0.0f ).rotateZ( m_pedestrian.getFacing() );
-			float angleDist = m_targetDirection.getAngleBetween( m_tmpDirVec );
-			if ( angleDist < 5.0f )
+		{
+			Vector3 currPos = m_pedestrian.getPosition();
+			float distSqToGoal = currPos.distSq( m_safePos );
+			if ( distSqToGoal < 1e-1 )
 			{
-				// when we're close to the desired facing, switch to wandering state
-				transitTo( Wander.class );
-			}
+				transitionTo( Wander.class );
+			}				
 		}
 	}
 	
@@ -122,7 +125,7 @@ public class PedestrianAI extends FiniteStateMachine
 			m_wait -= deltaTime;
 			if ( m_wait > 0 )
 			{
-				transitTo( Wander.class );
+				transitionTo( Wander.class );
 			}				
 		}
 	}
@@ -141,10 +144,14 @@ public class PedestrianAI extends FiniteStateMachine
 		
 		m_pedestrian = (Pedestrian)pedestrian;
 		m_sb = new SteeringBehaviors( m_pedestrian );
+		
+		// define events the entity responds to
+		m_pedestrian.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
+		m_pedestrian.registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
 
 		// setup the state machine
 		register( new Wander() );
-		register( new TurnBack() );
+		register( new TurnAround() );
 		register( new Observe() );
 		begin( Wander.class );
 	}

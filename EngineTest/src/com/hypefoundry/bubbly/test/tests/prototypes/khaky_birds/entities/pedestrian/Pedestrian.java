@@ -5,6 +5,7 @@ import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.physics.DynamicObject;
 
 
 /**
@@ -37,8 +38,10 @@ public class Pedestrian extends Entity
 		
 		m_hitWithShit = false;
 		
-		// define events the entity responds to
-		registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
+		// add movement capabilities
+		final float maxLinearSpeed = 1.0f;
+		final float maxRotationSpeed = 180.0f;
+		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
 
 

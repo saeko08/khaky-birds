@@ -8,6 +8,7 @@ import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.events.CollisionEvent;
 
 /**
@@ -32,6 +33,11 @@ public class Crap extends Entity implements EntityEventListener
 		
 		// register events listeners
 		attachEventListener( this );
+		
+		// add movement capabilities
+		final float maxLinearSpeed = 1.0f;
+		final float maxRotationSpeed = 180.0f;
+		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
 
 	

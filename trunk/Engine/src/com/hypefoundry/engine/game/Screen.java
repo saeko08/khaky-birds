@@ -49,6 +49,12 @@ public abstract class Screen implements UpdatesManager
 	 */
 	public final void update( float deltaTime )
 	{
+		if ( deltaTime > 0.1f )
+		{
+			// update speed clamp
+			deltaTime = 0.1f;
+		}
+		
 		// remove updatables			
 		for ( Updatable updatable : m_updatablesToRemove )
 		{

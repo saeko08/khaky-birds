@@ -60,6 +60,14 @@
 		<activity android:label="GL Surface View Test"
 			android:name=".tests.openGL.GLSurfaceViewTest"
 			android:screenOrientation="portrait" />	
+		
+		<activity android:label="GL Colored Triangle Test"
+			android:name=".tests.openGL.ColoredTriangleTest"
+			android:screenOrientation="portrait" />	
+		
+		<activity android:label="GL Sprites Batcher Test"
+			android:name=".tests.openGL.SpritesBatcherTest"
+			android:screenOrientation="portrait" />	
 			
 		<activity android:label="KhakyBirds prototype"
 			android:name=".tests.prototypes.khaky_birds.KhakyBirds"

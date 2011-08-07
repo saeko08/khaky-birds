@@ -23,6 +23,7 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.E
 import com.hypefoundry.engine.controllers.ControllersView;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.EntityControllerFactory;
+import com.hypefoundry.engine.util.FPSCounter;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
@@ -30,7 +31,7 @@ import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.physics.PhysicalBody;
 import com.hypefoundry.engine.physics.PhysicalBodyFactory;
 import com.hypefoundry.engine.physics.PhysicsView;
-import com.hypefoundry.engine.physics.CollisionBody;
+import com.hypefoundry.engine.physics.bodies.CollisionBody;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.EntityVisualFactory;
 import com.hypefoundry.engine.renderer2D.Renderer2D;
@@ -41,6 +42,8 @@ public class GameScreen extends Screen
 	Renderer2D									m_worldRenderer;
 	ControllersView								m_controllersView;
 	PhysicsView									m_physicsView;
+	
+	FPSCounter									m_fpsCounter = new FPSCounter();
 	
 	/**
 	 * Constructor.
@@ -108,20 +111,20 @@ public class GameScreen extends Screen
 		m_world.addEntity( new ElectricCables() );
 		
 		//create falcon that will hunt our bird
-		m_world.addEntity( new Falcon() );
+		//m_world.addEntity( new Falcon() );
 		
 		// next - we need the pedestrians that wander around
-		final int pedestriansCount = 10;
+		/*final int pedestriansCount = 100;
 		final float spawnAreaWidth = m_world.getWidth();
 		final float spawnAreaHeight = m_world.getHeight();
 		for ( int i = 0; i < pedestriansCount; ++i )
 		{
 			Pedestrian pedestrian = new Pedestrian( spawnAreaWidth, spawnAreaHeight );
 			m_world.addEntity( pedestrian );
-		}
+		}*/
 		
 		// finally add our main character
-		m_world.addEntity( new Bird() );
+		//m_world.addEntity( new Bird() );
 	}
 
 	@Override
@@ -129,6 +132,7 @@ public class GameScreen extends Screen
 	{	
 		// draw the world contents
 		m_worldRenderer.draw();
+		m_fpsCounter.logFrame();
 	}
 
 	@Override

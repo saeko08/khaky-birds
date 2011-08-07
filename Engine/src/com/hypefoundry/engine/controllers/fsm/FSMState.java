@@ -30,7 +30,7 @@ public abstract class FSMState
 	 * @param state
 	 * @return 	state instance that will be activated
 	 */
-	protected < T extends FSMState > T transitTo( Class< T > state )
+	protected < T extends FSMState > T transitionTonTo( Class< T > state )
 	{
 		if ( m_fsm != null )
 		{

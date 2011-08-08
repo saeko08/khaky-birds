@@ -424,9 +424,10 @@ public abstract class Entity
 	 */
 	public void processEvents()
 	{
-		for( EventsPool pool : m_eventsPool )
+		int count = m_eventsPool.size();
+		for( int i = 0; i < count; ++i )
 		{
-			pool.processEvents();
+			m_eventsPool.get(i).processEvents();
 		}
 	}
 	
@@ -467,8 +468,10 @@ public abstract class Entity
 	{
 		// check if the event isn't already registered.
 		// If it is - replace the old definition
-		for( EventsPool pool : m_eventsPool )
+		int count = m_eventsPool.size();
+		for( int i = 0; i < count; ++i )
 		{
+			EventsPool pool = m_eventsPool.get(i);
 			if ( pool.equals( eventClass ) )
 			{
 				pool.setFactory( factory );
@@ -489,8 +492,10 @@ public abstract class Entity
 	 */
 	private < T extends EntityEvent > EventsPool< T > getEventsPool( final Class< T > eventClass )
 	{
-		for( EventsPool pool : m_eventsPool )
+		int count = m_eventsPool.size();
+		for( int i = 0; i < count; ++i )
 		{
+			EventsPool pool = m_eventsPool.get(i);
 			if ( pool.equals( eventClass ) )
 			{
 				// pool found

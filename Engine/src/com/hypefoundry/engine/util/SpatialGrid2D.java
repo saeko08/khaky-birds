@@ -177,8 +177,10 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 		}
 		
 		// find the object and remove it
-		for ( DynamicObjectData objData : m_dynamicObjects )
+		int count = m_dynamicObjects.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			DynamicObjectData objData = m_dynamicObjects.get(i);
 			if ( objData.m_obj == obj )
 			{
 				m_dynamicObjects.remove( objData );
@@ -188,8 +190,10 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	
 		
 		// find the object and remove it
-		for ( StaticObjectData objData : m_staticObjects )
+		count = m_staticObjects.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			StaticObjectData objData = m_staticObjects.get(i);
 			if ( objData.m_obj == obj )
 			{
 				m_staticObjects.remove( objData );
@@ -204,8 +208,10 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	 */
 	public void update()
 	{
-		for ( DynamicObjectData objData : m_dynamicObjects )
+		int count = m_dynamicObjects.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			DynamicObjectData objData = m_dynamicObjects.get(i);
 			int cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
 			for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
 			{
@@ -250,13 +256,15 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	public List< T > getPotentialColliders( BoundingBox box ) 
 	{
 		m_foundObjects.clear();
-		for ( DynamicObjectData objData : m_dynamicObjects )
+		int count = m_dynamicObjects.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			objData.m_queried = false;
+			m_dynamicObjects.get(i).m_queried = false;
 		}
-		for ( StaticObjectData objData : m_staticObjects )
+		count = m_staticObjects.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			objData.m_queried = false;
+			m_staticObjects.get(i).m_queried = false;
 		}
 		
 		int[] cellIds = getCellIds( box );
@@ -308,13 +316,15 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	{
 		// clear the found objects list
 		m_foundObjects.clear();
-		for ( DynamicObjectData objData : m_dynamicObjects )
+		int count = m_dynamicObjects.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			objData.m_queried = false;
+			m_dynamicObjects.get(i).m_queried = false;
 		}
-		for ( StaticObjectData objData : m_staticObjects )
+		count = m_staticObjects.size();
+		for ( int i = 0; i < count; ++i )
 		{
-			objData.m_queried = false;
+			m_staticObjects.get(i).m_queried = false;
 		}
 		
 		BoundingBox shape = obj.getBounds();

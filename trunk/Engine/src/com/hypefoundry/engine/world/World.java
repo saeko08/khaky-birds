@@ -101,9 +101,10 @@ public class World implements Updatable
 		}
 		
 		// notify the views
-		for( WorldView view : m_views )
+		int count = m_views.size();
+		for( int i = 0; i < count; ++i )
 		{
-			view.onEntityAdded( entity );
+			m_views.get(i).onEntityAdded( entity );
 		}
 	}
 	
@@ -120,9 +121,10 @@ public class World implements Updatable
 			entity.onRemovedFromWorld( this );
 			
 			// notify the views
-			for( WorldView view : m_views )
+			int count = m_views.size();
+			for( int i = 0; i < count; ++i )
 			{
-				view.onEntityRemoved( entity );
+				m_views.get(i).onEntityRemoved( entity );
 			}
 		}
 	}
@@ -134,8 +136,10 @@ public class World implements Updatable
 	 */
 	public void attachView( WorldView view )
 	{
-		for( WorldView v : m_views )
+		int count = m_views.size();
+		for( int i = 0; i < count; ++i )
 		{
+			WorldView v = m_views.get(i);
 			if ( v.equals( view ) )
 			{
 				return;
@@ -147,9 +151,10 @@ public class World implements Updatable
 		view.onAttached( this );
 		
 		// inform the view about all present entities
-		for ( Entity entity : m_entities )
+		count = m_entities.size();
+		for( int i = 0; i < count; ++i )
 		{
-			view.onEntityAdded( entity );
+			view.onEntityAdded( m_entities.get(i) );
 		}
 	}
 	
@@ -161,9 +166,10 @@ public class World implements Updatable
 	public void detachView( WorldView view )
 	{
 		// remove all entities from the view
-		for ( Entity entity : m_entities )
+		int count = m_entities.size();
+		for( int i = 0; i < count; ++i )
 		{
-			view.onEntityRemoved( entity );
+			view.onEntityRemoved( m_entities.get(i) );
 		}
 		
 		// inform the view that it's been detached from a world
@@ -180,9 +186,10 @@ public class World implements Updatable
 	 */
 	public void executeOperation( EntityOperation operation )
 	{
-		for ( Entity entity : m_entities )
+		int count = m_entities.size();
+		for( int i = 0; i < count; ++i )
 		{
-			operation.visit( entity );
+			operation.visit( m_entities.get(i) );
 		}
 	}
 	
@@ -196,22 +203,25 @@ public class World implements Updatable
 	{	
 		// execute world attachment & detachment - detach first to save
 		// memory
-		for ( Entity entity : m_entitiesToRemove )
+		int count = m_entitiesToRemove.size();
+		for( int i = 0; i < count; ++i )
 		{
-			detachEntity( entity );
+			detachEntity( m_entitiesToRemove.get(i) );
 		}
 		m_entitiesToRemove.clear();
 		
-		for ( Entity entity : m_entitiesToAdd )
+		count = m_entitiesToAdd.size();
+		for( int i = 0; i < count; ++i )
 		{
-			attachEntity( entity );
+			attachEntity( m_entitiesToAdd.get(i) );
 		}
 		m_entitiesToAdd.clear();
 		
 		// process the entity events
-		for ( Entity entity : m_entities )
+		count = m_entities.size();
+		for( int i = 0; i < count; ++i )
 		{
-			entity.processEvents();
+			m_entities.get(i).processEvents();
 		}
 	}
 	
@@ -227,8 +237,10 @@ public class World implements Updatable
 	 */
 	public Entity findEntity( Class entityType ) 
 	{
-		for ( Entity entity : m_entities )
+		int count = m_entities.size();
+		for( int i = 0; i < count; ++i )
 		{
+			Entity entity = m_entities.get(i);
 			if ( entityType.isInstance( entity ) )
 			{
 				return entity;

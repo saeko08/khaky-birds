@@ -139,15 +139,24 @@ public class PhysicsTests extends AndroidTestCase
 
 		e1.setPosition( 0, 10, 0 );
 		e2.setPosition( 10, 0, 0 );
-		e1.query( DynamicObject.class ).m_velocity.set( 1, 0, 0 );
-		e2.query( DynamicObject.class ).m_velocity.set( 0, 1, 0 );
 		
-		for ( int i = 0; i < 10; ++i )
+		Vector3 pos = null;
+		float dist = 0;
+		for ( int i = 1; i < 10; ++i )
 		{
+			e1.query( DynamicObject.class ).m_velocity.set( 1, 0, 0 );
+			e2.query( DynamicObject.class ).m_velocity.set( 0, 1, 0 );
+			
 			world.update( 1 );
 			physics.update( 1 );
-			assertTrue( 0.1f < e1.getPosition().dist( new Vector3( i, 10, 0 ) ) );
-			assertTrue( 0.1f < e1.getPosition().dist( new Vector3( 10, i, 0 ) ) );
+			
+			pos = e1.getPosition();
+			dist = pos.dist( new Vector3( i, 10, 0 ) );
+			assertTrue( 0.1f > dist );
+			
+			pos = e2.getPosition();
+			dist = pos.dist( new Vector3( 10, i, 0 ) );
+			assertTrue( 0.1f > dist );
 		}
 	}
 }

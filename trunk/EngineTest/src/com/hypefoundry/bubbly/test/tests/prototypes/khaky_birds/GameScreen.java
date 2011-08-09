@@ -1,5 +1,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds;
 
+import java.util.List;
+
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.BirdController;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.BirdVisual;
@@ -23,6 +25,7 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.E
 import com.hypefoundry.engine.controllers.ControllersView;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.EntityControllerFactory;
+import com.hypefoundry.engine.core.Input.TouchEvent;
 import com.hypefoundry.engine.util.FPSCounter;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Game;
@@ -69,7 +72,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Pedestrian.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PedestrianVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Crap.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Falcon.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FalconVisual( m_resourceManager, parentEntity ); } } );
-		
+		/*
 		// register controllers
 		m_controllersView = new ControllersView( this );
 		m_world.attachView( m_controllersView );
@@ -90,10 +93,10 @@ public class GameScreen extends Screen
 		m_physicsView.register( Pedestrian.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity ); } } );
 		m_physicsView.register( Crap.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity ); } } );
 		m_physicsView.register( Falcon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity ); } } );
-		
+		*/
 		// register the updatables
 		addUpdatable( m_world );
-		addUpdatable( m_physicsView );
+		// addUpdatable( m_physicsView );
 				
 		// populate the game world
 		populateGameWorld();
@@ -130,6 +133,9 @@ public class GameScreen extends Screen
 	@Override
 	public void present( float deltaTime ) 
 	{	
+		m_game.getInput().getKeyEvents();
+		m_game.getInput().getTouchEvents();
+		
 		// draw the world contents
 		m_worldRenderer.draw();
 		m_fpsCounter.logFrame();

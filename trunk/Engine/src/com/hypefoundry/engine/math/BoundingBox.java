@@ -11,13 +11,13 @@ import com.hypefoundry.engine.math.Vector3;
  */
 final public class BoundingBox implements BoundingShape
 {
-	public float 		m_minX; 
-	public float 		m_minY;
-	public float 		m_minZ;
-	public float 		m_maxX;
-	public float 		m_maxY;
-	public float 		m_maxZ;
-	
+	public float 			m_minX; 
+	public float 			m_minY;
+	public float 			m_minZ;
+	public float 			m_maxX;
+	public float 			m_maxY;
+	public float 			m_maxZ;
+	private final Vector3 	m_massCenter = new Vector3();
 	/**
 	 * Default constructor.
 	 * 
@@ -51,6 +51,8 @@ final public class BoundingBox implements BoundingShape
 		m_maxX = maxX;
 		m_maxY = maxY;
 		m_maxZ = maxZ;
+		
+		calculateMassCenter();
 	}
 	
 	/**
@@ -67,6 +69,25 @@ final public class BoundingBox implements BoundingShape
 		m_maxX = sphere.m_center.m_x + halfSize;
 		m_maxY = sphere.m_center.m_y + halfSize;
 		m_maxZ = sphere.m_center.m_z + halfSize;
+		
+		calculateMassCenter();
+	}
+	
+	/**
+	 *Creates a bounding box based on the specified bounding coordinates
+	 * 
+	 * @param sphere
+	 */
+	public void set( float minX, float minY, float minZ, float maxX, float maxY, float maxZ )
+	{
+		m_minX = minX;
+		m_minY = minY;
+		m_minZ = minZ;
+		m_maxX = maxX;
+		m_maxY = maxY;
+		m_maxZ = maxZ;
+		
+		calculateMassCenter();
 	}
 	
 	/**
@@ -82,6 +103,16 @@ final public class BoundingBox implements BoundingShape
 		m_maxX = rhs.m_maxX;
 		m_maxY = rhs.m_maxY;
 		m_maxZ = rhs.m_maxZ;
+		
+		calculateMassCenter();
+	}
+	
+	/**
+	 * A Helper method for calculating the mass center.
+	 */
+	private void calculateMassCenter()
+	{
+		m_massCenter.set( m_maxX, m_maxY, m_maxZ ).sub( m_minX, m_minY, m_minZ ).scale( 0.5f );
 	}
 	
 	@Override
@@ -94,6 +125,12 @@ final public class BoundingBox implements BoundingShape
 	public float getHeight()
 	{
 		return m_maxY - m_minY;
+	}
+	
+	@Override
+	public Vector3 getMassCenter() 
+	{
+		return m_massCenter;
 	}
 
 	/**
@@ -126,5 +163,24 @@ final public class BoundingBox implements BoundingShape
 	final public boolean doesOverlap( final Vector3 pos )
 	{
 		return m_minX <= pos.m_x && m_maxX >= pos.m_x && m_minY <= pos.m_y && m_maxY >= pos.m_y && m_minZ <= pos.m_z && m_maxZ >= pos.m_z;
+	}
+	
+	@Override
+	final public boolean doesOverlap2D( final BoundingBox box )
+	{
+		return !( m_minX > box.m_maxX || m_maxX < box.m_minX || m_minY > box.m_maxY || m_maxY < box.m_minY );
+	}
+
+	@Override
+	public boolean doesOverlap2D( final BoundingSphere sphere ) 
+	{
+		// the code's implemented in the BoundingSphere class - so let's use it
+		return sphere.doesOverlap2D( this );
+	}
+	
+	@Override
+	final public boolean doesOverlap2D( final Vector3 pos )
+	{
+		return m_minX <= pos.m_x && m_maxX >= pos.m_x && m_minY <= pos.m_y && m_maxY >= pos.m_y;
 	}
 }

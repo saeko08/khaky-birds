@@ -174,12 +174,8 @@ public abstract class Entity
 	private final void updateWorldBounds() 
 	{
 		// update the world bounding box
-		m_worldBB.m_minX = m_bb.m_minX + m_pos.m_x;
-		m_worldBB.m_maxX = m_bb.m_maxX + m_pos.m_x;
-		m_worldBB.m_minY = m_bb.m_minY + m_pos.m_y;
-		m_worldBB.m_maxY = m_bb.m_maxY + m_pos.m_y;
-		m_worldBB.m_minZ = m_bb.m_minZ + m_pos.m_z;
-		m_worldBB.m_maxZ = m_bb.m_maxZ + m_pos.m_z;
+		m_worldBB.set( m_bb.m_minX + m_pos.m_x, m_bb.m_minY + m_pos.m_y, m_bb.m_minZ + m_pos.m_z, 
+				m_bb.m_maxX + m_pos.m_x, m_bb.m_maxY + m_pos.m_y, m_bb.m_maxZ + m_pos.m_z );
 	}
 	
 	/**

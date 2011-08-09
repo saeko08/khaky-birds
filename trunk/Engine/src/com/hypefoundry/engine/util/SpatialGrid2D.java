@@ -6,6 +6,8 @@ package com.hypefoundry.engine.util;
 import java.util.*;
 
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.Vector3;
+
 import android.util.FloatMath;
 import android.util.Log;
 
@@ -16,29 +18,6 @@ import android.util.Log;
  */
 public class SpatialGrid2D< T extends SpatialGridObject >
 {
-	private class DynamicObjectData
-	{
-		public int[] 	m_cellIds 		= new int[4];
-		public final T  m_obj;
-		public boolean	m_queried;
-		
-		DynamicObjectData( T obj )
-		{
-			m_obj = obj;
-			
-			m_cellIds[0] = m_cellIds[1] = m_cellIds[2] = m_cellIds[3] = -1;
-			m_queried = false;
-		}
-		
-		void setCells( int[] cellIds )
-		{
-			m_cellIds[0] = cellIds[0];
-			m_cellIds[1] = cellIds[1];
-			m_cellIds[2] = cellIds[2];
-			m_cellIds[3] = cellIds[3];
-		}
-	}
-	
 	private class StaticObjectData
 	{
 		public final T  m_obj;
@@ -53,14 +32,14 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	}
 	
 	
-	private List< DynamicObjectData >[] 	m_dynamicCells;
 	private List< StaticObjectData >[] 		m_staticCells;
-	private List< DynamicObjectData >		m_dynamicObjects;
+	private List< T >						m_dynamicObjects;
 	private List< StaticObjectData >		m_staticObjects;
 	
 	private int 							m_cellsPerRow;
 	private int 							m_cellsPerCol;
 	private float 							m_cellSize;
+	private float							m_dynObjectsMaxDistSq;
 	private int								m_cellsCount;
 	
 	private int[] 							m_cellIds = new int[4];
@@ -78,20 +57,19 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	{		
 		// memorize the basic data about the grid size
 		m_cellSize = cellSize;
+		m_dynObjectsMaxDistSq = ( 2.0f * m_cellSize ) * ( 2.0f * m_cellSize );
 		m_cellsPerRow = (int)FloatMath.ceil( worldWidth / cellSize );
 		m_cellsPerCol = (int)FloatMath.ceil( worldHeight / cellSize );
 		
 		// create the arrays in which we'll keep the entities
 		m_cellsCount = m_cellsPerRow * m_cellsPerCol;
-		m_dynamicCells = new List[m_cellsCount];
 		m_staticCells = new List[m_cellsCount];
-		m_dynamicObjects = new ArrayList< DynamicObjectData >();
+		m_dynamicObjects = new ArrayList< T >();
 		m_staticObjects = new ArrayList< StaticObjectData >();
 		
 		// preallocate the memory in the collections
 		for( int i = 0; i < m_cellsCount; ++i ) 
 		{
-			m_dynamicCells[i] = new ArrayList< DynamicObjectData >( 10 );
 			m_staticCells[i] = new ArrayList< StaticObjectData >( 10 );
 		}
 
@@ -126,33 +104,11 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	 * @param obj
 	 */
 	public void insertDynamicObject( T obj ) 
-	{
-		DynamicObjectData objData = new DynamicObjectData( obj );
-		
-		int[] cellIds = getCellIds( obj.getBounds() );
-		int existingIdx = -1;
-		int cellAddr = cellIds[2] * m_cellsPerRow + cellIds[0];
-		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
+	{	
+		if ( obj != null )
 		{
-			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
-			{
-				assert( cellAddr < m_cellsCount );	// invalid cell address check
-				
-				existingIdx = m_dynamicCells[cellAddr].indexOf( null );
-			
-				if ( existingIdx >= 0)
-				{
-					m_dynamicCells[cellAddr].set( existingIdx, objData );
-				}
-				else
-				{
-					m_dynamicCells[cellAddr].add( objData );
-				}
-			}
+			m_dynamicObjects.add( obj );
 		}
-		objData.setCells( cellIds );
-		
-		m_dynamicObjects.add( objData );
 	}
 	
 	/**
@@ -170,7 +126,6 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 			{
 				assert( cellAddr < m_cellsCount );	// invalid cell address check
 				
-				m_dynamicCells[cellAddr].remove( obj );
 				m_staticCells[cellAddr].remove( obj );
 				
 			}	
@@ -180,8 +135,8 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 		int count = m_dynamicObjects.size();
 		for ( int i = 0; i < count; ++i )
 		{
-			DynamicObjectData objData = m_dynamicObjects.get(i);
-			if ( objData.m_obj == obj )
+			T objData = m_dynamicObjects.get(i);
+			if ( objData == obj )
 			{
 				m_dynamicObjects.remove( objData );
 				break;
@@ -208,43 +163,6 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	 */
 	public void update()
 	{
-		int count = m_dynamicObjects.size();
-		for ( int i = 0; i < count; ++i )
-		{
-			DynamicObjectData objData = m_dynamicObjects.get(i);
-			int cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
-			for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
-			{
-				for ( int x = objData.m_cellIds[0]; x <= objData.m_cellIds[1]; ++x, ++cellAddr )
-				{
-					assert( cellAddr < m_cellsCount );	// invalid cell address check
-					int idx = m_dynamicCells[cellAddr].indexOf( objData );
-					if ( idx >= 0 )
-					{
-						m_dynamicCells[cellAddr].set( idx, null );
-					}
-				}
-			}
-
-			objData.setCells( getCellIds( objData.m_obj.getBounds() ) );
-
-			cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
-			for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
-			{
-				for ( int x = objData.m_cellIds[0]; x <= objData.m_cellIds[1]; ++x, ++cellAddr )
-				{
-					int idx = m_dynamicCells[cellAddr].indexOf( null );
-					
-					if ( idx < 0 )
-					{
-						idx = m_dynamicCells[cellAddr].size();
-						m_dynamicCells[cellAddr].add( null );
-					}
-					
-					m_dynamicCells[cellAddr].set( idx, objData );
-				}
-			}
-		}
 	}
 	
 	/**
@@ -256,40 +174,22 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	public List< T > getPotentialColliders( BoundingBox box ) 
 	{
 		m_foundObjects.clear();
-		int count = m_dynamicObjects.size();
-		for ( int i = 0; i < count; ++i )
-		{
-			m_dynamicObjects.get(i).m_queried = false;
-		}
-		count = m_staticObjects.size();
+		int count = m_staticObjects.size();
 		for ( int i = 0; i < count; ++i )
 		{
 			m_staticObjects.get(i).m_queried = false;
 		}
 		
+		// go through the static objects and find the ones nearby
 		int[] cellIds = getCellIds( box );
 		int cellAddr = cellIds[2] * m_cellsPerRow + cellIds[0];
 		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
 		{
 			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
 			{
-				// compare against the dynamic objects
-				int len = m_dynamicCells[cellAddr].size();
-				for( int j = 0; j < len; ++j ) 
-				{
-					DynamicObjectData collider = m_dynamicCells[cellAddr].get(j);
-					
-					// check for duplicates
-					if( collider != null && !collider.m_queried )
-					{
-						m_foundObjects.add( collider.m_obj );
-						collider.m_queried = true;
-					}
-				}
-				
 				// compare against the static objects
-				len = m_staticCells[cellAddr].size();
-				for( int j = 0; j < len; ++j ) 
+				count = m_staticCells[cellAddr].size();
+				for( int j = 0; j < count; ++j ) 
 				{
 					StaticObjectData collider = m_staticCells[cellAddr].get(j);
 					
@@ -300,6 +200,17 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 						collider.m_queried = true;
 					}
 				}
+			}
+		}
+		
+		// go through the dynamic objects and find the ones nearby
+		count = m_dynamicObjects.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			T collider = m_dynamicObjects.get(i);
+			if ( collider.getBounds().doesOverlap2D( box ) )
+			{
+				m_foundObjects.add( collider );	
 			}
 		}
 		
@@ -316,12 +227,7 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 	{
 		// clear the found objects list
 		m_foundObjects.clear();
-		int count = m_dynamicObjects.size();
-		for ( int i = 0; i < count; ++i )
-		{
-			m_dynamicObjects.get(i).m_queried = false;
-		}
-		count = m_staticObjects.size();
+		int count = m_staticObjects.size();
 		for ( int i = 0; i < count; ++i )
 		{
 			m_staticObjects.get(i).m_queried = false;
@@ -334,24 +240,10 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
 		{
 			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
-			{
-				// compare against the dynamic objects
-				int len = m_dynamicCells[cellAddr].size();
-				for( int j = 0; j < len; ++j ) 
-				{
-					DynamicObjectData collider = m_dynamicCells[cellAddr].get(j);
-					
-					// check for duplicates
-					if( collider != null && collider.m_obj != obj && !collider.m_queried )
-					{
-						m_foundObjects.add( collider.m_obj );
-						collider.m_queried = true;
-					}
-				}
-				
+			{				
 				// compare against the static objects
-				len = m_staticCells[cellAddr].size();
-				for( int j = 0; j < len; ++j ) 
+				count = m_staticCells[cellAddr].size();
+				for( int j = 0; j < count; ++j ) 
 				{
 					StaticObjectData collider = m_staticCells[cellAddr].get(j);
 					
@@ -362,6 +254,17 @@ public class SpatialGrid2D< T extends SpatialGridObject >
 						collider.m_queried = true;
 					}
 				}
+			}
+		}
+		
+		// go through the dynamic objects and find the ones nearby
+		count = m_dynamicObjects.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			T collider = m_dynamicObjects.get(i);
+			if ( collider != obj && collider.getBounds().doesOverlap2D( shape ) )
+			{
+				m_foundObjects.add( collider );	
 			}
 		}
 		

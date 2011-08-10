@@ -58,7 +58,7 @@ public class PhysicsTests extends AndroidTestCase
 
 		public PhysicalBodyMock( Entity entity ) 
 		{
-			super(entity);
+			super( entity, true );
 			EntityMock mock = (EntityMock)entity;
 			
 			mock.attachEventListener( mock );

@@ -33,26 +33,29 @@ public class SpatialGrid2DTests extends AndroidTestCase
 	
 	public void testStaticAndDynamicObject()
 	{	
-		SpatialGrid2D< GridObjectMock > grid = new SpatialGrid2D< GridObjectMock >( 10, 10, 5 );
+		final short MAX_ENTITIES_COUNT = 5;
+		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 5, MAX_ENTITIES_COUNT );
 		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
 		
 		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) );
 		grid.insertDynamicObject( movable );
 		
 		grid.update();
-		List< GridObjectMock > potentialColliders = grid.getPotentialColliders( movable );
-		assertEquals( 0, potentialColliders.size() );
+		GridObjectMock[] colliders = new GridObjectMock[MAX_ENTITIES_COUNT];
+		int collidersCount = grid.getPotentialColliders( movable, colliders );
+		assertEquals( 1, collidersCount );
 		
 		
 		movable.m_shape.m_center.set( 6, 6, 0 );
 		grid.update();
-		potentialColliders = grid.getPotentialColliders( movable );
-		assertEquals( 1, potentialColliders.size() );
+		collidersCount = grid.getPotentialColliders( movable, colliders );
+		assertEquals( 2, collidersCount );
 	}
 	
 	public void testTwoDynamicObjects()
 	{	
-		SpatialGrid2D< GridObjectMock > grid = new SpatialGrid2D< GridObjectMock >( 10, 10, 5 );
+		final short MAX_ENTITIES_COUNT = 5;
+		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 5, MAX_ENTITIES_COUNT );
 		GridObjectMock movable1 = new GridObjectMock( new BoundingSphere( 2, 2, 0, 1.5f ) );
 		grid.insertDynamicObject( movable1 );
 		
@@ -60,54 +63,58 @@ public class SpatialGrid2DTests extends AndroidTestCase
 		grid.insertDynamicObject( movable2 );
 		
 		grid.update();
-		List< GridObjectMock > potentialColliders = grid.getPotentialColliders( movable1 );
-		assertEquals( 0, potentialColliders.size() );
-		potentialColliders = grid.getPotentialColliders( movable2 );
-		assertEquals( 0, potentialColliders.size() );
+		GridObjectMock[] colliders = new GridObjectMock[MAX_ENTITIES_COUNT];
+		int collidersCount = grid.getPotentialColliders( movable1, colliders );
+		assertEquals( 1, collidersCount );
+		collidersCount = grid.getPotentialColliders( movable2, colliders );
+		assertEquals( 1, collidersCount );
 		
 		movable1.m_shape.m_center.set( 3, 6, 0 );
 		movable2.m_shape.m_center.set( 2, 5, 0 );
 		grid.update();
-		potentialColliders = grid.getPotentialColliders( movable1 );
-		assertEquals( 1, potentialColliders.size() );
-		potentialColliders = grid.getPotentialColliders( movable2 );
-		assertEquals( 1, potentialColliders.size() );
+		collidersCount = grid.getPotentialColliders( movable1, colliders );
+		assertEquals( 2, collidersCount );
+		collidersCount = grid.getPotentialColliders( movable2, colliders );
+		assertEquals( 2, collidersCount );
 	}
 	
 	public void testOutOfBoundsConditions()
 	{
-		SpatialGrid2D< GridObjectMock > grid = new SpatialGrid2D< GridObjectMock >( 10, 10, 5 );
+		final short MAX_ENTITIES_COUNT = 5;
+		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 5, MAX_ENTITIES_COUNT );
 		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
 		
 		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) );
 		grid.insertDynamicObject( movable );
 		
 		grid.update();
-		List< GridObjectMock > potentialColliders = grid.getPotentialColliders( movable );
-		assertEquals( 0, potentialColliders.size() );
+		GridObjectMock[] colliders = new GridObjectMock[MAX_ENTITIES_COUNT];
+		int collidersCount = grid.getPotentialColliders( movable, colliders );
+		assertEquals( 1, collidersCount );
 		
 		
 		movable.m_shape.m_center.set( 11, -11, 0 );
 		grid.update();
-		potentialColliders = grid.getPotentialColliders( movable );
-		assertEquals( 0, potentialColliders.size() );
+		collidersCount = grid.getPotentialColliders( movable, colliders );
+		assertEquals( 1, collidersCount );
 	}
 	
 	public void testMarkingLargeArea()
 	{
-		SpatialGrid2D< GridObjectMock > grid = new SpatialGrid2D< GridObjectMock >( 10, 10, 2 );
+		final short MAX_ENTITIES_COUNT = 5;
+		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 2, MAX_ENTITIES_COUNT );
 		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
 		
 		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) );
 		grid.insertDynamicObject( movable );
 		
 		grid.update();
-		List< GridObjectMock > potentialColliders = grid.getPotentialColliders( movable );
-		assertEquals( 0, potentialColliders.size() );
-		
-		
+		GridObjectMock[] colliders = new GridObjectMock[MAX_ENTITIES_COUNT];
+		int collidersCount = grid.getPotentialColliders( movable, colliders );
+		assertEquals( 1, collidersCount );
+			
 		grid.update();
-		potentialColliders = grid.getPotentialColliders( new BoundingBox( -100, -100, -100, 100, 100, 100 ) );
-		assertEquals( 2, potentialColliders.size() );
+		collidersCount = grid.getPotentialColliders( new BoundingBox( -100, -100, -100, 100, 100, 100 ), colliders );
+		assertEquals( 2, collidersCount );
 	}
 }

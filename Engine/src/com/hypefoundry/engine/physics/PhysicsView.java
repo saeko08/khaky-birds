@@ -26,14 +26,15 @@ import com.hypefoundry.engine.util.SpatialGrid2D;
 public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implements WorldView, Updatable
 {
 	private float								m_cellSize = 2.0f;
-	private final int							MAX_ENTITIES = 512;		// TODO: config
+	private final short							MAX_ENTITIES = 512;		// TODO: config
 	private float								m_worldWidth = 0;
 	private float								m_worldHeight = 0;
-	private SpatialGrid2D< PhysicalBody >		m_bodiesGrid = null;
+	private SpatialGrid2D						m_bodiesGrid = null;
 	private List< PhysicalBody > 				m_bodies;
 	private List< Entity >		 				m_bodiesToAdd;
 	private List< Entity > 						m_bodiesToRemove;
 	
+	private PhysicalBody[]						m_queryResults = new PhysicalBody[MAX_ENTITIES];
 	
 	/**
 	 * Constructor.
@@ -71,7 +72,7 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	{
 		m_worldWidth = world.getWidth();
 		m_worldHeight = world.getHeight();
-		m_bodiesGrid = new SpatialGrid2D< PhysicalBody >( m_worldWidth, m_worldHeight, m_cellSize );
+		m_bodiesGrid = new SpatialGrid2D( m_worldWidth, m_worldHeight, m_cellSize, MAX_ENTITIES );
 	}
 
 	@Override
@@ -201,18 +202,18 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 		for( int i = 0; i < count; ++i )
 		{
 			PhysicalBody body = m_bodies.get(i);
-
-			// test the collisions with other nearby objects
-			List< PhysicalBody > collidingBodies = m_bodiesGrid.getPotentialColliders( body );
-			
-			int collidersCount = collidingBodies.size();
-			for ( int j = 0; j < collidersCount; ++j )
+			if ( body.m_checkCollisions )
 			{
-				PhysicalBody collider = collidingBodies.get(j);
-				
-				if ( body.doesOverlap( collider ) )
+				// test the collisions with other nearby objects
+				int collidersCount = m_bodiesGrid.getPotentialColliders( body, m_queryResults );
+				for ( int j = 0; j < collidersCount; ++j )
 				{
-					body.onCollision( collider );
+					PhysicalBody collider = m_queryResults[j];
+					
+					if ( collider != body && body.doesOverlap( collider ) )
+					{
+						body.onCollision( collider );
+					}
 				}
 			}
 			

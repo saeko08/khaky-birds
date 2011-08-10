@@ -20,11 +20,12 @@ public class CollisionBody extends PhysicalBody
 	/**
 	 * Constructor.
 	 * 
-	 * @param entity
+	 * @param entity				represented entity
+	 * @param checkCollisions		checks collisions with other entities
 	 */
-	public CollisionBody( Entity entity ) 
+	public CollisionBody( Entity entity, boolean checkCollisions ) 
 	{
-		super(entity);
+		super( entity, checkCollisions );
 	}
 
 	@Override

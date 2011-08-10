@@ -25,14 +25,17 @@ public abstract class PhysicalBody implements SpatialGridObject
 {
 	protected Entity 			m_entity;
 	protected DynamicObject		m_dynamicObjectAspect;
+	final boolean				m_checkCollisions;
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param entity		represented entity
+	 * @param entity				represented entity
+	 * @param checkCollisions		checks collisions with other entities
 	 */
-	public PhysicalBody( Entity entity ) 
+	public PhysicalBody( Entity entity, boolean checkCollisions ) 
 	{
+		m_checkCollisions = checkCollisions;
 		m_entity = entity;
 		m_dynamicObjectAspect = m_entity.query( DynamicObject.class );
 		

@@ -15,6 +15,7 @@ import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.renderer2D.impl.GLCamera2D;
 import com.hypefoundry.engine.util.GenericFactory;
 import com.hypefoundry.engine.util.SpatialGrid2D;
+import com.hypefoundry.engine.util.Arrays;
 
 // TODO sorting by distance from the screen
 
@@ -29,19 +30,20 @@ import com.hypefoundry.engine.util.SpatialGrid2D;
 public class Renderer2D extends GenericFactory< Entity, EntityVisual > implements WorldView
 {
 	private final int							MAX_SPRITES = 512;			// TODO: config
-	private final int							MAX_ENTITIES = 512;			// TODO: config
+	private final short							MAX_ENTITIES = 512;			// TODO: config
 	private final float 						VIEWPORT_WIDTH = 9.6f;		// TODO: config
 	private final float 						VIEWPORT_HEIGHT = 4.8f;		// TODO: config
 	
 	private GLGraphics 							m_graphics;
 	private List< Entity >						m_entitiesToAdd;
 	private List< Entity >						m_entitiesToRemove;
-	private SpatialGrid2D< EntityVisual >		m_visualsGrid;
+	private SpatialGrid2D						m_visualsGrid;
 	private List< EntityVisual >				m_visuals;
 	private SpriteBatcher						m_batcher = null;
 	
-	private Camera2D							m_camera = null;
+	private EntityVisual[]						m_queryResult = new EntityVisual[MAX_ENTITIES];
 	
+	private Camera2D							m_camera = null;
 	private Comparator< EntityVisual >			m_comparator = new Comparator< EntityVisual >()
 			{
 				@Override
@@ -65,9 +67,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		m_entitiesToRemove = new ArrayList< Entity >();
 		
 		m_batcher = new SpriteBatcher( m_graphics, MAX_SPRITES );
-		
 		m_camera = new GLCamera2D( m_graphics, VIEWPORT_WIDTH, VIEWPORT_HEIGHT );
-		
 		m_visuals = new ArrayList< EntityVisual >( MAX_ENTITIES );
 	}
 	
@@ -75,7 +75,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	public void onAttached( World world )
 	{
 		float cellSize = ( VIEWPORT_HEIGHT < VIEWPORT_WIDTH ) ? VIEWPORT_HEIGHT : VIEWPORT_WIDTH; 
-		m_visualsGrid = new SpatialGrid2D< EntityVisual >( world.getWidth(), world.getHeight(), cellSize );
+		m_visualsGrid = new SpatialGrid2D( world.getWidth(), world.getHeight(), cellSize, MAX_ENTITIES );
 	}
 	
 	@Override
@@ -122,16 +122,13 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		gl.glEnable( GL10.GL_TEXTURE_2D );
 		gl.glDisable( GL10.GL_DEPTH_TEST );
 		
-		// draw the visuals, sorting them first in their Z order
-		List< EntityVisual > visuals = m_visualsGrid.getPotentialColliders( m_camera.getFrustum() );
+		// draw the visuals, sorting them first in their Z order		
+		int count = m_visualsGrid.getPotentialColliders( m_camera.getFrustum(), m_queryResult );
+		Arrays.quickSort( m_queryResult, m_comparator );
 		
-		// TODO: napisac wlasne in-place, bo to za duzo pamieci zre: 
-		// Collections.sort( visuals, m_comparator );
-		
-		int count = visuals.size();
 		for ( int i = 0; i < count; ++i )
 		{
-			visuals.get(i).draw( m_batcher );
+			m_queryResult[i].draw( m_batcher );
 		}
 		m_batcher.flush();
 	}

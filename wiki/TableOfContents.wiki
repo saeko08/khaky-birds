@@ -47,6 +47,7 @@
     * [ControllersViewReference Controllers]
        * [ControllersViewReference#Introduction Introduction]
        * [ControllersViewReference#Controllers_factory Controllers factory]
+    * [SteeringBehaviorsReference Steering behaviors]
     * [ Math ]
        * [Vector3Reference Vector]
        * [BoundingShapeReference BoundingShape]

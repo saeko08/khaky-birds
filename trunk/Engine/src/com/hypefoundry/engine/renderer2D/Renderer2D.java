@@ -12,7 +12,6 @@ import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.WorldView;
 import com.hypefoundry.engine.physics.DynamicObject;
-import com.hypefoundry.engine.renderer2D.impl.GLCamera2D;
 import com.hypefoundry.engine.util.GenericFactory;
 import com.hypefoundry.engine.util.SpatialGrid2D;
 import com.hypefoundry.engine.util.Arrays;
@@ -67,7 +66,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		m_entitiesToRemove = new ArrayList< Entity >();
 		
 		m_batcher = new SpriteBatcher( m_graphics, MAX_SPRITES );
-		m_camera = new GLCamera2D( m_graphics, VIEWPORT_WIDTH, VIEWPORT_HEIGHT );
+		m_camera = new Camera2D( m_graphics, VIEWPORT_WIDTH, VIEWPORT_HEIGHT );
 		m_visuals = new ArrayList< EntityVisual >( MAX_ENTITIES );
 	}
 	

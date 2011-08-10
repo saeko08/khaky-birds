@@ -18,16 +18,17 @@ public final class Arrays
 	 * A quicksort operation.
 	 * 
 	 * @param array
+	 * @param size
 	 * @param comparator
 	 */
-	public static < T > void quickSort( T[] array, Comparator< T > comparator )
+	public static < T > void quickSort( T[] array, int size, Comparator< T > comparator )
 	{
-		if ( array.length == 0 )
+		if ( size == 0 )
 		{
 			return;
 		}
 		
-		recursiveQuickSort( array, comparator, 0, array.length - 1 );
+		recursiveQuickSort( array, comparator, 0, size - 1 );
 	}
 	
 	/**

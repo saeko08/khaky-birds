@@ -139,8 +139,10 @@ public class FiniteStateMachine extends EntityController
 	 */
 	private FSMState findState( Class< ? extends FSMState > state )
 	{
-		for( FSMState s : m_states )
+		int count = m_states.size();
+		for( int i = 0; i < count; ++i )
 		{
+			FSMState s = m_states.get(i);
 			if ( state.isInstance( s ) )
 			{
 				return s;

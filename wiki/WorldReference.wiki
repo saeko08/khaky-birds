@@ -167,8 +167,120 @@ public void onRemovedFromWorld( World hostWorld );
 Implement them with the setup/release code you require.
 
 ==Entity events===
+Events can be sent to an entity. You can attach listeners to an entity to listen to those events.
+
+===Listening to events===
+A listener implements an interface `EntityEventListener`, which makes you implement one method:
+
+{{{
+/**
+ * Called when the even should be processed by the listener.
+ * 
+ * @param event
+ */
+public void onEvent( EntityEvent event );
+}}}
+
+This method will be called whenever an entity receives an event. In order to tell what event it was you can simply check its type:
+
+{{{
+@Override
+public void onEvent( EntityEvent event )
+{
+     if ( event instanceOf MyCoolEvent )
+     {
+          // do something
+     }
+}
+}}}
+
+
+===Sending an event===
+In order to *send* events to an entity, simply call 'Entity.sendEvent' method, specifying the type of event you want to send.
+
+Let's say you have a custom event called `Shot` that tells an entity it got shot and specifies what it was shot with:
+
+{{{
+enum Weapon
+{
+     WPN_Pistol,
+     WPN_Shotgun,
+     WPN_Rifle,
+}
+
+class Shot implements EntityEvent
+{
+     public Weapon    m_weapon;
+}
+}}}
+
+If you want to tell an entity it got shot with a Rifle, you can do this:
+{{{
+Shot shotEvent = shotEntity.sendEvent( Shot.class );
+shotEvent.m_weapon = Weapon.WPN_Rifle;
+}}}
+
+The *sendEvent* method takes a single param which is the event type, and returns the instance of event you can initialize with some data.
+
+An event itself is a regular class - you can define methods in it, make it do stuff once you receive it etc.
+
+Let's take a look at the *send event* method signature:
+{{{
+/**
+ * Transmits an entity event to the specific listeners.
+ * 
+ * CAUTION: single entity can only receive up to MAX_EVENTS_COUNT per frame.
+ * Once that number is reached, no new events will be transmitted to the entity
+ * and this method will return null pointers.
+ * 
+ * @param event
+ * @throws EntityEventException		when the allowed number of sent events was exceeded 
+ */
+public final < T extends EntityEvent > T sendEvent( Class< T > eventClass ) throws EntityEventException;
+}}}
+
+First of all - it may return *null* in case the entity doesn't support the specified event type. *THAT'S IMPORTANT TO KEEP IN MIND*.
+
+Second of all - it may throw an exception if the entity received too many events of this type this frame.
+Why does it throw an exception instead of returning *null* instead - because it points to a programming error - you flood it with an event of one type every frame - and that's bad.
+
+===Registering event types===
+An entity needs to be aware that it should process events of the specific type.
+
+In order to do that, you need to register an event type with it useing the *registerEvent* method:
+{{{
+/**
+ * Registers an event type.
+ * 
+ * @param eventClass
+ * @param factory			factory that will create the events
+ */
+public final < T extends EntityEvent > void registerEvent( Class< T > eventClass, EventFactory< T > factory );
+}}}
+
+And here's how you use it:
+{{{
+// define events the entity responds to
+registerEvent( Shot.class, new EventFactory< Shot >() { @Override public ShotcreateObject() { return new Shot(); } } );
+}}}
 
 ==Aspects===
+
+An aspect defines a set of attributes for an entity, that tells it how to do some additional stuff.
+
+You can define an aspect using the *defineAspect* method:
+{{{
+/**
+ * Defines a new aspect of the entity.
+ * It's protected - aspects can only be defined in the entity's implementation
+ * as a part of its state definition.
+ * 
+ * @param newAspect
+ */
+protected final void defineAspect( Aspect newAspect )
+}}}
+
+An example of such an aspect is the `DynamicObject` aspect, which gives an entity movement capabilities.
 
 ==Views==
 The world on its own is just a large storage of entities. It doesn't feature an `update` or `draw` methods for instance, because we want to be able to define different ways our entities will be updated or drawn in.

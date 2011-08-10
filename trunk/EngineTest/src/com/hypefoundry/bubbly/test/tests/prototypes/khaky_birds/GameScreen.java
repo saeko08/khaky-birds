@@ -1,6 +1,5 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds;
 
-import java.util.List;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.BirdController;
@@ -25,7 +24,6 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.E
 import com.hypefoundry.engine.controllers.ControllersView;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.EntityControllerFactory;
-import com.hypefoundry.engine.core.Input.TouchEvent;
 import com.hypefoundry.engine.util.FPSCounter;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Game;

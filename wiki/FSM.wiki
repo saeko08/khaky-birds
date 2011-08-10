@@ -154,7 +154,7 @@ class Scared extends FSMState implements EntityEventListener
 
 }}}
 
-To learn more how you can set up the events, take a look [EntityRef#Events here]
+To learn more how you can set up the events, take a look [WorldReference#Entity_events here]
 
 ==Good old updates==
 There's also a way to update something despite of the active state. A good candidate for such updates is a steering behavior instance, which needs to be updated every frame.

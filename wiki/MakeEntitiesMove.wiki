@@ -9,7 +9,7 @@ You can achieve that in two ways:
 
 Whichever approach you take however, be sure to mark the entity as *movable*. It's extremally important - due to optimization reasons, all entities are considered static by default, and as such will be subject to certain optimizations, which if they move, will cause bugs in them not being displayed etc.
 
-*How to make your entity movable?* In its constructor, add a *DynamicObject* aspect to it.
+*How to make your entity movable?* In its constructor, add a `DynamicObject` aspect to it.
 This aspect defines the movement capabilities of an entity ( how fast can it travel, how quickly can it rotate etc. ).
 
 {{{

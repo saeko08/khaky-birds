@@ -242,7 +242,7 @@ class Grid
 		// find the object and remove it
 		for ( short i = 0; i < m_objects.length; ++i )
 		{
-			if ( m_objects[i].m_obj == obj )
+			if ( m_objects[i] != null && m_objects[i].m_obj == obj )
 			{
 				objData = m_objects[ i ];
 				m_objects[ i ] = null;

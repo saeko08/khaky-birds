@@ -117,9 +117,10 @@ public abstract class Entity
 				T event = m_eventsToProcess.get( i );
 				m_eventsToProcess.set( i, null );
 				
-				for ( EntityEventListener listener : m_eventListeners )
+				int count = m_eventListeners.size();
+				for ( int j = 0; j < count; ++j )
 				{
-					listener.onEvent( event );
+					m_eventListeners.get(j).onEvent( event );
 				}
 				
 				// release the event back into the pool
@@ -357,8 +358,10 @@ public abstract class Entity
 	 */
 	public final < T extends Aspect > T query( Class< T > type )
 	{
-		for ( Aspect aspect : m_aspects )
+		int count = m_aspects.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			Aspect aspect = m_aspects.get(i);
 			if ( type.isInstance( aspect ) )
 			{
 				return (T)aspect;
@@ -376,8 +379,10 @@ public abstract class Entity
 	 */
 	public final < T extends Aspect >boolean hasAspect( Class< T > type ) 
 	{
-		for ( Aspect aspect : m_aspects )
+		int count = m_aspects.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			Aspect aspect = m_aspects.get(i);
 			if ( type.isInstance( aspect ) )
 			{
 				return true;

@@ -124,7 +124,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		
 		// draw the visuals, sorting them first in their Z order		
 		int count = m_visualsGrid.getPotentialColliders( m_camera.getFrustum(), m_queryResult );
-		Arrays.quickSort( m_queryResult, m_comparator );
+		Arrays.quickSort( m_queryResult, count, m_comparator );
 		
 		for ( int i = 0; i < count; ++i )
 		{

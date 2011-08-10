@@ -55,7 +55,7 @@
        * [SteeringBehaviorsReference#Introduction Introduction]
        * [SteeringBehaviorsReference#Behaviors_list Behaviors list]
        * [SteeringBehaviorsReference#Language Language]
-    * [ CameraReference Camera ]
+    * [CameraReference Camera]
     * [ Math ]
        * [Vector3Reference Vector]
        * [BoundingShapeReference BoundingShape]

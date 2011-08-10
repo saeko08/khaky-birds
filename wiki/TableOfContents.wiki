@@ -47,6 +47,7 @@
     * [ControllersViewReference Controllers]
        * [ControllersViewReference#Introduction Introduction]
        * [ControllersViewReference#Controllers_factory Controllers factory]
+       * [FSM Finite state machine]
     * [SteeringBehaviorsReference Steering behaviors]
        * [SteeringBehaviorsReference#Introduction Introduction]
        * [SteeringBehaviorsReference#Behaviors_list Behaviors list]

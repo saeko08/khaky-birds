@@ -6,9 +6,9 @@ Steering behaviors allow you to refine your control over an agent by making it m
 
 ==Introduction==
 
-You can use them by creating an instance of *SteeringBehavior* class, and passing it a *movable* entity.
+You can use them by creating an instance of `SteeringBehavior` class, and passing it a *movable* entity.
 
-A movable entity is an entity with a *DynamicObject* aspect set ( take a look [here] to see how it's done ).
+A movable entity is an entity with a `DynamicObject` aspect set ( take a look [here] to see how it's done ).
 
 If the entity doesn't have that aspect, it will stay imprevious to any movement commands.
 

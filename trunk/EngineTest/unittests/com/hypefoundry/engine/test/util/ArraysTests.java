@@ -19,19 +19,19 @@ public class ArraysTests extends AndroidTestCase
 	public void testQuickSort()
 	{
 		Integer[] arr = { 5, 8, 2, 1, 9, 0 };
-		Arrays.quickSort( arr, m_intComparator );
+		Arrays.quickSort( arr, arr.length, m_intComparator );
 		assertEquals( "[0, 1, 2, 5, 8, 9]", Arrays.toString( arr ) );
 		
 		arr = new Integer[]{ 0 };
-		Arrays.quickSort( arr, m_intComparator );
+		Arrays.quickSort( arr, arr.length, m_intComparator );
 		assertEquals( "[0]", Arrays.toString( arr ) );
 		
 		arr = new Integer[]{ 0, 0 };
-		Arrays.quickSort( arr, m_intComparator );
+		Arrays.quickSort( arr, arr.length, m_intComparator );
 		assertEquals( "[0, 0]", Arrays.toString( arr ) );
 		
 		arr = new Integer[]{ 3, 2, 1, 0 };
-		Arrays.quickSort( arr, m_intComparator );
+		Arrays.quickSort( arr, arr.length, m_intComparator );
 		assertEquals( "[0, 1, 2, 3]", Arrays.toString( arr ) );
 	}
 }

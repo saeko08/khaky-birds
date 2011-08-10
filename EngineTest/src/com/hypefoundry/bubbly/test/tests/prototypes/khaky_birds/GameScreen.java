@@ -108,10 +108,10 @@ public class GameScreen extends Screen
 	private void populateGameWorld() 
 	{
 		// first - create the ground
-		//m_world.addEntity( new Ground() );
+		m_world.addEntity( new Ground() );
 		
 		// create the cables the bird will move on
-		//m_world.addEntity( new ElectricCables() );
+		 m_world.addEntity( new ElectricCables() );
 		
 		//create falcon that will hunt our bird
 		//m_world.addEntity( new Falcon() );
@@ -138,7 +138,7 @@ public class GameScreen extends Screen
 		
 		// draw the world contents
 		m_worldRenderer.draw();
-		m_fpsCounter.logFrame();
+		// m_fpsCounter.logFrame();
 	}
 
 	@Override

@@ -17,8 +17,7 @@ import com.hypefoundry.engine.world.World;
 public class ElectricCablesAI extends EntityController 
 {
 	private World 					m_world;
-	private ElectricCables			m_cables;
-	
+
 	private float					m_cableOffsets[] = { 66, 131, 195, 259 }; 
 	private int						m_cablesCount = 4;
 	private int						m_prevShockedCableId = 0;
@@ -35,7 +34,6 @@ public class ElectricCablesAI extends EntityController
 		super(entity);
 		
 		m_world = world;
-		m_cables = (ElectricCables)entity;
 	}
 
 	@Override

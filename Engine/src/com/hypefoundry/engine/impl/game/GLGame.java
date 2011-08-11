@@ -47,7 +47,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	private GLSurfaceView 				m_glView;
 	private GLGraphics 					m_graphics;
 	private Audio 						m_audio;
-	private Input 						m_input;
+	private AndroidInput 				m_input;
 	private FileIO 						m_fileIO;
 	private Screen 						m_screen;
 	private WakeLock 					m_wakeLock;
@@ -152,6 +152,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			// update and draw the screen, if the game's running, providing it with a proper time delta
 			float deltaTime = ( System.nanoTime() - m_startTime ) / 1000000000.0f;
 			m_startTime = System.nanoTime();
+			m_input.update( deltaTime );
 			m_screen.update( deltaTime );
 			m_screen.present( deltaTime );
 		}

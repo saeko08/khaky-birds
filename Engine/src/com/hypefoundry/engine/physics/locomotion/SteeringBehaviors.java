@@ -175,11 +175,11 @@ public class SteeringBehaviors
 	// Behaviors control
 	// ------------------------------------------------------------------------
 	/**
-	 * Resets all behaviors.
+	 * Begins a behavior definition.
 	 * 
 	 * @return instance to self, allowing to chain commands
 	 */
-	public SteeringBehaviors reset()
+	public SteeringBehaviors begin()
 	{
 		for ( SteeringBehavior beh : m_behaviors )
 		{
@@ -189,7 +189,18 @@ public class SteeringBehaviors
 	}
 	
 	/**
-	 * Makes the entity seek the specified goal position.
+	 * Clears a behavior definition.
+	 */
+	public void clear()
+	{
+		for ( SteeringBehavior beh : m_behaviors )
+		{
+			beh.m_isActive = false;
+		}
+	}
+	
+	/**
+	 * Makes the entity rush towards the specified goal position.
 	 * 
 	 * @param goal
 	 * @return instance to self, allowing to chain commands

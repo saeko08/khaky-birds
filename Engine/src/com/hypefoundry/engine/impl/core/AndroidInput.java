@@ -72,6 +72,12 @@ public class AndroidInput implements Input
 	{
 		return m_touchHandler.getTouchY( pointer );
 	}
+	
+	@Override
+	public float getTouchDuriation( int pointer )
+	{
+		return m_touchHandler.getTouchDuriation( pointer );
+	}
 
 	@Override
 	public float getAccelX() 
@@ -103,4 +109,12 @@ public class AndroidInput implements Input
 		return m_touchHandler.getTouchEvents();
 	}
 
+	/**
+	 * Updates the status of the input manager.
+	 * @param deltaTime
+	 */
+	public void update( float deltaTime )
+	{
+		m_touchHandler.update( deltaTime );
+	}
 }

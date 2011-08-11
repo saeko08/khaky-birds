@@ -1,0 +1,15 @@
+#labels input
+=Input manager=
+
+Input manager allows you to query for the user input.
+
+There are several ways the user can interact with the phone:
+  * touching the screen
+  * typing something on the keyboard
+  * tilting it
+
+==Touchable screen input==
+
+==Keyboard input==
+
+==Accelerometers==

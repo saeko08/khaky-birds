@@ -11,6 +11,7 @@ import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.Pool;
 import com.hypefoundry.engine.util.PoolObjectFactory;
 import com.hypefoundry.engine.util.SpatialGridObject;
+import com.hypefoundry.engine.world.serialization.WorldFileLoader;
 
 /**
  * A game entity. Can be an agent, a piece of decoration - anything
@@ -507,4 +508,44 @@ public abstract class Entity
 		// no pool found
 		return null;
 	}
+	
+	// ------------------------------------------------------------------------
+	// Serialization support
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * Called during the loading to deserialize entity's state.
+	 * 
+	 * @param configNode
+	 */
+	public final void load( WorldFileLoader configNode )
+	{
+		if ( configNode == null )
+		{
+			return;
+		}
+		
+		// load common entity parameters
+		m_bb.load( "localBounds", configNode );
+		m_worldBB.load( "worldBounds", configNode );
+		m_pos.load( "position", configNode );
+		m_facing = configNode.getFloatValue( "facing" );
+		
+		// load the aspects
+		int aspectsCount = m_aspects.size();
+		for ( int i = 0; i < aspectsCount; ++i )
+		{
+			m_aspects.get(i).load( configNode );
+		}
+		
+		// load implementation specific stuff
+		onLoad( configNode );
+	}
+	
+	/**
+	 * Called during the loading to deserialize entity's implementation-specific state.
+	 * 
+	 * @param configNode
+	 */
+	public void onLoad( WorldFileLoader configNode ) {}
 }

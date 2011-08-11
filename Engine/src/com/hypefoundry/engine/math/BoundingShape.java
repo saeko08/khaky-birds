@@ -3,6 +3,8 @@
  */
 package com.hypefoundry.engine.math;
 
+import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+
 /**
  * A bounding shape interface.
  * 
@@ -78,4 +80,15 @@ public interface BoundingShape
 	 * @return
 	 */
 	boolean doesOverlap( Vector3 point );
+	
+	// ------------------------------------------------------------------------
+	// Serialization support
+	// ------------------------------------------------------------------------
+	/**
+	 * Configures the shape based on the config file node's contents.
+	 * 
+	 * @param id			id of the child node describing this shape
+	 * @param parentNode	parent node in which to look for the data
+	 */
+	void load( String id, WorldFileLoader parentNode );
 }

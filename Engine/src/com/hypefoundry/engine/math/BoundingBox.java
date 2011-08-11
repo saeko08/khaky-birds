@@ -1,6 +1,7 @@
 package com.hypefoundry.engine.math;
 
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.world.serialization.WorldFileLoader;
 
 
 /**
@@ -182,5 +183,25 @@ final public class BoundingBox implements BoundingShape
 	final public boolean doesOverlap2D( final Vector3 pos )
 	{
 		return m_minX <= pos.m_x && m_maxX >= pos.m_x && m_minY <= pos.m_y && m_maxY >= pos.m_y;
+	}
+	
+	@Override
+	public void load( String id, WorldFileLoader parentNode )
+	{
+		WorldFileLoader node = parentNode.getChild( id );
+		if ( node == null )
+		{
+			// parent node doesn't contain the description of this shape
+			return;
+		}
+		
+		m_minX = node.getFloatValue( "minX" );
+		m_minY = node.getFloatValue( "minY" );
+		m_minZ = node.getFloatValue( "minZ" );
+		m_maxX = node.getFloatValue( "maxX" );
+		m_maxY = node.getFloatValue( "maxY" );
+		m_maxZ = node.getFloatValue( "maxZ" );
+		
+		calculateMassCenter();
 	}
 }

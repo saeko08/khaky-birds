@@ -2,7 +2,7 @@ package com.hypefoundry.engine.math;
 
 import android.util.FloatMath;
 
-import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.world.serialization.WorldFileLoader;
 
 
 /**
@@ -356,5 +356,28 @@ public final class Vector3
 		}
 
 		return angle;
+	}
+	
+	// ------------------------------------------------------------------------
+	// Serialization support
+	// ------------------------------------------------------------------------
+	/**
+	 * Configures the vector based on the config file node's contents.
+	 * 
+	 * @param id			id of the child node describing this shape
+	 * @param parentNode	parent node in which to look for the data
+	 */
+	public void load( String id, WorldFileLoader parentNode )
+	{
+		WorldFileLoader node = parentNode.getChild( id );
+		if ( node == null )
+		{
+			// parent node doesn't contain the description of this shape
+			return;
+		}
+		
+		m_x = node.getFloatValue( "x" );
+		m_y = node.getFloatValue( "y" );
+		m_z = node.getFloatValue( "z" );
 	}
 }

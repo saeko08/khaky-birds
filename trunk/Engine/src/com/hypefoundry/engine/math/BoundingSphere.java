@@ -3,6 +3,8 @@
  */
 package com.hypefoundry.engine.math;
 
+import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+
 /**
  * Bounding sphere.
  * @author paksas
@@ -144,5 +146,19 @@ final public class BoundingSphere implements BoundingShape
 	{
 		float distance = m_center.distSq( point );
 		return distance <= m_radius * m_radius;
+	}
+	
+	@Override
+	public void load( String id, WorldFileLoader parentNode )
+	{
+		WorldFileLoader node = parentNode.getChild( id );
+		if ( node == null )
+		{
+			// parent node doesn't contain the description of this shape
+			return;
+		}
+		
+		m_center.load( "center", node );
+		m_radius = node.getFloatValue( "radius" );
 	}
 }

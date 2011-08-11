@@ -1,8 +1,11 @@
 package com.hypefoundry.engine.world;
 
+import java.io.InputStream;
 import java.util.*;
 
 import com.hypefoundry.engine.game.Updatable;
+import com.hypefoundry.engine.world.serialization.EntityFactory;
+import com.hypefoundry.engine.world.serialization.WorldFileLoader;
 
 import android.util.Log;
 
@@ -15,33 +18,55 @@ import android.util.Log;
  */
 public class World implements Updatable
 {
-	private float		m_width;
-	private float		m_height;
-	List< Entity >		m_entities;
-	List< Entity >		m_entitiesToAdd;
-	List< Entity >		m_entitiesToRemove;
-	List< WorldView >	m_views;
+	private float						m_width;
+	private float						m_height;
+	private List< Entity >				m_entities;
+	private List< Entity >				m_entitiesToAdd;
+	private List< Entity >				m_entitiesToRemove;
+	private List< WorldView >			m_views;
+	private List< EntityFactoryData >	m_entityFactories;
+	
+	class EntityFactoryData
+	{
+		Class< ? extends Entity >		m_type;
+		EntityFactory					m_factory;
+		
+		EntityFactoryData( Class< ? extends Entity > type, EntityFactory factory )
+		{
+			m_type = type;
+			m_factory = factory;
+		}
+	}
 	
 	/**
 	 * Constructor.
-	 * 
-	 * @param width			world width
-	 * @param height		world height
 	 */
-	public World( float	width, float height )
+	public World()
 	{
-		m_width = width;
-		m_height = height;
+		m_width = 0;
+		m_height = 0;
 		
 		m_entities = new ArrayList< Entity >();
 		m_entitiesToAdd = new ArrayList< Entity >();
 		m_entitiesToRemove = new ArrayList< Entity >();
 		m_views = new ArrayList< WorldView >();
+		m_entityFactories = new ArrayList< EntityFactoryData >();
 	}
 	
-	
-	// TODO: instead of these methods being polled all the time, 
-	// send events to entities that are outside the world bounds
+	/**
+	 * Allows to manually define the size of the world.
+	 * 
+	 * CAUTION: Call it as soon as possible before you attach any views - they
+	 * may be defining some internals with respect to the world size.
+	 * 
+	 * @param width			world width
+	 * @param height		world height
+	 */
+	public void setSize( float	width, float height )
+	{
+		m_width = width;
+		m_height = height;
+	}
 	
 	/**
 	 * Returns the width of the world.
@@ -247,6 +272,98 @@ public class World implements Updatable
 			}
 		}
 		
+		return null;
+	}
+	
+	// ------------------------------------------------------------------------
+	// Serialization
+	// ------------------------------------------------------------------------
+	/**
+	 * Loads the world's contents.
+	 * 
+	 * CAUTION: it doesn't remove the previous world's contents!!!
+	 * 
+	 * @param config		document containing the world description
+	 */
+	public void load( WorldFileLoader config )
+	{
+		if ( config == null )
+		{
+			return;
+		}
+		
+		try
+		{
+			m_width = config.getFloatValue( "width" );
+			m_height = config.getFloatValue( "height" );
+			
+			// parse the entities
+			for( WorldFileLoader child = config.getChild( "Entity" ); child != null; child = child.getSibling() )
+			{
+				String entityType = child.getStringValue( "type" );
+				EntityFactory factory = findEntityFactory( entityType );
+				if ( factory != null )
+				{
+					Entity entity = factory.create();
+					entity.load( child );
+					
+					// add entity to the world
+					addEntity( entity );
+				}
+			}
+		}
+		catch( Exception ex )
+		{
+			Log.d( "World", "Error while loading: " + ex.getMessage() );
+			throw new RuntimeException( ex );
+		}
+	}
+	
+	/**
+	 * Informs the world about a factory that will be instantiating entities
+	 * of the specified type.
+	 * 
+	 * @param type
+	 * @param factory
+	 */
+	public void registerEntity( Class< ? extends Entity > type, EntityFactory factory )
+	{
+		// look for a duplicate
+		int count = m_entityFactories.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			EntityFactoryData data = m_entityFactories.get(i);
+			if ( data.m_type == type )
+			{
+				// there's one - redefine
+				data.m_factory = factory;
+				break;
+			}
+		}
+		
+		// none was found - add a new definition
+		m_entityFactories.add( new EntityFactoryData( type, factory ) );
+	}
+	
+	/**
+	 * Looks for a factory that can instantiate entities of the specified type.
+	 * 
+	 * @param entityType
+	 * @return
+	 */
+	private EntityFactory findEntityFactory( String entityType )
+	{
+		int count = m_entityFactories.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			EntityFactoryData data = m_entityFactories.get(i);
+			if ( data.m_type.getSimpleName().equals( entityType ) )
+			{
+				return data.m_factory;
+			}
+		}
+		
+		// factory definition not found
 		return null;
 	}
 }

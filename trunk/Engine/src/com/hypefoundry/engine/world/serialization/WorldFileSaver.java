@@ -3,6 +3,8 @@
  */
 package com.hypefoundry.engine.world.serialization;
 
+import java.io.OutputStream;
+
 /**
  * Saver of a world file section.
  * 
@@ -10,6 +12,13 @@ package com.hypefoundry.engine.world.serialization;
  */
 public interface WorldFileSaver 
 {
+	/**
+	 * Flushes the saver contents to an output stream.
+	 * 
+	 * @param stream
+	 */
+	void flush( OutputStream stream );
+	
 	/**
 	 * Saves a string value.
 	 * 

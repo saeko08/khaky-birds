@@ -1,10 +1,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
 import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.math.BoundingBox;
-import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 
 

@@ -19,9 +19,13 @@ import com.hypefoundry.engine.core.Input.TouchEvent;
  */
 public class MultiTouchHandler implements TouchHandler 
 {
-	boolean[] 			m_isTouched = new boolean[20];
-	int[] 				m_touchX = new int[20];
-	int[] 				m_touchY = new int[20];
+	private static int  MAX_POINTERS_COUNT = 20;
+	
+	boolean[] 			m_isTouched = new boolean[MAX_POINTERS_COUNT];
+	int[] 				m_touchX = new int[MAX_POINTERS_COUNT];
+	int[] 				m_touchY = new int[MAX_POINTERS_COUNT];
+	float[]				m_touchDuration = new float[MAX_POINTERS_COUNT];
+	
 	Pool<TouchEvent> 	m_touchEventPool;
 	List<TouchEvent> 	m_touchEvents = new ArrayList<TouchEvent>();
 	List<TouchEvent> 	m_touchEventsBuffer = new ArrayList<TouchEvent>();
@@ -78,6 +82,7 @@ public class MultiTouchHandler implements TouchHandler
 					touchEvent.x = m_touchX[pointerId] = (int)( event.getX( pointerIndex ) * m_scaleX );
 					touchEvent.y = m_touchY[pointerId] = (int)( event.getY( pointerIndex ) * m_scaleY );
 					m_isTouched[pointerId] = true;
+					m_touchDuration[pointerId] = 0;  // reset the touch timer
 					m_touchEventsBuffer.add( touchEvent );
 					break;
 				}
@@ -123,7 +128,7 @@ public class MultiTouchHandler implements TouchHandler
 	{
 		synchronized ( this ) 
 		{
-			if ( pointer < 0 || pointer >= 20 )
+			if ( pointer < 0 || pointer >= MAX_POINTERS_COUNT )
 			{
 				return false;
 			}
@@ -139,7 +144,7 @@ public class MultiTouchHandler implements TouchHandler
 	{
 		synchronized ( this ) 
 		{
-			if ( pointer < 0 || pointer >= 20 )
+			if ( pointer < 0 || pointer >= MAX_POINTERS_COUNT )
 			{
 				return 0;
 			}
@@ -155,13 +160,44 @@ public class MultiTouchHandler implements TouchHandler
 	{
 		synchronized ( this ) 
 		{
-			if ( pointer < 0 || pointer >= 20 )
+			if ( pointer < 0 || pointer >= MAX_POINTERS_COUNT )
 			{
 				return 0;
 			}
 			else
 			{
 				return m_touchY[pointer];
+			}
+		}
+	}
+	
+	@Override
+	public float getTouchDuriation( int pointer )
+	{
+		synchronized ( this ) 
+		{
+			if ( pointer < 0 || pointer >= MAX_POINTERS_COUNT )
+			{
+				return 0;
+			}
+			else
+			{
+				return m_touchDuration[pointer];
+			}
+		}
+	}
+	
+	@Override
+	public void update( float deltaTime )
+	{
+		synchronized ( this ) 
+		{
+			for ( int i = 0; i < MAX_POINTERS_COUNT; ++i )
+			{
+				if ( m_isTouched[i] )
+				{
+					m_touchDuration[i] += deltaTime;
+				}
 			}
 		}
 	}

@@ -27,6 +27,8 @@ public class SingleTouchHandler implements TouchHandler
 	List<TouchEvent> 	m_touchEventsBuffer = new ArrayList<TouchEvent>();
 	float 				m_scaleX;
 	float 				m_scaleY;
+	float				m_touchDuration;
+	
 	
 	/**
 	 * Constructor.
@@ -68,6 +70,7 @@ public class SingleTouchHandler implements TouchHandler
 			case MotionEvent.ACTION_DOWN:
 				touchEvent.type = TouchEvent.TOUCH_DOWN;
 				m_isTouched = true;
+				m_touchDuration = 0; // reset the touch timer
 			break;
 			
 			case MotionEvent.ACTION_MOVE:
@@ -121,6 +124,24 @@ public class SingleTouchHandler implements TouchHandler
 		synchronized( this ) 
 		{
 			return m_touchY;
+		}
+	}
+	
+	@Override
+	public float getTouchDuriation( int pointer )
+	{
+		return m_touchDuration;
+	}
+	
+	@Override
+	public void update( float deltaTime )
+	{
+		synchronized ( this ) 
+		{
+			if ( m_isTouched )
+			{
+				m_touchDuration += deltaTime;
+			}
 		}
 	}
 

@@ -59,6 +59,14 @@ public interface Input {
 	public int getTouchY(int pointer);
 	
 	/**
+	 * Tells how long has a finger been touching the screen ( in seconds )
+	 * 
+	 * @param pointer
+	 * @return
+	 */
+	public float getTouchDuriation( int pointer );
+	
+	/**
 	 * Returns the X axis factor of the accelerometer.
 	 *  
 	 * @return

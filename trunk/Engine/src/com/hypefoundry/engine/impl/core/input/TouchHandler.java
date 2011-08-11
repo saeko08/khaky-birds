@@ -21,7 +21,7 @@ public interface TouchHandler extends OnTouchListener
 	 * @param pointer
 	 * @return
 	 */
-	public boolean isTouchDown( int pointer );
+	boolean isTouchDown( int pointer );
 	
 	/**
 	 * Returns the X coordinate of the touching finger.
@@ -29,7 +29,7 @@ public interface TouchHandler extends OnTouchListener
 	 * @param pointer
 	 * @return
 	 */
-	public int getTouchX( int pointer );
+	int getTouchX( int pointer );
 	
 	/**
 	 * Returns the Y coordinate of the touching finger.
@@ -37,12 +37,27 @@ public interface TouchHandler extends OnTouchListener
 	 * @param pointer
 	 * @return
 	 */
-	public int getTouchY( int pointer );
+	int getTouchY( int pointer );
+	
+	/**
+	 * Tells how long has a finger been touching the screen ( in seconds )
+	 * 
+	 * @param pointer
+	 * @return
+	 */
+	float getTouchDuriation( int pointer );
 	
 	/**
 	 * Returns a list of all touch-related events that happened.
 	 * 
 	 * @return
 	 */
-	public List<TouchEvent> getTouchEvents();
+	List<TouchEvent> getTouchEvents();
+	
+	/**
+	 * Update of the internal timers.
+	 * 
+	 * @param deltaTime
+	 */
+	void update( float deltaTime );
 }

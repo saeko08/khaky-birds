@@ -9,8 +9,17 @@ import java.io.OutputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
@@ -25,11 +34,9 @@ public class XMLWorldFileSaver implements WorldFileSaver
 	/**
 	 * A factory method that instantiates a new XML nodes hierarchy
 	 * into which the world contents will be saved.
-	 * 
-	 * @param stream
 	 * @return
 	 */
-	public static WorldFileSaver create( OutputStream stream )
+	public static WorldFileSaver create()
 	{
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = null;
@@ -44,19 +51,62 @@ public class XMLWorldFileSaver implements WorldFileSaver
 	
 		// parse the data the stream contains
 		Document doc = db.newDocument();
-		doc.appendChild(arg0)
+		Element root = doc.createElement( "World" );
+		doc.appendChild( root );
 		
-		
+		return new XMLWorldFileSaver( doc, root );
 	}
 	
 	// ------------------------------------------------------------------------
 	
+	private Document		m_document = null;
+	private Element			m_element = null;
+	
+	
 	/**
-	 * Constructor.
+	 * Root element constructor.
+	 * 
+	 * @param document
+	 * @param root			root element
 	 */
-	protected XMLWorldFileSaver()
+	protected XMLWorldFileSaver( Document document, Element root )
 	{
-		
+		m_document = document;
+		m_element = root;
+	}
+	
+	@Override
+	public void flush( OutputStream stream )
+	{
+		if ( m_document != null )
+		{
+			Transformer transformer = null;
+			try 
+			{
+				transformer = TransformerFactory.newInstance().newTransformer();
+			} 
+			catch( TransformerConfigurationException e ) 
+			{
+				throw new RuntimeException( e );
+			} 
+			catch( TransformerFactoryConfigurationError e ) 
+			{
+				throw new RuntimeException( e );
+			}
+			transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
+
+			// initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult( stream );
+			DOMSource source = new DOMSource( m_document );
+			try 
+			{
+				transformer.transform( source, result );
+			} 
+			catch( TransformerException e ) 
+			{
+				throw new RuntimeException( e );
+			}
+		}
 	}
 	
 	@Override

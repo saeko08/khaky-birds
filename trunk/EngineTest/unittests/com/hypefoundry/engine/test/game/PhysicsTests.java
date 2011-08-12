@@ -89,7 +89,8 @@ public class PhysicsTests extends AndroidTestCase
 		
 	public void testCollisions()
 	{
-		World world = new World( 4, 4 );
+		World world = new World();
+		world.setSize( 4, 4 );
 		EntityMock e1 = new EntityMock();
 		EntityMock e2 = new EntityMock();
 		CollisionReset op = new CollisionReset();
@@ -125,7 +126,8 @@ public class PhysicsTests extends AndroidTestCase
 	
 	public void testMovement()
 	{
-		World world = new World( 20, 20 );
+		World world = new World();
+		world.setSize( 20, 20 );
 		EntityMock e1 = new EntityMock();
 		EntityMock e2 = new EntityMock();
 			

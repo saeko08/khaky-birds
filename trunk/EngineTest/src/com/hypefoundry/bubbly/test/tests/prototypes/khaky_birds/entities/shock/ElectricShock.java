@@ -18,21 +18,31 @@ public class ElectricShock extends Entity implements EntityEventListener
 {
 
 	/**
+	 * Serialization support constructor.
+	 */
+	public ElectricShock() 
+	{		
+		// register events listeners
+		attachEventListener( this );
+						
+		// add movement capabilities
+		final float maxLinearSpeed = 1.0f;
+		final float maxRotationSpeed = 180.0f;
+		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
+	}
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param cableYOffset
 	 */
 	public ElectricShock( float cableXOffset ) 
 	{
+		// call the default constructor first to perform the generic initialization
+		this();
+			
+		// custom initialization of the position
 		setPosition( cableXOffset, 0, 5 );
-		
-		// register events listeners
-		attachEventListener( this );
-		
-		// add movement capabilities
-		final float maxLinearSpeed = 1.0f;
-		final float maxRotationSpeed = 180.0f;
-		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
 
 	@Override

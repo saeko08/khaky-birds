@@ -1,6 +1,11 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import android.util.Log;
+
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.BirdController;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.BirdVisual;
@@ -29,6 +34,8 @@ import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.world.World;
+import com.hypefoundry.engine.world.serialization.EntityFactory;
+import com.hypefoundry.engine.world.serialization.xml.XMLWorldFileLoader;
 import com.hypefoundry.engine.physics.PhysicalBody;
 import com.hypefoundry.engine.physics.PhysicalBodyFactory;
 import com.hypefoundry.engine.physics.PhysicsView;
@@ -56,20 +63,41 @@ public class GameScreen extends Screen
 		super( game );
 		
 		// create the game world
-		m_world = new World( 9.6f, 4.8f );
+		m_world = new World();
+		
+		// serialization support
+		m_world.registerEntity( Bird.class, new EntityFactory() { @Override public Entity create() { return new Bird(); } } );
+		m_world.registerEntity( ElectricCables.class, new EntityFactory() { @Override public Entity create() { return new ElectricCables(); } } );
+		m_world.registerEntity( ElectricShock.class, new EntityFactory() { @Override public Entity create() { return new ElectricShock(); } } );
+		m_world.registerEntity( Ground.class, new EntityFactory() { @Override public Entity create() { return new Ground(); } } );
+		m_world.registerEntity( Pedestrian.class, new EntityFactory() { @Override public Entity create() { return new Pedestrian(); } } );
+		m_world.registerEntity( Crap.class, new EntityFactory() { @Override public Entity create() { return new Crap(); } } );
+		m_world.registerEntity( Falcon.class, new EntityFactory() { @Override public Entity create() { return new Falcon(); } } );
+		
+		// load the world
+		try 
+		{
+			InputStream worldFileStream = game.getFileIO().readAsset( "khaky_birds_prototype/test_world.xml" );
+			m_world.load( XMLWorldFileLoader.parse( worldFileStream ) );
+		} 
+		catch ( IOException e ) 
+		{
+			Log.d( "Game", "Error while loading world" );
+			throw new RuntimeException( e );
+		}
 		
 		// create the renderer
 		m_worldRenderer = new Renderer2D( game );
 		m_world.attachView( m_worldRenderer );
 		
 		// register visuals
-		m_worldRenderer.register( Bird.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BirdVisual( m_resourceManager, parentEntity ); } } );
-		m_worldRenderer.register( ElectricCables.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricCablesVisual( m_resourceManager, parentEntity ); } } );
-		m_worldRenderer.register( ElectricShock.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricShockVisual( m_resourceManager, parentEntity ); } } );
-		m_worldRenderer.register( Ground.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GroundVisual( m_resourceManager, parentEntity ); } } );
-		m_worldRenderer.register( Pedestrian.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PedestrianVisual( m_resourceManager, parentEntity ); } } );
-		m_worldRenderer.register( Crap.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( m_resourceManager, parentEntity ); } } );
-		m_worldRenderer.register( Falcon.class , new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FalconVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Bird.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BirdVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( ElectricCables.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricCablesVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( ElectricShock.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricShockVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Ground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GroundVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Pedestrian.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PedestrianVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Crap.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Falcon.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FalconVisual( m_resourceManager, parentEntity ); } } );
 
 		// register controllers
 		m_controllersView = new ControllersView( this );
@@ -95,37 +123,6 @@ public class GameScreen extends Screen
 		// register the updatables
 		addUpdatable( m_world );
 		addUpdatable( m_physicsView );
-				
-		// populate the game world
-		populateGameWorld();
-	}
-
-	/**
-	 * Populates the game world with entities.
-	 */
-	private void populateGameWorld() 
-	{
-		// first - create the ground
-		m_world.addEntity( new Ground() );
-		
-		// create the cables the bird will move on
-		 m_world.addEntity( new ElectricCables() );
-		
-		//create falcon that will hunt our bird
-		//m_world.addEntity( new Falcon() );
-		
-		// next - we need the pedestrians that wander around
-		final int pedestriansCount = 100;
-		final float spawnAreaWidth = m_world.getWidth();
-		final float spawnAreaHeight = m_world.getHeight();
-		for ( int i = 0; i < pedestriansCount; ++i )
-		{
-			Pedestrian pedestrian = new Pedestrian( spawnAreaWidth, spawnAreaHeight );
-			m_world.addEntity( pedestrian );
-		}
-		
-		// finally add our main character
-		//m_world.addEntity( new Bird() );
 	}
 
 	@Override

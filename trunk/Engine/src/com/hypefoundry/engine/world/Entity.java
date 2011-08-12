@@ -12,6 +12,7 @@ import com.hypefoundry.engine.util.Pool;
 import com.hypefoundry.engine.util.PoolObjectFactory;
 import com.hypefoundry.engine.util.SpatialGridObject;
 import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
 /**
  * A game entity. Can be an agent, a piece of decoration - anything
@@ -514,38 +515,75 @@ public abstract class Entity
 	// ------------------------------------------------------------------------
 	
 	/**
-	 * Called during the loading to deserialize entity's state.
+	 * Called to deserialize entity's state.
 	 * 
-	 * @param configNode
+	 * @param loader
 	 */
-	public final void load( WorldFileLoader configNode )
+	public final void load( WorldFileLoader loader )
 	{
-		if ( configNode == null )
+		if ( loader == null )
 		{
 			return;
 		}
 		
 		// load common entity parameters
-		m_bb.load( "localBounds", configNode );
-		m_worldBB.load( "worldBounds", configNode );
-		m_pos.load( "position", configNode );
-		m_facing = configNode.getFloatValue( "facing" );
+		m_bb.load( "localBounds", loader );
+		m_worldBB.load( "worldBounds", loader );
+		m_pos.load( "position", loader );
+		m_facing = loader.getFloatValue( "facing" );
 		
 		// load the aspects
 		int aspectsCount = m_aspects.size();
 		for ( int i = 0; i < aspectsCount; ++i )
 		{
-			m_aspects.get(i).load( configNode );
+			m_aspects.get(i).load( loader );
 		}
 		
 		// load implementation specific stuff
-		onLoad( configNode );
+		onLoad( loader );
 	}
 	
 	/**
-	 * Called during the loading to deserialize entity's implementation-specific state.
+	 * Called to serialize entity's state.
 	 * 
-	 * @param configNode
+	 * @param saver
 	 */
-	public void onLoad( WorldFileLoader configNode ) {}
+	public void save( WorldFileSaver saver ) 
+	{
+		if ( saver == null )
+		{
+			return;
+		}
+		
+		// load common entity parameters
+		m_bb.save( "localBounds", saver );
+		m_worldBB.save( "worldBounds", saver );
+		m_pos.save( "position", saver );
+		saver.setFloatValue( "facing", m_facing );
+		
+		// load the aspects
+		int aspectsCount = m_aspects.size();
+		for ( int i = 0; i < aspectsCount; ++i )
+		{
+			m_aspects.get(i).save( saver );
+		}
+		
+		// save implementation specific stuff
+		onSave( saver );
+	}
+	
+	/**
+	 * Called to deserialize entity's implementation-specific state.
+	 * 
+	 * @param loader
+	 */
+	public void onLoad( WorldFileLoader loader ) {}
+	
+	/**
+	 * Called to deserialize entity's implementation-specific state.
+	 * 
+	 * @param loader
+	 */
+	public void onSave( WorldFileSaver saver ) {}
+
 }

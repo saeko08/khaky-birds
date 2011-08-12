@@ -4,6 +4,7 @@
 package com.hypefoundry.engine.math;
 
 import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
 /**
  * Bounding sphere.
@@ -160,5 +161,14 @@ final public class BoundingSphere implements BoundingShape
 		
 		m_center.load( "center", node );
 		m_radius = node.getFloatValue( "radius" );
+	}
+	
+	@Override
+	public void save( String id, WorldFileSaver parentNode )
+	{
+		WorldFileSaver node = parentNode.addChild( id );
+
+		m_center.save( "center", node );
+		node.setFloatValue( "radius", m_radius );
 	}
 }

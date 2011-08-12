@@ -4,6 +4,7 @@
 package com.hypefoundry.engine.world;
 
 import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
 /**
  * An aspect contains additional informations about an entity's state.
@@ -22,8 +23,15 @@ public interface Aspect
 	/**
 	 * Configures the vector based on the config file node's contents.
 	 * 
-	 * @param parentNode	parent node in which to look for the data
+	 * @param loader	loader in which to look for the data
 	 */
-	void load( WorldFileLoader parentNode );
+	void load( WorldFileLoader loader );
+	
+	/**
+	 * Saves the aspect configuration.
+	 * 
+	 * @param saver
+	 */
+	void save( WorldFileSaver saver );
 }
 

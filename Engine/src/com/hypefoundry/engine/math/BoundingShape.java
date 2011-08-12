@@ -4,6 +4,7 @@
 package com.hypefoundry.engine.math;
 
 import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
 /**
  * A bounding shape interface.
@@ -91,4 +92,12 @@ public interface BoundingShape
 	 * @param parentNode	parent node in which to look for the data
 	 */
 	void load( String id, WorldFileLoader parentNode );
+	
+	/**
+	 * Saves the shape cofiguration.
+	 * 
+	 * @param id			id of the child node describing this shape
+	 * @param parentNode	parent node to which the configuration should be added
+	 */
+	void save( String id, WorldFileSaver parentNode );
 }

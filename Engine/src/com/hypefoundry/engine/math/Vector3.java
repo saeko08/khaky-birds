@@ -3,6 +3,7 @@ package com.hypefoundry.engine.math;
 import android.util.FloatMath;
 
 import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
 
 /**
@@ -379,5 +380,20 @@ public final class Vector3
 		m_x = node.getFloatValue( "x" );
 		m_y = node.getFloatValue( "y" );
 		m_z = node.getFloatValue( "z" );
+	}
+	
+	/**
+	 * Saves the vector configuration.
+	 * 
+	 * @param id			id of the child node describing this shape
+	 * @param parentNode	parent node to which the configuration should be added
+	 */
+	public void save( String id, WorldFileSaver parentNode )
+	{
+		WorldFileSaver node = parentNode.addChild( id );
+
+		node.setFloatValue( "x", m_x );
+		node.setFloatValue( "y", m_y );
+		node.setFloatValue( "z", m_z );
 	}
 }

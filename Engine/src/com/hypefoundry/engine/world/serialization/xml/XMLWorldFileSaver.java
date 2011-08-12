@@ -18,8 +18,10 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
@@ -69,7 +71,7 @@ public class XMLWorldFileSaver implements WorldFileSaver
 	 * @param document
 	 * @param root			root element
 	 */
-	protected XMLWorldFileSaver( Document document, Element root )
+	protected XMLWorldFileSaver( Document document, Element root)
 	{
 		m_document = document;
 		m_element = root;
@@ -80,6 +82,8 @@ public class XMLWorldFileSaver implements WorldFileSaver
 	{
 		if ( m_document != null )
 		{
+			m_document.normalize();
+			
 			Transformer transformer = null;
 			try 
 			{
@@ -112,28 +116,39 @@ public class XMLWorldFileSaver implements WorldFileSaver
 	@Override
 	public void setStringValue( String id, String value ) 
 	{
+		m_element.setAttribute( id, value );
 	}
 
 	@Override
 	public void setIntValue( String id, int value ) 
 	{
+		try
+		{
+			m_element.setAttribute( id, Integer.toString( value ) );
+		}
+		catch( Exception ex )
+		{
+		}	
 	}
 
 	@Override
 	public void setFloatValue( String id, float value ) 
 	{
+		try
+		{
+			m_element.setAttribute( id, Float.toString( value ) );
+		}
+		catch( Exception ex )
+		{
+		}	
 	}
 
 	@Override
 	public WorldFileSaver addChild( String id ) 
 	{
-		return null;
-	}
-
-	@Override
-	public WorldFileSaver addSibling() 
-	{
-		return null;
+		Element child = m_document.createElement( id );
+		m_element.appendChild( child );
+		return new XMLWorldFileSaver( m_document, child );
 	}
 
 }

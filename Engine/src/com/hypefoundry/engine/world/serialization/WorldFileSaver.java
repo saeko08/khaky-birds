@@ -51,11 +51,4 @@ public interface WorldFileSaver
 	 */
 	WorldFileSaver addChild( String id );
 	
-	/**
-	 * Adds a new sibling node to the parent. The sibling node will have the same tag
-	 * as this node.
-	 * 
-	 * @return
-	 */
-	WorldFileSaver addSibling();
 }

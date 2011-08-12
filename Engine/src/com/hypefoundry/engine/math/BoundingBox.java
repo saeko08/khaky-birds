@@ -2,6 +2,7 @@ package com.hypefoundry.engine.math;
 
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
 
 /**
@@ -203,5 +204,18 @@ final public class BoundingBox implements BoundingShape
 		m_maxZ = node.getFloatValue( "maxZ" );
 		
 		calculateMassCenter();
+	}
+	
+	@Override
+	public void save( String id, WorldFileSaver parentNode )
+	{
+		WorldFileSaver node = parentNode.addChild( id );
+
+		node.setFloatValue( "minX", m_minX );
+		node.setFloatValue( "minY", m_minY );
+		node.setFloatValue( "minZ", m_minZ );
+		node.setFloatValue( "maxX", m_maxX );
+		node.setFloatValue( "maxY", m_maxY );
+		node.setFloatValue( "maxZ", m_maxZ );
 	}
 }

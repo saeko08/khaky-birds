@@ -6,6 +6,7 @@ import java.util.*;
 import com.hypefoundry.engine.game.Updatable;
 import com.hypefoundry.engine.world.serialization.EntityFactory;
 import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
 import android.util.Log;
 
@@ -283,22 +284,22 @@ public class World implements Updatable
 	 * 
 	 * CAUTION: it doesn't remove the previous world's contents!!!
 	 * 
-	 * @param config		document containing the world description
+	 * @param loader		loader that persists the world
 	 */
-	public void load( WorldFileLoader config )
+	public void load( WorldFileLoader loader )
 	{
-		if ( config == null )
+		if ( loader == null )
 		{
 			return;
 		}
 		
 		try
 		{
-			m_width = config.getFloatValue( "width" );
-			m_height = config.getFloatValue( "height" );
+			m_width = loader.getFloatValue( "width" );
+			m_height = loader.getFloatValue( "height" );
 			
 			// parse the entities
-			for( WorldFileLoader child = config.getChild( "Entity" ); child != null; child = child.getSibling() )
+			for( WorldFileLoader child = loader.getChild( "Entity" ); child != null; child = child.getSibling() )
 			{
 				String entityType = child.getStringValue( "type" );
 				EntityFactory factory = findEntityFactory( entityType );
@@ -315,6 +316,40 @@ public class World implements Updatable
 		catch( Exception ex )
 		{
 			Log.d( "World", "Error while loading: " + ex.getMessage() );
+			throw new RuntimeException( ex );
+		}
+	}
+	
+	/**
+	 * Saves the world's contents.
+	 * 
+	 * @param saver		saver that persists the world
+	 */
+	public void save( WorldFileSaver saver ) 
+	{
+		if ( saver == null )
+		{
+			return;
+		}
+		
+		try
+		{
+			saver.setFloatValue( "width", m_width );
+			saver.setFloatValue( "height", m_height );
+			
+			// parse the entities
+			int entitiesCount = m_entities.size();
+			for ( int i = 0; i < entitiesCount; ++i )
+			{
+				WorldFileSaver childEntity = saver.addChild( "Entity" );
+				Entity entity = m_entities.get(i);
+				childEntity.setStringValue( "type", entity.getClass().getSimpleName() );
+				entity.save( childEntity );
+			}
+		}
+		catch( Exception ex )
+		{
+			Log.d( "World", "Error while saving: " + ex.getMessage() );
 			throw new RuntimeException( ex );
 		}
 	}

@@ -1,6 +1,8 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
 import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.DynamicObject;
 
@@ -19,6 +21,19 @@ public class Pedestrian extends Entity
 	boolean				m_hitWithShit;
 	
 	/**
+	 * Serialization support constructor.
+	 */
+	public Pedestrian()
+	{		
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+		
+		// add movement capabilities
+		final float maxLinearSpeed = 1.0f;
+		final float maxRotationSpeed = 180.0f;
+		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
+	}
+	
+	/**
 	 * Constructor.
 	 *
 	 * @param spawnAreaWidth
@@ -26,19 +41,16 @@ public class Pedestrian extends Entity
 	 */
 	public Pedestrian( float spawnAreaWidth, float spawnAreaHeight )
 	{
+		// call the default constructor first to perform the generic initialization
+		this();
+		
 		// initialize random position
 		float x, y;
 		x = (float) Math.random() * spawnAreaWidth;
 		y = (float) Math.random() * spawnAreaHeight;
 		setPosition( x, y, 80 );
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
 		
 		m_hitWithShit = false;
-		
-		// add movement capabilities
-		final float maxLinearSpeed = 1.0f;
-		final float maxRotationSpeed = 180.0f;
-		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
 
 
@@ -52,4 +64,15 @@ public class Pedestrian extends Entity
 		m_hitWithShit = flag;
 	}
 
+	@Override
+	public void onLoad( WorldFileLoader loader ) 
+	{
+		m_hitWithShit = ( loader.getIntValue( "hitWithShit" ) == 1 );
+	}
+	
+	@Override
+	public void onSave( WorldFileSaver saver ) 
+	{
+		saver.setIntValue( "hitWithShit", m_hitWithShit ? 1 : 0  );
+	}
 }

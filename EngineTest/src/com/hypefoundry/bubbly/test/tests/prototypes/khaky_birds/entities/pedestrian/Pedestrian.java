@@ -1,7 +1,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.DynamicObject;
@@ -65,13 +65,13 @@ public class Pedestrian extends Entity
 	}
 
 	@Override
-	public void onLoad( WorldFileLoader loader ) 
+	public void onLoad( DataLoader loader ) 
 	{
 		m_hitWithShit = ( loader.getIntValue( "hitWithShit" ) == 1 );
 	}
 	
 	@Override
-	public void onSave( WorldFileSaver saver ) 
+	public void onSave( DataSaver saver ) 
 	{
 		saver.setIntValue( "hitWithShit", m_hitWithShit ? 1 : 0  );
 	}

@@ -6,10 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
-import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileLoader;
-import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
+import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
+import com.hypefoundry.engine.util.serialization.xml.XMLDataSaver;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.WorldView;
@@ -28,13 +28,13 @@ public class WorldTest extends AndroidTestCase
 		Apple( int sweetness ) { m_sweetness = sweetness; }
 		
 		@Override
-		public void onLoad( WorldFileLoader loader )
+		public void onLoad( DataLoader loader )
 		{
 			m_sweetness = loader.getIntValue( "sweetness" );
 		}
 		
 		@Override
-		public void onSave( WorldFileSaver saver )
+		public void onSave( DataSaver saver )
 		{
 			saver.setIntValue( "val" , m_sweetness );
 		}
@@ -50,19 +50,19 @@ public class WorldTest extends AndroidTestCase
 		Orange( int[] sourness ) { m_sourness = sourness; }
 		
 		@Override
-		public void onLoad( WorldFileLoader loader )
+		public void onLoad( DataLoader loader )
 		{
 			int count = loader.getChildrenCount( "sourness" );
 			m_sourness = new int[count];
 			int i = 0;
-			for( WorldFileLoader child = loader.getChild( "sourness" ); child != null; child = child.getSibling(), ++i )
+			for( DataLoader child = loader.getChild( "sourness" ); child != null; child = child.getSibling(), ++i )
 			{
 				m_sourness[i] = child.getIntValue( "val" );
 			}
 		}
 		
 		@Override
-		public void onSave( WorldFileSaver saver )
+		public void onSave( DataSaver saver )
 		{
 			for ( int i = 0; i < m_sourness.length; ++i )
 			{
@@ -121,7 +121,7 @@ public class WorldTest extends AndroidTestCase
 		world.registerEntity( Apple.class, new EntityFactory() { @Override public Entity create() { return new Apple(); } } );
 		world.registerEntity( Orange.class, new EntityFactory() { @Override public Entity create() { return new Orange(); } } );
 		
-		world.load( XMLWorldFileLoader.parse( new ByteArrayInputStream( worldDefinition.getBytes("UTF-8") ) ) );
+		world.load( XMLDataLoader.parse( new ByteArrayInputStream( worldDefinition.getBytes("UTF-8") ), "World" ) );
 		
 		assertEquals( 200.0f, world.getWidth() );
 		assertEquals( 300.0f, world.getHeight() );
@@ -150,7 +150,7 @@ public class WorldTest extends AndroidTestCase
 			world.update(0);
 			
 			// save the world's state
-			WorldFileSaver saver = XMLWorldFileSaver.create();
+			DataSaver saver = XMLDataSaver.create( "World" );
 			world.save( saver );
 			
 			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -164,7 +164,7 @@ public class WorldTest extends AndroidTestCase
 			world.registerEntity( Apple.class, new EntityFactory() { @Override public Entity create() { return new Apple(); } } );
 			world.registerEntity( Orange.class, new EntityFactory() { @Override public Entity create() { return new Orange(); } } );
 			
-			world.load( XMLWorldFileLoader.parse( new ByteArrayInputStream( receivedResult.getBytes("UTF-8") ) ) );
+			world.load( XMLDataLoader.parse( new ByteArrayInputStream( receivedResult.getBytes("UTF-8") ), "World" ) );
 			
 			assertEquals( 200.0f, world.getWidth() );
 			assertEquals( 300.0f, world.getHeight() );

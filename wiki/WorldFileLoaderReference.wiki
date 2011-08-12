@@ -79,3 +79,22 @@ for ( WorldFileLoader child = collectionNode.getChild( "Int" ); child != null; c
    int val = child.getIntValue( "val" );
 }
 }}}
+
+==Implementations==
+
+Currently the engine supports just an implementation that reads definitions from XML files.
+
+Here's how you can obtain an implementation based on an InputStream with an XML contents:
+
+{{{
+try 
+{
+       InputStream worldFileStream = game.getFileIO().readAsset( "khaky_birds_prototype/test_world.xml" );
+      
+       WorldFileLoader loader = XMLWorldFileLoader.parse( worldFileStream );
+} 
+catch ( IOException e ) 
+{
+       // exception handling code
+}
+}}}

@@ -528,12 +528,3 @@ and the XML section that creates an entity with the 'sweetness' parameter define
 
 
 Check out the dedicated references on the [WorldFileLoaderReference WorldFileLoader] and [WorldFileSaverReference WorldFileSaver] for more information.
-
-
-==Persistance==
-===Loading===
-===Registering entity types===
-===XML file layout===
-===Main XML tags===
-===Generic entity tags===
-===Custom entity tags===

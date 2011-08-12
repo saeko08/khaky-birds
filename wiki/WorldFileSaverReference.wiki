@@ -60,7 +60,7 @@ You explicitly need to specify when you want to persist the data. The interface 
 void flush( OutputStream stream );
 }}}
 
-Simply call it, passing it an instance to an OutputStream you want the data to be written to.
+Simply call it, passing it an instance to an `OutputStream` you want the data to be written to.
 
 ==Implementations==
 

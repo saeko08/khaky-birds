@@ -528,9 +528,10 @@ public abstract class Entity
 		
 		// load common entity parameters
 		m_bb.load( "localBounds", loader );
-		m_worldBB.load( "worldBounds", loader );
 		m_pos.load( "position", loader );
 		m_facing = loader.getFloatValue( "facing" );
+		
+		updateWorldBounds();
 		
 		// load the aspects
 		int aspectsCount = m_aspects.size();
@@ -557,7 +558,6 @@ public abstract class Entity
 		
 		// load common entity parameters
 		m_bb.save( "localBounds", saver );
-		m_worldBB.save( "worldBounds", saver );
 		m_pos.save( "position", saver );
 		saver.setFloatValue( "facing", m_facing );
 		

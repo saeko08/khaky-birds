@@ -40,7 +40,7 @@ public class BirdVisual extends EntityVisual
 	}
 
 	@Override
-	public void draw( SpriteBatcher batcher ) 
+	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_bird.getPosition();
 		BoundingShape bs = m_bird.getBoundingShape();

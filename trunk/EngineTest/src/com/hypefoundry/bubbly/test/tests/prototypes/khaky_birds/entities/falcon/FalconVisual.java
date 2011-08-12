@@ -39,7 +39,7 @@ public class FalconVisual extends EntityVisual
 	}
 
 	@Override
-	public void draw( SpriteBatcher batcher ) 
+	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_falcon.getPosition();
 		BoundingShape bs = m_falcon.getBoundingShape();

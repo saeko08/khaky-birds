@@ -42,7 +42,7 @@ public class ElectricCablesVisual extends EntityVisual
 	}
 
 	@Override
-	public void draw( SpriteBatcher batcher ) 
+	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_entity.getPosition();
 		BoundingShape bs = m_entity.getBoundingShape();

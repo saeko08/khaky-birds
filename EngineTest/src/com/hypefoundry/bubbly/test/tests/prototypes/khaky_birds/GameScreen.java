@@ -132,7 +132,7 @@ public class GameScreen extends Screen
 		m_game.getInput().getTouchEvents();
 		
 		// draw the world contents
-		m_worldRenderer.draw();
+		m_worldRenderer.draw( deltaTime );
 		// m_fpsCounter.logFrame();
 	}
 

@@ -41,7 +41,7 @@ public class CrapVisual extends EntityVisual
 	}
 
 	@Override
-	public void draw( SpriteBatcher batcher) 
+	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_crap.getPosition();
 		BoundingShape bs = m_crap.getBoundingShape();

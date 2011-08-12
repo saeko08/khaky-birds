@@ -42,8 +42,8 @@ public class PedestrianVisual extends EntityVisual
 		m_pedestrian = (Pedestrian)entity;
 		
 		// load animations
-		Animation regularAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/pedestrianWalking.ani");
-		Animation wipeShitOffAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/pedestrianWipeShitOff.ani");
+		Animation regularAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/pedestrianWalking.xml");
+		Animation wipeShitOffAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/pedestrianWipeShitOff.xml");
 		
 		// create an animation player
 		m_animationPlayer = new AnimationPlayer();

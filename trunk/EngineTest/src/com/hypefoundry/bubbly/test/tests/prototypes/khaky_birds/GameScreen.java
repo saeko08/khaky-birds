@@ -30,7 +30,7 @@ import com.hypefoundry.engine.controllers.ControllersView;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.EntityControllerFactory;
 import com.hypefoundry.engine.util.FPSCounter;
-import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileLoader;
+import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
@@ -78,7 +78,7 @@ public class GameScreen extends Screen
 		try 
 		{
 			InputStream worldFileStream = game.getFileIO().readAsset( "khaky_birds_prototype/test_world.xml" );
-			m_world.load( XMLWorldFileLoader.parse( worldFileStream ) );
+			m_world.load( XMLDataLoader.parse( worldFileStream, "World" ) );
 		} 
 		catch ( IOException e ) 
 		{

@@ -6,14 +6,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileLoader;
+import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileSaver;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.WorldView;
 import com.hypefoundry.engine.world.serialization.EntityFactory;
-import com.hypefoundry.engine.world.serialization.xml.XMLWorldFileLoader;
-import com.hypefoundry.engine.world.serialization.xml.XMLWorldFileSaver;
 
 import android.test.AndroidTestCase;
 

@@ -1,4 +1,4 @@
-#labels world,entity,aspects,EntityEvents
+#labels world,entity,aspects,EntityEvents,save,load
 =World=
 
 ==Introduction==
@@ -371,3 +371,169 @@ Keep in mind that although our position representation with the `Vector3` class 
 So in other words - try putting your entities on the positive side of the axes, 'cause the world span is expressed as (0, 0)->(worldWidth, worldHeight).
 
 Another cautious thing - even though we support 3D rendering and operations, the world is a 2D concept. What it means is that we assume that it spans into infinity on the Z axis.
+
+==Persistance==
+You can ( and should ) define your game world in an asset.
+Engine supports XML files with world configuration.
+
+===Loading===
+To load a world from a file, simply call `World.load` method, passing it a `WorldFileLoader` instance:
+{{{
+try 
+{
+      InputStream worldFileStream = game.getFileIO().readAsset( "game_assets/my_world.xml" );
+      m_world.load( XMLWorldFileLoader.parse( worldFileStream ) );
+} 
+catch ( IOException e ) 
+{
+     Log.d( "Game", "Error while loading world" );
+     throw new RuntimeException( e );
+}
+}}}
+
+This command will create an input stream with the world XML file in it, and then create a loader instance using the `XMLWorldFileLoader` loader implementation and pass it to the world so that it can restore its state.
+
+Here's the `load` method signature:
+{{{
+/**
+ * Loads the world's contents.
+ * 
+ * CAUTION: it doesn't remove the previous world's contents!!!
+ * 
+ * @param loader                loader that persists the world
+ */
+public void load( WorldFileLoader loader );
+}}}
+
+===Registering entity types===
+Your game may feature many specific entity types. You need to inform the world about them before you load it from a file, so that the world cn create proper entity instances based on what is written in the XML file.
+
+You can do that using the `registerEntity` method:
+{{{
+/**
+ * Informs the world about a factory that will be instantiating entities
+ * of the specified type.
+ * 
+ * @param type
+ * @param factory
+ */
+public void registerEntity( Class< ? extends Entity > type, EntityFactory factory );
+}}}
+
+And here's how you do it:
+{{{
+m_world.registerEntity( Bird.class, new EntityFactory() { @Override public Entity create() { return new Bird(); } } );
+}}}
+
+You simply pass your entity class as the firsts argument, and an `EntityFactory` interface implementation that creates the actual entity instance as the second argument.
+
+*REMEBER* - you have to register entity types *BEFORE* you load the world from a file.
+
+===XML file layout===
+Here's a sample XML file:
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<World width='9.6' height='4.8'>
+        <Entity type="Ground" />
+        <Entity type="ElectricCables" />
+        
+        <Entity type="Pedestrian" facing='180.0'>
+                <localBounds minX='-0.5' minY='-0.5' minZ='-0.5' maxX='0.5' maxY='0.5' maxZ='0.5' />
+                <position x='3' y='5' z='80' />
+                <DynamicObject rotation='-45.0'>
+                        <velocity  x='1' y='0' z='0' />
+                </DynamicObject>
+        </Entity>
+
+        <Entity type="Pedestrian" />
+</World>
+}}}
+
+This particular definition will set the world to be 9.6 meters wide and 4.8 meters high, and will add 4 entities - a Ground, ElectricCables, and two Pedestrians, one of which has the specific parameters set, and the other one simply has the default parameters.
+
+===Main XML tags===
+So what tags are there:
+  * *World* - it features two attributes *width* and *height* that describe its size
+  * *Entity* - describes an entity, needs to be embedded inside a *World* tag. Features a *type* attribute that contains a simple name of the entity class.
+
+Those two tags will help you populate the world with entities.
+
+===Generic entity tags===
+Entity class features position, facing and a bounding shape parameters. You're probably wondering how to set those?
+
+It's simple:
+{{{
+<Entity type="Pedestrian" facing='180.0'>
+     <localBounds minX='-0.5' minY='-0.5' minZ='-0.5' maxX='0.5' maxY='0.5' maxZ='0.5' />
+     <position x='3' y='5' z='80' />
+</Entity>
+}}}
+
+  * *facing* - an attribute that specifies the angle which the entity 's facing
+  * *localBounds* - describes a bounding box around the entity ( in local space )
+  * *position* - entity's position ( in world space )
+
+===Custom entity tags===
+The tags above described something every entity has. But your game features custom entities, each of which has a unique set of parameters.
+How can you set those?
+
+You need to define two methods that will handle those parameters and add them to your entity implementation. How you handle the parameters will describe how you should describe them in an XML file.
+
+The two methods you need to override are:
+{{{
+/**
+ * Called to deserialize entity's implementation-specific state.
+ * 
+ * @param loader
+ */
+public void onLoad( WorldFileLoader loader );
+        
+/**
+ * Called to deserialize entity's implementation-specific state.
+ * 
+ * @param loader
+ */
+public void onSave( WorldFileSaver saver );
+}}}
+
+So let's analyze an example - let's assume you want to create an `Apple` entity, that is described by how sweet it is.
+
+Here's how the class and the two methods saving those would look like.
+{{{
+class Apple extends Entity
+{
+        private int   m_sweetness;
+
+        // .....
+
+        @Override
+        public void onLoad( WorldFileLoader loader ) 
+        {
+                m_sweetness = loader.getIntValue( "sweetness" );
+        }
+        
+        @Override
+        public void onSave( WorldFileSaver saver ) 
+        {
+                saver.setIntValue( "sweetness", m_sweetness );
+        }
+}
+}}}
+
+and the XML section that creates an entity with the 'sweetness' parameter defined would look like this:
+{{{
+<Entity type="Apple" sweetness='10' />
+}}}
+
+
+Check out the dedicated references on the [WorldFileLoaderReference WorldFileLoader] and [WorldFileSaverReference WorldFileSaver] for more information.
+
+
+==Persistance==
+===Loading===
+===Registering entity types===
+===XML file layout===
+===Main XML tags===
+===Generic entity tags===
+===Custom entity tags===

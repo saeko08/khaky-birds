@@ -11,8 +11,9 @@ import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.Pool;
 import com.hypefoundry.engine.util.PoolObjectFactory;
 import com.hypefoundry.engine.util.SpatialGridObject;
-import com.hypefoundry.engine.world.serialization.WorldFileLoader;
-import com.hypefoundry.engine.world.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
+
 
 /**
  * A game entity. Can be an agent, a piece of decoration - anything
@@ -422,7 +423,7 @@ public abstract class Entity
 		}
 	}
 	
-	/**
+	/** 
 	 * Processes the events the entity received.
 	 */
 	public void processEvents()

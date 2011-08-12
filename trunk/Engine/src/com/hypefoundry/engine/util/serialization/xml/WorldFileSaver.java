@@ -1,9 +1,11 @@
 /**
  * 
  */
-package com.hypefoundry.engine.world.serialization;
+package com.hypefoundry.engine.util.serialization.xml;
 
 import java.io.OutputStream;
+
+import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
 
 /**
  * Saver of a world file section.

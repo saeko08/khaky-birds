@@ -11,10 +11,8 @@ import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.Pool;
 import com.hypefoundry.engine.util.PoolObjectFactory;
 import com.hypefoundry.engine.util.SpatialGridObject;
-import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
-
-
+import com.hypefoundry.engine.util.serialization.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.WorldFileSaver;
 /**
  * A game entity. Can be an agent, a piece of decoration - anything
  * that we want to place in the game world. 

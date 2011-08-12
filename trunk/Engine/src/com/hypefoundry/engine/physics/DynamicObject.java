@@ -3,8 +3,8 @@
  */
 package com.hypefoundry.engine.physics;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.world.Aspect;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.Vector3;
@@ -70,9 +70,9 @@ public final class DynamicObject implements Aspect
 	}
 
 	@Override
-	public void load( WorldFileLoader loader ) 
+	public void load( DataLoader loader )
 	{
-		WorldFileLoader node = loader.getChild( "DynamicObject" );
+		DataLoader node = loader.getChild( "DynamicObject" );
 		if ( node == null )
 		{
 			// parent node doesn't contain the description of this shape
@@ -84,9 +84,9 @@ public final class DynamicObject implements Aspect
 	}
 	
 	@Override
-	public void save( WorldFileSaver saver )
+	public void save( DataSaver saver )
 	{
-		WorldFileSaver node = saver.addChild( "DynamicObject" );
+		DataSaver node = saver.addChild( "DynamicObject" );
 			
 		m_velocity.save( "velocity", node );
 		node.setFloatValue( "rotation", m_rotation );	

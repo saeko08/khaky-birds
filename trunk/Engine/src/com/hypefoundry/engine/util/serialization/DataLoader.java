@@ -3,15 +3,13 @@
  */
 package com.hypefoundry.engine.util.serialization;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-
 
 /**
  * Reader of a world file section.
  * 
  * @author Paksas
  */
-public interface WorldFileLoader 
+public interface DataLoader 
 {
 	/**
 	 * Reads a string value from the node.
@@ -51,12 +49,12 @@ public interface WorldFileLoader
 	 * @param id
 	 * @return
 	 */
-	WorldFileLoader getChild( String id );
+	DataLoader getChild( String id );
 	
 	/**
 	 * If the parent node has many nodes with a similar tag, then this
 	 * one will return the next in line.
 	 * 
 	 * @return
-	 */	WorldFileLoader getSibling();
+	 */	DataLoader getSibling();
 }

@@ -11,8 +11,10 @@ import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.Pool;
 import com.hypefoundry.engine.util.PoolObjectFactory;
 import com.hypefoundry.engine.util.SpatialGridObject;
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
+
+
 /**
  * A game entity. Can be an agent, a piece of decoration - anything
  * that we want to place in the game world. 
@@ -518,7 +520,7 @@ public abstract class Entity
 	 * 
 	 * @param loader
 	 */
-	public final void load( WorldFileLoader loader )
+	public final void load( DataLoader loader )
 	{
 		if ( loader == null )
 		{
@@ -548,7 +550,7 @@ public abstract class Entity
 	 * 
 	 * @param saver
 	 */
-	public void save( WorldFileSaver saver ) 
+	public void save( DataSaver saver )
 	{
 		if ( saver == null )
 		{
@@ -576,13 +578,13 @@ public abstract class Entity
 	 * 
 	 * @param loader
 	 */
-	public void onLoad( WorldFileLoader loader ) {}
+	public void onLoad( DataLoader loader ) {}
 	
 	/**
 	 * Called to deserialize entity's implementation-specific state.
 	 * 
 	 * @param loader
 	 */
-	public void onSave( WorldFileSaver saver ) {}
-
+	public void onSave( DataSaver saver ) {}
 }
+

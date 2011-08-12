@@ -16,8 +16,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileLoader;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
 ;
 
 /**
@@ -26,7 +26,7 @@ import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileLoader;
  * @author Paksas
  *
  */
-public class XMLWorldFileLoader implements WorldFileLoader 
+public class XMLDataLoader implements DataLoader 
 {
 
 	/**
@@ -34,9 +34,10 @@ public class XMLWorldFileLoader implements WorldFileLoader
 	 * based on the specified input stream that contains an XML file data.
 	 * 
 	 * @param stream
+	 * @param rootNodeTag		tag of the root node
 	 * @return
 	 */
-	public static WorldFileLoader parse( InputStream stream )
+	public static DataLoader parse( InputStream stream, String rootNodeTag )
 	{
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = null;
@@ -66,7 +67,7 @@ public class XMLWorldFileLoader implements WorldFileLoader
 		
 		// normalize the document
 		doc.getDocumentElement().normalize();
-		NodeList worldNodesList = doc.getElementsByTagName( "World" );
+		NodeList worldNodesList = doc.getElementsByTagName( rootNodeTag );
 		if ( worldNodesList.getLength() == 0 )
 		{
 			// there are no world definitions in the file
@@ -80,7 +81,7 @@ public class XMLWorldFileLoader implements WorldFileLoader
 			{
 				if ( worldNodesList.item(i).getNodeType() == Node.ELEMENT_NODE )
 				{
-					return new XMLWorldFileLoader( worldNodesList, i );
+					return new XMLDataLoader( worldNodesList, i );
 				}
 			}
 			
@@ -100,7 +101,7 @@ public class XMLWorldFileLoader implements WorldFileLoader
 	 * 
 	 * @param xmlElement
 	 */
-	protected XMLWorldFileLoader( NodeList siblings, int elemIdx )
+	protected XMLDataLoader( NodeList siblings, int elemIdx )
 	{
 		m_siblings = siblings;
 		m_elemIdx = elemIdx;
@@ -150,7 +151,7 @@ public class XMLWorldFileLoader implements WorldFileLoader
 	}
 
 	@Override
-	public WorldFileLoader getChild( String id ) 
+	public DataLoader getChild( String id ) 
 	{			
 		NodeList children = m_xmlElement.getElementsByTagName( id );
 		
@@ -160,7 +161,7 @@ public class XMLWorldFileLoader implements WorldFileLoader
 		{
 			if ( children.item(i).getNodeType() == Node.ELEMENT_NODE )
 			{
-				return new XMLWorldFileLoader( children, i );
+				return new XMLDataLoader( children, i );
 			}
 		}
 		
@@ -169,7 +170,7 @@ public class XMLWorldFileLoader implements WorldFileLoader
 	}
 
 	@Override
-	public WorldFileLoader getSibling() 
+	public DataLoader getSibling() 
 	{
 		// find an index of the first element
 		int count = m_siblings.getLength();
@@ -177,7 +178,7 @@ public class XMLWorldFileLoader implements WorldFileLoader
 		{
 			if ( m_siblings.item(i).getNodeType() == Node.ELEMENT_NODE )
 			{
-				return new XMLWorldFileLoader( m_siblings, i );
+				return new XMLDataLoader( m_siblings, i );
 			}
 		}
 					

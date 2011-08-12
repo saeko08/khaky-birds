@@ -23,23 +23,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
-import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataSaver;
 
-/**
- * An XML world file saver.
+
+/** An XML world file saver.
  * 
  * @author Paksas
  */
-public class XMLWorldFileSaver implements WorldFileSaver 
+public class XMLDataSaver implements DataSaver
 {
-
 	/**
 	 * A factory method that instantiates a new XML nodes hierarchy
 	 * into which the world contents will be saved.
+	 * 
+	 * @param rootNodeTag		tag of the root node
 	 * @return
 	 */
-	public static WorldFileSaver create()
+	public static DataSaver create( String rootNodeTag )
 	{
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = null;
@@ -54,10 +54,10 @@ public class XMLWorldFileSaver implements WorldFileSaver
 	
 		// parse the data the stream contains
 		Document doc = db.newDocument();
-		Element root = doc.createElement( "World" );
+		Element root = doc.createElement( rootNodeTag );
 		doc.appendChild( root );
 		
-		return new XMLWorldFileSaver( doc, root );
+		return new XMLDataSaver( doc, root );
 	}
 	
 	// ------------------------------------------------------------------------
@@ -72,7 +72,7 @@ public class XMLWorldFileSaver implements WorldFileSaver
 	 * @param document
 	 * @param root			root element
 	 */
-	protected XMLWorldFileSaver( Document document, Element root)
+	protected XMLDataSaver( Document document, Element root )
 	{
 		m_document = document;
 		m_element = root;
@@ -145,11 +145,11 @@ public class XMLWorldFileSaver implements WorldFileSaver
 	}
 
 	@Override
-	public WorldFileSaver addChild( String id ) 
+	public DataSaver addChild( String id ) 
 	{
 		Element child = m_document.createElement( id );
 		m_element.appendChild( child );
-		return new XMLWorldFileSaver( m_document, child );
+		return new XMLDataSaver( m_document, child );
 	}
 
 }

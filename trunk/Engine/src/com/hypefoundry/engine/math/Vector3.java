@@ -2,8 +2,9 @@ package com.hypefoundry.engine.math;
 
 import android.util.FloatMath;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
+
 
 /**
  * A vector representation.
@@ -367,9 +368,9 @@ public final class Vector3
 	 * @param id			id of the child node describing this shape
 	 * @param parentNode	parent node in which to look for the data
 	 */
-	public void load( String id, WorldFileLoader parentNode )
+	public void load( String id, DataLoader loader )
 	{
-		WorldFileLoader node = parentNode.getChild( id );
+		DataLoader node = loader.getChild( id );
 		if ( node == null )
 		{
 			// parent node doesn't contain the description of this shape
@@ -387,9 +388,9 @@ public final class Vector3
 	 * @param id			id of the child node describing this shape
 	 * @param parentNode	parent node to which the configuration should be added
 	 */
-	public void save( String id, WorldFileSaver parentNode )
+	public void save( String id, DataSaver saver )
 	{
-		WorldFileSaver node = parentNode.addChild( id );
+		DataSaver node = saver.addChild( id );
 
 		node.setFloatValue( "x", m_x );
 		node.setFloatValue( "y", m_y );

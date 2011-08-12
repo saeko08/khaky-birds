@@ -17,7 +17,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.hypefoundry.engine.core.Resource;
-import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileLoader;
+import com.hypefoundry.engine.core.Texture;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
 
 
 /**
@@ -83,7 +85,26 @@ public class Animation extends Resource
 		{
 			throw new RuntimeException( e );
 		}
-		// XMLDataLoader loader = XMLDataLoader.parse( stream, "Animation" );
+		
+		// parse the animation data
+		DataLoader animNode = XMLDataLoader.parse( stream, "Animation" );
+		if ( animNode != null )
+		{
+			m_frameDuration = animNode.getFloatValue( "frameDuration" );
+			String atlasName = animNode.getStringValue( "atlasName" );
+			Texture atlas = m_resMgr.getResource( Texture.class, atlasName );
+			
+			m_regions = new TextureRegion[ animNode.getChildrenCount( "TextureRegion" ) ];
+			int i = 0;
+			for ( DataLoader regionNode = animNode.getChild( "TextureRegion" ); regionNode != null; regionNode = regionNode.getSibling(), ++i )
+			{
+				float x = regionNode.getFloatValue( "x" );
+				float y = regionNode.getFloatValue( "y" );
+				float w = regionNode.getFloatValue( "w" );
+				float h = regionNode.getFloatValue( "h" );
+				m_regions[i] = new TextureRegion( atlas, x, y, w, h );
+			}
+		}
 	}
 	
 	@Override

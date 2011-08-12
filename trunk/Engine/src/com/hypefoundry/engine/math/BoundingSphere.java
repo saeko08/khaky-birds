@@ -3,8 +3,9 @@
  */
 package com.hypefoundry.engine.math;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
+
 /**
  * Bounding sphere.
  * @author paksas
@@ -149,9 +150,9 @@ final public class BoundingSphere implements BoundingShape
 	}
 	
 	@Override
-	public void load( String id, WorldFileLoader parentNode )
+	public void load( String id, DataLoader loader )
 	{
-		WorldFileLoader node = parentNode.getChild( id );
+		DataLoader node = loader.getChild( id );
 		if ( node == null )
 		{
 			// parent node doesn't contain the description of this shape
@@ -163,9 +164,9 @@ final public class BoundingSphere implements BoundingShape
 	}
 	
 	@Override
-	public void save( String id, WorldFileSaver parentNode )
+	public void save( String id, DataSaver saver )
 	{
-		WorldFileSaver node = parentNode.addChild( id );
+		DataSaver node = saver.addChild( id );
 
 		m_center.save( "center", node );
 		node.setFloatValue( "radius", m_radius );

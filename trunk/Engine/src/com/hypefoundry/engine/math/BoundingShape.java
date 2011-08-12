@@ -3,8 +3,8 @@
  */
 package com.hypefoundry.engine.math;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
 
 
 /**
@@ -92,7 +92,7 @@ public interface BoundingShape
 	 * @param id			id of the child node describing this shape
 	 * @param parentNode	parent node in which to look for the data
 	 */
-	void load( String id, WorldFileLoader parentNode );
+	void load( String id, DataLoader laoder );
 	
 	/**
 	 * Saves the shape cofiguration.
@@ -100,5 +100,5 @@ public interface BoundingShape
 	 * @param id			id of the child node describing this shape
 	 * @param parentNode	parent node to which the configuration should be added
 	 */
-	void save( String id, WorldFileSaver parentNode );
+	void save( String id, DataSaver saver );
 }

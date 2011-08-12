@@ -3,8 +3,10 @@
  */
 package com.hypefoundry.engine.world;
 
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
+
+
 /**
  * An aspect contains additional informations about an entity's state.
  * 
@@ -24,13 +26,13 @@ public interface Aspect
 	 * 
 	 * @param loader	loader in which to look for the data
 	 */
-	void load( WorldFileLoader loader );
+	void load( DataLoader loader );
 	
 	/**
 	 * Saves the aspect configuration.
 	 * 
 	 * @param saver
 	 */
-	void save( WorldFileSaver saver );
+	void save( DataSaver saver );
 }
 

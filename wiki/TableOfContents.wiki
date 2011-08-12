@@ -72,6 +72,7 @@
       * [WorldFileLoaderReference#Introduction Introduction]
       * [WorldFileLoaderReference#Attributes Attributes]
       * [WorldFileLoaderReference#Child_nodes Child nodes]
+      * [WorldFileLoaderReference#Implementations Implementations]
     * [WorldFileSaverReference WorldFileSaver]
   * [ Math ]
     * [Vector3Reference Vector]

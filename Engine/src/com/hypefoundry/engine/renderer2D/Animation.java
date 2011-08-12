@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.hypefoundry.engine.core.Resource;
-import com.hypefoundry.engine.world.serialization.xml.XMLWorldFileLoader;
+import com.hypefoundry.engine.util.serialization.xml.XMLWorldFileLoader;
 
 
 /**

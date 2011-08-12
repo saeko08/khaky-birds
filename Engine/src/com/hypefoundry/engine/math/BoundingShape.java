@@ -3,8 +3,9 @@
  */
 package com.hypefoundry.engine.math;
 
-import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+
 
 /**
  * A bounding shape interface.

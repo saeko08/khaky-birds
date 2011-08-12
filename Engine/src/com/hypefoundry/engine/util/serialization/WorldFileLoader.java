@@ -1,9 +1,10 @@
 /**
  * 
  */
-package com.hypefoundry.engine.util.serialization.xml;
+package com.hypefoundry.engine.util.serialization;
 
-import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.WorldFileLoader;
+
 
 /**
  * Reader of a world file section.

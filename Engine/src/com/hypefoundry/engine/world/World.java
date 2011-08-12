@@ -3,8 +3,8 @@ package com.hypefoundry.engine.world;
 import java.util.*;
 
 import com.hypefoundry.engine.game.Updatable;
-import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.WorldFileSaver;
 import com.hypefoundry.engine.world.serialization.EntityFactory;
 
 import android.util.Log;

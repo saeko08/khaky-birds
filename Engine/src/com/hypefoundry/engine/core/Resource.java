@@ -14,6 +14,7 @@ import com.hypefoundry.engine.game.Game;
 public abstract class Resource 
 {
 	protected 	Game			m_game;
+	protected	ResourceManager	m_resMgr;
 	protected 	String			m_assetPath;
 	
 	/**
@@ -22,6 +23,7 @@ public abstract class Resource
 	public Resource()
 	{
 		m_game = null;
+		m_resMgr = null;
 		m_assetPath = "";
 	}
 	
@@ -29,11 +31,13 @@ public abstract class Resource
 	 * Initializes the resource. Used exclusively by ResourceManager.
 	 * 
 	 * @param game
+	 * @param resMgr
 	 * @param assetPath
 	 */
-	void initialize( Game game, String assetPath )
+	void initialize( Game game, ResourceManager resMgr, String assetPath )
 	{
 		m_game = game;
+		m_resMgr = resMgr;
 		m_assetPath = assetPath;
 	}
 	
@@ -48,6 +52,8 @@ public abstract class Resource
 	
 	/**
 	 * Loads the resource.
+	 * 
+	 * @param resMgr		host resource manager
 	 */
 	public abstract void load();
 	

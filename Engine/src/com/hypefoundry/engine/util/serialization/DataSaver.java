@@ -4,7 +4,6 @@
 package com.hypefoundry.engine.util.serialization;
 
 import java.io.OutputStream;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
 
 
 /**
@@ -12,7 +11,7 @@ import com.hypefoundry.engine.util.serialization.WorldFileSaver;
  * 
  * @author Paksas
  */
-public interface WorldFileSaver 
+public interface DataSaver 
 {
 	/**
 	 * Flushes the saver contents to an output stream.
@@ -51,6 +50,6 @@ public interface WorldFileSaver
 	 * @param id
 	 * @return
 	 */
-	WorldFileSaver addChild( String id );
+	DataSaver addChild( String id );
 	
 }

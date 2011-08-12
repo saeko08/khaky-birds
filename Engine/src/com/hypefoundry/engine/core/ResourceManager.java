@@ -70,7 +70,7 @@ public class ResourceManager
 		
 		if ( newResource != null )
 		{
-			newResource.initialize( m_game, assetPath );
+			newResource.initialize( m_game, this, assetPath );
 			if ( m_isActive )
 			{
 				// load the resource, if the resources manager is active

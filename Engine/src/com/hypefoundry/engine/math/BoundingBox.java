@@ -1,8 +1,9 @@
 package com.hypefoundry.engine.math;
 
 import com.hypefoundry.engine.math.Vector3;
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
+
 
 /**
  * A bounding box.
@@ -186,9 +187,9 @@ final public class BoundingBox implements BoundingShape
 	}
 	
 	@Override
-	public void load( String id, WorldFileLoader parentNode )
+	public void load( String id, DataLoader loader )
 	{
-		WorldFileLoader node = parentNode.getChild( id );
+		DataLoader node = loader.getChild( id );
 		if ( node == null )
 		{
 			// parent node doesn't contain the description of this shape
@@ -206,9 +207,9 @@ final public class BoundingBox implements BoundingShape
 	}
 	
 	@Override
-	public void save( String id, WorldFileSaver parentNode )
+	public void save( String id, DataSaver saver )
 	{
-		WorldFileSaver node = parentNode.addChild( id );
+		DataSaver node = saver.addChild( id );
 
 		node.setFloatValue( "minX", m_minX );
 		node.setFloatValue( "minY", m_minY );

@@ -3,8 +3,8 @@ package com.hypefoundry.engine.world;
 import java.util.*;
 
 import com.hypefoundry.engine.game.Updatable;
-import com.hypefoundry.engine.util.serialization.WorldFileLoader;
-import com.hypefoundry.engine.util.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.world.serialization.EntityFactory;
 
 import android.util.Log;
@@ -285,7 +285,7 @@ public class World implements Updatable
 	 * 
 	 * @param loader		loader that persists the world
 	 */
-	public void load( WorldFileLoader loader )
+	public void load( DataLoader loader )
 	{
 		if ( loader == null )
 		{
@@ -298,7 +298,7 @@ public class World implements Updatable
 			m_height = loader.getFloatValue( "height" );
 			
 			// parse the entities
-			for( WorldFileLoader child = loader.getChild( "Entity" ); child != null; child = child.getSibling() )
+			for( DataLoader child = loader.getChild( "Entity" ); child != null; child = child.getSibling() )
 			{
 				String entityType = child.getStringValue( "type" );
 				EntityFactory factory = findEntityFactory( entityType );
@@ -324,7 +324,7 @@ public class World implements Updatable
 	 * 
 	 * @param saver		saver that persists the world
 	 */
-	public void save( WorldFileSaver saver ) 
+	public void save( DataSaver saver )
 	{
 		if ( saver == null )
 		{
@@ -340,7 +340,7 @@ public class World implements Updatable
 			int entitiesCount = m_entities.size();
 			for ( int i = 0; i < entitiesCount; ++i )
 			{
-				WorldFileSaver childEntity = saver.addChild( "Entity" );
+				DataSaver childEntity = saver.addChild( "Entity" );
 				Entity entity = m_entities.get(i);
 				childEntity.setStringValue( "type", entity.getClass().getSimpleName() );
 				entity.save( childEntity );

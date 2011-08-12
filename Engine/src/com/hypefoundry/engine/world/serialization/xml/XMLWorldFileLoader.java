@@ -16,7 +16,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.hypefoundry.engine.world.serialization.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
+;
 
 /**
  * An XML world file parser.

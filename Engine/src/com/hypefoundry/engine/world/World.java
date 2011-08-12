@@ -1,12 +1,11 @@
 package com.hypefoundry.engine.world;
 
-import java.io.InputStream;
 import java.util.*;
 
 import com.hypefoundry.engine.game.Updatable;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
 import com.hypefoundry.engine.world.serialization.EntityFactory;
-import com.hypefoundry.engine.world.serialization.WorldFileLoader;
-import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 
 import android.util.Log;
 

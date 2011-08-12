@@ -95,8 +95,10 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	
 	/**
 	 * Draws the contents of the view.
+	 * 
+	 * @param deltaTime
 	 */
-	public void draw()
+	public void draw( float deltaTime )
 	{
 		if ( m_camera == null || m_visualsGrid == null )
 		{
@@ -127,7 +129,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		
 		for ( int i = 0; i < count; ++i )
 		{
-			m_queryResult[i].draw( m_batcher );
+			m_queryResult[i].draw( m_batcher, deltaTime );
 		}
 		m_batcher.flush();
 	}

@@ -23,7 +23,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.hypefoundry.engine.world.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
+;
 
 /**
  * An XML world file saver.

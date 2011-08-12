@@ -3,8 +3,9 @@
  */
 package com.hypefoundry.engine.world;
 
-import com.hypefoundry.engine.world.serialization.WorldFileLoader;
-import com.hypefoundry.engine.world.serialization.WorldFileSaver;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
+
 
 /**
  * An aspect contains additional informations about an entity's state.

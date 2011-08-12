@@ -39,8 +39,9 @@ public abstract class EntityVisual implements SpatialGridObject
 	 * Draw self.
 	 * 
 	 * @param batcher
+	 * @param deltaTime
 	 */
-	public abstract void draw( SpriteBatcher batcher );
+	public abstract void draw( SpriteBatcher batcher, float deltaTime );
 
 	/**
 	 * Returns the position in the Z buffer. 

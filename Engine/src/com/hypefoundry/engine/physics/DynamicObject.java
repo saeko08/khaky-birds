@@ -3,10 +3,10 @@
  */
 package com.hypefoundry.engine.physics;
 
+import com.hypefoundry.engine.util.serialization.xml.WorldFileLoader;
+import com.hypefoundry.engine.util.serialization.xml.WorldFileSaver;
 import com.hypefoundry.engine.world.Aspect;
 import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.engine.world.serialization.WorldFileLoader;
-import com.hypefoundry.engine.world.serialization.WorldFileSaver;
 import com.hypefoundry.engine.math.Vector3;
 
 /**

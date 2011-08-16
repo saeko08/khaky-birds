@@ -5,6 +5,8 @@ import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.renderer2D.Animation;
+import com.hypefoundry.engine.renderer2D.AnimationPlayer;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
@@ -18,9 +20,12 @@ import com.hypefoundry.engine.renderer2D.TextureRegion;
  */
 public class BirdVisual extends EntityVisual 
 {
-	private TextureRegion	m_pixmap;
-	private TextureRegion	m_pixmapCrosshair;
+	private AnimationPlayer	m_animationPlayer;
 	private Bird			m_bird;
+	
+	private int 			ANIM_JUMP;
+	private int 			ANIM_FLY;
+	private int 			ANIM_SHIT;
 	
 	/**
 	 * Constructor.
@@ -34,9 +39,16 @@ public class BirdVisual extends EntityVisual
 
 		m_bird = (Bird)entity;
 		
-		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
-		m_pixmapCrosshair = new TextureRegion( atlas, 619, 0, 40, 73 );
-		m_pixmap = new TextureRegion( atlas, 662, 0, 40, 57 );
+		// load animations
+		Animation jumpingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/jumpingBird.xml");
+		Animation flyingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/flyingBird.xml");
+		Animation shittingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/shittingBird.xml");		
+		
+		// create an animation player
+		m_animationPlayer = new AnimationPlayer();
+		ANIM_JUMP = m_animationPlayer.addAnimation( jumpingBird );
+		ANIM_FLY = m_animationPlayer.addAnimation( flyingBird );
+		ANIM_SHIT = m_animationPlayer.addAnimation( shittingBird );
 	}
 
 	@Override
@@ -45,14 +57,20 @@ public class BirdVisual extends EntityVisual
 		Vector3 pos = m_bird.getPosition();
 		BoundingShape bs = m_bird.getBoundingShape();
 		
-		if ( m_bird.crosshairInitialized )
+		if( m_bird.m_state == Bird.State.Shitting )
 		{
-			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmapCrosshair );
+			m_animationPlayer.select(ANIM_SHIT);
+		}
+		else if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing )
+		{
+			m_animationPlayer.select(ANIM_FLY);
 		}
 		else
 		{
-			batcher.drawSprite(pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
+			m_animationPlayer.select(ANIM_JUMP);
 		}
+		
+		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_bird.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
 	}
 
 }

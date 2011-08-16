@@ -3,6 +3,8 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
+import com.hypefoundry.engine.math.Vector3;
+
 /**
  * Provides the bird with positions of the cables it can jump.
  * 
@@ -11,13 +13,6 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
  */
 public interface CableProvider 
 {
-	/**
-	 * Returns the initial cable index
-	 * 
-	 * @return
-	 */
-	int getStartCableIdx();
-
 	/**
 	 * Returns the x position on the specified cable
 	 * 
@@ -42,4 +37,12 @@ public interface CableProvider
 	 * @return
 	 */
 	int getRightCable(int cableIdx);
+
+	/**
+	 * Returns a cable closest to the specified position.
+	 *  
+	 * @param position
+	 * @return
+	 */
+	int getNearestCableIdx(Vector3 position);
 }

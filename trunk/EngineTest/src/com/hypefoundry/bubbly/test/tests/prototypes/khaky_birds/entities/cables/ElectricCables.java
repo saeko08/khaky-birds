@@ -3,9 +3,11 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables
 import java.util.*;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.CableProvider;
+import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.Vector3;
 
 
 /**
@@ -16,16 +18,17 @@ import com.hypefoundry.engine.math.BoundingBox;
  */
 public class ElectricCables extends Entity implements CableProvider
 {
-	
-	private float  m_cablePositions[] = new float[0];
+	private float	m_modelWidth = 4.8f;  // TODO: config
+	private float	m_modelHeight = 9.6f;  // TODO: config
+	private float  	m_cablePositions[] = new float[0];
 
 	/**
 	 * Constructor.
 	 */
 	public ElectricCables()
 	{
-		float halfWidth = 4.8f; // TODO: config
-		float halfHeight = 4.8f; // TODO: config
+		float halfWidth = m_modelWidth / 2.0f;
+		float halfHeight = m_modelHeight / 2.0f;
 		
 		setPosition( halfWidth, halfHeight, 10 );
 		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, 0, halfWidth, halfHeight, 0 ) );	
@@ -51,8 +54,9 @@ public class ElectricCables extends Entity implements CableProvider
 	}
 	
 	@Override
-	public int getStartCableIdx() 
+	public int getNearestCableIdx( Vector3 position )
 	{
+		// TODO
 		return 0;
 	}
 
@@ -82,6 +86,18 @@ public class ElectricCables extends Entity implements CableProvider
 			newIdx = m_cablePositions.length - 1;
 		}
 		return newIdx;	
+	}
+	
+	@Override
+	public void onLoad( DataLoader loader ) 
+	{
+		float pixelHeight = loader.getFloatValue("textureWidth");
+		for ( DataLoader child = loader.getChild( "Cable" ); child != null; child = child.getSibling() )
+		{
+		   int pixelPos = child.getIntValue( "pos" );
+		   float modelPos = pixelPos * m_modelWidth / pixelHeight;
+		   addCable( modelPos );
+		}
 	}
 	
 }

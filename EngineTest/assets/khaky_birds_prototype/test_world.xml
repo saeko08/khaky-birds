@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<World width='9.6' height='4.8'>
+<World width='4.8' height='9.6'>
 	<Entity type="Ground" />
-	<Entity type="ElectricCables" />
 	
-	<Entity type="Pedestrian" facing='180.0'>
+	<Entity type="ElectricCables" textureWidth="275">
+		<Cable pos='46'/>
+		<Cable pos='109'/>
+		<Cable pos='163'/>
+		<Cable pos='235'/>
+	</Entity>
+	
+	<Entity type="Pedestrian" facing='180.0' >
 		<localBounds minX='-0.5' minY='-0.5' minZ='-0.5' maxX='0.5' maxY='0.5' maxZ='0.5' />
 		<position x='3' y='5' z='80' />
 		<DynamicObject rotation='-45.0'>
@@ -19,4 +25,6 @@
 	<Entity type="Pedestrian" />
 	<Entity type="Pedestrian" />
 	<Entity type="Pedestrian" />
+	
+	<Entity type="Bird" />
 </World>

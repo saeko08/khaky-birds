@@ -127,10 +127,7 @@ public class GameScreen extends Screen
 
 	@Override
 	public void present( float deltaTime ) 
-	{	
-		m_game.getInput().getKeyEvents();
-		m_game.getInput().getTouchEvents();
-		
+	{			
 		// draw the world contents
 		m_worldRenderer.draw( deltaTime );
 		// m_fpsCounter.logFrame();

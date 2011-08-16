@@ -17,8 +17,8 @@ public class Ground extends Entity
 	 */
 	public Ground()
 	{
-		float halfWidth = 4.8f; 	// TODO: config
-		float halfHeight = 2.4f; 	// TODO: config
+		float halfWidth = 2.4f; 	// TODO: config
+		float halfHeight = 4.8f; 	// TODO: config
 		setPosition( halfWidth, halfHeight, 100 );
 		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, 0.0f, halfWidth, halfHeight, 0.0f ) );
 	}

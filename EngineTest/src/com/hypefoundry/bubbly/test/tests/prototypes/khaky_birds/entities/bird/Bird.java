@@ -21,16 +21,22 @@ import com.hypefoundry.engine.physics.DynamicObject;
  * @author paksas
  *
  */
-public class Bird extends Entity implements EntityEventListener
+public class Bird extends Entity
 {
-	private CableProvider		m_cables			 = null;
+	public CableProvider		m_cables			 = null;
 	private int					m_cableIdx  		 = 0;
 	private final float 		m_dy 				 = 1;		// the distance the bird can jump up or down
-	private World 				m_world    			 = null;
-	public 	boolean 			crosshairInitialized = false;
-	private Crap				m_crap               = null;
+	public World 				m_world    			 = null;
 	
+	public enum State
+	{
+		Jumping,
+		Shitting,
+		Flying,
+		Landing,
+	};
 	
+	public State				m_state;
 	
 	/**
 	 * Constructor.
@@ -39,43 +45,20 @@ public class Bird extends Entity implements EntityEventListener
 	{
 		setPosition( 0, 0, 0 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
-		
-		// define events the entity responds to
-		registerEvent( Eaten.class, new EventFactory< Eaten >() { @Override public Eaten createObject() { return new Eaten (); } } );
-		registerEvent( Shocked.class, new EventFactory< Shocked >() { @Override public Shocked createObject() { return new Shocked (); } } );
-		
-		// register events listeners
-		attachEventListener( this );
-		
+		m_state = State.Flying; 
+					
 		// add movement capabilities
-		final float maxLinearSpeed = 1.0f;
-		final float maxRotationSpeed = 180.0f;
+		final float maxLinearSpeed = 3.0f;
+		final float maxRotationSpeed = 720.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
 	
 	@Override
 	public void onAddedToWorld( World hostWorld )
-	{
+	{		
 		m_world = hostWorld;
 		m_cables = (CableProvider)hostWorld.findEntity( CableProvider.class );
-		
-		if ( m_cables != null )
-		{
-			m_cableIdx = m_cables.getStartCableIdx();
-			
-			float y = hostWorld.getHeight() / 2;
-			float x = 0;
-			try
-			{
-				x = m_cables.getPositionOnCable( m_cableIdx, y );
-			}
-			catch( RuntimeException ex )
-			{
-				// TODO: there are no cables - fly
-			}
-			
-			setPosition( x, y, 0 );
-		}
+		setPosition( m_world.getWidth() / 2, m_world.getHeight() / 2, 0 );
 	}
 	
 	@Override
@@ -131,8 +114,8 @@ public class Bird extends Entity implements EntityEventListener
 		}
 		
 		Vector3 currPos = getPosition();
-		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y + m_dy );
-		translate( x - currPos.m_x, m_dy, 0 );
+		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y - m_dy );
+		translate( x - currPos.m_x, -m_dy, 0 );
 	}
 
 	/**
@@ -146,40 +129,15 @@ public class Bird extends Entity implements EntityEventListener
 		}
 		
 		Vector3 currPos = getPosition();
-		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y - m_dy );
-		translate( x - currPos.m_x, -m_dy, 0 );
-	}
-
-	/**
-	 * Initialize the crosshair on bird 
-	 */
-	public void crosshairOn() 
-	{
-		crosshairInitialized = true;
+		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y + m_dy );
+		translate( x - currPos.m_x, m_dy, 0 );
 	}
 	
 	/**
-	 * Bird starts shitting
+	 * Bird makes a crap.
 	 */
-	public void makeShit() 
+	void makeShit() 
 	{
-		m_crap = new Crap();
-		crosshairInitialized = false;
-		
-		m_world.addEntity(m_crap);
+		m_world.addEntity( new Crap() );
 	}
-
-	// ------------------------------------------------------------------------
-	// Environment interactions
-	// ------------------------------------------------------------------------
-
-	@Override
-	public void onEvent( EntityEvent event ) 
-	{
-		if ( event instanceof Eaten || event instanceof Shocked )
-		{
-			m_world.removeEntity( this );
-		}
-	}
-
 }

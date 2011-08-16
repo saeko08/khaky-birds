@@ -48,6 +48,8 @@
     * [Renderer2DReference#Sprites Sprites]
     * [Renderer2DReference#Atlas Atlas]
     * [Renderer2DReference#Animation Animation]
+      * [Renderer2DReference#XML_animation_resource XML animation resource]
+      * [Renderer2DReference#Playing_animation Playing animation]
     * [Renderer2DReference#Sprite_batcher Sprite batcher]
     * [Renderer2DReference#Entity_visual Entity visual]
     * [Renderer2DReference#Visuals_factory Visuals factory]

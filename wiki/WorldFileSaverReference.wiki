@@ -1,7 +1,7 @@
 #labels XML,save
-=World File Saver=
+=Data Saver=
 
-This interface complements the `WorldFileLoader` in that it allows you to save data to a schema the loader will read.
+This interface complements the `DataLoader` in that it allows you to save data to a schema the loader will read.
 
 As its counterpart, each instance represents a single node in the document hierarchy.
 
@@ -44,7 +44,7 @@ You can add child nodes using the following method:
  * @param id
  * @return
  */
-WorldFileSaver addChild( String id );
+DataSaver addChild( String id );
 }}}
 
 ==Saving the data==
@@ -68,5 +68,5 @@ At this moment, the engine contains just one implementation that can persist the
 
 You can obtain its instance by calling:
 {{{
-WorldFileSaver saver = XMLWorldFileSaver.create();
+DataSaver saver = XMLDataSaver.create();
 }}}

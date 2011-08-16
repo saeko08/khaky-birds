@@ -20,7 +20,84 @@ An atlas is a large texture where an artist can place a lot of smaller sprite bi
 *CAUTION* an atlas texture has to have a ^2 ( power of two ) dimensions, and the largest supported dimensions are 1024x1024.
 
 == Animation ==
-*TODO*
+An animation is a resource. You can create them manually, or by using a definition stored in an XML file.
+
+===XML animation resource===
+To instantiate an animation resource, do this:
+{{{
+Animation myAnimation = resourcesManager.getResource( Animation.class, "path_to_my_anim/my_anim.xml" );
+}}}
+
+The XML file with it could look like so:
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='khaky_birds_prototype/atlas.png'>
+        <TextureRegion x='0', y='0' w='100' h='100'/>
+</Animation>
+}}}
+
+The file must contain a single `<Animation>` tag with an attribute `frameDuration` specifying the duration of a single animation frame and another one, `atlasName`, specifying the name of an atlas that contains the animation key frames.
+
+That tag has children - `<TextureRegion>` tags, each of which describes a region in a texture where an animation frame is located.
+The order of the tags specifies the order in which the key frames will be played.
+
+===Playing animation===
+A resource can't be played by itself. In order to be played, we need to memorize the time of the animation somewhere, and since an animation is a resource, shared between many interested visuals that want to display it, it doesn't fit to keep such a runtime info in a static by nature instance.
+
+That's why the engine offers another tool - `AnimationPlayer`, which allows you to play and mix multiple animations.
+
+First of all, you need to define which animations you want to be able to play. You can do that using this method:
+{{{
+/**
+ * Adds a new animation definition to the player.
+ * 
+ * @param animation
+ * @return              animation index
+ */
+public int addAnimation( Animation animation );
+}}}
+
+and here's how you can go about it:
+{{{
+// load animations
+Animation regularAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/pedestrianWalking.xml");
+Animation wipeShitOffAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/pedestrianWipeShitOff.xml");
+                
+// create an animation player
+m_animationPlayer = new AnimationPlayer();
+int ANIM_WALK = m_animationPlayer.addAnimation( regularAnimation );
+int ANIM_WIPE_SHIT_OFF = m_animationPlayer.addAnimation( wipeShitOffAnimation );
+}}}
+
+So first you load the animations themselves, then you add them to the player. The player returns an ID for each of the added animations, which you'll need in order to switch to playing the specified animation.
+
+You can select an animation you want to play using this ID and the following method of the `AnimationPlayer`:
+{{{
+/**
+ * Selects an active animation.
+ * 
+ * @param idx   animation index
+ */
+public void select( int idx );
+}}}
+
+An animation player returns a `TextureRegion` you should draw your sprite with. So here's how you animate your sprite:
+{{{
+batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_animationPlayer.getTextureRegion( deltaTime ) ); 
+}}}
+
+where `deltaTime` is the time that's elapsed since the last time you called that method.
+
+The `getTextureRegion` method's signature is:
+{{{
+/**
+ * Returns a texture region you should draw your geometry with in this animation frame. 
+ * 
+ * @param deltaTime
+ * @return
+ */
+public TextureRegion getTextureRegion( float deltaTime );
+}}}
 
 == Sprite batcher ==
 A device used to draw sprites on the screen.

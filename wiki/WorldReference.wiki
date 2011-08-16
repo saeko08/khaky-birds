@@ -377,12 +377,12 @@ You can ( and should ) define your game world in an asset.
 Engine supports XML files with world configuration.
 
 ===Loading===
-To load a world from a file, simply call `World.load` method, passing it a `WorldFileLoader` instance:
+To load a world from a file, simply call `World.load` method, passing it a DataLoader` instance:
 {{{
 try 
 {
       InputStream worldFileStream = game.getFileIO().readAsset( "game_assets/my_world.xml" );
-      m_world.load( XMLWorldFileLoader.parse( worldFileStream ) );
+      m_world.load( XMLDataLoader.parse( worldFileStream ) );
 } 
 catch ( IOException e ) 
 {
@@ -402,7 +402,7 @@ Here's the `load` method signature:
  * 
  * @param loader                loader that persists the world
  */
-public void load( WorldFileLoader loader );
+public void load( DataLoader loader );
 }}}
 
 ===Registering entity types===
@@ -487,14 +487,14 @@ The two methods you need to override are:
  * 
  * @param loader
  */
-public void onLoad( WorldFileLoader loader );
+public void onLoad( DataLoader loader );
         
 /**
  * Called to deserialize entity's implementation-specific state.
  * 
  * @param loader
  */
-public void onSave( WorldFileSaver saver );
+public void onSave( DataSaver saver );
 }}}
 
 So let's analyze an example - let's assume you want to create an `Apple` entity, that is described by how sweet it is.
@@ -508,13 +508,13 @@ class Apple extends Entity
         // .....
 
         @Override
-        public void onLoad( WorldFileLoader loader ) 
+        public void onLoad( DataLoader loader ) 
         {
                 m_sweetness = loader.getIntValue( "sweetness" );
         }
         
         @Override
-        public void onSave( WorldFileSaver saver ) 
+        public void onSave( DataSaver saver ) 
         {
                 saver.setIntValue( "sweetness", m_sweetness );
         }
@@ -527,4 +527,4 @@ and the XML section that creates an entity with the 'sweetness' parameter define
 }}}
 
 
-Check out the dedicated references on the [WorldFileLoaderReference WorldFileLoader] and [WorldFileSaverReference WorldFileSaver] for more information.
+Check out the dedicated references on the [WorldFileLoaderReference Data Loader] and [WorldFileSaverReference Data Saver] for more information.

@@ -4,9 +4,9 @@
 	
 	<Entity type="ElectricCables" textureWidth="275">
 		<Cable pos='46'/>
-		<Cable pos='109'/>
-		<Cable pos='163'/>
-		<Cable pos='235'/>
+		<Cable pos='108'/>
+		<Cable pos='172'/>
+		<Cable pos='233'/>
 	</Entity>
 	
 	<Entity type="Pedestrian" facing='180.0' >

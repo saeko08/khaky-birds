@@ -24,12 +24,13 @@ import com.hypefoundry.engine.physics.DynamicObject;
 public class Bird extends Entity
 {
 	public CableProvider		m_cables			 = null;
-	private int					m_cableIdx  		 = 0;
-	private final float 		m_dy 				 = 1;		// the distance the bird can jump up or down
+	public int					m_cableIdx  		 = 0;
+	//private final float 		m_dy 				 = 1;		// the distance the bird can jump up or down
 	public World 				m_world    			 = null;
 	
 	public enum State
 	{
+		Idle,
 		Jumping,
 		Shitting,
 		Flying,
@@ -70,7 +71,7 @@ public class Bird extends Entity
 	/**
 	 * Moves the bird to the next cable to its left. 
 	 */
-	public void jumpLeft() 
+	/*public void jumpLeft() 
 	{
 		if ( m_cables == null )
 		{
@@ -88,7 +89,7 @@ public class Bird extends Entity
 	/**
 	 * Moves the bird to the next cable to its right. 
 	 */
-	public void jumpRight() 
+	/*public void jumpRight() 
 	{
 		if ( m_cables == null )
 		{
@@ -100,13 +101,14 @@ public class Bird extends Entity
 		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y );
 		
 		translate( x - currPos.m_x, 0, 0 );
+	
 		
 	}
 
 	/**
 	 * Moves the bird down the cable it's sitting on. 
 	 */
-	public void jumpDown() 
+	/*public void jumpDown() 
 	{
 		if ( m_cables == null )
 		{
@@ -121,7 +123,7 @@ public class Bird extends Entity
 	/**
 	 * Moves the bird up the cable it's sitting on. 
 	 */
-	public void jumpUp() 
+	/*public void jumpUp() 
 	{
 		if ( m_cables == null )
 		{
@@ -131,7 +133,7 @@ public class Bird extends Entity
 		Vector3 currPos = getPosition();
 		float x = m_cables.getPositionOnCable( m_cableIdx, currPos.m_y + m_dy );
 		translate( x - currPos.m_x, m_dy, 0 );
-	}
+	}*/
 	
 	/**
 	 * Bird makes a crap.

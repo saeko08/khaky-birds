@@ -23,7 +23,7 @@ public class BirdVisual extends EntityVisual
 	private AnimationPlayer	m_animationPlayer;
 	private Bird			m_bird;
 	
-	private int 			ANIM_JUMP;
+	private int 			ANIM_IDLE;
 	private int 			ANIM_FLY;
 	private int 			ANIM_SHIT;
 	
@@ -40,13 +40,13 @@ public class BirdVisual extends EntityVisual
 		m_bird = (Bird)entity;
 		
 		// load animations
-		Animation jumpingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/jumpingBird.xml");
+		Animation idleBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/idleBird.xml");
 		Animation flyingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/flyingBird.xml");
 		Animation shittingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/shittingBird.xml");		
 		
 		// create an animation player
 		m_animationPlayer = new AnimationPlayer();
-		ANIM_JUMP = m_animationPlayer.addAnimation( jumpingBird );
+		ANIM_IDLE = m_animationPlayer.addAnimation( idleBird );
 		ANIM_FLY = m_animationPlayer.addAnimation( flyingBird );
 		ANIM_SHIT = m_animationPlayer.addAnimation( shittingBird );
 	}
@@ -61,13 +61,13 @@ public class BirdVisual extends EntityVisual
 		{
 			m_animationPlayer.select(ANIM_SHIT);
 		}
-		else if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing )
+		else if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.Jumping)
 		{
 			m_animationPlayer.select(ANIM_FLY);
 		}
 		else
 		{
-			m_animationPlayer.select(ANIM_JUMP);
+			m_animationPlayer.select(ANIM_IDLE);
 		}
 		
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_bird.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );

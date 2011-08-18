@@ -108,13 +108,16 @@ public class BirdController extends FiniteStateMachine
 	{
 		
 		private	Vector3 m_goToPos  = new Vector3();
-		
+		private Vector3 m_direction = new Vector3();
 		@Override
 		public void activate()
 		{
+			m_direction.set(m_goToPos);
+			m_direction.sub(m_bird.getPosition());
+			m_direction.normalize2D();
 			m_bird.m_state = Bird.State.Jumping;
 			m_bird.attachEventListener( this );
-			m_sb.begin().seek( m_goToPos ).faceMovementDirection();
+			m_sb.begin().lookAt(m_direction).seek( m_goToPos ).faceMovementDirection();
 		}
 		
 		@Override

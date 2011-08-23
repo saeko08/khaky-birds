@@ -61,7 +61,7 @@ public class BirdVisual extends EntityVisual
 		{
 			m_animationPlayer.select(ANIM_SHIT);
 		}
-		else if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.Jumping)
+		else if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.Jumping|| m_bird.m_state == Bird.State.Rotating)
 		{
 			m_animationPlayer.select(ANIM_FLY);
 		}

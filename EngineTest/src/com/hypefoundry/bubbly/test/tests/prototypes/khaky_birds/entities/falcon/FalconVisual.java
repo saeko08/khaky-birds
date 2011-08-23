@@ -6,6 +6,8 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.renderer2D.Animation;
+import com.hypefoundry.engine.renderer2D.AnimationPlayer;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
@@ -19,8 +21,9 @@ import com.hypefoundry.engine.math.Vector3;
  */
 public class FalconVisual extends EntityVisual 
 {
-	private TextureRegion		m_pixmap;
+	private AnimationPlayer	    m_animationPlayer;
 	private Falcon				m_falcon;
+	private int 			    ANIM_FLY;
 	
 	
 	/**
@@ -34,8 +37,12 @@ public class FalconVisual extends EntityVisual
 		super(entity);
 		m_falcon = (Falcon)entity;
 		
-		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
-		m_pixmap = new TextureRegion( atlas, 620, 88, 40, 60 );
+		// load animations
+		Animation FlyingFalcon = resMgr.getResource( Animation.class, "khaky_birds_prototype/FlyingFalcon.xml");
+		
+		// create an animation player
+			m_animationPlayer = new AnimationPlayer();
+			ANIM_FLY = m_animationPlayer.addAnimation( FlyingFalcon );
 	}
 
 	@Override
@@ -44,14 +51,9 @@ public class FalconVisual extends EntityVisual
 		Vector3 pos = m_falcon.getPosition();
 		BoundingShape bs = m_falcon.getBoundingShape();
 		
-		if (m_falcon.m_flyingFromLeft == true)
-		{			
-			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
-		}
-		else
-		{
-			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), 180.0f, m_pixmap );
-		}
+		m_animationPlayer.select(ANIM_FLY);
+		
+		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_falcon.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
 	}
 
 }

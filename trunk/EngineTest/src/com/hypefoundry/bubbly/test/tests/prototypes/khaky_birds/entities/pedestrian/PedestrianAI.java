@@ -159,6 +159,6 @@ public class PedestrianAI extends FiniteStateMachine
 	@Override
 	public void onUpdate( float deltaTime )
 	{
-		m_sb.update();
+		m_sb.update( deltaTime );
 	}
 }

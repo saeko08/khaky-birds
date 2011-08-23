@@ -215,6 +215,18 @@ public class MultiTouchHandler implements TouchHandler
 	}
 	
 	@Override
+	public void clearTouchDuration()
+	{
+		synchronized ( this ) 
+		{
+			for ( int i = 0; i < m_touchDuration.length; ++i )
+			{
+				m_touchDuration[i] = 0;
+			}
+		}
+	}
+	
+	@Override
 	public void update( float deltaTime )
 	{
 		synchronized ( this ) 

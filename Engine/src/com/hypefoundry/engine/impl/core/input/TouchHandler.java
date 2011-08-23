@@ -48,6 +48,11 @@ public interface TouchHandler extends OnTouchListener
 	float getTouchDuriation( int pointer );
 	
 	/**
+	 * Clears previously registered duration events.
+	 */
+	void clearTouchDuration();
+	
+	/**
 	 * Returns a list of all touch-related events that happened.
 	 * 
 	 * @return

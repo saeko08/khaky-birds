@@ -158,6 +158,12 @@ public class SingleTouchHandler implements TouchHandler
 	}
 	
 	@Override
+	public void clearTouchDuration()
+	{
+		m_touchDuration = 0;
+	}
+	
+	@Override
 	public void update( float deltaTime )
 	{
 		synchronized ( this ) 

@@ -25,8 +25,11 @@ public class SteeringBehaviorTest extends AndroidTestCase
 	{
 		public MobileMock()
 		{
-			float maxLinearSpeed = 1.0f;
-			float maxRotationSpeed = 180.0f;
+			this( 1.0f, 180.0f );
+		}
+		
+		public MobileMock( float maxLinearSpeed, float maxRotationSpeed )
+		{
 			defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 		}
 	}
@@ -42,7 +45,7 @@ public class SteeringBehaviorTest extends AndroidTestCase
 		sb.seek( new Vector3( 10.0f, 0.0f, 0.0f ) );
 		try
 		{
-			sb.update();
+			sb.update( 0 );
 		}
 		catch( Exception ex )
 		{
@@ -58,9 +61,72 @@ public class SteeringBehaviorTest extends AndroidTestCase
 		
 		// at this point the entity doesn't have the movement capabilities, so it won't budge
 		sb.seek( new Vector3( 10.0f, 0.0f, 0.0f ) );
-		sb.update();
+		sb.update( 0 );
 		
 		DynamicObject movable = entity.query( DynamicObject.class );
 		assertTrue( movable.m_velocity.distSq( 1.0f, 0.0f, 0.0f ) < 1e-3 );
+	}
+	
+	public void testLookAt()
+	{
+		MobileMock entity = new MobileMock( 1.0f, 720.0f );		
+		SteeringBehaviors sb = new SteeringBehaviors( entity );
+		DynamicObject movable = entity.query( DynamicObject.class );
+		
+		//  look back
+		sb.lookAt( new Vector3( -1.0f, 0.0f, 0.0f ) );
+		
+		// nothing happens without a simulation
+		assertTrue( entity.m_facing == 0.0f );
+		
+		// so simulate the dynamics then - in 0.1s the body should rotate 72 degrees given its rotation speed
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( entity.m_facing == 72.0f );
+		
+		// and so it goes
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( entity.m_facing == 144.0f );
+		
+		// however there's no risk of overshooting
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( entity.m_facing == 180.0f );
+	}
+	
+	public void testArrive()
+	{
+		MobileMock entity = new MobileMock( 10.0f, 0.0f );		
+		SteeringBehaviors sb = new SteeringBehaviors( entity );
+		DynamicObject movable = entity.query( DynamicObject.class );
+		
+		//  look back
+		sb.arrive( new Vector3( 10.0f, 0.0f, 0.0f ), 2.0f );
+		
+		// so simulate the dynamics then - in 0.1s the body should move by 1m
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( entity.getPosition().distSq( 1.0f, 0.0f, 0.0f ) < 1e-3 );
+		
+		// we're almost there
+		sb.update( 0.7f );
+		movable.simulate( 0.7f, entity );
+		assertTrue( entity.getPosition().distSq( 8.0f, 0.0f, 0.0f ) < 1e-3 );
+		
+		// ... aaaaand start breaking
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( entity.getPosition().distSq( 9.0f, 0.0f, 0.0f ) < 1e-3 );
+		
+		// ... keep breaking
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( entity.getPosition().distSq( 9.5f, 0.0f, 0.0f ) < 1e-3 );
+		
+		// ... keep breaking
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( entity.getPosition().distSq( 9.75f, 0.0f, 0.0f ) < 1e-3 );
 	}
 }

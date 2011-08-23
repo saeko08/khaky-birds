@@ -46,6 +46,9 @@ public class BirdController extends FiniteStateMachine
 		{
 			m_bird.m_state = Bird.State.Idle;
 			m_bird.attachEventListener( this );
+			
+			// we're not interested in previous duration events
+			m_input.clearTouchDuration();
 		}
 		
 		@Override
@@ -70,8 +73,11 @@ public class BirdController extends FiniteStateMachine
 		private void updateInput( float deltaTime ) 
 		{	
 			List< TouchEvent > inputEvents = m_input.getTouchEvents();
-			for ( TouchEvent lastEvent : inputEvents )
+			int count = inputEvents.size();
+			for ( int i = 0 ; i < count; ++i )
 			{	
+				TouchEvent lastEvent = inputEvents.get(i);
+			
 				if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
 				{
 					m_dragStart.m_x = lastEvent.x;
@@ -272,29 +278,26 @@ public class BirdController extends FiniteStateMachine
 			Vector3 currPos = m_bird.getPosition();
 			float angle = currPos.getAngleBetween(m_goToPos);
 			angle = Math.abs(angle);
-			if ( angle <= 15.0f && angle >= 0)
-				
-				{
-					
-					if (m_jumpLeft == true)
-					{
-						transitionTo( Jumping.class ).jumpLeft();
-					}
-					else if (m_jumpRight == true)
-					{
-						transitionTo( Jumping.class ).jumpRight();
-					}
-				    if (m_jumpDown == true)
-					{
-						transitionTo( Jumping.class ).jumpDown();
-					}
-					else if (m_jumpUp == true)
-					{
-						transitionTo( Jumping.class ).jumpUp();
-					}
-				
-				}
 			
+			if ( angle <= 15.0f && angle >= 0)
+			{
+				if (m_jumpLeft == true)
+				{
+					transitionTo( Jumping.class ).jumpLeft();
+				}
+				else if (m_jumpRight == true)
+				{
+					transitionTo( Jumping.class ).jumpRight();
+				}
+			    if (m_jumpDown == true)
+				{
+					transitionTo( Jumping.class ).jumpDown();
+				}
+				else if (m_jumpUp == true)
+				{
+					transitionTo( Jumping.class ).jumpUp();
+				}
+			}
 		}
 		
 		@Override
@@ -501,8 +504,10 @@ public class BirdController extends FiniteStateMachine
 		public void execute( float deltaTime )
 		{
 			List< TouchEvent > inputEvents = m_input.getTouchEvents();
-			for ( TouchEvent lastEvent : inputEvents )
+			int count = inputEvents.size();
+			for ( int i = 0 ; i < count; ++i )
 			{	
+				TouchEvent lastEvent = inputEvents.get(i);	
 				if ( lastEvent.type == TouchEvent.TOUCH_UP)
 				{
 					m_bird.makeShit();

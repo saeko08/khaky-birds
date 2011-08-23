@@ -53,6 +53,16 @@ public float getTouchDuriation( int pointer );
 
 You just need to specifiy the pointer index that you wish to check, and that's all. The returned value is expressed in *seconds*.
 
+Keep in mind that the duration is memorized so that you can access it even after the touch was released. It will get reset with the next touch.
+
+If you want to reset it at any time, simply call the `clearTouchDuration` method:
+{{{
+/**
+ * Clears previously registered duration events.
+ */
+void clearTouchDuration();
+}}}
+
 ==Keyboard input==
 
 You can check the keyboard input in a similar way. `Input` class has a few methods in store just for that occasion:

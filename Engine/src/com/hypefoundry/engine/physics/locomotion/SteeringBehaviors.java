@@ -5,6 +5,7 @@ package com.hypefoundry.engine.physics.locomotion;
 
 import java.util.*;
 
+import com.hypefoundry.engine.game.Updatable;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.world.Entity;
@@ -15,7 +16,7 @@ import com.hypefoundry.engine.world.Entity;
  * @author Paksas
  *
  */
-public class SteeringBehaviors 
+public class SteeringBehaviors implements Updatable 
 {		
 	// controlled entity
 	private	Entity								m_entity;
@@ -44,8 +45,9 @@ public class SteeringBehaviors
 		 * Calculates new velocity for the specified movable.
 		 * 
 		 * @param movable
+		 * @param deltaTime
 		 */
-		abstract void update( DynamicObject movable );
+		abstract void update( DynamicObject movable, float deltaTime );
 	};
 	
 	// ------------------------------------------------------------------------
@@ -54,18 +56,31 @@ public class SteeringBehaviors
 	{
 		private Vector3 	m_tmpDir = new Vector3();
 		public Vector3		m_staticGoal = new Vector3();
+		private float		m_breakDistanceFactor;
 		
-		void activate( Vector3 goal )
+		void activate( Vector3 goal, float breakDistanceFactor )
 		{
 			m_isActive = true;
 			m_staticGoal.set( goal );
+			m_breakDistanceFactor = breakDistanceFactor;
 		}
 		
 		@Override
-		void update( DynamicObject movable )
+		void update( DynamicObject movable, float deltaTime )
 		{
 			Vector3 currPos = m_entity.getPosition();
-			m_tmpDir.set( m_staticGoal ).sub( currPos ).normalize2D().scale( movable.m_linearSpeed );
+			m_tmpDir.set( m_staticGoal ).sub( currPos );
+			
+			float dist = m_tmpDir.mag();
+			float breakingDistance = movable.m_linearSpeed * 0.1f * m_breakDistanceFactor;
+			
+			float desiredSpeed = movable.m_linearSpeed;
+			float breakDistFactor = dist / breakingDistance;
+			if ( breakDistFactor < 1.0f )
+			{
+				desiredSpeed *= breakDistFactor;
+			}
+			m_tmpDir.normalize2D().scale( desiredSpeed );
 			
 			movable.m_velocity.set( m_tmpDir );
 		}
@@ -92,7 +107,7 @@ public class SteeringBehaviors
 		}
 		
 		@Override
-		void update( DynamicObject movable )
+		void update( DynamicObject movable, float deltaTime )
 		{
 			movable.m_velocity.set( m_movementDir );
 			movable.m_velocity.scale( movable.m_linearSpeed );
@@ -109,10 +124,10 @@ public class SteeringBehaviors
 		}
 		
 		@Override
-		void update( DynamicObject movable ) 
+		void update( DynamicObject movable, float deltaTime ) 
 		{
 			float rotationAngle = movable.m_velocity.angleXY() - m_entity.m_facing;
-			movable.m_rotation = rotationAngle;
+			movable.m_rotation = movable.getRotationPerFrame( rotationAngle, deltaTime );
 		}
 	};
 	
@@ -129,10 +144,10 @@ public class SteeringBehaviors
 		}
 		
 		@Override
-		void update( DynamicObject movable ) 
+		void update( DynamicObject movable, float deltaTime ) 
 		{
 			float rotationAngle = m_lookAtVec.angleXY() - m_entity.m_facing;
-			movable.m_rotation = rotationAngle;
+			movable.m_rotation = movable.getRotationPerFrame( rotationAngle, deltaTime );
 		}
 	};
 	
@@ -150,8 +165,10 @@ public class SteeringBehaviors
 	
 	/**
 	 * Updates the movement params of the entity.
+	 * 
+	 * @param deltaTime
 	 */
-	public void update()
+	public void update( float deltaTime )
 	{
 		DynamicObject movable = m_entity.query( DynamicObject.class );
 		if ( movable == null )
@@ -164,7 +181,7 @@ public class SteeringBehaviors
 		{
 			if( beh.m_isActive )
 			{
-				beh.update( movable );
+				beh.update( movable, deltaTime );
 			}
 		}
 	
@@ -207,7 +224,25 @@ public class SteeringBehaviors
 	 */
 	public SteeringBehaviors seek( Vector3 goal )
 	{
-		m_seek.activate( goal );
+		m_seek.activate( goal, 1.0f );
+		
+		return this;
+	}
+	
+	/**
+	 * Makes the entity rush towards the specified goal position, and arrive at that position
+	 * gently by breaking at the very last moment
+	 * 
+	 * @param goal
+	 * @param breakDistanceFactor		factor which tells how far before the goal the breaking 
+	 * 									process should begin ( the larger the number, the earlier it will start )
+	 * 
+	 * @return instance to self, allowing to chain commands
+	 */
+	public SteeringBehaviors arrive( Vector3 goal, float breakDistanceFactor )
+	{
+		m_seek.activate( goal, breakDistanceFactor );
+				
 		return this;
 	}
 	

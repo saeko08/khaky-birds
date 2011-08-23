@@ -31,6 +31,7 @@ public class Bird extends Entity
 	public enum State
 	{
 		Idle,
+		Rotating,
 		Jumping,
 		Shitting,
 		Flying,

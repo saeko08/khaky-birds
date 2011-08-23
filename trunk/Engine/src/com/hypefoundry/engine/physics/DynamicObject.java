@@ -53,6 +53,25 @@ public final class DynamicObject implements Aspect
 	}
 	
 	/**
+	 * Calculates the maximum rotation the body can perform this frame.
+	 * 
+	 * @param rotationAngle
+	 * @param deltaTime
+	 * @return
+	 */
+	public final float getRotationPerFrame( float rotationAngle, float deltaTime ) 
+	{
+		float rotMag = Math.abs( rotationAngle );
+		float maxRotThisFrame = m_rotationSpeed * deltaTime;
+		if ( rotMag > maxRotThisFrame )
+		{
+			rotationAngle = ( rotationAngle > 0 ) ? maxRotThisFrame : -maxRotThisFrame;
+		}
+		
+		return rotationAngle / deltaTime;
+	}
+	
+	/**
 	 * Simulates the dynamics that influences the entity.
 	 * 
 	 * @param entity
@@ -91,4 +110,5 @@ public final class DynamicObject implements Aspect
 		m_velocity.save( "velocity", node );
 		node.setFloatValue( "rotation", m_rotation );	
 	}
+
 }

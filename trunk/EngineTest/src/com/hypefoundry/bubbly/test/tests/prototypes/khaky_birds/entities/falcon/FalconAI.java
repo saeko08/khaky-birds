@@ -258,7 +258,7 @@ public class FalconAI extends FiniteStateMachine
 	@Override
 	public void onUpdate( float deltaTime )
 	{
-		m_sb.update();
+		m_sb.update(deltaTime);
 	}
 	
 	void die()

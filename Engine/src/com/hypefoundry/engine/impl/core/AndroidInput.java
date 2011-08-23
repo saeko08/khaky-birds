@@ -28,12 +28,14 @@ public class AndroidInput implements Input
 	/**
 	 * Constructor.
 	 * 
-	 * @param context	activity context
-	 * @param view		view we want to be receiving key events from
-	 * @param scaleX	screen scale X
-	 * @param scaleY	screen scale Y
+	 * @param context				activity context
+	 * @param view					view we want to be receiving key events from
+	 * @param scaleX				screen scale X
+	 * @param scaleY				screen scale Y
+	 * @param doubleTapDuration		period between two consecutive touch-downs ( in seconds ) that will allow us 
+	 * 								to consider them a single double tap event
 	 */
-	public AndroidInput( Context context, View view, float scaleX, float scaleY ) 
+	public AndroidInput( Context context, View view, float scaleX, float scaleY, float doubleTapDuration ) 
 	{
 		m_accelHandler = new AccelerometerHandler( context );
 		m_keyHandler = new KeyboardHandler( view );
@@ -41,11 +43,11 @@ public class AndroidInput implements Input
 		// create a proper touch handler based on the Android version
 		if( Integer.parseInt( VERSION.SDK ) < 5 )
 		{
-			m_touchHandler = new SingleTouchHandler( view, scaleX, scaleY );
+			m_touchHandler = new SingleTouchHandler( view, scaleX, scaleY, doubleTapDuration );
 		}
 		else
 		{
-			m_touchHandler = new MultiTouchHandler( view, scaleX, scaleY );
+			m_touchHandler = new MultiTouchHandler( view, scaleX, scaleY, doubleTapDuration );
 		}
 	}
 	

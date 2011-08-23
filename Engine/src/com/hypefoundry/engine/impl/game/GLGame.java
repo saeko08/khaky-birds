@@ -83,7 +83,9 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		AndroidFileIO fileIOImpl = new AndroidFileIO( getAssets() );
 		m_fileIO = fileIOImpl;
 		m_audio = new AndroidAudio( this );
-		m_input = new AndroidInput( this, m_glView, 1, 1 );
+		
+		final float DOUBLE_TAP_PERIOD = 0.5f;		// TODO: config
+		m_input = new AndroidInput( this, m_glView, 1, 1, DOUBLE_TAP_PERIOD );
 		
 		// we wait with the screen initialization until the render surface gets created
 		m_screen = null;

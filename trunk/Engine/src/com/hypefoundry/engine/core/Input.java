@@ -68,6 +68,11 @@ public interface Input {
 	public float getTouchDuriation( int pointer );
 	
 	/**
+	 * Clears previously registered duration events.
+	 */
+	public void clearTouchDuration();
+	
+	/**
 	 * Returns the X axis factor of the accelerometer.
 	 *  
 	 * @return

@@ -80,6 +80,12 @@ public class AndroidInput implements Input
 	{
 		return m_touchHandler.getTouchDuriation( pointer );
 	}
+	
+	@Override
+	public void clearTouchDuration()
+	{
+		m_touchHandler.clearTouchDuration();
+	}
 
 	@Override
 	public float getAccelX() 

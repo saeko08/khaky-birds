@@ -25,22 +25,25 @@ public class MultiTouchHandler implements TouchHandler
 	int[] 				m_touchX = new int[MAX_POINTERS_COUNT];
 	int[] 				m_touchY = new int[MAX_POINTERS_COUNT];
 	float[]				m_touchDuration = new float[MAX_POINTERS_COUNT];
-	
+	float[]				m_doubleTapStartTimes = new float[MAX_POINTERS_COUNT];
 	Pool<TouchEvent> 	m_touchEventPool;
 	List<TouchEvent> 	m_touchEvents = new ArrayList<TouchEvent>();
 	List<TouchEvent> 	m_touchEventsBuffer = new ArrayList<TouchEvent>();
 	float 				m_scaleX;
 	float 				m_scaleY;
+	float				m_doubleTapDuration;
 	
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param view				view the touches of which we want to listen to
-	 * @param scaleX			X scale of the screen
-	 * @param scaleY			Y scale of the screen
+	 * @param view					view the touches of which we want to listen to
+	 * @param scaleX				X scale of the screen
+	 * @param scaleY				Y scale of the screen
+	 * @param doubleTapDuration		period between two consecutive touch-downs ( in seconds ) that will allow us 
+	 * 								to consider them a single double tap event
 	 */
-	public MultiTouchHandler( View view, float scaleX, float scaleY ) 
+	public MultiTouchHandler( View view, float scaleX, float scaleY, float doubleTapDuration ) 
 	{
 		// create the TouchEvents objects factory
 		PoolObjectFactory<TouchEvent> factory = new PoolObjectFactory<TouchEvent>() 
@@ -55,8 +58,14 @@ public class MultiTouchHandler implements TouchHandler
 		m_touchEventPool = new Pool<TouchEvent>( factory, 100 );
 		view.setOnTouchListener( this );
 		
+		for ( int i = 0; i < m_doubleTapStartTimes.length; ++i )
+		{
+			m_doubleTapStartTimes[i] = -1;
+		}
+		
 		m_scaleX = scaleX;
 		m_scaleY = scaleY;
+		m_doubleTapDuration = doubleTapDuration;
 	}
 	
 	@Override
@@ -70,6 +79,8 @@ public class MultiTouchHandler implements TouchHandler
 			int pointerIndex = ( event.getAction() & MotionEvent.ACTION_POINTER_ID_MASK ) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
 			int pointerId = event.getPointerId( pointerIndex );
 			
+			float currTime = System.nanoTime() / 1000000000.0f; // [s]
+			
 			TouchEvent touchEvent;
 			switch ( action ) 
 			{
@@ -77,12 +88,28 @@ public class MultiTouchHandler implements TouchHandler
 				case MotionEvent.ACTION_POINTER_DOWN:
 				{
 					touchEvent = m_touchEventPool.newObject();
-					touchEvent.type = TouchEvent.TOUCH_DOWN;
 					touchEvent.pointer = pointerId;
 					touchEvent.x = m_touchX[pointerId] = (int)( event.getX( pointerIndex ) * m_scaleX );
 					touchEvent.y = m_touchY[pointerId] = (int)( event.getY( pointerIndex ) * m_scaleY );
 					m_isTouched[pointerId] = true;
 					m_touchDuration[pointerId] = 0;  // reset the touch timer
+					
+					touchEvent.type = TouchEvent.TOUCH_DOWN;
+					if ( m_doubleTapStartTimes[pointerId] < 0.0f )
+					{
+						// we're looking for a double tap
+						m_doubleTapStartTimes[pointerId] = currTime;
+					}
+					else
+					{
+						if ( currTime - m_doubleTapStartTimes[pointerId] <= m_doubleTapDuration )
+						{
+							// we have a double tap
+							touchEvent.type = TouchEvent.TOUCH_DOUBLE_TAP;
+						}
+						m_doubleTapStartTimes[pointerId] = -1;
+					}
+					
 					m_touchEventsBuffer.add( touchEvent );
 					break;
 				}

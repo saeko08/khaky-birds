@@ -18,7 +18,7 @@ import com.hypefoundry.engine.core.Input.TouchEvent;
  *
  */
 public class SingleTouchHandler implements TouchHandler 
-{
+{	
 	boolean 			m_isTouched;
 	int	 				m_touchX;
 	int 				m_touchY;
@@ -28,16 +28,20 @@ public class SingleTouchHandler implements TouchHandler
 	float 				m_scaleX;
 	float 				m_scaleY;
 	float				m_touchDuration;
+	float				m_doubleTapStartTime = -1;
+	float				m_doubleTapDuration;
 	
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param view				view the touches of which we want to listen to
-	 * @param scaleX			X scale of the screen
-	 * @param scaleY			Y scale of the screen
+	 * @param view					view the touches of which we want to listen to
+	 * @param scaleX				X scale of the screen
+	 * @param scaleY				Y scale of the screen
+	 * @param doubleTapDuration		period between two consecutive touch-downs ( in seconds ) that will allow us 
+	 * 								to consider them a single double tap event
 	 */
-	public SingleTouchHandler( View view, float scaleX, float scaleY ) 
+	public SingleTouchHandler( View view, float scaleX, float scaleY, float doubleTapDuration ) 
 	{
 		// create the TouchEvents objects factory
 		PoolObjectFactory<TouchEvent> factory = new PoolObjectFactory<TouchEvent>() 
@@ -54,6 +58,7 @@ public class SingleTouchHandler implements TouchHandler
 		
 		m_scaleX = scaleX;
 		m_scaleY = scaleY;
+		m_doubleTapDuration = doubleTapDuration;
 	}
 	
 	@Override
@@ -64,13 +69,35 @@ public class SingleTouchHandler implements TouchHandler
 		synchronized( this ) 
 		{
 			TouchEvent touchEvent = m_touchEventPool.newObject();
+			touchEvent.x = m_touchX = (int)( event.getX() * m_scaleX );
+			touchEvent.y = m_touchY = (int)( event.getY() * m_scaleY );
+			
+			float currTime = System.nanoTime() / 1000000000.0f; // [s]
 			
 			switch ( event.getAction() ) 
 			{
 			case MotionEvent.ACTION_DOWN:
+				
 				touchEvent.type = TouchEvent.TOUCH_DOWN;
+				
+				if ( m_doubleTapStartTime < 0.0f )
+				{
+					// we're looking for a double tap
+					m_doubleTapStartTime = currTime;
+				}
+				else
+				{
+					if ( currTime - m_doubleTapStartTime <= m_doubleTapDuration )
+					{
+						// we have a double tap
+						touchEvent.type = TouchEvent.TOUCH_DOUBLE_TAP;
+					}
+					m_doubleTapStartTime = -1;
+				}
+
 				m_isTouched = true;
 				m_touchDuration = 0; // reset the touch timer
+								
 			break;
 			
 			case MotionEvent.ACTION_MOVE:
@@ -84,9 +111,6 @@ public class SingleTouchHandler implements TouchHandler
 				m_isTouched = false;
 			break;
 			}
-			
-			touchEvent.x = m_touchX = (int)( event.getX() * m_scaleX );
-			touchEvent.y = m_touchY = (int)( event.getY() * m_scaleY );
 			m_touchEventsBuffer.add( touchEvent );
 			
 			return true;
@@ -137,7 +161,7 @@ public class SingleTouchHandler implements TouchHandler
 	public void update( float deltaTime )
 	{
 		synchronized ( this ) 
-		{
+		{	
 			if ( m_isTouched )
 			{
 				m_touchDuration += deltaTime;
@@ -150,6 +174,7 @@ public class SingleTouchHandler implements TouchHandler
 	{
 		synchronized( this ) 
 		{
+			// free old events back to the pool
 			int len = m_touchEvents.size();
 			for( int i = 0; i < len; i++ )
 			{
@@ -157,6 +182,7 @@ public class SingleTouchHandler implements TouchHandler
 			}
 			m_touchEvents.clear();
 			
+
 			m_touchEvents.addAll( m_touchEventsBuffer );
 			m_touchEventsBuffer.clear();
 			

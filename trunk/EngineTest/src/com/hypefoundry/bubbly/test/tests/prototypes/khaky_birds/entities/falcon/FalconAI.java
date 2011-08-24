@@ -29,12 +29,9 @@ public class FalconAI extends FiniteStateMachine
 
 	private World 				m_world;
 	private Falcon				m_falcon;
-	private float 				m_speed         = 55.f;
-	private float 				m_speedChaser   = 40.f;
 	private Bird                m_bird          = null;
 	private SteeringBehaviors	m_sb;
 	
-	private Vector3 			m_direction = new Vector3();
 	
 	
 	/**
@@ -198,62 +195,6 @@ public class FalconAI extends FiniteStateMachine
 			}
 		}
 	}
-	/* (non-Javadoc)
-	 * @see com.hypefoundry.engine.game.Updatable#update(float)
-	 */
-	/*@Override
-	public void update(float deltaTime) 
-	{
-		// start moving the falcon
-		
-		if (m_falcon.m_isChasing == true)
-		{
-			if ( m_bird != null )
-			{
-				m_direction.set( m_bird.getPosition() ); // direction = birdPos 
-				m_direction.sub( m_falcon.getPosition() ); // direction -= falconPos
-				m_direction.normalize2D();
-				
-				float speedForThisFrame = m_speedChaser * deltaTime;
-				m_direction.scale( speedForThisFrame );
-				
-				m_falcon.translate( m_direction );
-			}
-		}
-		
-		else if (m_falcon.m_flyingFromLeft == true)
-		{
-			float translation = m_speed * deltaTime;
-			m_falcon.translate( +translation, 0, 0  );
-			
-			// once it goes out of the view scope, destroy it
-			float borderPos = m_falcon.getWorldBounds().m_minX;
-			
-			
-			if ( borderPos >= 330.0f)
-			{
-				// ok - we can remove the falcon - it went out of the visibility scope
-				m_world.removeEntity( m_falcon );
-			}
-		}
-		else
-		{
-			float translation = m_speed * deltaTime;
-			m_falcon.translate( -translation, 0, 0  );
-			
-			// once it goes out of the view scope, destroy it
-			float borderPos = m_falcon.getWorldBounds().m_maxX;
-			
-			if ( borderPos <= -10.f )
-			{
-				// ok - we can remove the falcon - it went out of the visibility scope
-				m_world.removeEntity( m_falcon );
-				
-			}
-		}
-				
-
-	}*/
 	
 	@Override
 	public void onUpdate( float deltaTime )

@@ -35,10 +35,10 @@ public class ElectricCablesVisual extends EntityVisual
 		
 		// define cable positions
 		ElectricCables cables = (ElectricCables)entity;
-		cables.addCable( 65 );
-		cables.addCable( 131 );
-		cables.addCable( 195 );
-		cables.addCable( 257 );
+		cables.addCable( 46 );
+		cables.addCable( 108 );
+		cables.addCable( 172 );
+		cables.addCable( 233 );
 	}
 
 	@Override

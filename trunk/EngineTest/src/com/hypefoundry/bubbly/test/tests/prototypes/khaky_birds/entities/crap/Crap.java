@@ -1,6 +1,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon.State;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
@@ -17,11 +18,19 @@ import com.hypefoundry.engine.physics.events.CollisionEvent;
  * @author azagor
  *
  */
-public class Crap extends Entity implements EntityEventListener
+public class Crap extends Entity 
 {
 	private World 	m_world    			 = null;
 	public boolean pedestrianHit         = false;
 	private Bird   m_bird 				 = null;
+	
+	public enum State
+	{
+		Falling,
+		Hitting,
+	};
+	
+	public State				m_state;
 	
 	/**
 	 * Constructor.
@@ -31,11 +40,8 @@ public class Crap extends Entity implements EntityEventListener
 		setPosition( 0, 0, 0 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
 		
-		// register events listeners
-		attachEventListener( this );
-		
 		// add movement capabilities
-		final float maxLinearSpeed = 1.0f;
+		final float maxLinearSpeed = 5.0f;
 		final float maxRotationSpeed = 180.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
@@ -54,23 +60,12 @@ public class Crap extends Entity implements EntityEventListener
 		if ( m_bird != null )
 		{
 			Vector3 pos = m_bird.getPosition();
+			//float rot = m_bird.getFacing();
 			float x = pos.m_x;
 			float y = pos.m_y;
+			float z = pos.m_z;
 			
-			setPosition( x, y + 26, 1 );
-		}
-	}
-
-	@Override
-	public void onEvent( EntityEvent event ) 
-	{
-		if ( event instanceof CollisionEvent )
-		{
-			if ( ((CollisionEvent)event).m_collider instanceof Pedestrian )
-			{
-				((CollisionEvent)event).m_collider.sendEvent( Crapped.class );
-				pedestrianHit = true;
-			}
+			setPosition( x, y - 0.2f, z + 0.1f );
 		}
 	}
 }

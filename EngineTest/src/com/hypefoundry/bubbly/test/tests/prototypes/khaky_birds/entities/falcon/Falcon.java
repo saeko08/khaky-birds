@@ -52,7 +52,7 @@ public class Falcon extends Entity
 		m_state = State.Hunting; 
 		
 		// add movement capabilities
-		final float maxLinearSpeed = 3.0f;
+		final float maxLinearSpeed = 1.0f;
 		final float maxRotationSpeed = 720.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 		
@@ -70,9 +70,8 @@ public class Falcon extends Entity
 		m_bird = (Bird) m_world.findEntity(Bird.class);
 		
 		int startSideX = m_randStartSideX.nextInt(2);
-		//int startPosY = m_randStartPosY.nextInt(481);
 		int startPosY = m_randStartPosY.nextInt(10);
-		int chasingChance = m_randChasingChance.nextInt(3);
+		int chasingChance = m_randChasingChance.nextInt(6);
 		
 		
 		if (startSideX == 0 )

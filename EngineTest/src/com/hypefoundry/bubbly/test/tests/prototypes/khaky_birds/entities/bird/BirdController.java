@@ -91,7 +91,6 @@ public class BirdController extends FiniteStateMachine
 					//transitionTo( Rotating.class ).setRotation(dx,dy );
 					transitionTo( Jumping.class ).setJumpingPosition(dx,dy );
 					break;
-					//moveBird( dx, dy );
 				}
 				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
 				{
@@ -121,7 +120,6 @@ public class BirdController extends FiniteStateMachine
 		{
 			m_bird.m_state = Bird.State.Jumping;
 			m_bird.attachEventListener( this );
-			m_sb.begin().seek( m_goToPos ).faceMovementDirection();
 		}
 		
 		@Override
@@ -178,15 +176,25 @@ public class BirdController extends FiniteStateMachine
 		
 		public void jumpLeft() 
 		{
+			
 			if ( m_bird.m_cables == null )
 			{
 				return;
 			}
 			
 			m_goToPos.set( m_bird.getPosition() );
-			
 			m_bird.m_cableIdx = m_bird.m_cables.getLeftCable( m_bird.m_cableIdx );
 			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y );
+			
+			if ( m_goToPos.m_x > 4.3 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > 9.3 || m_goToPos.m_y < 0.3 )
+			{
+				transitionTo( Idle.class );
+			}
+			else
+			{
+				m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
+			}
+
 			
 		}
 
@@ -195,14 +203,23 @@ public class BirdController extends FiniteStateMachine
 		 */
 		public void jumpRight() 
 		{
+			
 			if ( m_bird.m_cables == null )
 			{
 				return;
 			}
 			m_goToPos.set( m_bird.getPosition() );
-			
 			m_bird.m_cableIdx = m_bird.m_cables.getRightCable( m_bird.m_cableIdx );
 			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y );
+			
+			if ( m_goToPos.m_x > 4.3 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > 9.1 || m_goToPos.m_y < 0.5 )
+			{
+				transitionTo( Idle.class );
+			}
+			else
+			{
+				m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
+			}
 			
 		
 			
@@ -213,6 +230,7 @@ public class BirdController extends FiniteStateMachine
 		 */
 		public void jumpDown() 
 		{
+			
 			if ( m_bird.m_cables == null )
 			{
 				return;
@@ -221,6 +239,15 @@ public class BirdController extends FiniteStateMachine
 			m_goToPos.set( m_bird.getPosition() );
 			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y - m_dy );
 			m_goToPos.m_y = m_goToPos.m_y - m_dy;
+			
+			if ( m_goToPos.m_x > 4.3 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > 9.1 || m_goToPos.m_y < 0.5 )
+			{
+				transitionTo( Idle.class );
+			}
+			else
+			{
+				m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
+			}
 			
 		}
 
@@ -237,6 +264,15 @@ public class BirdController extends FiniteStateMachine
 			m_goToPos.set( m_bird.getPosition() );
 			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y + m_dy );
 			m_goToPos.m_y = m_goToPos.m_y + m_dy;
+			
+			if ( m_goToPos.m_x > 4.3 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > 9.1 || m_goToPos.m_y < 0.5 )
+			{
+				transitionTo( Idle.class );
+			}
+			else
+			{
+				m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
+			}
 		}
 	}
 	// ----------------------------------------------------------------
@@ -570,29 +606,5 @@ public class BirdController extends FiniteStateMachine
 	{
 		m_bird.m_world.removeEntity( m_bird );
 	}
-	
-
-	/*private void moveBird( float dx, float dy ) 
-	{	
-		// decide where to move
-		if ( dx > m_inputSensitivityThreshold )
-		{
-			m_bird.jumpRight();
-			m_sb.faceMovementDirection();
-		}
-		else if ( dx < -m_inputSensitivityThreshold )
-		{
-			m_bird.jumpLeft();
-		}
-		
-		if ( dy > m_inputSensitivityThreshold )
-		{
-			m_bird.jumpDown();
-		}
-		else if ( dy < -m_inputSensitivityThreshold )
-		{
-			m_bird.jumpUp();
-		}
-	}*/
 
 }

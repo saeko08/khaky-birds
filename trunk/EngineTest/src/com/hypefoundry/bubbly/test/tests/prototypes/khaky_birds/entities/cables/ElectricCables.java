@@ -57,7 +57,7 @@ public class ElectricCables extends Entity implements CableProvider
 	public int getNearestCableIdx( Vector3 position )
 	{
 		float smallestDist = 100000;
-		int nearestCableIdx = 0;
+		int nearestCableIdx = -1;
 		
 		for ( int i = 0; i < m_cablePositions.length; ++i )
 		{
@@ -83,6 +83,11 @@ public class ElectricCables extends Entity implements CableProvider
 	@Override
 	public int getLeftCable( int cableIdx ) 
 	{
+		if ( m_cablePositions.length <= 0 )
+		{
+			return -1;
+		}
+		
 		int newIdx = cableIdx - 1;
 		if ( newIdx <= 0 )
 		{
@@ -94,6 +99,11 @@ public class ElectricCables extends Entity implements CableProvider
 	@Override
 	public int getRightCable(int cableIdx) 
 	{
+		if ( m_cablePositions.length <= 0 )
+		{
+			return -1;
+		}
+		
 		int newIdx = cableIdx + 1;
 		if ( newIdx >= ( m_cablePositions.length - 1 ) )
 		{

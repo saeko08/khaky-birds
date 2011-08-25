@@ -28,6 +28,7 @@ public class Crap extends Entity
 	{
 		Falling,
 		Hitting,
+		Splat,
 	};
 	
 	public State				m_state;
@@ -38,7 +39,7 @@ public class Crap extends Entity
 	public Crap()
 	{
 		setPosition( 0, 0, 0 );
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 11f ) );	// TODO: config
 		
 		// add movement capabilities
 		final float maxLinearSpeed = 5.0f;
@@ -65,7 +66,7 @@ public class Crap extends Entity
 			float y = pos.m_y;
 			float z = pos.m_z;
 			
-			setPosition( x, y - 0.2f, z + 0.1f );
+			setPosition( x, y, 70 );
 		}
 	}
 }

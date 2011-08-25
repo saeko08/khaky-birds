@@ -49,6 +49,7 @@ public class CrapAI extends FiniteStateMachine
 		
 		register( new Falling() );
 		register( new Hitting() );
+		register( new Splat() );
 		
 		begin( Falling.class );
 		
@@ -60,37 +61,32 @@ public class CrapAI extends FiniteStateMachine
 	
 	//----------------------------------------------------------------------------
 	
-	class Falling extends FSMState implements EntityEventListener
+	class Hitting extends FSMState implements EntityEventListener
 	{
 		
-		private	Vector3 m_goToPos       = new Vector3();
+		private float m_fallingTime     = 0;
+		
 		
 		@Override
 		public void activate()
 		{
-			m_crap.m_state = Crap.State.Falling;
+			m_crap.m_state = Crap.State.Hitting;
 			m_crap.attachEventListener( this );
-			m_goToPos = m_crap.getPosition();
-			m_goToPos.m_z = 90;
-			
-			m_sb.begin().seek( m_goToPos );
-				
+		
 		}
 		
 		@Override
 		public void deactivate()
 		{
 			m_crap.detachEventListener( this );
-			m_sb.clear();
+			m_fallingTime     = 0;
 		}
 		
 		@Override
 		public void execute( float deltaTime )
 		{
-			// once it goes out of the view scope, destroy it
-			float bottomPos = m_crap.getWorldBounds().m_maxZ;
-			
-			if ( bottomPos >= 82.0f )
+			m_fallingTime     = m_fallingTime + deltaTime;
+			if ( m_fallingTime  >= 0.1f )
 			{
 				// ok - we can remove the crap - it went out of the visibility scope
 				die();
@@ -106,41 +102,69 @@ public class CrapAI extends FiniteStateMachine
 				// if it collides with another entity, it attempts eating it
 				Entity collider = ( (CollisionEvent)event ).m_collider;
 				collider.sendEvent( Crapped.class );
-				transitionTo( Hitting.class );
+				transitionTo( Splat.class );
 
 			}
 		}
 	}
 	//--------------------------------------------------------------------------------
-	class Hitting extends FSMState
+	class Falling extends FSMState
 	{
-		
-		private	Vector3 m_goToPos       = new Vector3();
+		private float m_fallingTime     = 0;
+	
 		
 		@Override
 		public void activate()
 		{
-			m_crap.m_state = Crap.State.Hitting;
-			m_goToPos = m_crap.getPosition();
-			m_goToPos.m_z = 90;
-			
-			m_sb.begin().seek( m_goToPos );
+			m_crap.m_state = Crap.State.Falling;
 				
 		}
 		
 		@Override
 		public void deactivate()
 		{
-			m_sb.clear();
+			m_fallingTime     = 0;
 		}
 		
 		@Override
 		public void execute( float deltaTime )
 		{
-			// once it goes out of the view scope, destroy it
-			float bottomPos = m_crap.getWorldBounds().m_maxZ;
+			m_fallingTime     = m_fallingTime + deltaTime;
 			
-			if ( bottomPos >= 85.0f )
+			if ( m_fallingTime >= 3.f )
+			{
+				// ok - we can remove the crap - it went out of the visibility scope
+				transitionTo( Hitting.class );
+			}
+			
+		}
+	}
+	//--------------------------------------------------------------------------------
+	
+	class Splat extends FSMState
+	{
+		private float m_fallingTime     = 0;
+	
+		
+		@Override
+		public void activate()
+		{
+			m_crap.m_state = Crap.State.Splat;
+				
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_fallingTime     = 0;
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			m_fallingTime     = m_fallingTime + deltaTime;
+			
+			if ( m_fallingTime >= 0.2f )
 			{
 				// ok - we can remove the crap - it went out of the visibility scope
 				die();
@@ -148,7 +172,6 @@ public class CrapAI extends FiniteStateMachine
 			
 		}
 	}
-	
 	void die()
 	{
 		m_world.removeEntity( m_crap );

@@ -39,7 +39,7 @@ public class Crap extends Entity
 	public Crap()
 	{
 		setPosition( 0, 0, 0 );
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 11f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 15f ) );	// TODO: config
 		
 		// add movement capabilities
 		final float maxLinearSpeed = 5.0f;

@@ -131,9 +131,8 @@ public class CrapAI extends FiniteStateMachine
 		{
 			m_fallingTime     = m_fallingTime + deltaTime;
 			
-			if ( m_fallingTime >= 3.f )
+			if ( m_fallingTime >= 1.5f )
 			{
-				// ok - we can remove the crap - it went out of the visibility scope
 				transitionTo( Hitting.class );
 			}
 			

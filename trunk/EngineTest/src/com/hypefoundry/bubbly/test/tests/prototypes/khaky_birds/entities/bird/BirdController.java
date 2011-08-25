@@ -41,6 +41,9 @@ public class BirdController extends FiniteStateMachine
 	
 	class Idle extends FSMState implements EntityEventListener
 	{
+		
+		private	Vector3 m_goToPos  = new Vector3();
+		
 		@Override
 		public void activate()
 		{
@@ -89,7 +92,7 @@ public class BirdController extends FiniteStateMachine
 					float dy = lastEvent.y - m_dragStart.m_y;
 					
 					//transitionTo( Rotating.class ).setRotation(dx,dy );
-					transitionTo( Jumping.class ).setJumpingPosition(dx,dy );
+					setJumpingPosition(dx,dy );
 					break;
 				}
 				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
@@ -97,6 +100,138 @@ public class BirdController extends FiniteStateMachine
 					transitionTo( Flying.class );
 					break;
 				}
+			}
+		}
+		
+		void setJumpingPosition(float dx, float dy) 
+		{
+			
+			// decide where to move
+			if ( dx > m_inputSensitivityThreshold )
+			{
+				jumpRight();
+			}
+			else if ( dx < -m_inputSensitivityThreshold )
+			{
+				jumpLeft();
+			}
+			
+			if ( dy > m_inputSensitivityThreshold )
+			{
+				jumpDown();
+			}
+			else if ( dy < -m_inputSensitivityThreshold )
+			{
+				jumpUp();
+			}
+		}
+		
+		void jumpLeft() 
+		{
+			
+			if ( m_bird.m_cables == null )
+			{
+				return;
+			}
+			
+			int cableIdx = m_bird.m_cableIdx = m_bird.m_cables.getLeftCable( m_bird.m_cableIdx );
+			
+			
+			if (cableIdx < 0)
+			{
+				return;
+			}
+			else
+			{
+				m_goToPos.set( m_bird.getPosition() );
+				m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos.m_y );
+				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
+			}
+
+			
+		}
+
+		/**
+		 * Moves the bird to the next cable to its right. 
+		 */
+		void jumpRight() 
+		{
+			
+			if ( m_bird.m_cables == null )
+			{
+				return;
+			}
+			
+			int cableIdx = m_bird.m_cables.getRightCable( m_bird.m_cableIdx );
+			
+			if (cableIdx < 0 )
+			{
+				return;
+			}
+			else
+			{
+				m_goToPos.set( m_bird.getPosition() );
+				m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos.m_y );
+				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
+			}
+			
+		
+			
+		}
+
+		/**
+		 * Moves the bird down the cable it's sitting on. 
+		 */
+		void jumpDown() 
+		{
+			
+			if ( m_bird.m_cables == null )
+			{
+				return;
+			}
+			
+			m_goToPos.set( m_bird.getPosition() );
+			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y);
+			m_goToPos.m_y = m_goToPos.m_y - m_dy;
+			
+			float worldWidth = m_bird.m_world.getWidth();
+			float worldHeight = m_bird.m_world.getHeight();
+			
+			if ( m_goToPos.m_x > worldWidth - 0.5 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > worldHeight - 0.5 || m_goToPos.m_y < 0.5 )
+			{
+				return;
+			}
+			else
+			{
+				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
+			}
+			
+		}
+
+		/**
+		 * Moves the bird up the cable it's sitting on. 
+		 */
+		void jumpUp() 
+		{
+			if ( m_bird.m_cables == null )
+			{
+				return;
+			}
+			
+			m_goToPos.set( m_bird.getPosition() );
+			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y);
+			m_goToPos.m_y = m_goToPos.m_y + m_dy;
+			
+			float worldWidth = m_bird.m_world.getWidth();
+			float worldHeight = m_bird.m_world.getHeight();
+			
+			if ( m_goToPos.m_x > worldWidth - 0.5 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > worldHeight - 0.5 || m_goToPos.m_y < 0.5 )
+			{
+				return;
+			}
+			else
+			{
+				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
 			}
 		}
 		
@@ -120,6 +255,7 @@ public class BirdController extends FiniteStateMachine
 		{
 			m_bird.m_state = Bird.State.Jumping;
 			m_bird.attachEventListener( this );
+			m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
 		}
 		
 		@Override
@@ -151,293 +287,14 @@ public class BirdController extends FiniteStateMachine
 				die();
 			}
 		}
-		public void setJumpingPosition(float dx, float dy) 
+		public void setJumpingPosition(Vector3 destination) 
 		{
-			
-			// decide where to move
-			if ( dx > m_inputSensitivityThreshold )
-			{
-				jumpRight();
-			}
-			else if ( dx < -m_inputSensitivityThreshold )
-			{
-				jumpLeft();
-			}
-			
-			if ( dy > m_inputSensitivityThreshold )
-			{
-				jumpDown();
-			}
-			else if ( dy < -m_inputSensitivityThreshold )
-			{
-				jumpUp();
-			}
+			m_goToPos.set(destination);
 		}
 		
-		public void jumpLeft() 
-		{
-			
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			m_goToPos.set( m_bird.getPosition() );
-			m_bird.m_cableIdx = m_bird.m_cables.getLeftCable( m_bird.m_cableIdx );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y );
-			
-			if ( m_goToPos.m_x > 4.3 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > 9.3 || m_goToPos.m_y < 0.3 )
-			{
-				transitionTo( Idle.class );
-			}
-			else
-			{
-				m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
-			}
-
-			
-		}
-
-		/**
-		 * Moves the bird to the next cable to its right. 
-		 */
-		public void jumpRight() 
-		{
-			
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			m_goToPos.set( m_bird.getPosition() );
-			m_bird.m_cableIdx = m_bird.m_cables.getRightCable( m_bird.m_cableIdx );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y );
-			
-			if ( m_goToPos.m_x > 4.3 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > 9.1 || m_goToPos.m_y < 0.5 )
-			{
-				transitionTo( Idle.class );
-			}
-			else
-			{
-				m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
-			}
-			
 		
-			
-		}
-
-		/**
-		 * Moves the bird down the cable it's sitting on. 
-		 */
-		public void jumpDown() 
-		{
-			
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			m_goToPos.set( m_bird.getPosition() );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y - m_dy );
-			m_goToPos.m_y = m_goToPos.m_y - m_dy;
-			
-			if ( m_goToPos.m_x > 4.3 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > 9.1 || m_goToPos.m_y < 0.5 )
-			{
-				transitionTo( Idle.class );
-			}
-			else
-			{
-				m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
-			}
-			
-		}
-
-		/**
-		 * Moves the bird up the cable it's sitting on. 
-		 */
-		public void jumpUp() 
-		{
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			m_goToPos.set( m_bird.getPosition() );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y + m_dy );
-			m_goToPos.m_y = m_goToPos.m_y + m_dy;
-			
-			if ( m_goToPos.m_x > 4.3 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > 9.1 || m_goToPos.m_y < 0.5 )
-			{
-				transitionTo( Idle.class );
-			}
-			else
-			{
-				m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
-			}
-		}
 	}
-	// ----------------------------------------------------------------
-	class Rotating extends FSMState implements EntityEventListener
-	{
-		
-		private	Vector3 m_goToPos  = new Vector3();
-		private Vector3 m_direction = new Vector3();
-		private boolean m_jumpRight = false;
-		private boolean m_jumpLeft = false;
-		private boolean m_jumpDown = false;
-		private boolean m_jumpUp = false;
-		
-		@Override
-		public void activate()
-		{
-			m_direction.set(m_goToPos);
-			m_direction.sub(m_bird.getPosition());
-			m_bird.m_state = Bird.State.Rotating;
-			m_bird.attachEventListener( this );
-			m_sb.begin().lookAt(m_direction.normalize2D());
-		}
-		
-		@Override
-		public void deactivate()
-		{
-			m_bird.detachEventListener( this );
-			m_sb.clear();
-			m_jumpRight = false;
-			m_jumpLeft = false;
-		    m_jumpDown = false;
-		    m_jumpUp = false;
-			
-		}
-		
-		@Override
-		public void execute( float deltaTime )
-		{
-			Vector3 currPos = m_bird.getPosition();
-			float angle = currPos.getAngleBetween(m_goToPos);
-			angle = Math.abs(angle);
-			
-			if ( angle <= 15.0f && angle >= 0)
-			{
-				if (m_jumpLeft == true)
-				{
-					transitionTo( Jumping.class ).jumpLeft();
-				}
-				else if (m_jumpRight == true)
-				{
-					transitionTo( Jumping.class ).jumpRight();
-				}
-			    if (m_jumpDown == true)
-				{
-					transitionTo( Jumping.class ).jumpDown();
-				}
-				else if (m_jumpUp == true)
-				{
-					transitionTo( Jumping.class ).jumpUp();
-				}
-			}
-		}
-		
-		@Override
-		public void onEvent( EntityEvent event ) 
-		{
-			if ( event instanceof Eaten || event instanceof Shocked )
-			{
-				die();
-			}
-		}
-		public void setRotation(float dx, float dy) 
-		{
-			
-			// decide where to move
-			if ( dx > m_inputSensitivityThreshold )
-			{
-				lookRight();
-			}
-			else if ( dx < -m_inputSensitivityThreshold )
-			{
-				lookLeft();
-			}
-			
-			if ( dy > m_inputSensitivityThreshold )
-			{
-				lookDown();
-			}
-			else if ( dy < -m_inputSensitivityThreshold )
-			{
-				lookUp();
-			}
-		}
-		
-		void lookLeft() 
-		{
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			m_goToPos.set( m_bird.getPosition() );
-			
-			m_bird.m_cableIdx = m_bird.m_cables.getLeftCable( m_bird.m_cableIdx );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y );
-			
-			m_jumpLeft = true;
-			
-		}
 
-		/**
-		 * Moves the bird to the next cable to its right. 
-		 */
-		void lookRight() 
-		{
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			m_goToPos.set( m_bird.getPosition() );
-			
-			m_bird.m_cableIdx = m_bird.m_cables.getRightCable( m_bird.m_cableIdx );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y );
-			
-			m_jumpRight = true;
-			
-		
-			
-		}
-
-		/**
-		 * Moves the bird down the cable it's sitting on. 
-		 */
-		void lookDown() 
-		{
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			m_goToPos.set( m_bird.getPosition() );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y - m_dy );
-			m_goToPos.m_y = m_goToPos.m_y - m_dy;
-			
-			m_jumpDown = true;
-			
-		}
-
-		/**
-		 * Moves the bird up the cable it's sitting on. 
-		 */
-		void lookUp() 
-		{
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			m_goToPos.set( m_bird.getPosition() );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y + m_dy );
-			m_goToPos.m_y = m_goToPos.m_y + m_dy;
-			
-			m_jumpUp = true;
-		}
-	}
 	
 	// ----------------------------------------------------------------
 	
@@ -583,7 +440,6 @@ public class BirdController extends FiniteStateMachine
 		// set up state machine
 		register( new Idle() );
 		register( new Jumping() );
-		register( new Rotating() );
 		register( new Flying() );
 		register( new Shitting() );
 		register( new Landing() );

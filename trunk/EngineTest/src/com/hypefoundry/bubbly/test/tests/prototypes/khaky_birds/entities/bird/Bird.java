@@ -25,13 +25,11 @@ public class Bird extends Entity
 {
 	public CableProvider		m_cables			 = null;
 	public int					m_cableIdx  		 = 0;
-	//private final float 		m_dy 				 = 1;		// the distance the bird can jump up or down
 	public World 				m_world    			 = null;
 	
 	public enum State
 	{
 		Idle,
-		Rotating,
 		Jumping,
 		Shitting,
 		Flying,

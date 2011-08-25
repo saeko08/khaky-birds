@@ -69,8 +69,11 @@ public class Falcon extends Entity
 		m_world = hostWorld;
 		m_bird = (Bird) m_world.findEntity(Bird.class);
 		
+		float worldWidth = m_world.getWidth();
+		float worldHeight = m_world.getHeight();
+		
 		int startSideX = m_randStartSideX.nextInt(2);
-		int startPosY = m_randStartPosY.nextInt(10);
+		int startPosY = m_randStartPosY.nextInt((int) worldHeight);
 		int chasingChance = m_randChasingChance.nextInt(6);
 		
 		
@@ -78,7 +81,7 @@ public class Falcon extends Entity
 		{
 			m_flyingFromLeft = true;
 			
-			setPosition( -1, startPosY, -1);
+			setPosition( -2, startPosY, -1);
 			this.rotate(0);
 			
 			if (m_bird!=null)
@@ -93,7 +96,7 @@ public class Falcon extends Entity
 		{
 			m_flyingFromLeft = false;
 			
-			setPosition( 6, startPosY, -1 );
+			setPosition( worldWidth + 2, startPosY, -1 );
 			this.rotate(-180);
 			
 			if (m_bird!=null)

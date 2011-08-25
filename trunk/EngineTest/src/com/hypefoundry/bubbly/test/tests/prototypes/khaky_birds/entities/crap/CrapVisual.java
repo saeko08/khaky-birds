@@ -59,7 +59,7 @@ public class CrapVisual extends EntityVisual
 		{
 			m_animationPlayer.select(ANIM_FALL);
 		}
-		else if ( m_crap.m_state == Crap.State.Hitting )
+		else if ( m_crap.m_state == Crap.State.Splat )
 		{
 			m_animationPlayer.select(ANIM_HIT);
 		}

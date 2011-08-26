@@ -79,7 +79,13 @@ public final class Vector3
 	 */
 	public Vector3 normalize() 
 	{
-		float invMag = 1.0f/(float) Math.sqrt( m_x*m_x + m_y*m_y + m_z*m_z );
+		float sqMag = (float) Math.sqrt( m_x*m_x + m_y*m_y + m_z*m_z );
+		if ( sqMag <= 1e-6 )
+		{
+			return this;
+		}
+		
+		float invMag = 1.0f/sqMag;
 		m_x *= invMag;
 		m_y *= invMag;
 		m_z *= invMag;
@@ -91,7 +97,13 @@ public final class Vector3
 	 */
 	public Vector3 normalize2D() 
 	{
-		float invMag = 1.0f/(float) Math.sqrt( m_x*m_x + m_y*m_y );
+		float sqMag = (float) Math.sqrt( m_x*m_x + m_y*m_y );
+		if ( sqMag <= 1e-6 )
+		{
+			return this;
+		}
+		
+		float invMag = 1.0f/sqMag;
 		m_x *= invMag;
 		m_y *= invMag;
 		m_z = 0;
@@ -105,7 +117,13 @@ public final class Vector3
 	 */
 	public void normalized( Vector3 outVec )
 	{
-		float invMag = 1.0f/(float) Math.sqrt( m_x*m_x + m_y*m_y + m_z*m_z );
+		float sqMag = (float) Math.sqrt( m_x*m_x + m_y*m_y + m_z*m_z );
+		float invMag = 0.0f;
+		if ( sqMag > 1e-6 )
+		{
+			invMag = 1.0f/(float) sqMag;
+		}
+		
 		outVec.m_x = m_x * invMag;
 		outVec.m_y = m_y * invMag;
 		outVec.m_z = m_z * invMag;
@@ -119,7 +137,13 @@ public final class Vector3
 	 */
 	public void normalized2D( Vector3 outVec )
 	{
-		float invMag = 1.0f/(float) Math.sqrt( m_x*m_x + m_y*m_y );
+		float sqMag = (float) Math.sqrt( m_x*m_x + m_y*m_y );
+		float invMag = 0.0f;
+		if ( sqMag > 1e-6 )
+		{
+			invMag = 1.0f/(float) sqMag;
+		}
+		
 		outVec.m_x = m_x * invMag;
 		outVec.m_y = m_y * invMag;
 		outVec.m_z = 0;
@@ -328,7 +352,11 @@ public final class Vector3
 		float lenSq = m_x*m_x + m_y*m_y + m_z*m_z;
 		if ( newLenSq < lenSq )
 		{
-			float invMag = (float) Math.sqrt( newLenSq / lenSq );
+			float invMag = 0;
+			if ( lenSq > 1e-6 )
+			{
+				invMag = (float) Math.sqrt( newLenSq / lenSq );
+			}
 			m_x *= invMag;
 			m_y *= invMag;
 			m_z *= invMag;

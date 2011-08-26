@@ -14,29 +14,13 @@ import com.hypefoundry.engine.math.Vector3;
 public interface CableProvider 
 {
 	/**
-	 * Returns the x position on the specified cable
+	 * Returns the position on the specified cable
 	 * 
 	 * @param cableIdx
-	 * @param y
-	 * @return
+	 * @param currPos		position in the world we want to cast to a cable pos
+	 * @param outPos		position on the cable
 	 */
-	float getPositionOnCable( int cableIdx, float y );
-
-	/**
-	 * Returns the index of a cable to the left
-	 * 
-	 * @param cableIdx
-	 * @return
-	 */
-	int getLeftCable( int cableIdx );
-	
-	/**
-	 * Returns the index of a cable to the right
-	 * 
-	 * @param cableIdx
-	 * @return
-	 */
-	int getRightCable(int cableIdx);
+	void getPositionOnCable( int cableIdx, Vector3 currPos, Vector3 outPos );
 
 	/**
 	 * Returns a cable closest to the specified position.
@@ -44,5 +28,5 @@ public interface CableProvider
 	 * @param position
 	 * @return
 	 */
-	int getNearestCableIdx(Vector3 position);
+	int getNearestCableIdx( Vector3 position );
 }

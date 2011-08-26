@@ -61,7 +61,7 @@ public class ElectricCables extends Entity implements CableProvider
 		
 		for ( int i = 0; i < m_cablePositions.length; ++i )
 		{
-			float x = getPositionOnCable( i, position.m_y );
+			float x = m_cablePositions[ i ];
 			float dist = Math.abs( position.m_x - x );
 			
 			if ( dist < smallestDist )
@@ -75,42 +75,12 @@ public class ElectricCables extends Entity implements CableProvider
 	}
 
 	@Override
-	public float getPositionOnCable( int cableIdx, float y ) 
+	public void getPositionOnCable( int cableIdx, Vector3 currPos, Vector3 outPos )
 	{
-		return m_cablePositions[ cableIdx ];
+		outPos.set( currPos );
+		outPos.m_x = m_cablePositions[ cableIdx ];
 	}
 
-	@Override
-	public int getLeftCable( int cableIdx ) 
-	{
-		if ( m_cablePositions.length <= 0 )
-		{
-			return -1;
-		}
-		
-		int newIdx = cableIdx - 1;
-		if ( newIdx <= 0 )
-		{
-			newIdx = 0;
-		}
-		return newIdx;	
-	}
-	
-	@Override
-	public int getRightCable(int cableIdx) 
-	{
-		if ( m_cablePositions.length <= 0 )
-		{
-			return -1;
-		}
-		
-		int newIdx = cableIdx + 1;
-		if ( newIdx >= ( m_cablePositions.length - 1 ) )
-		{
-			newIdx = m_cablePositions.length - 1;
-		}
-		return newIdx;	
-	}
 	
 	@Override
 	public void onLoad( DataLoader loader ) 

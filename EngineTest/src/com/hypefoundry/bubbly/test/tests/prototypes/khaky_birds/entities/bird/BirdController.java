@@ -34,7 +34,6 @@ public class BirdController extends FiniteStateMachine
 	private Vector3				m_dragStart = new Vector3( 0, 0, 0 );
 	private final int			m_inputSensitivityThreshold = 25;
 	private final float			AIM_TIMER = 0.4f;
-	private final float 		m_dy 				 = 1;
 	
 	
 	// ----------------------------------------------------------------
@@ -81,20 +80,29 @@ public class BirdController extends FiniteStateMachine
 			{	
 				TouchEvent lastEvent = inputEvents.get(i);
 			
+				// maybe we are drawing a gesture
 				if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
 				{
 					m_dragStart.m_x = lastEvent.x;
 					m_dragStart.m_y = lastEvent.y;
 				}
+				
+				// we stopped drawing a gesture
 				if ( lastEvent.type == TouchEvent.TOUCH_UP)
 				{			
 					float dx = lastEvent.x - m_dragStart.m_x;
 					float dy = lastEvent.y - m_dragStart.m_y;
 					
-					//transitionTo( Rotating.class ).setRotation(dx,dy );
-					setJumpingPosition(dx,dy );
-					break;
+					
+					boolean canJump = calculateJumpPosition(dx, dy);
+					if ( canJump )
+					{
+						transitionTo( Jumping.class ).setJumpingPosition( m_goToPos );
+						break;
+					}
 				}
+				
+				// we double tapped the screen
 				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
 				{
 					transitionTo( Flying.class );
@@ -102,135 +110,37 @@ public class BirdController extends FiniteStateMachine
 				}
 			}
 		}
-		
-		void setJumpingPosition(float dx, float dy) 
-		{
-			
-			// decide where to move
-			if ( dx > m_inputSensitivityThreshold )
-			{
-				jumpRight();
-			}
-			else if ( dx < -m_inputSensitivityThreshold )
-			{
-				jumpLeft();
-			}
-			
-			if ( dy > m_inputSensitivityThreshold )
-			{
-				jumpDown();
-			}
-			else if ( dy < -m_inputSensitivityThreshold )
-			{
-				jumpUp();
-			}
-		}
-		
-		void jumpLeft() 
-		{
-			
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			int cableIdx = m_bird.m_cables.getLeftCable( m_bird.m_cableIdx );
-			
-			
-			if (cableIdx < 0)
-			{
-				return;
-			}
-			else
-			{
-				m_bird.m_cableIdx = cableIdx;
-				m_goToPos.set( m_bird.getPosition() );
-				m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos.m_y );
-				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
-			}
-		}
 
 		/**
-		 * Moves the bird to the next cable to its right. 
+		 * Calculates a jump position in the direction pointed by the gesture.
+		 * 
+		 * @param dx
+		 * @param dy
+		 * @return
 		 */
-		void jumpRight() 
-		{
-			
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			int cableIdx = m_bird.m_cables.getRightCable( m_bird.m_cableIdx );
-			
-			if (cableIdx < 0 )
-			{
-				return;
-			}
-			else
-			{
-				m_bird.m_cableIdx = cableIdx;
-				
-				m_goToPos.set( m_bird.getPosition() );
-				m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos.m_y );
-				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
-			}
-		}
-
-		/**
-		 * Moves the bird down the cable it's sitting on. 
-		 */
-		void jumpDown() 
-		{
-			
-			if ( m_bird.m_cables == null )
-			{
-				return;
-			}
-			
-			m_goToPos.set( m_bird.getPosition() );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y);
-			m_goToPos.m_y = m_goToPos.m_y - m_dy;
-			
-			float worldWidth = m_bird.m_world.getWidth();
-			float worldHeight = m_bird.m_world.getHeight();
-			
-			if ( m_goToPos.m_x > worldWidth - 0.5 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > worldHeight - 0.5 || m_goToPos.m_y < 0.5 )
-			{
-				return;
-			}
-			else
-			{
-				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
-			}
-			
-		}
-
-		/**
-		 * Moves the bird up the cable it's sitting on. 
-		 */
-		void jumpUp() 
+		private boolean calculateJumpPosition( float dx, float dy ) 
 		{
 			if ( m_bird.m_cables == null )
 			{
-				return;
+				return false;
 			}
 			
-			m_goToPos.set( m_bird.getPosition() );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( m_bird.m_cableIdx, m_goToPos.m_y);
-			m_goToPos.m_y = m_goToPos.m_y + m_dy;
-			
-			float worldWidth = m_bird.m_world.getWidth();
-			float worldHeight = m_bird.m_world.getHeight();
-			
-			if ( m_goToPos.m_x > worldWidth - 0.5 ||m_goToPos.m_x < 0.5 || m_goToPos.m_y > worldHeight - 0.5 || m_goToPos.m_y < 0.5 )
+			// I need a desired position the gesture points to
+			m_goToPos.set( m_bird.getPosition() ).add( dx, dy, 0 );
+			if ( m_goToPos.mag() < m_inputSensitivityThreshold )
 			{
-				return;
+				// the gesture is too short - it probably wasn't a gesture at all
+				return false;
 			}
-			else
+			
+			int cableIdx = m_bird.m_cables.getNearestCableIdx( m_goToPos );
+			if ( cableIdx < 0 )
 			{
-				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
+				return false;
 			}
+			
+			m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos, m_goToPos );
+			return true;
 		}
 		
 		@Override
@@ -271,28 +181,23 @@ public class BirdController extends FiniteStateMachine
 			if ( distSqToGoal < 1e-1 )
 			{
 				transitionTo( Idle.class );
-				//int cableIdx = m_bird.m_cables.getNearestCableIdx( m_bird.getPosition() );	
-				//transitionTo( Landing.class ).setLandingPosition(cableIdx);
-			}
-			
+			}	
 		}
 		
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Eaten || event instanceof Shocked )
+			if ( event instanceof Eaten )
 			{
 				die();
 			}
 		}
+		
 		public void setJumpingPosition(Vector3 destination) 
 		{
 			m_goToPos.set(destination);
 		}
-		
-		
 	}
-
 	
 	// ----------------------------------------------------------------
 	
@@ -327,8 +232,7 @@ public class BirdController extends FiniteStateMachine
 
 		public void setLandingPosition(int cableIdx) 
 		{
-			m_goToPos.set( m_bird.getPosition() );
-			m_goToPos.m_x = m_bird.m_cables.getPositionOnCable(cableIdx, m_goToPos.m_y );
+			m_bird.m_cables.getPositionOnCable( cableIdx, m_bird.getPosition(), m_goToPos );
 		}
 	}
 	

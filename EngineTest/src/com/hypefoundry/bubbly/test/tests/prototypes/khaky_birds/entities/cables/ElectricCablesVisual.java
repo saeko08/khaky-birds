@@ -32,13 +32,6 @@ public class ElectricCablesVisual extends EntityVisual
 		
 		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
 		m_pixmap = new TextureRegion( atlas, 340, 0, 275, 480 );
-		
-		// define cable positions
-		ElectricCables cables = (ElectricCables)entity;
-		cables.addCable( 46 );
-		cables.addCable( 108 );
-		cables.addCable( 172 );
-		cables.addCable( 233 );
 	}
 
 	@Override

@@ -134,7 +134,7 @@ public class BirdController extends FiniteStateMachine
 				return;
 			}
 			
-			int cableIdx = m_bird.m_cableIdx = m_bird.m_cables.getLeftCable( m_bird.m_cableIdx );
+			int cableIdx = m_bird.m_cables.getLeftCable( m_bird.m_cableIdx );
 			
 			
 			if (cableIdx < 0)
@@ -143,12 +143,11 @@ public class BirdController extends FiniteStateMachine
 			}
 			else
 			{
+				m_bird.m_cableIdx = cableIdx;
 				m_goToPos.set( m_bird.getPosition() );
 				m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos.m_y );
 				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
 			}
-
-			
 		}
 
 		/**
@@ -170,13 +169,12 @@ public class BirdController extends FiniteStateMachine
 			}
 			else
 			{
+				m_bird.m_cableIdx = cableIdx;
+				
 				m_goToPos.set( m_bird.getPosition() );
 				m_goToPos.m_x = m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos.m_y );
 				transitionTo( Jumping.class ).setJumpingPosition(m_goToPos);
 			}
-			
-		
-			
 		}
 
 		/**

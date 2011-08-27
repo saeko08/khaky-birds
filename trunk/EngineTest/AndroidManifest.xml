@@ -68,7 +68,11 @@
 		<activity android:label="GL Sprites Batcher Test"
 			android:name=".tests.openGL.SpritesBatcherTest"
 			android:screenOrientation="portrait" />	
-			
+		
+		<activity android:label="GL Lines Drawing Test"
+			android:name=".tests.openGL.LinesDrawingTest"
+			android:screenOrientation="portrait" />	
+
 		<activity android:label="KhakyBirds prototype"
 			android:name=".tests.prototypes.khaky_birds.KhakyBirds"
 			android:screenOrientation="portrait" />

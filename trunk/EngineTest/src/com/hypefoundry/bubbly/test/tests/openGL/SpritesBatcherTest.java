@@ -48,7 +48,7 @@ class SpritesBatcherScreen extends Screen
 		
 		m_batcher = new SpriteBatcher( m_glGraphics, MAX_SPRITES );
 		
-		Texture atlas = m_resourceManager.getResource( Texture.class, "bitmaps/bobargb8888.png" ); //"khaky_birds_prototype/atlas.png" );
+		Texture atlas = m_resourceManager.getResource( Texture.class, "bitmaps/bobargb8888.png" );
 		m_pixmap = new TextureRegion( atlas, 0, 0, 256, 256 );
 	}
 	

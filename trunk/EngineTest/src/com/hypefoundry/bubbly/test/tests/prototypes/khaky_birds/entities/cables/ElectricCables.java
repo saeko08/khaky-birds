@@ -1,8 +1,11 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables;
 
+
 import java.util.*;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.CableProvider;
+import com.hypefoundry.engine.renderer2D.Color;
+import com.hypefoundry.engine.renderer2D.Spline;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
@@ -18,9 +21,10 @@ import com.hypefoundry.engine.math.Vector3;
  */
 public class ElectricCables extends Entity implements CableProvider
 {
-	private float	m_modelWidth = 4.8f;  // TODO: config
-	private float	m_modelHeight = 9.6f;  // TODO: config
-	private float  	m_cablePositions[] = new float[0];
+	private float		m_modelWidth 			= 4.8f;  // TODO: config
+	private float		m_modelHeight 			= 9.6f;  // TODO: config
+	
+	Spline				m_wires[] 				= new Spline[0];
 
 	/**
 	 * Constructor.
@@ -31,7 +35,7 @@ public class ElectricCables extends Entity implements CableProvider
 		float halfHeight = m_modelHeight / 2.0f;
 		
 		setPosition( halfWidth, halfHeight, 10 );
-		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, 0, halfWidth, halfHeight, 0 ) );	
+		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, 0, halfWidth, halfHeight, 0 ) );
 	}
 	
 	/**
@@ -41,28 +45,33 @@ public class ElectricCables extends Entity implements CableProvider
 	 */
 	public void addCable( float x )
 	{
-		float cablePositions[] = new float[ m_cablePositions.length + 1 ];
-		for( int i = 0; i < m_cablePositions.length; ++i )
+		// resize the array
+		Spline wires[] = new Spline[ m_wires.length + 1 ];
+		for( int i = 0; i < m_wires.length; ++i )
 		{
-			cablePositions[i] = m_cablePositions[i];
+			wires[i] = m_wires[i];
 		}
+		m_wires = wires;
 		
-		cablePositions[ m_cablePositions.length ] = x;
-		m_cablePositions = cablePositions;
+		// create a new cable at the specified position
+		Spline newWire = new Spline( Color.BLUE );
+		newWire.addPoint( new Vector3( x, 0.0f, 10 ) );
+		newWire.addPoint( new Vector3( x, m_modelHeight, 10 ) );
 		
-		Arrays.sort(m_cablePositions );
+		// and append it to the array
+		wires[ m_wires.length - 1 ] = newWire;
 	}
 	
+	private Vector3 tmpCableQueryPos = new Vector3();
 	@Override
 	public int getNearestCableIdx( Vector3 position )
 	{
 		float smallestDist = 100000;
 		int nearestCableIdx = -1;
 		
-		for ( int i = 0; i < m_cablePositions.length; ++i )
+		for ( int i = 0; i < m_wires.length; ++i )
 		{
-			float x = m_cablePositions[ i ];
-			float dist = Math.abs( position.m_x - x );
+			float dist = m_wires[i].getNearestPosition( position, tmpCableQueryPos );
 			
 			if ( dist < smallestDist )
 			{
@@ -77,11 +86,9 @@ public class ElectricCables extends Entity implements CableProvider
 	@Override
 	public void getPositionOnCable( int cableIdx, Vector3 currPos, Vector3 outPos )
 	{
-		outPos.set( currPos );
-		outPos.m_x = m_cablePositions[ cableIdx ];
+		m_wires[cableIdx].getNearestPosition( currPos, outPos );
 	}
 
-	
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{

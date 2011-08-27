@@ -99,7 +99,7 @@ public class PedestrianAI extends FiniteStateMachine
 		public void execute( float deltaTime )
 		{
 			Vector3 currPos = m_pedestrian.getPosition();
-			float distSqToGoal = currPos.distSq( m_safePos );
+			float distSqToGoal = currPos.distSq2D( m_safePos );
 			if ( distSqToGoal < 1e-1 )
 			{
 				transitionTo( Wander.class );

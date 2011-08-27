@@ -1,6 +1,5 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.CableProvider;
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.world.Entity;
@@ -18,7 +17,7 @@ import com.hypefoundry.engine.renderer2D.TextureRegion;
  */
 public class ElectricCablesVisual extends EntityVisual
 {
-	private TextureRegion		m_pixmap;
+	private ElectricCables		m_cables;
 	
 	/**
 	 * Constructor.
@@ -30,16 +29,15 @@ public class ElectricCablesVisual extends EntityVisual
 	{
 		super( entity );
 		
-		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
-		m_pixmap = new TextureRegion( atlas, 340, 0, 275, 480 );
+		m_cables = (ElectricCables)entity;
 	}
 
 	@Override
 	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
-		Vector3 pos = m_entity.getPosition();
-		BoundingShape bs = m_entity.getBoundingShape();
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
+		for ( int i = 0; i < m_cables.m_wires.length; ++i )
+		{
+			batcher.drawSpline( m_cables.m_wires[i] );
+		}
 	}
-
 }

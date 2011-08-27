@@ -18,6 +18,7 @@ import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
+import com.hypefoundry.engine.renderer2D.Camera2D;
 
 
 /**
@@ -28,11 +29,11 @@ import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
  */
 public class BirdController extends FiniteStateMachine 
 {
+	private Camera2D			m_camera;
 	private Bird				m_bird;
 	private SteeringBehaviors	m_sb;
 	private Input				m_input;
 	private Vector3				m_dragStart = new Vector3( 0, 0, 0 );
-	private final int			m_inputSensitivityThreshold = 25;
 	private final float			AIM_TIMER = 0.4f;
 	
 	
@@ -42,6 +43,7 @@ public class BirdController extends FiniteStateMachine
 	{
 		
 		private	Vector3 m_goToPos  = new Vector3();
+		private	Vector3 m_gestureDir  = new Vector3();
 		
 		@Override
 		public void activate()
@@ -125,21 +127,21 @@ public class BirdController extends FiniteStateMachine
 				return false;
 			}
 			
-			// I need a desired position the gesture points to
-			m_goToPos.set( m_bird.getPosition() ).add( dx, dy, 0 );
-			if ( m_goToPos.mag() < m_inputSensitivityThreshold )
-			{
-				// the gesture is too short - it probably wasn't a gesture at all
-				return false;
-			}
+			// change the gesture direction from screen to model space
+			m_gestureDir.set( dx, dy, 0 );
+			m_camera.directionToWorld( m_gestureDir );
 			
+			// I need a desired position the gesture points to
+			m_goToPos.set( m_bird.getPosition() ).add( m_gestureDir );
+
 			int cableIdx = m_bird.m_cables.getNearestCableIdx( m_goToPos );
 			if ( cableIdx < 0 )
 			{
 				return false;
 			}
 			
-			m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos, m_goToPos );
+			m_bird.m_cables.getPositionOnCable( cableIdx, m_goToPos, m_gestureDir );
+			m_goToPos.set( m_gestureDir );
 			return true;
 		}
 		
@@ -163,7 +165,7 @@ public class BirdController extends FiniteStateMachine
 		{
 			m_bird.m_state = Bird.State.Jumping;
 			m_bird.attachEventListener( this );
-			m_sb.begin().arrive( m_goToPos,0.1f ).faceMovementDirection();
+			m_sb.begin().arrive( m_goToPos, 1.2f ).faceMovementDirection();
 		}
 		
 		@Override
@@ -177,8 +179,8 @@ public class BirdController extends FiniteStateMachine
 		public void execute( float deltaTime )
 		{
 			Vector3 currPos = m_bird.getPosition();
-			float distSqToGoal = currPos.distSq( m_goToPos );
-			if ( distSqToGoal < 1e-1 )
+			float distSqToGoal = currPos.distSq2D( m_goToPos );
+			if ( distSqToGoal < 1e-3 )
 			{
 				transitionTo( Idle.class );
 			}	
@@ -223,8 +225,8 @@ public class BirdController extends FiniteStateMachine
 		public void execute( float deltaTime )
 		{
 			Vector3 currPos = m_bird.getPosition();
-			float distSqToGoal = currPos.distSq( m_goToPos );
-			if ( distSqToGoal < 1e-1 )
+			float distSqToGoal = currPos.distSq2D( m_goToPos );
+			if ( distSqToGoal < 1e-3 )
 			{
 				transitionTo( Idle.class );
 			}				
@@ -329,13 +331,15 @@ public class BirdController extends FiniteStateMachine
 	 * Constructor.
 	 * 
 	 * @param input			input manager
+	 * @param camera		active camera
 	 * @param entity
 	 */
-	public BirdController( Input input, Entity entity ) 
+	public BirdController( Input input, Camera2D camera, Entity entity ) 
 	{
 		super( entity );
 		
 		m_input = input;
+		m_camera = camera;
 		m_bird = (Bird)entity;
 		m_sb = new SteeringBehaviors( m_bird );
 		

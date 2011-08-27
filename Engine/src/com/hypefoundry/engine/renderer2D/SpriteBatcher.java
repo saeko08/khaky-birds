@@ -6,7 +6,6 @@ package com.hypefoundry.engine.renderer2D;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.FloatMath;
-import android.util.Log;
 
 import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.core.Texture;
@@ -21,16 +20,32 @@ import com.hypefoundry.engine.math.Vector3;
  */
 public class SpriteBatcher 
 {
+	private enum DrawItem
+	{
+		Lines,
+		Sprites
+	};
+	
 	private final float[] 		m_verticesBuffer;
 	private int 				m_bufferIndex;
+	
 	private final Geometry 		m_geometry;
+	private final Geometry 		m_lines;
+	
 	private int 				m_numSprites;
+	private int					m_numLines;
 	
 	private Texture				m_currentTexture = null;
+	private DrawItem			m_currentDrawItem = DrawItem.Lines;
 	
 	
 	/**
 	 * Constructor.
+	 * 
+	 * CAUTION: at this point we're using the same vertex buffer to store
+	 * both lines and the sprites data - we may need to separate them in the future
+	 * if we need to differentiate the maximum number of sprites and lines. Right
+	 * now we're using the same value for both.
 	 * 
 	 * @param graphics
 	 * @param maxSprites
@@ -39,9 +54,11 @@ public class SpriteBatcher
 	{
 		m_verticesBuffer = new float[ maxSprites * 4 * 4 ];
 		m_geometry = new Geometry( graphics, maxSprites * 4, maxSprites*6, false, true );
+		m_lines = new Geometry( graphics, maxSprites * 2, 0, true, false );
 		
 		m_bufferIndex = 0;
 		m_numSprites = 0;
+		m_numLines = 0;
 		
 		// allocate the index buffer
 		short[] indices = new short[ maxSprites * 6 ];
@@ -64,14 +81,76 @@ public class SpriteBatcher
 	 */
 	public void flush()
 	{
-		// draw what's in the buffer
-		m_geometry.setVertices( m_verticesBuffer, 0, m_bufferIndex );
-		m_geometry.bind();
-		m_geometry.draw( GL10.GL_TRIANGLES, 0, m_numSprites * 6 );
-		m_geometry.unbind();
+		// draw what's in the sprites buffer
+		if ( m_numSprites > 0 )
+		{
+			assert( m_numLines == 0 ); // those are mutually exclusive
+			
+			m_geometry.setVertices( m_verticesBuffer, 0, m_bufferIndex );
+			m_geometry.bind();
+			m_geometry.draw( GL10.GL_TRIANGLES, 0, m_numSprites * 6 );
+			m_geometry.unbind();
+			
+			m_numSprites = 0;
+		}
 		
-		m_numSprites = 0;
+		// draw what's in the lines buffer
+		if ( m_numLines > 0 )
+		{
+			assert( m_numSprites == 0 ); // those are mutually exclusive
+			
+			m_lines.setVertices( m_verticesBuffer, 0, m_bufferIndex );
+			m_lines.bind();
+			m_lines.draw( GL10.GL_LINES, 0, m_numLines * 2 );
+			m_lines.unbind();
+			
+			m_numLines = 0;
+		}
+		
 		m_bufferIndex = 0;
+	}
+	
+	/**
+	 * Draws a spline.
+	 * 
+	 * @param spline
+	 */
+	public void drawSpline( Spline spline )
+	{		
+		// check if the spline has any segments defined
+		int count = spline.m_points.length - 1;
+		if ( count <= 0 )
+		{
+			return;
+		}
+		
+		// we'll be drawing lines now, so flush the buffer if something else was drawn before
+		switchTo( DrawItem.Lines );
+			
+		// draw the spline
+		for ( int i = 0; i < count; ++i )
+		{
+			// line start point
+			Vector3 pt = spline.m_points[ i ];
+			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_x;
+			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_y;
+			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Red ];
+			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Green ];
+			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Blue ];
+			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Alpha ];
+			
+			// line end point
+			pt = spline.m_points[ i + 1 ];
+			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_x;
+			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_y;
+			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Red ];
+			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Green ];
+			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Blue ];
+			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Alpha ];
+			
+			++m_numLines;
+		}
+		
 	}
 	
 	/**
@@ -85,6 +164,9 @@ public class SpriteBatcher
 	 */
 	public void drawSprite( float x, float y, float width, float height, TextureRegion region ) 
 	{
+		// we'll be drawing sprites now, so flush the buffer if something else was drawn before
+		switchTo( DrawItem.Sprites );
+		
 		// set a texture first
 		setTexture( region.m_texture );
 				
@@ -128,6 +210,9 @@ public class SpriteBatcher
 	 */
 	public void drawSprite( float x, float y, float width, float height, float angle, TextureRegion region ) 
 	{
+		// we'll be drawing sprites now, so flush the buffer if something else was drawn before
+		switchTo( DrawItem.Sprites );
+		
 		// set a texture first
 		setTexture( region.m_texture );
 		
@@ -196,6 +281,22 @@ public class SpriteBatcher
 			{
 				m_currentTexture.bind();
 			}
+		}
+	}
+	
+	/**
+	 * Switches the drawing mode to a different item, flushing the contents
+	 * of the vertex buffer if necessary.
+	 * 
+	 * @param item
+	 */
+	private void switchTo( DrawItem item )
+	{
+		if ( m_currentDrawItem != item )
+		{
+			flush();
+			
+			m_currentDrawItem = item;
 		}
 	}
 }

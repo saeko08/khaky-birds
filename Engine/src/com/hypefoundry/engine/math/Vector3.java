@@ -45,6 +45,18 @@ public final class Vector3
 	}
 	
 	/**
+	 * Constructor.
+	 * 
+	 * @param rhs
+	 */
+	public Vector3( Vector3 rhs ) 
+	{
+		m_x = rhs.m_x;
+		m_y = rhs.m_y;
+		m_z = rhs.m_z;
+	}
+
+	/**
 	 * Sets the value of the vector based on a different vector.
 	 * 
 	 * @param x
@@ -342,6 +354,63 @@ public final class Vector3
 	}
 	
 	/**
+	 * Calculates the 2D distance to the specified vector.
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public float dist2D( Vector3 rhs ) 
+	{
+		float distX = m_x - rhs.m_x;
+		float distY = m_y - rhs.m_y;
+		float distZ = m_z - rhs.m_z;
+		return FloatMath.sqrt( distX * distX + distY * distY );
+	}
+	
+	/**
+	 * Calculates the 2D distance to the specified vector.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public float dist2D( float x, float y ) 
+	{
+		float distX = m_x - x;
+		float distY = m_y - y;
+		return FloatMath.sqrt( distX * distX + distY * distY );
+	}
+	
+	/**
+	 * Calculates the 2D square distance to the specified vector.
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public float distSq2D( Vector3 rhs ) 
+	{
+		float distX = m_x - rhs.m_x;
+		float distY = m_y - rhs.m_y;
+		return distX * distX + distY * distY;
+	}
+	
+	/**
+	 * Calculates the 2D square distance to the specified vector.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public float distSq2D( float x, float y) 
+	{
+		float distX = m_x - x;
+		float distY = m_y - y;
+		return distX * distX + distY * distY;
+	}
+	
+	
+	/**
 	 * Limits vector's length to the specified value without changing its direction.  
 	 * 
 	 * @param newLen
@@ -385,6 +454,28 @@ public final class Vector3
 		}
 
 		return angle;
+	}
+	
+	/**
+	 * Calculates a dot product between this and the specified vector.
+	 * 
+	 * @param rhs
+	 * @return
+	 */
+	public float dot( Vector3 rhs )
+	{
+		return m_x * rhs.m_x + m_y * rhs.m_y + m_z * rhs.m_z; 
+	}
+	
+	/**
+	 * Calculates a 2D dot product between this and the specified vector.
+	 * 
+	 * @param rhs
+	 * @return
+	 */
+	public float dot2D( Vector3 rhs )
+	{
+		return m_x * rhs.m_x + m_y * rhs.m_y; 
 	}
 	
 	// ------------------------------------------------------------------------

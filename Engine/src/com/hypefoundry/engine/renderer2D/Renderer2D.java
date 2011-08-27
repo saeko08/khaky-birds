@@ -117,9 +117,10 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
 		m_camera.setViewportAndMatrices();
 		
-		gl.glEnable( GL10.GL_BLEND );
-		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );
-		
+		gl.glDisable( GL10.GL_BLEND );
+		gl.glEnable( GL10.GL_ALPHA_TEST );
+		gl.glAlphaFunc( GL10.GL_GREATER, 0.9f );
+		gl.glLineWidth (1.5f);
 		gl.glEnable( GL10.GL_TEXTURE_2D );
 		gl.glDisable( GL10.GL_DEPTH_TEST );
 		

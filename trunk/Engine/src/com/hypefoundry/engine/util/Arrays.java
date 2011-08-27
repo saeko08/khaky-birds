@@ -2,6 +2,8 @@ package com.hypefoundry.engine.util;
 
 import java.util.Comparator;
 
+import com.hypefoundry.engine.math.Vector3;
+
 /**
  * 
  */
@@ -113,5 +115,59 @@ public final class Arrays
 		str.append( "]" );
 		
 		return str.toString();
+	}
+	
+	/**
+	 * Appends a vector to an array, resizing it.
+	 * 
+	 * @param array
+	 * @return resized array
+	 */
+	public static Vector3[] append( Vector3[] array, Vector3 obj )
+	{
+		Vector3[] newArray = null;
+		if ( array == null )
+		{
+			newArray = new Vector3[1];
+			newArray[0] = obj;
+		}
+		else
+		{
+			newArray = new Vector3[ array.length + 1 ];
+			for ( int i = 0; i < array.length; ++i )
+			{
+				newArray[i] = array[i];
+			}
+			newArray[array.length] = obj;
+		}
+		
+		return newArray;
+	}
+	
+	/**
+	 * Appends a float to an array, resizing it.
+	 * 
+	 * @param array
+	 * @return resized array
+	 */
+	public static float[] append( float[] array, float val )
+	{
+		float[] newArray = null;
+		if ( array == null )
+		{
+			newArray = new float[1];
+			newArray[0] = val;
+		}
+		else
+		{
+			newArray = new float[ array.length + 1 ];
+			for ( int i = 0; i < array.length; ++i )
+			{
+				newArray[i] = array[i];
+			}
+			newArray[array.length] = val;
+		}
+		
+		return newArray;
 	}
 }

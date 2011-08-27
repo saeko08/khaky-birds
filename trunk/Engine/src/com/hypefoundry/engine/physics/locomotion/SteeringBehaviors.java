@@ -70,6 +70,7 @@ public class SteeringBehaviors implements Updatable
 		{
 			Vector3 currPos = m_entity.getPosition();
 			m_tmpDir.set( m_staticGoal ).sub( currPos );
+			m_tmpDir.m_z = 0;
 			
 			float dist = m_tmpDir.mag();
 			float breakingDistance = movable.m_linearSpeed * 0.1f * m_breakDistanceFactor;

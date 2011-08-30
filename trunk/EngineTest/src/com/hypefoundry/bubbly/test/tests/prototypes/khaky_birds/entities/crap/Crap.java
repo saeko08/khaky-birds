@@ -11,6 +11,7 @@ import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.events.CollisionEvent;
+import com.hypefoundry.engine.renderer2D.Camera2D;
 
 /**
  * Crap a bird makes.
@@ -20,9 +21,10 @@ import com.hypefoundry.engine.physics.events.CollisionEvent;
  */
 public class Crap extends Entity 
 {
-	private World 	m_world    			 = null;
-	public boolean pedestrianHit         = false;
-	private Bird   m_bird 				 = null;
+	private World 	 m_world    			 = null;
+	public boolean   pedestrianHit           = false;
+	private Bird     m_bird 				 = null;
+	private Camera2D m_camera;
 	
 	public enum State
 	{
@@ -61,10 +63,11 @@ public class Crap extends Entity
 		if ( m_bird != null )
 		{
 			Vector3 pos = m_bird.getPosition();
-			//float rot = m_bird.getFacing();
+			pos.scale(-1.2f);
+			m_camera.directionToWorld( pos );
+			
 			float x = pos.m_x;
 			float y = pos.m_y;
-			float z = pos.m_z;
 			
 			setPosition( x, y, 70 );
 		}

@@ -24,7 +24,7 @@ public class Crap extends Entity
 	private World 	 m_world    			 = null;
 	public boolean   pedestrianHit           = false;
 	private Bird     m_bird 				 = null;
-	private Camera2D m_camera;
+	//private Camera2D m_camera;
 	
 	public enum State
 	{
@@ -63,8 +63,8 @@ public class Crap extends Entity
 		if ( m_bird != null )
 		{
 			Vector3 pos = m_bird.getPosition();
-			pos.scale(-1.2f);
-			m_camera.directionToWorld( pos );
+			//pos.scale(-1.2f);
+			//m_camera.directionToWorld( pos );
 			
 			float x = pos.m_x;
 			float y = pos.m_y;

@@ -62,12 +62,13 @@ public class Crap extends Entity
 		
 		if ( m_bird != null )
 		{
-			Vector3 pos = m_bird.getPosition();
-			//pos.scale(-1.2f);
-			//m_camera.directionToWorld( pos );
+			Vector3 birdPos = m_bird.getPosition();
+			Vector3 crapPos = new Vector3();
+			crapPos.set(birdPos);
+			crapPos.scale(-0.2f);
 			
-			float x = pos.m_x;
-			float y = pos.m_y;
+			float x = crapPos.m_x;
+			float y = crapPos.m_y;
 			
 			setPosition( x, y, 70 );
 		}

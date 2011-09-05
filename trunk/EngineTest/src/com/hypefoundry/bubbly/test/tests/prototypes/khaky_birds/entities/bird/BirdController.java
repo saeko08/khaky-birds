@@ -307,21 +307,6 @@ public class BirdController extends FiniteStateMachine
 					
 				}
 				
-				// we stopped drawing a gesture
-			/*	if ( lastEvent.type == TouchEvent.TOUCH_UP)
-				{			
-					float dx = lastEvent.x - m_dragStart.m_x;
-					float dy = lastEvent.y - m_dragStart.m_y;
-					
-					
-					m_canFly = calculateFlightPosition(dx, dy);
-					if ( m_canFly )
-					{
-						setFlightPosition( m_goToPos );
-						break;
-					}
-				}*/
-				
 				// we double tapped the screen
 				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
 				{

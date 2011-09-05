@@ -116,12 +116,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		GL10 gl = m_graphics.getGL();
 		gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
 		m_camera.setViewportAndMatrices();
-		
-		gl.glDisable( GL10.GL_BLEND );
-		gl.glEnable( GL10.GL_ALPHA_TEST );
-		gl.glAlphaFunc( GL10.GL_GREATER, 0.9f );
-		gl.glLineWidth (1.5f);
-		gl.glEnable( GL10.GL_TEXTURE_2D );
+
 		gl.glDisable( GL10.GL_DEPTH_TEST );
 		
 		// draw the visuals, sorting them first in their Z order		

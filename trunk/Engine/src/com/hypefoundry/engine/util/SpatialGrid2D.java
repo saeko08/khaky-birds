@@ -218,9 +218,9 @@ class Grid
 		
 		// set it in the grid
 		getCellIds( obj.getBounds(), objData.m_cellIds );
-		int cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
 		for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
 		{
+			int cellAddr = y * m_cellsPerRow + objData.m_cellIds[0];
 			for ( int x = objData.m_cellIds[0]; x <= objData.m_cellIds[1]; ++x, ++cellAddr )
 			{
 				assert( cellAddr < m_cellsCount );	// invalid cell address check
@@ -257,9 +257,9 @@ class Grid
 		}
 		
 		// remove the object from the cells
-		int cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
 		for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
 		{
+			int cellAddr = y * m_cellsPerRow + objData.m_cellIds[0];
 			for ( int x = objData.m_cellIds[0]; x <= objData.m_cellIds[1]; ++x, ++cellAddr )
 			{
 				assert( cellAddr < m_cellsCount );	// invalid cell address check
@@ -283,9 +283,9 @@ class Grid
 			
 			// reset the old cells
 			ObjectData objData = m_objects[i];
-			int cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
 			for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
 			{
+				int cellAddr = y * m_cellsPerRow + objData.m_cellIds[0];
 				for ( int x = objData.m_cellIds[0]; x <= objData.m_cellIds[1]; ++x, ++cellAddr )
 				{
 					m_cells[cellAddr].set( objData.m_idx, false );
@@ -294,9 +294,9 @@ class Grid
 			
 			// set the new ones
 			getCellIds( objData.m_obj.getBounds(), objData.m_cellIds );
-			cellAddr = objData.m_cellIds[2] * m_cellsPerRow + objData.m_cellIds[0];
 			for ( int y = objData.m_cellIds[2]; y <= objData.m_cellIds[3]; ++y )
 			{
+				int cellAddr = y * m_cellsPerRow + objData.m_cellIds[0];
 				for ( int x = objData.m_cellIds[0]; x <= objData.m_cellIds[1]; ++x, ++cellAddr )
 				{
 					m_cells[cellAddr].set( objData.m_idx, true );
@@ -318,9 +318,9 @@ class Grid
 	{	
 		// check which objects overlap the specified area
 		m_colliders.zeroes();
-		int cellAddr = cellIds[2] * m_cellsPerRow + cellIds[0];
 		for ( int y = cellIds[2]; y <= cellIds[3]; ++y )
 		{
+			int cellAddr = y * m_cellsPerRow + cellIds[0];
 			for ( int x = cellIds[0]; x <= cellIds[1]; ++x, ++cellAddr )
 			{
 				m_colliders.or( m_cells[cellAddr] );

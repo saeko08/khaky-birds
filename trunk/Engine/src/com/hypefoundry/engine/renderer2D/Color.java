@@ -46,4 +46,48 @@ public final class Color
 		m_vals[Blue] = b;
 		m_vals[Alpha] = a;
 	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param rhs
+	 */
+	public Color( Color rhs )
+	{
+		m_vals[Red] = rhs.m_vals[Red];
+		m_vals[Green] = rhs.m_vals[Green];
+		m_vals[Blue] = rhs.m_vals[Blue];
+		m_vals[Alpha] = rhs.m_vals[Alpha];
+	}
+	
+	/**
+	 * Brightens up the color by the specified factor.
+	 * 
+	 * @param factor
+	 * @return this color instance, allowing for commands chaining
+	 */
+	public Color brighter( float factor )
+	{
+		if ( factor < 0 )
+		{
+			factor = 0;
+		} 
+		else if ( factor > 1 )
+		{
+			factor = 1;
+		}
+		
+		// make it brighter but don't change the alpha ( that's why we're only
+		// changing the first 3 params )
+		for ( byte i = 0; i < 3; ++i )
+		{
+			m_vals[i] += factor;
+			if ( m_vals[i] > 1 )
+			{
+				m_vals[i] = 1;
+			}
+		}
+		
+		return this;
+	}
 }

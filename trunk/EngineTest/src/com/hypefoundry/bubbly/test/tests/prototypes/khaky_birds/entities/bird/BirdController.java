@@ -242,6 +242,10 @@ public class BirdController extends FiniteStateMachine
 	
 	class Flying extends FSMState implements EntityEventListener
 	{
+		
+		private	Vector3 m_goToPos  = new Vector3();
+		private	Vector3 m_gestureDir  = new Vector3();
+		private boolean m_canFly      = false;
 
 		@Override
 		public void activate()
@@ -253,8 +257,105 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
-			m_bird.m_state = Bird.State.Landing;
 			m_bird.detachEventListener( this );
+			m_canFly      = false;
+			m_sb.clear();
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			updateInput( deltaTime );
+			if(m_canFly)
+			{
+				if (m_goToPos != null && m_goToPos != m_bird.getPosition())
+				{
+					m_sb.begin().arrive( m_goToPos, 1.5f ).faceMovementDirection();
+				}
+			}
+		}
+		
+		private void updateInput( float deltaTime ) 
+		{	
+			List< TouchEvent > inputEvents = m_input.getTouchEvents();
+			int count = inputEvents.size();
+			for ( int i = 0 ; i < count; ++i )
+			{	
+				TouchEvent lastEvent = inputEvents.get(i);
+			
+				// maybe we are drawing a gesture
+				if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
+				{
+					m_dragStart.m_x = lastEvent.x;
+					m_dragStart.m_y = lastEvent.y;
+					
+					float dx = lastEvent.x;
+					float dy = lastEvent.y;
+					
+					
+					boolean canFly = calculateFlightPosition(dx, dy);
+					if ( canFly )
+					{
+						setFlightPosition( m_goToPos );
+						m_canFly = true;
+					}
+					else
+					{
+						m_canFly = false;
+					}
+					
+					
+				}
+				
+				// we stopped drawing a gesture
+			/*	if ( lastEvent.type == TouchEvent.TOUCH_UP)
+				{			
+					float dx = lastEvent.x - m_dragStart.m_x;
+					float dy = lastEvent.y - m_dragStart.m_y;
+					
+					
+					m_canFly = calculateFlightPosition(dx, dy);
+					if ( m_canFly )
+					{
+						setFlightPosition( m_goToPos );
+						break;
+					}
+				}*/
+				
+				// we double tapped the screen
+				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
+				{
+					tryLanding();
+					break;
+				}
+			}
+		}
+		
+		/**
+		 * Calculates a flight position in the direction pointed by the gesture.
+		 * 
+		 * @param dx
+		 * @param dy
+		 * @return
+		 */
+		private boolean calculateFlightPosition( float dx, float dy ) 
+		{
+		
+			// change the gesture direction from screen to model space
+			m_gestureDir.set( dx, dy, 0 );
+			//m_camera.directionToWorld( m_gestureDir );
+			
+			m_camera.touchToWorld( m_gestureDir );
+			
+			// I need a desired position the gesture points to
+			m_goToPos.set( m_gestureDir );
+
+			return true;
+		}
+		
+		private void setFlightPosition(Vector3 destination) 
+		{
+			m_goToPos.set(destination);
 		}
 		
 		@Override

@@ -4,8 +4,8 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock;
 
 import com.hypefoundry.engine.controllers.EntityController;
+import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.engine.world.World;
 
 
 /**
@@ -16,21 +16,21 @@ import com.hypefoundry.engine.world.World;
  */
 public class ElectricShockAI extends EntityController 
 {
-	private World 				m_world;
 	private ElectricShock		m_shock;
-	private final float			m_moveSpeed = 30.0f;
+	private final float			m_moveSpeed = 1.0f;
+	
+	private Vector3				m_tmpPos = new Vector3();
+	
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param world
 	 * @param entity
 	 */
-	public ElectricShockAI( World world, Entity entity ) 
+	public ElectricShockAI( Entity entity ) 
 	{
 		super(entity);
 		
-		m_world = world;
 		m_shock = (ElectricShock)entity;
 	}
 
@@ -38,16 +38,12 @@ public class ElectricShockAI extends EntityController
 	public void update( float deltaTime ) 
 	{
 		// start moving the shock up the screen
-		float translation = m_moveSpeed * deltaTime;
-		m_shock.translate( 0, -translation, 0  );
+		m_shock.m_offset += m_moveSpeed * deltaTime;
 		
-		// once it goes out of the view scope, destroy it
-		float bottomPos = m_shock.getWorldBounds().m_maxY;
-		if ( bottomPos <= 0.0f )
-		{
-			// ok - we can remove the shock - it went out of the visibility scope
-			m_world.removeEntity( m_shock );
-		}
+		m_shock.m_hostWire.getPosition( m_shock.m_offset, m_tmpPos );
+		
+		float z = m_shock.getPosition().m_z;
+		m_shock.setPosition( m_tmpPos.m_x, m_tmpPos.m_y, z );
 	}
 
 }

@@ -103,9 +103,9 @@ public class SpatialGrid2DTests extends AndroidTestCase
 	{
 		final short MAX_ENTITIES_COUNT = 5;
 		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 2, MAX_ENTITIES_COUNT );
-		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
+		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 1, 1, 0, 2 ) ) );
 		
-		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) );
+		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 8, 8, 0, 2 ) );
 		grid.insertDynamicObject( movable );
 		
 		grid.update();

@@ -25,7 +25,7 @@ public class SpriteBatcher
 		Lines,
 		Sprites
 	};
-	
+		
 	private final float[] 		m_verticesBuffer;
 	private int 				m_bufferIndex;
 	
@@ -35,8 +35,9 @@ public class SpriteBatcher
 	private int 				m_numSprites;
 	private int					m_numLines;
 	
-	private Texture				m_currentTexture = null;
 	private DrawItem			m_currentDrawItem = DrawItem.Lines;
+	
+	private RenderState			m_renderState;
 	
 	
 	/**
@@ -52,6 +53,8 @@ public class SpriteBatcher
 	 */
 	public SpriteBatcher( GLGraphics graphics, int maxSprites ) 
 	{
+		m_renderState = new RenderState( graphics.getGL(), this );
+		
 		m_verticesBuffer = new float[ maxSprites * 4 * 4 ];
 		m_geometry = new Geometry( graphics, maxSprites * 4, maxSprites*6, false, true );
 		m_lines = new Geometry( graphics, maxSprites * 2, 0, true, false );
@@ -114,8 +117,10 @@ public class SpriteBatcher
 	 * Draws a spline.
 	 * 
 	 * @param spline
+	 * @param color
+	 * @param lineWidth
 	 */
-	public void drawSpline( Spline spline )
+	public void drawSpline( Spline spline, Color color, float lineWidth )
 	{		
 		// check if the spline has any segments defined
 		int count = spline.m_points.length - 1;
@@ -126,7 +131,10 @@ public class SpriteBatcher
 		
 		// we'll be drawing lines now, so flush the buffer if something else was drawn before
 		switchTo( DrawItem.Lines );
-			
+		
+		// set the render state
+		m_renderState.disableTexturing().disableAlphaOp().setLineWidth( lineWidth ).end();
+		
 		// draw the spline
 		for ( int i = 0; i < count; ++i )
 		{
@@ -134,23 +142,22 @@ public class SpriteBatcher
 			Vector3 pt = spline.m_points[ i ];
 			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_x;
 			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_y;
-			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Red ];
-			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Green ];
-			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Blue ];
-			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Alpha ];
+			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Red ];
+			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Green ];
+			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Blue ];
+			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Alpha ];
 			
 			// line end point
 			pt = spline.m_points[ i + 1 ];
 			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_x;
 			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_y;
-			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Red ];
-			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Green ];
-			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Blue ];
-			m_verticesBuffer[ m_bufferIndex++ ] = spline.m_color.m_vals[ Color.Alpha ];
+			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Red ];
+			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Green ];
+			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Blue ];
+			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Alpha ];
 			
 			++m_numLines;
 		}
-		
 	}
 	
 	/**
@@ -167,9 +174,9 @@ public class SpriteBatcher
 		// we'll be drawing sprites now, so flush the buffer if something else was drawn before
 		switchTo( DrawItem.Sprites );
 		
-		// set a texture first
-		setTexture( region.m_texture );
-				
+		// set the render state
+		m_renderState.setTexture( region.m_texture ).enableAlphaTest().end();
+						
 		// add the new sprite to the batcher
 		float halfWidth = width / 2;
 		float halfHeight = height / 2;
@@ -213,8 +220,8 @@ public class SpriteBatcher
 		// we'll be drawing sprites now, so flush the buffer if something else was drawn before
 		switchTo( DrawItem.Sprites );
 		
-		// set a texture first
-		setTexture( region.m_texture );
+		// set the render state
+		m_renderState.setTexture( region.m_texture ).enableAlphaTest().end();
 		
 		// add the new sprite to the batcher
 		float halfWidth = width / 2;
@@ -258,30 +265,6 @@ public class SpriteBatcher
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
 		
 		m_numSprites++;
-	}
-	
-	/**
-	 * Sets a texture for the batch rendering
-	 * 
-	 * @param texture
-	 */
-	private void setTexture( Texture texture ) 
-	{
-		if ( m_currentTexture != texture )
-		{
-			// this is a new batch - draw the stuff that's in the buffer
-			// and prepare it for the new batch
-			
-			// draw what's in the buffer
-			flush();
-				
-			// prepare the new texture
-			m_currentTexture = texture;
-			if ( m_currentTexture != null )
-			{
-				m_currentTexture.bind();
-			}
-		}
 	}
 	
 	/**

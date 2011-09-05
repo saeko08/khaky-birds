@@ -17,6 +17,10 @@ public final class Vector3
 	public static float TO_RADIANS = (1 / 180.0f) * (float) Math.PI;
 	public static float TO_DEGREES = (1 / (float) Math.PI) * 180;
 	
+	public static Vector3 EX		= new Vector3( 1, 0, 0 );
+	public static Vector3 EY		= new Vector3( 0, 1, 0 );
+	public static Vector3 EZ		= new Vector3( 0, 0, 1 );
+	
 	public float		m_x;
 	public float		m_y;
 	public float		m_z;
@@ -476,6 +480,19 @@ public final class Vector3
 	public float dot2D( Vector3 rhs )
 	{
 		return m_x * rhs.m_x + m_y * rhs.m_y; 
+	}
+	
+	/**
+	 * Calculates a cross product of two vectors
+	 * 
+	 * @param rhs		other vector
+	 * @param outVec	result
+	 */
+	public void cross( Vector3 rhs, Vector3 outVec )
+	{
+		outVec.m_x = m_y * rhs.m_z - m_z * rhs.m_y;
+		outVec.m_y = m_z * rhs.m_x - m_x * rhs.m_z;
+		outVec.m_z = m_x * rhs.m_y - m_y * rhs.m_x;
 	}
 	
 	// ------------------------------------------------------------------------

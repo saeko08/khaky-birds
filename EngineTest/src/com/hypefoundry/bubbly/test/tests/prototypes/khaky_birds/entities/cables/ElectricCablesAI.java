@@ -17,8 +17,8 @@ import com.hypefoundry.engine.world.World;
 public class ElectricCablesAI extends EntityController 
 {
 	private World 					m_world;
-
-	private float					m_cableOffsets[] = { 66, 131, 195, 259 }; 
+	private ElectricCables			m_cables;
+	
 	private int						m_cablesCount = 4;
 	private int						m_prevShockedCableId = 0;
 	private final float				m_shockSpawnTimeout = 10.0f;
@@ -34,6 +34,7 @@ public class ElectricCablesAI extends EntityController
 		super(entity);
 		
 		m_world = world;
+		m_cables = (ElectricCables)entity;
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class ElectricCablesAI extends EntityController
 			m_prevShockedCableId = selectShockedCable();
 			
 			// the spawn time has passed - spawn an electric charge
-			m_world.addEntity( new ElectricShock( m_cableOffsets[ m_prevShockedCableId ] ) );
+			m_world.addEntity( new ElectricShock( m_cables.m_wires[ m_prevShockedCableId ] ) );
 			
 			// reset the spawn timer
 			m_shockSpawnTimeElapsed = m_shockSpawnTimeout;

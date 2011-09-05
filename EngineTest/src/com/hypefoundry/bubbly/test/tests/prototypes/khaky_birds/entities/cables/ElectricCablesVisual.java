@@ -5,6 +5,7 @@ import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
@@ -37,7 +38,7 @@ public class ElectricCablesVisual extends EntityVisual
 	{
 		for ( int i = 0; i < m_cables.m_wires.length; ++i )
 		{
-			batcher.drawSpline( m_cables.m_wires[i] );
+			batcher.drawSpline( m_cables.m_wires[i], Color.BLUE, 1.5f );
 		}
 	}
 }

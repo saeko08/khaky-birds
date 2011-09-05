@@ -54,7 +54,7 @@ public class ElectricCables extends Entity implements CableProvider
 		m_wires = wires;
 		
 		// create a new cable at the specified position
-		Spline newWire = new Spline( Color.BLUE );
+		Spline newWire = new Spline();
 		newWire.addPoint( new Vector3( x, 0.0f, 10 ) );
 		newWire.addPoint( new Vector3( x, m_modelHeight, 10 ) );
 		

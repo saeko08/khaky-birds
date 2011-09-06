@@ -21,9 +21,7 @@ import com.hypefoundry.engine.renderer2D.Camera2D;
  */
 public class Crap extends Entity 
 {
-	private World 	 m_world    			 = null;
 	public boolean   pedestrianHit           = false;
-	private Bird     m_bird 				 = null;
 	//private Camera2D m_camera;
 	
 	public enum State
@@ -34,43 +32,30 @@ public class Crap extends Entity
 	};
 	
 	public State				m_state;
+
 	
 	/**
-	 * Constructor.
+	 * Default constructor.
 	 */
 	public Crap()
 	{
-		setPosition( 0, 0, 0 );
+		this( 0, 0 );
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public Crap( float x, float y )
+	{
+		setPosition( x, y, 70 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 15f ) );	// TODO: config
 		
 		// add movement capabilities
 		final float maxLinearSpeed = 5.0f;
 		final float maxRotationSpeed = 180.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
-	}
-
-	
-	/**
-	 * Setting starting position of crap
-	 *
-	 */
-	@Override
-	public void onAddedToWorld( World hostWorld )
-	{
-		m_world = hostWorld;
-		m_bird = (Bird) hostWorld.findEntity( Bird.class );
-		
-		if ( m_bird != null )
-		{
-			Vector3 birdPos = m_bird.getPosition();
-			Vector3 crapPos = new Vector3();
-			crapPos.set(birdPos);
-			crapPos.scale(-0.2f);
-			
-			float x = crapPos.m_x;
-			float y = crapPos.m_y;
-			
-			setPosition( x, y, 70 );
-		}
 	}
 }

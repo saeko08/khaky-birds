@@ -23,9 +23,11 @@ import com.hypefoundry.engine.physics.DynamicObject;
  */
 public class Bird extends Entity
 {
-	public CableProvider		m_cables			 = null;
-	public int					m_cableIdx  		 = 0;
-	public World 				m_world    			 = null;
+	public CableProvider		m_cables			= null;
+	public int					m_cableIdx  		= 0;
+	public World 				m_world    			= null;
+	
+	private Vector3 			m_tmpCrapPos 		= new Vector3();
 	
 	public enum State
 	{
@@ -72,6 +74,9 @@ public class Bird extends Entity
 	 */
 	public void makeShit() 
 	{
-		m_world.addEntity( new Crap() );
+		Vector3 birdPos = getPosition();
+		
+		m_tmpCrapPos.rotateZ( getFacing() ).scale(-0.3f).add( birdPos );		
+		m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
 	}
 }

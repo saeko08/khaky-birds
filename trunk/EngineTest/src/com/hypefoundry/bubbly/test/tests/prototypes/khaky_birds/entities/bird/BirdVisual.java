@@ -40,9 +40,9 @@ public class BirdVisual extends EntityVisual
 		m_bird = (Bird)entity;
 		
 		// load animations
-		Animation idleBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/idleBird.xml");
-		Animation flyingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/flyingBird.xml");
-		Animation shittingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/shittingBird.xml");		
+		Animation idleBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/idleBird.xml");
+		Animation flyingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/flyingBird.xml");
+		Animation shittingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/shittingBird.xml");		
 		
 		// create an animation player
 		m_animationPlayer = new AnimationPlayer();

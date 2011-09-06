@@ -268,10 +268,7 @@ public class BirdController extends FiniteStateMachine
 			updateInput( deltaTime );
 			if(m_canFly)
 			{
-				if (m_goToPos != null && m_goToPos != m_bird.getPosition())
-				{
-					m_sb.begin().arrive( m_goToPos, 1.5f ).faceMovementDirection();
-				}
+				m_sb.begin().arrive( m_goToPos, 1.5f ).faceMovementDirection();
 			}
 		}
 		
@@ -293,16 +290,7 @@ public class BirdController extends FiniteStateMachine
 					float dy = lastEvent.y;
 					
 					
-					boolean canFly = calculateFlightPosition(dx, dy);
-					if ( canFly )
-					{
-						setFlightPosition( m_goToPos );
-						m_canFly = true;
-					}
-					else
-					{
-						m_canFly = false;
-					}
+					m_canFly = calculateFlightPosition(dx, dy);
 					
 					
 				}
@@ -328,14 +316,22 @@ public class BirdController extends FiniteStateMachine
 		
 			// change the gesture direction from screen to model space
 			m_gestureDir.set( dx, dy, 0 );
-			//m_camera.directionToWorld( m_gestureDir );
 			
+			//m_camera.directionToWorld( m_gestureDir );
 			m_camera.touchToWorld( m_gestureDir );
 			
 			// I need a desired position the gesture points to
 			m_goToPos.set( m_gestureDir );
-
-			return true;
+			
+			if (m_goToPos != m_bird.getPosition())
+			{
+				setFlightPosition( m_goToPos );
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		
 		private void setFlightPosition(Vector3 destination) 

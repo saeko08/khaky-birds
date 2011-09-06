@@ -22,7 +22,7 @@ public class TextureRegion extends Resource
 	public float 			m_u1, m_v1;
 	public float 			m_u2, m_v2;
 	
-	public Texture 			m_texture;
+	public RenderState		m_renderState = new RenderState();
 	
 	/**
 	 * Default constructor.
@@ -33,8 +33,22 @@ public class TextureRegion extends Resource
 		m_v1 = 0;
 		m_u2 = 0;
 		m_v2 = 0;	
-		m_texture = null;
 	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * * @param texture
+	 */
+	public TextureRegion( Texture texture )
+	{
+		m_u1 = 0;
+		m_v1 = 0;
+		m_u2 = 0;
+		m_v2 = 0;	
+		m_renderState.setTexture( texture );
+	}
+	
 	
 	/**
 	 * Constructor.
@@ -62,13 +76,32 @@ public class TextureRegion extends Resource
 			m_v2 = 0;
 		}
 		
-		m_texture = texture;
+		m_renderState.setTexture( texture );
 	}
+	
+	/**
+	 * Loads texel coordinates from a data loader.
+	 * 
+	 * @param loader
+	 */
+	public void deserializeCoordinates( DataLoader loader )
+	{	
+		float x = loader.getFloatValue( "x" );
+		float y = loader.getFloatValue( "y" );
+		float width = loader.getFloatValue( "w" );
+		float height = loader.getFloatValue( "h" );
+		
+		m_u1 = x / m_renderState.m_texture.getWidth();
+		m_v1 = y / m_renderState.m_texture.getHeight();
+		m_u2 = m_u1 + width / m_renderState.m_texture.getWidth();
+		m_v2 = m_v1 + height / m_renderState.m_texture.getHeight();
+	}
+	
 	
 	@Override
 	public void load() 
 	{
-		if ( m_texture != null )
+		if ( m_renderState.m_texture != null )
 		{
 			// texture is already loaded
 			return;
@@ -88,18 +121,8 @@ public class TextureRegion extends Resource
 		DataLoader texNode = XMLDataLoader.parse( stream, "TextureRegion" );
 		if ( texNode != null )
 		{
-			String atlasName = texNode.getStringValue( "atlasName" );
-			m_texture = m_resMgr.getResource( Texture.class, atlasName );
-			
-			float x = texNode.getFloatValue( "x" );
-			float y = texNode.getFloatValue( "y" );
-			float width = texNode.getFloatValue( "w" );
-			float height = texNode.getFloatValue( "h" );
-			
-			m_u1 = x / m_texture.getWidth();
-			m_v1 = y / m_texture.getHeight();
-			m_u2 = m_u1 + width / m_texture.getWidth();
-			m_v2 = m_v1 + height / m_texture.getHeight();
+			m_renderState.deserialize( m_resMgr, texNode );
+			deserializeCoordinates( texNode );
 		}
 	}
 	

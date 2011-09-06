@@ -6,16 +6,6 @@ package com.hypefoundry.engine.renderer2D;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import com.hypefoundry.engine.core.Resource;
 import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.util.serialization.DataLoader;
@@ -98,11 +88,9 @@ public class Animation extends Resource
 			int i = 0;
 			for ( DataLoader regionNode = animNode.getChild( "TextureRegion" ); regionNode != null; regionNode = regionNode.getSibling(), ++i )
 			{
-				float x = regionNode.getFloatValue( "x" );
-				float y = regionNode.getFloatValue( "y" );
-				float w = regionNode.getFloatValue( "w" );
-				float h = regionNode.getFloatValue( "h" );
-				m_regions[i] = new TextureRegion( atlas, x, y, w, h );
+				m_regions[i] = new TextureRegion( atlas );
+				m_regions[i].deserializeCoordinates( regionNode );
+				m_regions[i].m_renderState.deserialize( m_resMgr, regionNode );
 			}
 		}
 	}

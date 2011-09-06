@@ -5,6 +5,7 @@ package com.hypefoundry.engine.renderer2D.fx;
 
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.Color;
+import com.hypefoundry.engine.renderer2D.RenderState;
 import com.hypefoundry.engine.renderer2D.Spline;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 
@@ -25,6 +26,8 @@ public class LightningFX
 	
 	private Color				m_bgColor;
 	private Color				m_fgColor;
+	private RenderState			m_bgRenderState = new RenderState();
+	private RenderState			m_fgRenderState = new RenderState();
 	
 	
 	/**
@@ -56,9 +59,6 @@ public class LightningFX
 			m_width = 0.1f;
 		}
 		
-		m_bgColor = new Color( color ).brighter( 0.5f );
-		m_fgColor = color;
-		
 		// calculate the base placement of the particles
 		m_particles = new Spline();
 		m_worldSpaceParticles = new Spline();
@@ -81,6 +81,12 @@ public class LightningFX
 			
 			m_worldSpaceParticles.addPoint( new Vector3() );
 		}
+		
+		// set the render states
+		m_bgColor = new Color( color ).brighter( 0.5f );
+		m_fgColor = color;
+		m_bgRenderState.setLineWidth( 7.0f );
+		m_fgRenderState.setLineWidth( 2.0f );
 	}
 	
 	/**
@@ -111,7 +117,7 @@ public class LightningFX
 		m_worldSpaceParticles.refresh();
 		
 		// draw
-		batcher.drawSpline( m_worldSpaceParticles, m_bgColor, 7.0f );
-		batcher.drawSpline( m_worldSpaceParticles, m_fgColor, 2.0f );
+		batcher.drawSpline( m_worldSpaceParticles, m_bgColor, m_bgRenderState );
+		batcher.drawSpline( m_worldSpaceParticles, m_fgColor, m_fgRenderState );
 	}
 }

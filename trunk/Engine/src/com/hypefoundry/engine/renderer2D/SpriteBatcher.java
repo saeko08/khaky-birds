@@ -8,7 +8,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.util.FloatMath;
 
 import com.hypefoundry.engine.core.GLGraphics;
-import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.math.Vector3;
 
 
@@ -26,6 +25,7 @@ public class SpriteBatcher
 		Sprites
 	};
 		
+	private GL10				m_gl;
 	private final float[] 		m_verticesBuffer;
 	private int 				m_bufferIndex;
 	
@@ -36,8 +36,7 @@ public class SpriteBatcher
 	private int					m_numLines;
 	
 	private DrawItem			m_currentDrawItem = DrawItem.Lines;
-	
-	private RenderState			m_renderState;
+	private RenderState			m_currRenderState = new RenderState();		
 	
 	
 	/**
@@ -52,8 +51,8 @@ public class SpriteBatcher
 	 * @param maxSprites
 	 */
 	public SpriteBatcher( GLGraphics graphics, int maxSprites ) 
-	{
-		m_renderState = new RenderState( graphics.getGL(), this );
+	{	
+		m_gl = graphics.getGL();
 		
 		m_verticesBuffer = new float[ maxSprites * 4 * 4 ];
 		m_geometry = new Geometry( graphics, maxSprites * 4, maxSprites*6, false, true );
@@ -118,9 +117,9 @@ public class SpriteBatcher
 	 * 
 	 * @param spline
 	 * @param color
-	 * @param lineWidth
+	 * @param rs		render state
 	 */
-	public void drawSpline( Spline spline, Color color, float lineWidth )
+	public void drawSpline( Spline spline, Color color, RenderState rs )
 	{		
 		// check if the spline has any segments defined
 		int count = spline.m_points.length - 1;
@@ -133,7 +132,7 @@ public class SpriteBatcher
 		switchTo( DrawItem.Lines );
 		
 		// set the render state
-		m_renderState.disableTexturing().disableAlphaOp().setLineWidth( lineWidth ).end();
+		setRenderState( rs );
 		
 		// draw the spline
 		for ( int i = 0; i < count; ++i )
@@ -175,7 +174,7 @@ public class SpriteBatcher
 		switchTo( DrawItem.Sprites );
 		
 		// set the render state
-		m_renderState.setTexture( region.m_texture ).enableAlphaTest().end();
+		setRenderState( region.m_renderState );
 						
 		// add the new sprite to the batcher
 		float halfWidth = width / 2;
@@ -221,7 +220,7 @@ public class SpriteBatcher
 		switchTo( DrawItem.Sprites );
 		
 		// set the render state
-		m_renderState.setTexture( region.m_texture ).enableAlphaTest().end();
+		setRenderState( region.m_renderState );
 		
 		// add the new sprite to the batcher
 		float halfWidth = width / 2;
@@ -265,6 +264,19 @@ public class SpriteBatcher
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
 		
 		m_numSprites++;
+	}
+	
+	/**
+	 * Sets the render state
+	 */
+	private void setRenderState( RenderState rs )
+	{
+		if ( m_currRenderState.equals( rs ) == false )
+		{
+			flush();
+			m_currRenderState.set( rs );
+			m_currRenderState.bind( m_gl );
+		}
 	}
 	
 	/**

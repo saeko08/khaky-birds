@@ -38,7 +38,7 @@ public class FalconVisual extends EntityVisual
 		m_falcon = (Falcon)entity;
 		
 		// load animations
-		Animation FlyingFalcon = resMgr.getResource( Animation.class, "khaky_birds_prototype/FlyingFalcon.xml");
+		Animation FlyingFalcon = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/FlyingFalcon.xml");
 		
 		// create an animation player
 			m_animationPlayer = new AnimationPlayer();

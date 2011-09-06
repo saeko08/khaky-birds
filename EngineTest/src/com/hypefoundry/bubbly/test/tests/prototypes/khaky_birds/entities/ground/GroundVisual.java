@@ -33,8 +33,7 @@ public class GroundVisual extends EntityVisual
 	{
 		super( entity );
 		
-		Texture atlas = resMgr.getResource( Texture.class, "khaky_birds_prototype/atlas.png" );
-		m_pixmap = new TextureRegion( atlas, 0, 0, 320, 480 );
+		m_pixmap = resMgr.getResource( TextureRegion.class, "khaky_birds_prototype/textures/ground.xml" );
 	}
 
 	@Override

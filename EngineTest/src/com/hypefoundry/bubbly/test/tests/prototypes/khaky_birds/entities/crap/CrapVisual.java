@@ -40,8 +40,8 @@ public class CrapVisual extends EntityVisual
 		m_crap = (Crap)entity;
 		
 		// load animations
-			Animation fallingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/fallingShit.xml");
-			Animation hittingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/hittingShit.xml");	
+			Animation fallingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/fallingShit.xml");
+			Animation hittingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/hittingShit.xml");	
 			
 			// create an animation player
 			m_animationPlayer = new AnimationPlayer();

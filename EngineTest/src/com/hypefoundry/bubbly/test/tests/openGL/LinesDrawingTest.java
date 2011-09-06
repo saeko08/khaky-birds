@@ -8,6 +8,7 @@ import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.impl.game.GLGame;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.Color;
+import com.hypefoundry.engine.renderer2D.RenderState;
 import com.hypefoundry.engine.renderer2D.Spline;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.util.FPSCounter;
@@ -39,6 +40,7 @@ class LinesDrawingScreen extends Screen
 			new Spline().addPoint( new Vector3( 3.0f, 0.0f, 10 ) ).addPoint( new Vector3( 3.0f, 9.6f, 10 ) ),
 			new Spline().addPoint( new Vector3( 4.0f, 0.0f, 10 ) ).addPoint( new Vector3( 4.0f, 9.6f, 10 ) ),
 	};
+	RenderState			m_renderState = new RenderState();
 	FPSCounter			m_fpsCounter = new FPSCounter();
 	
 	
@@ -47,7 +49,7 @@ class LinesDrawingScreen extends Screen
 		super( game );
 		
 		m_glGraphics = ((GLGame) game).getGraphics();
-		
+		m_renderState.setLineWidth( 2.0f );
 		m_batcher = new SpriteBatcher( m_glGraphics, MAX_SPRITES );
 	}
 	
@@ -72,7 +74,7 @@ class LinesDrawingScreen extends Screen
 		
 		for ( int i = 0; i < m_spline.length; ++i )
 		{
-			m_batcher.drawSpline( m_spline[i], Color.RED, 2.0f );
+			m_batcher.drawSpline( m_spline[i], Color.RED, m_renderState );
 		}
 		
 		m_batcher.flush();

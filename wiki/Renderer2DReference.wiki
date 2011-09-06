@@ -19,6 +19,36 @@ An atlas is a large texture where an artist can place a lot of smaller sprite bi
 
 *CAUTION* an atlas texture has to have a ^2 ( power of two ) dimensions, and the largest supported dimensions are 1024x1024.
 
+===XML texture definition===
+
+Here's a sample texture region XML file:
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureRegion atlasName='khaky_birds_prototype/atlas.png' x='0' y='0' w='320' h='480' alphaOp='none'/>
+}}}
+
+It specifies a texture that's contained in atlas `khaky_birds_prototype/atlas.png` and is located in the region (0, 0)->(320, 480), and should be drawn without any alpha test.
+
+Attributes:
+  # `atlasName` - name of the atlas from which the texture should be aquired
+  # `x`, `y` - upper left corner coordinates ( in pixels )
+  # `w`, `h` - texture width and height ( in pixels )
+  # `alphaOp` - alpha operation to use:
+    * `none` - don't perform any alpha operation
+    * `test` - perform a simple alpha test
+    * `blend` - dop the alpha blending. When this param is specified, you should also specify the `srcAlphaFunc` and `destAlphaFunc` attributes
+  # `srcAlphaFunc`, `destAlphaFunc` - alpha blending functions for the source and destination textures
+    * `zero` - don't use the texture
+    * `one` - use texture color and alpha
+    * `srcAlpha` - use source texture alpha
+    * `destAlpha` - use destination texture alpha
+    * `srcColor` - use source texture color
+    * `destColor` - use destination texture color
+    * `oneMinusSrcAlpha` - use invertex source texture alpha
+    * `oneMinusDestAlpha` - use invertex destination texture alpha
+    * `oneMinusSrcColor` - use invertex source texture color
+    * `oneMinusDestColor` - use invertex destination texture color
+
 == Animation ==
 An animation is a resource. You can create them manually, or by using a definition stored in an XML file.
 
@@ -38,7 +68,7 @@ The XML file with it could look like so:
 
 The file must contain a single `<Animation>` tag with an attribute `frameDuration` specifying the duration of a single animation frame and another one, `atlasName`, specifying the name of an atlas that contains the animation key frames.
 
-That tag has children - `<TextureRegion>` tags, each of which describes a region in a texture where an animation frame is located.
+That tag has children - `<TextureRegion>` tags, each of which describes a region in a texture where an animation frame is located. It's a regular `TextureRegion` XML definition - take a look [#XML_texture_definition here] to see what you can specify.
 The order of the tags specifies the order in which the key frames will be played.
 
 ===Playing animation===

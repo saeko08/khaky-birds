@@ -47,6 +47,8 @@
     * [Renderer2DReference Renderer 2D]
       * [Renderer2DReference#Sprites Sprites]
       * [Renderer2DReference#Atlas Atlas]
+        * [Renderer2DReference#XML_texture_definition XML texture definition]
+        * [Renderer2DReference#XML_render_state_attrbutes XML render state attrbutes]
       * [Renderer2DReference#Animation Animation]
         * [Renderer2DReference#XML_animation_resource XML animation resource]
         * [Renderer2DReference#Playing_animation Playing animation]

@@ -81,16 +81,15 @@ public class Animation extends Resource
 		if ( animNode != null )
 		{
 			m_frameDuration = animNode.getFloatValue( "frameDuration" );
-			String atlasName = animNode.getStringValue( "atlasName" );
-			Texture atlas = m_resMgr.getResource( Texture.class, atlasName );
+			RenderState renderState = new RenderState();
+			renderState.deserialize( m_resMgr, animNode );
 			
 			m_regions = new TextureRegion[ animNode.getChildrenCount( "TextureRegion" ) ];
 			int i = 0;
 			for ( DataLoader regionNode = animNode.getChild( "TextureRegion" ); regionNode != null; regionNode = regionNode.getSibling(), ++i )
 			{
-				m_regions[i] = new TextureRegion( atlas );
+				m_regions[i] = new TextureRegion( renderState );
 				m_regions[i].deserializeCoordinates( regionNode );
-				m_regions[i].m_renderState.deserialize( m_resMgr, regionNode );
 			}
 		}
 	}

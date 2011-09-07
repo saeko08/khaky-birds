@@ -29,7 +29,8 @@ Here's a sample texture region XML file:
 
 It specifies a texture that's contained in atlas `khaky_birds_prototype/atlas.png` and is located in the region (0, 0)->(320, 480), and should be drawn without any alpha test.
 
-Attributes:
+===XML render state attrbutes===
+
   # `atlasName` - name of the atlas from which the texture should be aquired
   # `x`, `y` - upper left corner coordinates ( in pixels )
   # `w`, `h` - texture width and height ( in pixels )
@@ -61,14 +62,14 @@ Animation myAnimation = resourcesManager.getResource( Animation.class, "path_to_
 The XML file with it could look like so:
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
-<Animation frameDuration='0.1' atlasName='khaky_birds_prototype/atlas.png'>
+<Animation frameDuration='0.1' atlasName='khaky_birds_prototype/atlas.png' alphaOp='test'>
         <TextureRegion x='0', y='0' w='100' h='100'/>
 </Animation>
 }}}
 
-The file must contain a single `<Animation>` tag with an attribute `frameDuration` specifying the duration of a single animation frame and another one, `atlasName`, specifying the name of an atlas that contains the animation key frames.
+The file must contain a single `<Animation>` tag with an attribute `frameDuration` specifying the duration of a single animation frame. It may also contain regular *render state tags* ( such as `atlasName` or `alphaOp` ) which are described in more detail [#XML_render_state_attrbutes here].
 
-That tag has children - `<TextureRegion>` tags, each of which describes a region in a texture where an animation frame is located. It's a regular `TextureRegion` XML definition - take a look [#XML_texture_definition here] to see what you can specify.
+That tag has children - `<TextureRegion>` tags, each of which describes a region in a texture where an animation frame is located.
 The order of the tags specifies the order in which the key frames will be played.
 
 ===Playing animation===

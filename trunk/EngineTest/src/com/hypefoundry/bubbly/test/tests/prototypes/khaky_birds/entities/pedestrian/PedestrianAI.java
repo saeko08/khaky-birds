@@ -123,7 +123,7 @@ public class PedestrianAI extends FiniteStateMachine
 		public void execute( float deltaTime )
 		{
 			m_wait -= deltaTime;
-			if ( m_wait > 0 )
+			if ( m_wait < 0 )
 			{
 				transitionTo( Wander.class );
 			}				

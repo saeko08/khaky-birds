@@ -76,7 +76,7 @@ public class Bird extends Entity
 	{
 		Vector3 birdPos = getPosition();
 		
-		m_tmpCrapPos.rotateZ( getFacing() ).scale(-0.3f).add( birdPos );		
+		m_tmpCrapPos.set(Vector3.EX).rotateZ( getFacing() ).scale(-0.3f).add( birdPos );		
 		m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
 	}
 }

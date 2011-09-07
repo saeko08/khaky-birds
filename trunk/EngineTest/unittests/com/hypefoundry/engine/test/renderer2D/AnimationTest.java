@@ -1,6 +1,5 @@
 package com.hypefoundry.engine.test.renderer2D;
 
-import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.renderer2D.Animation;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
 
@@ -12,12 +11,10 @@ public class AnimationTest extends AndroidTestCase
 	
 	public void testFrameSelection()
 	{
-		Texture textureStub = new Texture();
-		
 		TextureRegion[] frames = {
-				new TextureRegion( textureStub, 0, 0, 0, 0 ),
-				new TextureRegion( textureStub, 0, 0, 0, 0 ),
-				new TextureRegion( textureStub, 0, 0, 0, 0 ),
+				new TextureRegion(),
+				new TextureRegion(),
+				new TextureRegion(),
 		};
 		Animation animation = new Animation( 0.2f, frames );
 		

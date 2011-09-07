@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Animation frameDuration='0.5' atlasName='khaky_birds_prototype/atlas.png'>
-	<TextureRegion x='715' y='1' w='27' h='28' alphaOp='test'/>
+<Animation frameDuration='0.5' atlasName='khaky_birds_prototype/atlas.png' alphaOp='test'>
+	<TextureRegion x='715' y='1' w='27' h='28'/>
 </Animation>

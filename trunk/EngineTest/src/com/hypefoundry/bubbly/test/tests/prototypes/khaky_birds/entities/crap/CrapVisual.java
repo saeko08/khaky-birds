@@ -27,6 +27,8 @@ public class CrapVisual extends EntityVisual
 	private int 			ANIM_FALL;
 	private int 			ANIM_HIT;
 	private Crap            m_crap;
+	float                  m_scaleFactor = 1.f;
+	float                  m_scaleCounter = 0.1f;
 
 	/**
 	 * Constructor.
@@ -55,16 +57,33 @@ public class CrapVisual extends EntityVisual
 		Vector3 pos = m_crap.getPosition();
 		BoundingShape bs = m_crap.getBoundingShape();
 		
-		if( m_crap.m_state == Crap.State.Falling )
+		float width;
+		float hight;
+		
+		width =	bs.getWidth();
+		hight = bs.getHeight();
+		
+		
+		if( m_crap.m_state == Crap.State.Falling || m_crap.m_state == Crap.State.Hitting )
 		{
 			m_animationPlayer.select(ANIM_FALL);
+			
+			if (m_scaleFactor > 0)
+			{
+				m_scaleFactor = m_scaleFactor - m_scaleCounter;
+			}
+			
+			
+			width = width *  m_scaleFactor;
+			hight = hight *  m_scaleFactor;
+			
 		}
 		else if ( m_crap.m_state == Crap.State.Splat )
 		{
 			m_animationPlayer.select(ANIM_HIT);
 		}
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_animationPlayer.getTextureRegion( deltaTime ) );
+		batcher.drawSprite( pos.m_x, pos.m_y, width, hight, m_animationPlayer.getTextureRegion( deltaTime ) );
 
 	}
 

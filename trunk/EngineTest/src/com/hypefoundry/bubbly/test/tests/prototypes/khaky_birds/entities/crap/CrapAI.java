@@ -99,10 +99,13 @@ public class CrapAI extends FiniteStateMachine
 		{
 			if ( event instanceof CollisionEvent )
 			{
-				// if it collides with another entity, it attempts eating it
+				// if it collides with Pedestrian it splats
 				Entity collider = ( (CollisionEvent)event ).m_collider;
-				collider.sendEvent( Crapped.class );
-				transitionTo( Splat.class );
+				if(collider instanceof Pedestrian)
+				{
+					collider.sendEvent( Crapped.class );
+					transitionTo( Splat.class );
+				}
 
 			}
 		}
@@ -131,7 +134,7 @@ public class CrapAI extends FiniteStateMachine
 		{
 			m_fallingTime     = m_fallingTime + deltaTime;
 			
-			if ( m_fallingTime >= 1.5f )
+			if ( m_fallingTime >= 2.5f )
 			{
 				transitionTo( Hitting.class );
 			}

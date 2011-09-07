@@ -8,6 +8,7 @@ import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.impl.game.GLGame;
+import com.hypefoundry.engine.renderer2D.RenderState;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
 import com.hypefoundry.engine.util.FPSCounter;
@@ -49,7 +50,7 @@ class SpritesBatcherScreen extends Screen
 		m_batcher = new SpriteBatcher( m_glGraphics, MAX_SPRITES );
 		
 		Texture atlas = m_resourceManager.getResource( Texture.class, "bitmaps/bobargb8888.png" );
-		m_pixmap = new TextureRegion( atlas, 0, 0, 256, 256 );
+		m_pixmap = new TextureRegion( new RenderState().setTexture( atlas ), 0, 0, 256, 256 );
 	}
 	
 	@Override

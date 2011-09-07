@@ -38,15 +38,15 @@ public class TextureRegion extends Resource
 	/**
 	 * Constructor.
 	 * 
-	 * * @param texture
+	 * * @param renderState
 	 */
-	public TextureRegion( Texture texture )
+	public TextureRegion( RenderState renderState )
 	{
 		m_u1 = 0;
 		m_v1 = 0;
 		m_u2 = 0;
 		m_v2 = 0;	
-		m_renderState.setTexture( texture );
+		m_renderState = renderState;
 	}
 	
 	
@@ -59,14 +59,14 @@ public class TextureRegion extends Resource
 	 * @param width
 	 * @param height
 	 */
-	public TextureRegion( Texture texture, float x, float y, float width, float height ) 
+	public TextureRegion( RenderState renderState, float x, float y, float width, float height ) 
 	{
-		if ( texture != null )
+		if ( renderState != null )
 		{
-			m_u1 = x / texture.getWidth();
-			m_v1 = y / texture.getHeight();
-			m_u2 = m_u1 + width / texture.getWidth();
-			m_v2 = m_v1 + height / texture.getHeight();
+			m_u1 = x / renderState.m_texture.getWidth();
+			m_v1 = y / renderState.m_texture.getHeight();
+			m_u2 = m_u1 + width / renderState.m_texture.getWidth();
+			m_v2 = m_v1 + height / renderState.m_texture.getHeight();
 		}
 		else
 		{
@@ -76,7 +76,7 @@ public class TextureRegion extends Resource
 			m_v2 = 0;
 		}
 		
-		m_renderState.setTexture( texture );
+		m_renderState = renderState;
 	}
 	
 	/**

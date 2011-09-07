@@ -132,12 +132,17 @@ public class CrapAI extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-			m_fallingTime     = m_fallingTime + deltaTime;
 			
-			if ( m_fallingTime >= 2.5f )
+			if (m_crap.m_canHit == true)
 			{
 				transitionTo( Hitting.class );
 			}
+			/*m_fallingTime     = m_fallingTime + deltaTime;
+			
+			if ( m_fallingTime >= 1.0f )
+			{
+				transitionTo( Hitting.class );
+			}*/
 			
 		}
 	}

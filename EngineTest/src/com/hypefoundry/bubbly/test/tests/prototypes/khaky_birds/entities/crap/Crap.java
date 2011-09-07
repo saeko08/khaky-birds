@@ -22,6 +22,7 @@ import com.hypefoundry.engine.renderer2D.Camera2D;
 public class Crap extends Entity 
 {
 	public boolean   pedestrianHit           = false;
+	public boolean    m_canHit				 = false;	
 	//private Camera2D m_camera;
 	
 	public enum State
@@ -57,5 +58,10 @@ public class Crap extends Entity
 		final float maxLinearSpeed = 5.0f;
 		final float maxRotationSpeed = 180.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
+	}
+	
+	public void canHit()
+	{
+		m_canHit = true;
 	}
 }

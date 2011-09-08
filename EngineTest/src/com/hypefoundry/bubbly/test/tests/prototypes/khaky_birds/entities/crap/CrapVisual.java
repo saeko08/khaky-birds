@@ -75,7 +75,7 @@ public class CrapVisual extends EntityVisual
 			float height = 	bs.getHeight();	
 			width *= m_scaleFactor;
 			height *= m_scaleFactor;
-			m_crap.setBoundingBox(width, height );
+			m_crap.setBoundingBox( width, height );
 		}
 		else if ( m_crap.m_state == Crap.State.Splat )
 		{

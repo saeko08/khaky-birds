@@ -79,6 +79,9 @@ public class TextureRegion extends Resource
 		m_renderState = renderState;
 	}
 	
+	// ------------------------------------------------------------------------
+	// Resource implementation
+	// ------------------------------------------------------------------------
 	/**
 	 * Loads texel coordinates from a data loader.
 	 * 

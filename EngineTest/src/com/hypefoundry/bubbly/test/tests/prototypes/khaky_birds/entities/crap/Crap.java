@@ -60,8 +60,15 @@ public class Crap extends Entity
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
 	
-	public void canHit()
+	public void canHit(boolean canHit)
 	{
-		m_canHit = true;
+		if (canHit == true)
+		{
+			m_canHit = true;
+		}
+		else
+		{
+			m_canHit = false;
+		}
 	}
 }

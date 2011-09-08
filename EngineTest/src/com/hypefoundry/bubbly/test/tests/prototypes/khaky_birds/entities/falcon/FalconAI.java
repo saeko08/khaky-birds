@@ -73,7 +73,6 @@ public class FalconAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_falcon.m_state = Falcon.State.Hunting;
-			m_falcon.attachEventListener( this );
 			
 			if (m_falcon.m_isChasing == true)
 			{
@@ -100,7 +99,6 @@ public class FalconAI extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
-			m_falcon.detachEventListener( this );
 			m_sb.clear();
 		}
 		
@@ -144,15 +142,12 @@ public class FalconAI extends FiniteStateMachine
 		@Override
 		public void activate()
 		{
-			m_falcon.m_state = Falcon.State.Chasing;
-			m_falcon.attachEventListener( this );
-				
+			m_falcon.m_state = Falcon.State.Chasing;	
 		}
 		
 		@Override
 		public void deactivate()
 		{
-			m_falcon.detachEventListener( this );
 			m_sb.clear();
 			m_chasingActive = false;
 		}

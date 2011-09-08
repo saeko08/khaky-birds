@@ -49,7 +49,6 @@ public class BirdController extends FiniteStateMachine
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Idle;
-			m_bird.attachEventListener( this );
 			
 			// we're not interested in previous duration events
 			m_input.clearTouchDuration();
@@ -58,7 +57,6 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
-			m_bird.detachEventListener( this );
 		}
 		
 		@Override
@@ -164,14 +162,12 @@ public class BirdController extends FiniteStateMachine
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Jumping;
-			m_bird.attachEventListener( this );
 			m_sb.begin().arrive( m_goToPos, 1.2f ).faceMovementDirection();
 		}
 		
 		@Override
 		public void deactivate()
 		{
-			m_bird.detachEventListener( this );
 			m_sb.clear();
 		}
 		
@@ -251,13 +247,11 @@ public class BirdController extends FiniteStateMachine
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Flying;
-			m_bird.attachEventListener( this );
 		}
 		
 		@Override
 		public void deactivate()
 		{
-			m_bird.detachEventListener( this );
 			m_canFly      = false;
 			m_sb.clear();
 		}
@@ -369,14 +363,11 @@ public class BirdController extends FiniteStateMachine
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Shitting;
-			
-			m_bird.attachEventListener( this );
 		}
 		
 		@Override
 		public void deactivate()
 		{
-			m_bird.detachEventListener( this );
 		}
 		
 		@Override

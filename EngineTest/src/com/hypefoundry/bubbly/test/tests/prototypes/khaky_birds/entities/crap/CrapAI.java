@@ -85,10 +85,8 @@ public class CrapAI extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-			m_fallingTime     = m_fallingTime + deltaTime;
-			if ( m_fallingTime  >= 0.2f )
+			if (m_crap.m_canHit == false)
 			{
-				// ok - we can remove the crap - it went out of the visibility scope
 				die();
 			}
 			
@@ -137,12 +135,6 @@ public class CrapAI extends FiniteStateMachine
 			{
 				transitionTo( Hitting.class );
 			}
-			/*m_fallingTime     = m_fallingTime + deltaTime;
-			
-			if ( m_fallingTime >= 1.0f )
-			{
-				transitionTo( Hitting.class );
-			}*/
 			
 		}
 	}
@@ -169,19 +161,13 @@ public class CrapAI extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-			
-			if (m_crap.m_canHit == false)
-			{
-				die();
-			}
-			/*m_fallingTime     = m_fallingTime + deltaTime;
+			m_fallingTime     = m_fallingTime + deltaTime;
 			
 			if ( m_fallingTime >= 0.2f )
 			{
 				// ok - we can remove the crap - it went out of the visibility scope
 				die();
-			}*/
-			
+			}
 		}
 	}
 	void die()

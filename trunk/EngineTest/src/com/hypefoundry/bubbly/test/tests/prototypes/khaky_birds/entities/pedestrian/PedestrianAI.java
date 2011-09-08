@@ -4,6 +4,8 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
 
+import java.util.Random;
+
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
@@ -33,6 +35,9 @@ public class PedestrianAI extends FiniteStateMachine
 	class Wander extends FSMState implements EntityEventListener
 	{	
 		private Vector3 m_tmpDirVec 		= new Vector3();
+		private Random m_randObserveChnce   = new Random();
+		private int m_toObserveChance       = 0;
+		private float m_walkingTime         = 0;
 		
 		@Override
 		public void activate()
@@ -41,6 +46,7 @@ public class PedestrianAI extends FiniteStateMachine
 			m_pedestrian.attachEventListener( this );
 			
 			m_sb.begin().wander().faceMovementDirection();
+			
 
 		}
 		
@@ -51,6 +57,18 @@ public class PedestrianAI extends FiniteStateMachine
 			
 			// remove events listeners
 			m_pedestrian.detachEventListener( this );
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			//m_walkingTime     = m_walkingTime + deltaTime;
+			m_toObserveChance = m_randObserveChnce.nextInt(10);
+			
+			if ( m_toObserveChance == 5 )
+			{
+				transitionTo( Observe.class );
+			}
 		}
 
 		@Override
@@ -109,24 +127,47 @@ public class PedestrianAI extends FiniteStateMachine
 	
 	// ------------------------------------------------------------------------
 	
-	class Observe extends FSMState
+	class Observe extends FSMState implements EntityEventListener
 	{
-		private float 				m_wait 			= 0.f;
+		private Random m_randWaitTime   = new Random();
+		private int m_waitTimer         = 0;
+		private float 	m_wait 			= 0.f;
 		
 		@Override
 		public void activate()
 		{
-			m_wait = 10.0f;
+			m_wait = 6.0f;
+			
+			// register events listeners
+			m_pedestrian.attachEventListener( this );
+			m_waitTimer = m_randWaitTime.nextInt(6);
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			// remove events listeners
+			m_pedestrian.detachEventListener( this );
 		}
 		
 		@Override
 		public void execute( float deltaTime )
 		{
 			m_wait -= deltaTime;
-			if ( m_wait < 0 )
+			if ( m_wait < m_waitTimer )
 			{
 				transitionTo( Wander.class );
 			}				
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				m_pedestrian.setHitWithShit( true );
+			}
 		}
 	}
 	

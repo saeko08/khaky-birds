@@ -25,7 +25,7 @@ public class CrapVisual extends EntityVisual
 	private int 			ANIM_HIT;
 	private Crap            m_crap;
 	float                  m_scaleFactor = 1.f;
-	float                  m_scaleCounter = 0.1f;
+	float                  m_scaleCounter = 0.05f;
 
 	/**
 	 * Constructor.
@@ -62,11 +62,11 @@ public class CrapVisual extends EntityVisual
 			{
 				m_scaleFactor = m_scaleFactor - m_scaleCounter;
 			}
-			if (m_scaleFactor <= 0.4f && m_scaleFactor >= 0.3f)
+			if (m_scaleFactor <= 0.8f && m_scaleFactor >= 0.7f)
 			{
 				m_crap.canHit(true);
 			}
-			if (m_scaleFactor < 0.2f)
+			if (m_scaleFactor < 0.6f)
 			{
 				m_crap.canHit(false);
 			}

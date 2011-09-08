@@ -1,5 +1,6 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.world.Entity;
@@ -16,7 +17,7 @@ import com.hypefoundry.engine.physics.DynamicObject;
  * @author paksas
  *
  */
-public class Pedestrian extends Entity
+public class Pedestrian extends Entity implements Crappable
 {
 	boolean				m_hitWithShit;
 	

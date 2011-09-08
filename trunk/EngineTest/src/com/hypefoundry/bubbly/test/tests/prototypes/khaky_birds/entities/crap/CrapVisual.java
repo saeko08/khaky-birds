@@ -72,9 +72,13 @@ public class CrapVisual extends EntityVisual
 			{
 				m_scaleFactor = m_scaleFactor - m_scaleCounter;
 			}
-			if (m_scaleFactor <= 0.3f)
+			if (m_scaleFactor <= 0.3f && m_scaleFactor >= 0.2f)
 			{
-				m_crap.canHit();
+				m_crap.canHit(true);
+			}
+			if (m_scaleFactor < 0.2f)
+			{
+				m_crap.canHit(false);
 			}
 			
 			

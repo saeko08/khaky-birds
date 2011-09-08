@@ -54,13 +54,6 @@ public class CrapVisual extends EntityVisual
 		Vector3 pos = m_crap.getPosition();
 		BoundingShape bs = m_crap.getBoundingShape();
 		
-		float width;
-		float hight;
-		
-		width =	bs.getWidth();
-		hight = bs.getHeight();
-		
-		
 		if( m_crap.m_state == Crap.State.Falling || m_crap.m_state == Crap.State.Hitting )
 		{
 			m_animationPlayer.select(ANIM_FALL);
@@ -78,17 +71,18 @@ public class CrapVisual extends EntityVisual
 				m_crap.canHit(false);
 			}
 			
-			
-			width = width *  m_scaleFactor;
-			hight = hight *  m_scaleFactor;
-			
+			float width =	bs.getWidth();
+			float height = 	bs.getHeight();	
+			width *= m_scaleFactor;
+			height *= m_scaleFactor;
+			m_crap.setBoundingBox(width, height );
 		}
 		else if ( m_crap.m_state == Crap.State.Splat )
 		{
 			m_animationPlayer.select(ANIM_HIT);
 		}
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, width, hight, m_animationPlayer.getTextureRegion( deltaTime ) );
+		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_animationPlayer.getTextureRegion( deltaTime ) );
 
 	}
 

@@ -64,8 +64,6 @@ public class CrapAI extends FiniteStateMachine
 	class Hitting extends FSMState implements EntityEventListener
 	{
 		
-		private float m_fallingTime     = 0;
-		
 		
 		@Override
 		public void activate()
@@ -77,7 +75,7 @@ public class CrapAI extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
-			m_fallingTime     = 0;
+		
 		}
 		
 		@Override
@@ -97,7 +95,7 @@ public class CrapAI extends FiniteStateMachine
 			{
 				// if it collides with Pedestrian it splats
 				Entity collider = ( (CollisionEvent)event ).m_collider;
-				if(collider instanceof Pedestrian)
+				if(collider instanceof Crappable)
 				{
 					collider.sendEvent( Crapped.class );
 					transitionTo( Splat.class );
@@ -109,8 +107,6 @@ public class CrapAI extends FiniteStateMachine
 	//--------------------------------------------------------------------------------
 	class Falling extends FSMState
 	{
-		private float m_fallingTime     = 0;
-	
 		
 		@Override
 		public void activate()
@@ -121,7 +117,7 @@ public class CrapAI extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
-			m_fallingTime     = 0;
+			
 		}
 		
 		@Override
@@ -160,7 +156,7 @@ public class CrapAI extends FiniteStateMachine
 		{
 			m_fallingTime     = m_fallingTime + deltaTime;
 			
-			if ( m_fallingTime >= 0.2f )
+			if ( m_fallingTime >= 0.25f )
 			{
 				// ok - we can remove the crap - it went out of the visibility scope
 				die();

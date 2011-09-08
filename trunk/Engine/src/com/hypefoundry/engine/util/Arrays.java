@@ -3,6 +3,8 @@ package com.hypefoundry.engine.util;
 import java.util.Comparator;
 
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleAffector;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleEmitter;
 
 /**
  * 
@@ -166,6 +168,60 @@ public final class Arrays
 				newArray[i] = array[i];
 			}
 			newArray[array.length] = val;
+		}
+		
+		return newArray;
+	}
+
+	/**
+	 * Appends a particle emitter to an array, resizing it.
+	 * 
+	 * @param array
+	 * @return resized array
+	 */
+	public static ParticleEmitter[] append( ParticleEmitter[] array, ParticleEmitter obj ) 
+	{
+		ParticleEmitter[] newArray = null;
+		if ( array == null )
+		{
+			newArray = new ParticleEmitter[1];
+			newArray[0] = obj;
+		}
+		else
+		{
+			newArray = new ParticleEmitter[ array.length + 1 ];
+			for ( int i = 0; i < array.length; ++i )
+			{
+				newArray[i] = array[i];
+			}
+			newArray[array.length] = obj;
+		}
+		
+		return newArray;
+	}
+	
+	/**
+	 * Appends a particle emitter to an array, resizing it.
+	 * 
+	 * @param array
+	 * @return resized array
+	 */
+	public static ParticleAffector[] append( ParticleAffector[] array, ParticleAffector obj ) 
+	{
+		ParticleAffector[] newArray = null;
+		if ( array == null )
+		{
+			newArray = new ParticleAffector[1];
+			newArray[0] = obj;
+		}
+		else
+		{
+			newArray = new ParticleAffector[ array.length + 1 ];
+			for ( int i = 0; i < array.length; ++i )
+			{
+				newArray[i] = array[i];
+			}
+			newArray[array.length] = obj;
 		}
 		
 		return newArray;

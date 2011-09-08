@@ -42,7 +42,7 @@ public class FiniteStateMachine extends EntityController
 			// we want to activate a state - deactivate the old state
 			if ( m_activeState != null )
 			{
-				m_activeState.deactivate();
+				m_activeState.deactivateState();
 			}
 			
 			// activate the new state
@@ -50,7 +50,7 @@ public class FiniteStateMachine extends EntityController
 			m_stateToActivate = null;
 			if ( m_activeState != null )
 			{
-				m_activeState.activate();
+				m_activeState.activateState();
 			}
 		}
 		

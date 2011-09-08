@@ -14,7 +14,7 @@ import com.hypefoundry.engine.game.Updatable;
  */
 public abstract class EntityController implements Updatable 
 {
-	protected Entity		m_entity;
+	public Entity		m_entity;
 	
 	/**
 	 * Constructor.

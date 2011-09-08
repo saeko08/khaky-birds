@@ -71,14 +71,12 @@ public class CrapAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_crap.m_state = Crap.State.Hitting;
-			m_crap.attachEventListener( this );
 		
 		}
 		
 		@Override
 		public void deactivate()
 		{
-			m_crap.detachEventListener( this );
 			m_fallingTime     = 0;
 		}
 		
@@ -117,8 +115,7 @@ public class CrapAI extends FiniteStateMachine
 		@Override
 		public void activate()
 		{
-			m_crap.m_state = Crap.State.Falling;
-				
+			m_crap.m_state = Crap.State.Falling;		
 		}
 		
 		@Override

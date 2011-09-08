@@ -42,9 +42,6 @@ public class PedestrianAI extends FiniteStateMachine
 		@Override
 		public void activate()
 		{
-			// register events listeners
-			m_pedestrian.attachEventListener( this );
-			
 			m_sb.begin().wander().faceMovementDirection();
 			
 
@@ -54,9 +51,6 @@ public class PedestrianAI extends FiniteStateMachine
 		public void deactivate()
 		{
 			m_sb.clear();
-			
-			// remove events listeners
-			m_pedestrian.detachEventListener( this );
 		}
 		
 		@Override

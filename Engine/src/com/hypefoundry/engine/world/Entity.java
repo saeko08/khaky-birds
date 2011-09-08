@@ -163,6 +163,24 @@ public abstract class Entity
 	}
 	
 	/**
+	 * Sets the bounding box of the entity.
+	 * 
+	 * @param width
+	 * @param height
+	 */
+	public final void setBoundingBox( float width, float height )
+	{
+		float halfWidth = width * 0.5f;
+		float halfHeight = height * 0.5f;
+		m_bb.m_minX = -halfWidth;
+		m_bb.m_maxX = halfWidth;
+		m_bb.m_minY = -halfHeight;
+		m_bb.m_maxY = halfHeight;
+		
+		updateWorldBounds();
+	}
+	
+	/**
 	 * Returns the entity's bounding shape.
 	 * 
 	 * @return

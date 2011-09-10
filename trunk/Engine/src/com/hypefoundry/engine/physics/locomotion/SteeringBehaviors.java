@@ -24,6 +24,7 @@ public class SteeringBehaviors implements Updatable
 	// behaviors indices
 	private final Seek							m_seek = new Seek();
 	private final Pursuit						m_pursuit = new Pursuit();
+	private final Circle						m_circle = new Circle();
 	private final Wander						m_wander = new Wander();
 	private final FaceMovementDirection 		m_faceMovementDirection = new FaceMovementDirection();
 	private final LookAt						m_lookAt = new LookAt();
@@ -31,6 +32,7 @@ public class SteeringBehaviors implements Updatable
 	private SteeringBehavior[]					m_behaviors = {
 			m_seek, 
 			m_pursuit,
+			m_circle,
 			m_wander,
 			m_faceMovementDirection,
 			m_lookAt
@@ -118,6 +120,46 @@ public class SteeringBehaviors implements Updatable
 			
 			// regular seek
 			super.update( movable, deltaTime );
+		}
+	};
+	
+	// ------------------------------------------------------------------------
+	
+	class Circle extends SteeringBehavior
+	{
+		private Vector3 	m_tmpDir = new Vector3();
+		private Vector3 	m_tmpVel = new Vector3();
+		private Vector3 	m_tmpCentrifugalVel = new Vector3();
+		Vector3				m_anchorPt = new Vector3();
+		private float		m_radius;
+		
+		
+		void activate( Vector3 anchorPt, float radius )
+		{
+			m_isActive = true;
+			m_anchorPt.set( anchorPt );
+			m_radius = radius;
+		}
+		
+		@Override
+		void update( DynamicObject movable, float deltaTime )
+		{
+			m_tmpDir.set( m_anchorPt ).sub( m_entity.getPosition() );
+			
+			// calculate the centrifugal velocity
+			float dist = m_tmpDir.set( m_anchorPt ).sub( m_entity.getPosition() ).mag2D();
+			m_tmpDir.normalized2D( m_tmpCentrifugalVel );
+			float distToRad = dist - m_radius;
+			m_tmpCentrifugalVel.scale( distToRad );
+			
+			// calculate the pushing velocity
+			m_tmpDir.normalize2D().cross( Vector3.EZ, m_tmpVel );
+			
+			// add the two together and scale them to match the movement speed
+			m_tmpDir.set( m_tmpCentrifugalVel ).add( m_tmpVel ).normalize2D().scale( movable.m_linearSpeed );
+			
+			// set the speed
+			movable.m_velocity.set( m_tmpDir );
 		}
 	};
 	
@@ -260,7 +302,7 @@ public class SteeringBehaviors implements Updatable
 	public SteeringBehaviors seek( Vector3 goal )
 	{
 		// deactivate other movement related behaviors
-		m_pursuit.m_isActive = false;
+		disableMovementBehaviors();
 				
 		// activate the seek behavior
 		m_seek.activate( goal, 1.0f );
@@ -281,7 +323,7 @@ public class SteeringBehaviors implements Updatable
 	public SteeringBehaviors arrive( Vector3 goal, float breakDistanceFactor )
 	{
 		// deactivate other movement related behaviors
-		m_pursuit.m_isActive = false;
+		disableMovementBehaviors();
 		
 		// activate the seek behavior
 		m_seek.activate( goal, breakDistanceFactor );
@@ -290,8 +332,7 @@ public class SteeringBehaviors implements Updatable
 	}
 	
 	/**
-	 * Makes the entity rush towards the specified goal position, and arrive at that position
-	 * gently by breaking at the very last moment
+	 * Makes the entity chase another entity.
 	 * 
 	 * @param goal
 	 * 
@@ -300,10 +341,29 @@ public class SteeringBehaviors implements Updatable
 	public SteeringBehaviors pursuit( Entity goal )
 	{
 		// deactivate other movement related behaviors
-		m_seek.m_isActive = false;
+		disableMovementBehaviors();
 		
 		// activate the pursuit behavior
 		m_pursuit.activate( goal );
+				
+		return this;
+	}
+	
+	/**
+	 * Makes the entity circle around a point.
+	 * 
+	 * @param anchorPt
+	 * @oaram radius
+	 * 
+	 * @return instance to self, allowing to chain commands
+	 */
+	public SteeringBehaviors circle( Vector3 anchorPt, float radius )
+	{
+		// deactivate other movement related behaviors
+		disableMovementBehaviors();
+		
+		// activate the circling behavior
+		m_circle.activate( anchorPt, radius );
 				
 		return this;
 	}
@@ -352,6 +412,16 @@ public class SteeringBehaviors implements Updatable
 	{
 		m_lookAt.activate( lookAtVec );
 		return this;
+	}
+	
+	/**
+	 * Disable all movement behaviors.
+	 */
+	private void disableMovementBehaviors()
+	{
+		m_seek.m_isActive = false;
+		m_pursuit.m_isActive = false;
+		m_circle.m_isActive = false;
 	}
 }
 

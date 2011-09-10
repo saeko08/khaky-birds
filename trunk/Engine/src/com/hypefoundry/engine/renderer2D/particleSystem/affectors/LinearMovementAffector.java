@@ -16,38 +16,38 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
  */
 public class LinearMovementAffector implements ParticleAffector
 {
-	private Vector3			m_speed;
-	private Vector3			m_tmpSpeed = new Vector3();
+	private Vector3			m_velocity;
+	private Vector3			m_tmpVelocity = new Vector3();
 	
 	/**
 	 * Default constructor.
 	 */
 	public LinearMovementAffector()
 	{
-		m_speed = new Vector3();
+		m_velocity = new Vector3();
 	}
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param speed
+	 * @param velocity
 	 */
-	public LinearMovementAffector( Vector3 speed )
+	public LinearMovementAffector( Vector3 velocity )
 	{
-		m_speed = speed;
+		m_velocity = velocity;
 	}
 	
 	@Override
 	public void update( float deltaTime, Particle particle ) 
 	{
-		m_tmpSpeed.set( m_speed ).scale( deltaTime );
-		particle.m_position.add( m_tmpSpeed );
+		m_tmpVelocity.set( m_velocity ).scale( deltaTime );
+		particle.m_velocity.add( m_tmpVelocity );
 	}
 
 	@Override
 	public void load( DataLoader loader ) 
 	{
-		m_speed.load( "speed", loader );
+		m_velocity.load( "velocity", loader );
 	}
 
 }

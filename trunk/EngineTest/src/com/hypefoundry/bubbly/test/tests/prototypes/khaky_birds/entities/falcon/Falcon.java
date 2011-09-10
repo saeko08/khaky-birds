@@ -29,9 +29,6 @@ public class Falcon extends Entity
 	public World 	m_world    				     = null;
 	private Random m_randStartSideX              = new Random();
 	private Random m_randStartPosY               = new Random();
-	private Random m_randChasingChance           = new Random();
-	private Falcon m_falcon						 = null;
-	private Bird m_bird                          = null;
 
 	
 	public enum State
@@ -67,14 +64,12 @@ public class Falcon extends Entity
 	public void onAddedToWorld( World hostWorld )
 	{
 		m_world = hostWorld;
-		m_bird = (Bird) m_world.findEntity(Bird.class);
 		
 		float worldWidth = m_world.getWidth();
 		float worldHeight = m_world.getHeight();
 		
 		int startSideX = m_randStartSideX.nextInt(2);
 		int startPosY = m_randStartPosY.nextInt((int) worldHeight);
-		int chasingChance = m_randChasingChance.nextInt(6);
 		
 		
 		if (startSideX == 0 )
@@ -83,14 +78,6 @@ public class Falcon extends Entity
 			
 			setPosition( -2, startPosY, -1);
 			this.rotate(0);
-			
-			if (m_bird!=null)
-			{
-				if (chasingChance == 0 )
-				{
-					m_isChasing = true;
-				}
-			}
 		}
 		else
 		{
@@ -98,23 +85,8 @@ public class Falcon extends Entity
 			
 			setPosition( worldWidth + 2, startPosY, -1 );
 			this.rotate(-180);
-			
-			if (m_bird!=null)
-			{
-				if (chasingChance == 0 )
-				{
-					m_isChasing = true;
-				}
-			}
 		}
 	}
 	
-	@Override
-	public void onRemovedFromWorld( World hostWorld ) 
-	{
-		m_falcon = new Falcon();
-		
-		m_world.addEntity( m_falcon );
-	}
 
 }

@@ -176,6 +176,17 @@ public final class Vector3
 	}
 	
 	/**
+	 * Calculates a 2D magnitude of the vector.
+	 *  
+	 * @return
+	 */
+	public float mag2D() 
+	{
+		float mag = (float) Math.sqrt( m_x*m_x + m_y*m_y );
+		return mag;
+	}
+	
+	/**
 	 * Scales the vector uniformally in three directions.
 	 * @param s
 	 * @return  this vector

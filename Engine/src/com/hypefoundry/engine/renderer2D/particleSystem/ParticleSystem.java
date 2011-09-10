@@ -5,21 +5,21 @@ package com.hypefoundry.engine.renderer2D.particleSystem;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.hypefoundry.engine.core.Resource;
-import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.util.Arrays;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
-import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.engine.world.serialization.EntityFactory;
 
 import com.hypefoundry.engine.renderer2D.particleSystem.emitters.*;
 import com.hypefoundry.engine.renderer2D.particleSystem.affectors.*;
 import com.hypefoundry.engine.renderer2D.particleSystem.particles.*;
 
+
+interface AbstractParticlesFactory
+{
+	ParticlesFactory create();
+}
 
 /**
  * A tool for creating visual effects that involve may small bitmaps moving around.
@@ -55,13 +55,14 @@ public class ParticleSystem extends Resource
 			m_factory = factory;
 		}
 	}
+
 	
 	static class ParticlesFactoryData
 	{
 		Class< ? extends Particle >				m_type;
-		ParticlesFactory						m_factory;
+		AbstractParticlesFactory				m_factory;
 		
-		ParticlesFactoryData( Class< ? extends Particle > type, ParticlesFactory factory )
+		ParticlesFactoryData( Class< ? extends Particle > type, AbstractParticlesFactory factory )
 		{
 			m_type = type;
 			m_factory = factory;
@@ -72,7 +73,8 @@ public class ParticleSystem extends Resource
 	// REGISTER EMITTERS HERE
 	// ------------------------------------------------------------------------
 	static private EmittersFactoryData[]			m_emittersFactories = {
-			new EmittersFactoryData( PointParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new PointParticleEmitter(); } } ),
+			new EmittersFactoryData( RadialParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new RadialParticleEmitter(); } } ),
+			new EmittersFactoryData( DirectionalParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new DirectionalParticleEmitter(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
@@ -86,16 +88,24 @@ public class ParticleSystem extends Resource
 	// REGISTER PARTICLES HERE
 	// ------------------------------------------------------------------------
 	static private ParticlesFactoryData[]			m_particlesFactories = {
-		new ParticlesFactoryData( AnimatedParticle.class, new ParticlesFactory() { @Override public Particle create() { return new AnimatedParticle(); } } ),
-		new ParticlesFactoryData( TexturedParticle.class, new ParticlesFactory() { @Override public Particle create() { return new TexturedParticle(); } } ),
+		new ParticlesFactoryData( AnimatedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new AnimatedParticleFactory(); } } ),
+		new ParticlesFactoryData( TexturedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new TexturedParticleFactory(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
 	// members
 	// ------------------------------------------------------------------------
-	private ParticleEmitter[] 				m_emitters 		= new ParticleEmitter[0];
-	private ParticleAffector[] 				m_affectors 	= new ParticleAffector[0];
-	private Particle[]						m_particles;
+	ParticleEmitter[] 						m_emitters 		= new ParticleEmitter[0];
+	ParticleAffector[] 						m_affectors 	= new ParticleAffector[0];
+	int										m_maxParticles;					
+	
+	/**
+	 * Default constructor ( required by the resources manager ).
+	 */
+	public ParticleSystem()
+	{
+		m_maxParticles = 0;
+	}
 	
 	/**
 	 * Constructor.
@@ -104,7 +114,7 @@ public class ParticleSystem extends Resource
 	 */
 	public ParticleSystem( int maxParticles )
 	{
-		m_particles = new Particle[maxParticles];
+		m_maxParticles = maxParticles;
 	}
 	
 	/**
@@ -117,7 +127,6 @@ public class ParticleSystem extends Resource
 		if ( emitter != null )
 		{
 			m_emitters = Arrays.append( m_emitters, emitter );
-			emitter.onAttached( this );
 		}
 	}
 	
@@ -131,90 +140,6 @@ public class ParticleSystem extends Resource
 		if ( affector != null )
 		{
 			m_affectors = Arrays.append( m_affectors, affector );
-		}
-	}
-	
-	/**
-	 * A method that allows the emitters to register the particles they create with the system.
-	 */
-	void addParticle( Particle particle )
-	{
-		for ( int i = 0; i < m_particles.length; ++i )
-		{
-			if ( m_particles[i] == null )
-			{
-				m_particles[i] = particle;
-				break;
-			}
-		}
-	}
-	
-	/**
-	 * Returns the number of currently spawned particles.
-	 * 
-	 * @return
-	 */
-	public int getActiveParticles( Particle[] particles )
-	{
-		int count = 0;
-		for ( int i = 0; i < m_particles.length; ++i )
-		{
-			if ( m_particles[i] != null && m_particles[i].m_timeToLive > 0 )
-			{
-				particles[count] = m_particles[i];
-				++count;
-			}
-		}
-		return count;
-	}
-	
-	/**
-	 * Simulates the particle system.
-	 * 
-	 * @param deltaTime
-	 */
-	public void simulate( float deltaTime ) 
-	{
-		// update the affectors
-		Particle particle = null;
-		for ( int j = 0; j < m_particles.length; ++j )
-		{
-			particle = m_particles[j];
-			if ( particle.m_timeToLive > 0 )
-			{
-				for ( int i = 0; i < m_affectors.length; ++i )
-				{
-					m_affectors[i].update( deltaTime, particle );
-				}
-			}
-		}
-				
-		// update the emitters
-		for ( int i = 0; i < m_emitters.length; ++i )
-		{
-			m_emitters[i].update( deltaTime );
-		}
-	}
-
-	/**
-	 * Renders the particle system.
-	 * 
-	 * @param batcher
-	 * @param deltaTime
-	 */
-	public void draw( SpriteBatcher batcher, float deltaTime ) 
-	{
-		simulate( deltaTime );
-		
-		// render the particles
-		Particle particle = null;
-		for ( int i = 0; i < m_particles.length; ++i )
-		{
-			particle = m_particles[i];
-			if ( particle != null )
-			{
-				particle.draw( batcher, deltaTime );
-			}
 		}
 	}
 	
@@ -238,6 +163,8 @@ public class ParticleSystem extends Resource
 		DataLoader psNode = XMLDataLoader.parse( stream, "ParticleSystem" );
 		if ( psNode != null )
 		{
+			m_maxParticles = psNode.getIntValue( "maxParticles" );
+			
 			// load the emitters
 			for( DataLoader child = psNode.getChild( "Emitter" ); child != null; child = child.getSibling() )
 			{
@@ -326,7 +253,7 @@ public class ParticleSystem extends Resource
 			ParticlesFactoryData data = m_particlesFactories[i];
 			if ( data.m_type.getSimpleName().equals( particleType ) )
 			{
-				return data.m_factory;
+				return data.m_factory.create();
 			}
 		}
 		

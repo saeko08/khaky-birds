@@ -4,7 +4,6 @@
 package com.hypefoundry.engine.renderer2D.particleSystem;
 
 import com.hypefoundry.engine.core.ResourceManager;
-import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 
 /**
@@ -15,22 +14,57 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
  */
 public abstract class ParticleEmitter 
 {
-	private float 			m_emissionFrequency;
-	private float			m_timeToLive;
-	private int				m_numEmittedEachTick;
+	protected int				m_particlesCount;
+	private float 				m_emissionFrequency;
+	private float				m_timeToLive;
+	private int					m_numEmittedEachTick;
+	private float				m_particleWidth;
+	private float				m_particleHeight;
 	
-	private Particle[]		m_particles;
-	private float			m_timeElapsed;
+	private float				m_timeElapsed;
+	private ParticlesFactory 	m_factory;
 	
 	/**
 	 * Constructor.
 	 */
 	public ParticleEmitter( ) 
 	{
+		m_particlesCount = 0;
 		m_emissionFrequency = 0;
 		m_timeToLive = 0;
 		m_numEmittedEachTick = 0;
+		m_particleWidth = 0;
+		m_particleHeight = 0;
 		m_timeElapsed = 0;
+		m_factory = null;
+	}
+	
+	/**
+	 * Sets the total emitted particles count and the factory that cretes them.
+	 * 
+	 * @param val
+	 * @param factory
+	 * @return
+	 */
+	public ParticleEmitter setParticlesCount( int val, ParticlesFactory factory )
+	{
+		m_particlesCount = val;
+		m_factory = factory;
+		return this;
+	}
+	
+	/**
+	 * Sets particle size.
+	 * 
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	public ParticleEmitter setParticleSize( float width, float height )
+	{
+		m_particleWidth = width;
+		m_particleHeight = height;
+		return this;
 	}
 	
 	/**
@@ -44,20 +78,6 @@ public abstract class ParticleEmitter
 		return this;
 	}
 	
-	/**
-	 * Sets the amount of particles this emitter can emit at most.
-	 * 
-	 * @param val
-	 */
-	public ParticleEmitter setParticlesCount( int maxParticles, ParticlesFactory factory )
-	{
-		m_particles = new Particle[maxParticles];
-		for ( int i = 0; i < m_particles.length; ++i )
-		{
-			m_particles[i] = new Particle();
-		}
-		return this;
-	}
 	
 	/**
 	 * Sets the wait period between subsequent particle emissions.
@@ -80,26 +100,37 @@ public abstract class ParticleEmitter
 		m_numEmittedEachTick = val;
 		return this;
 	}
-
+	
+	
 	/**
-	 * Called when the emitter is added to the particle system
+	 * Called when a player receives a particle system to play
+	 * and needs to get its particles initialized
 	 * 
-	 * @param ps
+	 * @param particles
+	 * @param startIdx
+	 * @return	number of particles added
 	 */
-	void onAttached( ParticleSystem ps )
+	int onPlayerAttached( Particle[] particles, int startIdx )
 	{
-		for ( int i = 0; i < m_particles.length; ++i )
+		for ( int i = 0; i < m_particlesCount; ++i )
 		{
-			ps.addParticle( m_particles[i] );
+			particles[i + startIdx] = m_factory.create();
+			particles[i + startIdx].m_width = m_particleWidth;
+			particles[i + startIdx].m_height = m_particleHeight;
 		}
+		
+		return m_particlesCount;
 	}
 
 	/**
 	 * Manages the particles, spawning new ones and removing the old ones.
 	 * 
 	 * @param deltaTime
+	 * @param particles
+	 * @param firstParticleIdx
+	 * @param lastParticleIdx
 	 */
-	void update( float deltaTime )
+	void update( float deltaTime, Particle[] particles, int firstParticleIdx, int lastParticleIdx )
 	{			
 		int toBeReborn = 0;
 		m_timeElapsed += deltaTime;
@@ -110,15 +141,14 @@ public abstract class ParticleEmitter
 		}
 		
 		// change the remaining life time of the particles
-		for ( int i = 0; i < m_particles.length; ++i )
+		for ( int i = firstParticleIdx; i < lastParticleIdx; ++i )
 		{
-			m_particles[i].m_timeToLive -= deltaTime;
-			if ( m_particles[i].m_timeToLive < 0 && toBeReborn > 0 )
+			if ( particles[i].m_timeToLive <= 0 && toBeReborn > 0 )
 			{
-				m_particles[i].m_timeToLive = m_timeToLive;
+				particles[i].m_timeToLive = m_timeToLive;
 				--toBeReborn;
 				
-				initialize( m_particles[i] );
+				initialize( i, particles[i] );
 			}
 		}
 	}
@@ -126,10 +156,10 @@ public abstract class ParticleEmitter
 	/**
 	 * Initializes the particle.
 	 * 
-	 * @param particle
+	 * @param particleIdx
 	 * @param particle
 	 */
-	protected abstract void initialize( Particle particle );
+	protected abstract void initialize( int particleIdx, Particle particle );
 	
 	/**
 	 * Loads the emitter definition from a stream.
@@ -142,17 +172,16 @@ public abstract class ParticleEmitter
 		// load the basic parameters
 		m_emissionFrequency 			= loader.getFloatValue( "frequency" );
 		m_timeToLive 					= loader.getFloatValue( "timeToLive" );
+		m_particleWidth					= loader.getFloatValue( "width" );
+		m_particleHeight				= loader.getFloatValue( "height" );
 		m_numEmittedEachTick			= loader.getIntValue( "amountEmittedEachTick" );
-		int particlesCount				= loader.getIntValue( "totalAmount" );
-		String particleType				= loader.getStringValue( "particleType" );
-		ParticlesFactory factory		= ParticleSystem.findParticleFactory( particleType );
-		setParticlesCount( particlesCount, factory );
+		m_particlesCount				= loader.getIntValue( "totalAmount" );
 		
-		// initialize the particles
-		for ( int i = 0; i < m_particles.length; ++i )
-		{
-			m_particles[i].load( loader, resMgr );
-		}
+		// create the particles
+		String particleType				= loader.getStringValue( "particleType" );
+		m_factory						= ParticleSystem.findParticleFactory( particleType );
+		m_factory.load( loader, resMgr );
+
 		
 		// load the implementation specific data
 		onLoad( loader );

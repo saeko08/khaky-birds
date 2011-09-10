@@ -3,6 +3,9 @@
  */
 package com.hypefoundry.engine.renderer2D.particleSystem;
 
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.util.serialization.DataLoader;
+
 
 /**
  * This factory creates particles of the specific type.
@@ -18,4 +21,12 @@ public interface ParticlesFactory
 	 * @return
 	 */
 	Particle create();
+	
+	/**
+	 * Loads the particle definition from a stream.
+	 * 
+	 * @param loader
+	 * @param resMgr
+	 */
+	void load( DataLoader loader, ResourceManager resMgr );
 }

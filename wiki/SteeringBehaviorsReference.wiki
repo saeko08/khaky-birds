@@ -72,6 +72,20 @@ public SteeringBehaviors wander( Vector3 initialDir );
 public SteeringBehaviors pursuit( Entity goal )
 }}}
 
+  * circle
+
+{{{
+/**
+ * Makes the entity circle around a point.
+ * 
+ * @param anchorPt
+ * @oaram radius
+ * 
+ * @return instance to self, allowing to chain commands
+ */
+public SteeringBehaviors circle( Vector3 anchorPt, float radius )
+}}}
+
   * faceMovementDirection
 
 {{{

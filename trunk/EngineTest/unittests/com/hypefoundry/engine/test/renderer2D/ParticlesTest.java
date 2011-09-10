@@ -40,20 +40,17 @@ public class ParticlesTest extends AndroidTestCase
 	// ------------------------------------------------------------------------
 	
 	public void testPointEmitter()
-	{		
-		int maxParticles = 5;
-		Particle[] particles = new Particle[maxParticles];
-		
+	{			
 		int maxAliveParticles = 5;
 		float emissionFrequency = 0.1f;
 		float timeToLive = 10;
-		ParticleSystem ps = new ParticleSystem( maxParticles );
+		ParticleSystem ps = new ParticleSystem();
 		ps.addEmitter( new RadialParticleEmitter( new Vector3(), 0 )
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( emissionFrequency )
 							.setParticlesCount( maxAliveParticles, new ParticlesFactoryStub() )
 							.setTimeToLive( timeToLive ) );
-		
+		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
 		
 		// no particles are spawned at first
@@ -67,9 +64,7 @@ public class ParticlesTest extends AndroidTestCase
 	public void testMultipleEmitters()
 	{
 		int maxParticles = 10;
-		Particle[] particles = new Particle[maxParticles];
-		
-		ParticleSystem ps = new ParticleSystem( maxParticles );
+		ParticleSystem ps = new ParticleSystem();
 		ps.addEmitter( new RadialParticleEmitter( new Vector3( 1, 0, 0 ), 0 )
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 1 )
@@ -81,6 +76,7 @@ public class ParticlesTest extends AndroidTestCase
 							.setParticlesCount( maxParticles / 2, new ParticlesFactoryStub() )
 							.setTimeToLive( 10 ) );
 		
+		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
 		
 		// no particles are spawned at first
@@ -95,16 +91,15 @@ public class ParticlesTest extends AndroidTestCase
 	
 	public void testParticleMovement()
 	{
-		int maxParticles = 1;
-		Particle[] particles = new Particle[maxParticles];
-		
-		ParticleSystem ps = new ParticleSystem( maxParticles );
+
+		ParticleSystem ps = new ParticleSystem();
 		ps.addEmitter( new DirectionalParticleEmitter( new Vector3(), new Vector3( 1, 0, 0 ) )							
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 0.1f )
-							.setParticlesCount( maxParticles, new ParticlesFactoryStub() )
+							.setParticlesCount( 1, new ParticlesFactoryStub() )
 							.setTimeToLive( 10 ) );
-	
+		
+		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
 		
 		player.simulate( 0.2f );
@@ -118,17 +113,15 @@ public class ParticlesTest extends AndroidTestCase
 	
 	public void testParticleAffector()
 	{
-		int maxParticles = 1;
-		Particle[] particles = new Particle[maxParticles];
-		
-		ParticleSystem ps = new ParticleSystem( maxParticles );
+		int maxParticles = 1;		
+		ParticleSystem ps = new ParticleSystem();
 		ps.addEmitter( new RadialParticleEmitter( new Vector3(), 0 )							
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 0.1f )
 							.setParticlesCount( maxParticles, new ParticlesFactoryStub() )
 							.setTimeToLive( 10 ) );
 		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ) );
-	
+		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
 		
 		player.simulate( 0.2f );
@@ -143,16 +136,14 @@ public class ParticlesTest extends AndroidTestCase
 	public void testParticleRebirth()
 	{
 		int maxParticles = 1;
-		Particle[] particles = new Particle[maxParticles];
-		
-		ParticleSystem ps = new ParticleSystem( maxParticles );
+		ParticleSystem ps = new ParticleSystem( );
 		ps.addEmitter( new RadialParticleEmitter( new Vector3(), 0 )							
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 0.1f )
 							.setParticlesCount( maxParticles, new ParticlesFactoryStub() )
 							.setTimeToLive( 1 ) );
 		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ) );
-	
+		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
 		
 		player.simulate( 0.2f );
@@ -177,17 +168,15 @@ public class ParticlesTest extends AndroidTestCase
 	
 	public void testUnloopedPlayback()
 	{
-		int maxParticles = 1;
-		Particle[] particles = new Particle[maxParticles];
-		
-		ParticleSystem ps = new ParticleSystem( maxParticles );
+		int maxParticles = 1;		
+		ParticleSystem ps = new ParticleSystem();
 		ps.addEmitter( new RadialParticleEmitter( new Vector3(), 0 )							
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 0.1f )
 							.setParticlesCount( maxParticles, new ParticlesFactoryStub() )
 							.setTimeToLive( 1 ) );
 		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ) );
-	
+		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, false );
 		
 		player.simulate( 0.2f );

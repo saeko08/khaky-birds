@@ -11,6 +11,8 @@ import com.hypefoundry.engine.renderer2D.Animation;
 import com.hypefoundry.engine.renderer2D.AnimationPlayer;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystem;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystemPlayer;
 
 /**
  * Crap visualisation
@@ -19,13 +21,15 @@ import com.hypefoundry.engine.renderer2D.SpriteBatcher;
  */
 public class CrapVisual extends EntityVisual 
 {
-	private AnimationPlayer	m_animationPlayer;
+	private AnimationPlayer			m_animationPlayer;
+	private int 					ANIM_FALL;
+	private int 					ANIM_HIT;
 	
-	private int 			ANIM_FALL;
-	private int 			ANIM_HIT;
-	private Crap            m_crap;
-	float                  m_scaleFactor = 1.f;
-	float                  m_scaleCounter = 0.05f;
+	private ParticleSystemPlayer	m_crapHitFx;
+	
+	private Crap            		m_crap;
+	float                  			m_scaleFactor = 1.f;
+	float                  			m_scaleCounter = 0.05f;
 
 	/**
 	 * Constructor.
@@ -39,13 +43,17 @@ public class CrapVisual extends EntityVisual
 		m_crap = (Crap)entity;
 		
 		// load animations
-			Animation fallingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/fallingShit.xml");
-			Animation hittingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/hittingShit.xml");	
+		Animation fallingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/fallingShit.xml");
+		Animation hittingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/hittingShit.xml");	
 			
-			// create an animation player
-			m_animationPlayer = new AnimationPlayer();
-			ANIM_FALL = m_animationPlayer.addAnimation( fallingShit );
-			ANIM_HIT = m_animationPlayer.addAnimation( hittingShit );
+		// create an animation player
+		m_animationPlayer = new AnimationPlayer();
+		ANIM_FALL = m_animationPlayer.addAnimation( fallingShit );
+		ANIM_HIT = m_animationPlayer.addAnimation( hittingShit );
+		
+		// load the fx
+		ParticleSystem crapHitFx = resMgr.getResource( ParticleSystem.class, "khaky_birds_prototype/fx/crapHit.xml" );
+		m_crapHitFx = new ParticleSystemPlayer( crapHitFx, false );
 	}
 
 	@Override
@@ -83,7 +91,12 @@ public class CrapVisual extends EntityVisual
 		}
 		
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_animationPlayer.getTextureRegion( deltaTime ) );
-
+		
+		// draw the fx
+		if ( m_crap.m_state == Crap.State.Splat )
+		{
+			m_crapHitFx.draw( pos.m_x, pos.m_y, batcher, deltaTime );
+		}
 	}
 
 }

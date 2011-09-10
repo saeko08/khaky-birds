@@ -23,12 +23,14 @@ public class SteeringBehaviors implements Updatable
 	
 	// behaviors indices
 	private final Seek							m_seek = new Seek();
+	private final Pursuit						m_pursuit = new Pursuit();
 	private final Wander						m_wander = new Wander();
 	private final FaceMovementDirection 		m_faceMovementDirection = new FaceMovementDirection();
 	private final LookAt						m_lookAt = new LookAt();
 	
 	private SteeringBehavior[]					m_behaviors = {
 			m_seek, 
+			m_pursuit,
 			m_wander,
 			m_faceMovementDirection,
 			m_lookAt
@@ -55,8 +57,8 @@ public class SteeringBehaviors implements Updatable
 	class Seek extends SteeringBehavior
 	{
 		private Vector3 	m_tmpDir = new Vector3();
-		public Vector3		m_staticGoal = new Vector3();
-		private float		m_breakDistanceFactor;
+		Vector3				m_staticGoal = new Vector3();
+		float				m_breakDistanceFactor;
 		
 		void activate( Vector3 goal, float breakDistanceFactor )
 		{
@@ -84,6 +86,38 @@ public class SteeringBehaviors implements Updatable
 			m_tmpDir.normalize2D().scale( desiredSpeed );
 			
 			movable.m_velocity.set( m_tmpDir );
+		}
+	};
+	
+	// ------------------------------------------------------------------------
+	
+	class Pursuit extends Seek
+	{
+		private Entity			m_goal;
+		private DynamicObject	m_goalDO;
+		
+		void activate( Entity goal )
+		{
+			m_isActive = true;
+			m_goal = goal;
+			m_goalDO = goal.query( DynamicObject.class );
+			m_breakDistanceFactor = 1;
+		}
+		
+		@Override
+		void update( DynamicObject movable, float deltaTime )
+		{
+			if ( m_goalDO != null )
+			{
+				m_staticGoal.set( m_goalDO.m_velocity ).scale( deltaTime ).add( m_goal.getPosition() );
+			}
+			else
+			{
+				m_staticGoal.set( m_goal.getPosition() );
+			}
+			
+			// regular seek
+			super.update( movable, deltaTime );
 		}
 	};
 	
@@ -225,6 +259,10 @@ public class SteeringBehaviors implements Updatable
 	 */
 	public SteeringBehaviors seek( Vector3 goal )
 	{
+		// deactivate other movement related behaviors
+		m_pursuit.m_isActive = false;
+				
+		// activate the seek behavior
 		m_seek.activate( goal, 1.0f );
 		
 		return this;
@@ -242,7 +280,30 @@ public class SteeringBehaviors implements Updatable
 	 */
 	public SteeringBehaviors arrive( Vector3 goal, float breakDistanceFactor )
 	{
+		// deactivate other movement related behaviors
+		m_pursuit.m_isActive = false;
+		
+		// activate the seek behavior
 		m_seek.activate( goal, breakDistanceFactor );
+				
+		return this;
+	}
+	
+	/**
+	 * Makes the entity rush towards the specified goal position, and arrive at that position
+	 * gently by breaking at the very last moment
+	 * 
+	 * @param goal
+	 * 
+	 * @return instance to self, allowing to chain commands
+	 */
+	public SteeringBehaviors pursuit( Entity goal )
+	{
+		// deactivate other movement related behaviors
+		m_seek.m_isActive = false;
+		
+		// activate the pursuit behavior
+		m_pursuit.activate( goal );
 				
 		return this;
 	}

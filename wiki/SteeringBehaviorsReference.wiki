@@ -26,6 +26,21 @@ If the entity doesn't have that aspect, it will stay imprevious to any movement 
 public SteeringBehaviors seek( Vector3 goal )
 }}}
 
+  * arrive
+{{{
+/**
+ * Makes the entity rush towards the specified goal position, and arrive at that position
+ * gently by breaking at the very last moment
+ * 
+ * @param goal
+ * @param breakDistanceFactor		factor which tells how far before the goal the breaking 
+ * process should begin ( the larger the number, the earlier it will start )
+ * 
+ * @return instance to self, allowing to chain commands
+ */
+public SteeringBehaviors arrive( Vector3 goal, float breakDistanceFactor )
+}}}
+
   * wander ( there are 2 versions of this behavior )
 {{{
 /**
@@ -42,6 +57,19 @@ public SteeringBehaviors wander();
  * @return instance to self, allowing to chain commands
  */
 public SteeringBehaviors wander( Vector3 initialDir );
+}}}
+
+  * pursuit
+
+{{{
+/**
+ * Makes the entity chase another entity.
+ * 
+ * @param goal
+ * 
+ * @return instance to self, allowing to chain commands
+ */
+public SteeringBehaviors pursuit( Entity goal )
 }}}
 
   * faceMovementDirection

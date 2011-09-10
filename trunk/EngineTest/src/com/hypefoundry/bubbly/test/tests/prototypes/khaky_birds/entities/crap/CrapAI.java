@@ -31,7 +31,6 @@ public class CrapAI extends FiniteStateMachine
 	private Crap				m_crap;
 	private World 				m_world;
 	private SteeringBehaviors	m_sb;
-	private Pedestrian          m_pedestrian         = null;
 
 	/**
 	 * Constructor
@@ -54,27 +53,17 @@ public class CrapAI extends FiniteStateMachine
 		begin( Falling.class );
 		
 		// define events the entity responds to
-	
-		m_crap.registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
-			
+		m_crap.registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );	
 	}
 	
 	//----------------------------------------------------------------------------
 	
 	class Hitting extends FSMState implements EntityEventListener
 	{
-		
-		
 		@Override
 		public void activate()
 		{
 			m_crap.m_state = Crap.State.Hitting;
-		
-		}
-		
-		@Override
-		public void deactivate()
-		{
 		
 		}
 		
@@ -107,7 +96,6 @@ public class CrapAI extends FiniteStateMachine
 	//--------------------------------------------------------------------------------
 	class Falling extends FSMState
 	{
-		
 		@Override
 		public void activate()
 		{
@@ -115,20 +103,12 @@ public class CrapAI extends FiniteStateMachine
 		}
 		
 		@Override
-		public void deactivate()
-		{
-			
-		}
-		
-		@Override
 		public void execute( float deltaTime )
 		{
-			
 			if (m_crap.m_canHit == true)
 			{
 				transitionTo( Hitting.class );
 			}
-			
 		}
 	}
 	//--------------------------------------------------------------------------------
@@ -142,7 +122,6 @@ public class CrapAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_crap.m_state = Crap.State.Splat;
-				
 		}
 		
 		@Override

@@ -82,7 +82,7 @@ public class FalconAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_falcon.m_state = Falcon.State.Hunting;
-			m_circlingPt.set( 1, 2, 1);
+			m_circlingPt.set( m_world.getWidth()/2, m_world.getHeight()/2, 1);
 			randomizeCirclingRange();			
 		}
 		

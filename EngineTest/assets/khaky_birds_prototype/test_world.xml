@@ -9,24 +9,38 @@
 		<Cable pos='233'/>
 	</Entity>
 	
-	<Entity type="Pedestrian" facing='180.0' >
-		<localBounds minX='-0.5' minY='-0.5' minZ='-0.5' maxX='0.5' maxY='0.5' maxZ='0.5' />
-		<position x='3' y='5' z='80' />
-		<DynamicObject rotation='-45.0'>
-			<velocity  x='1' y='0' z='0' />
-		</DynamicObject>
+	<Entity type="Pedestrian">
+		<position x='1' y='1' z='80' />
 	</Entity>
-	<Entity type="Pedestrian" />
-	<Entity type="Pedestrian" />
-	<Entity type="Pedestrian" />
-	<Entity type="Pedestrian" />
-	<Entity type="Pedestrian" />
-	<Entity type="Pedestrian" />
-	<Entity type="Pedestrian" />
-	<Entity type="Pedestrian" />
-	<Entity type="Pedestrian" />
+	
+	<Entity type="Pedestrian">
+		<position x='2' y='1' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian">
+		<position x='3' y='1' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian":
+		<position x='1' y='3' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian":
+		<position x='2' y='3' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian":
+		<position x='3' y='3' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian":
+		<position x='2' y='4' z='80' />
+	</Entity>
 	
 	<Entity type="Bird" />
 	<Entity type="Falcon" />
+	<Entity type="Hunter">
+		<position x='2' y='2' z='80' />
+	</Entity>
 	
 </World>

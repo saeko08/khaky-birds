@@ -97,7 +97,7 @@ public class ParticleSystem extends Resource
 	// ------------------------------------------------------------------------
 	ParticleEmitter[] 						m_emitters 		= new ParticleEmitter[0];
 	ParticleAffector[] 						m_affectors 	= new ParticleAffector[0];
-	int										m_maxParticles;					
+	public int								m_maxParticles;					
 	
 	/**
 	 * Default constructor ( required by the resources manager ).
@@ -107,15 +107,6 @@ public class ParticleSystem extends Resource
 		m_maxParticles = 0;
 	}
 	
-	/**
-	 * Constructor.
-	 * 
-	 * @param maxParticles
-	 */
-	public ParticleSystem( int maxParticles )
-	{
-		m_maxParticles = maxParticles;
-	}
 	
 	/**
 	 * Adds a new particle emitter.
@@ -127,6 +118,7 @@ public class ParticleSystem extends Resource
 		if ( emitter != null )
 		{
 			m_emitters = Arrays.append( m_emitters, emitter );
+			m_maxParticles += emitter.m_particlesCount;
 		}
 	}
 	
@@ -163,7 +155,7 @@ public class ParticleSystem extends Resource
 		DataLoader psNode = XMLDataLoader.parse( stream, "ParticleSystem" );
 		if ( psNode != null )
 		{
-			m_maxParticles = psNode.getIntValue( "maxParticles" );
+			m_maxParticles = 0;
 			
 			// load the emitters
 			for( DataLoader child = psNode.getChild( "Emitter" ); child != null; child = child.getSibling() )
@@ -175,6 +167,9 @@ public class ParticleSystem extends Resource
 					ParticleEmitter emitter = factory.create();
 					emitter.load( child, m_resMgr );
 					addEmitter( emitter );
+					
+					// sum up the number of particles the system will operate on 
+					m_maxParticles += emitter.m_particlesCount;
 				}
 			}	
 			

@@ -28,6 +28,7 @@ public class SteeringBehaviors implements Updatable
 	private final Wander						m_wander = new Wander();
 	private final FaceMovementDirection 		m_faceMovementDirection = new FaceMovementDirection();
 	private final LookAt						m_lookAt = new LookAt();
+	private final ActiveLookAt					m_activeLookAt = new ActiveLookAt();
 	
 	private SteeringBehavior[]					m_behaviors = {
 			m_seek, 
@@ -35,7 +36,8 @@ public class SteeringBehaviors implements Updatable
 			m_circle,
 			m_wander,
 			m_faceMovementDirection,
-			m_lookAt
+			m_lookAt, 
+			m_activeLookAt
 	};
 
 	
@@ -230,6 +232,29 @@ public class SteeringBehaviors implements Updatable
 	
 	// ------------------------------------------------------------------------
 	
+	class ActiveLookAt extends LookAt
+	{
+		private Entity		m_goal;
+		private Vector3		m_tmpDir = new Vector3();
+		
+		
+		void activate( Entity goal )
+		{
+			m_isActive = true;
+			m_goal = goal;
+		}
+		
+		@Override
+		void update( DynamicObject movable, float deltaTime ) 
+		{
+			m_tmpDir.set( m_goal.getPosition() ).sub( m_entity.getPosition() );
+			super.activate( m_tmpDir );
+			super.update( movable, deltaTime );
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
 	/**
 	 * Constructor.
 	 * 
@@ -411,6 +436,18 @@ public class SteeringBehaviors implements Updatable
 	public SteeringBehaviors lookAt( Vector3 lookAtVec ) 
 	{
 		m_lookAt.activate( lookAtVec );
+		return this;
+	}
+	
+	/**
+	 * Makes the entity rotate so that it's looking at the specified 
+	 * 
+	 * @param goal
+	 * @return instance to self, allowing to chain commands
+	 */
+	public SteeringBehaviors lookAt( Entity goal ) 
+	{
+		m_activeLookAt.activate( goal );
 		return this;
 	}
 	

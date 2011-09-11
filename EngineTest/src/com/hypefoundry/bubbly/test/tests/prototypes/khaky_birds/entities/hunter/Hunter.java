@@ -3,12 +3,15 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter;
 
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.World;
 
 /**
  * Hunter that tries to shoot the bird down.
@@ -18,6 +21,10 @@ import com.hypefoundry.engine.world.Entity;
  */
 public class Hunter extends Entity  implements Crappable
 {
+	
+	private Vector3 			m_tmpBulletPos 		= new Vector3();
+	public World 				m_world    			= null;
+	
 	enum State
 	{
 		Aiming,
@@ -44,6 +51,23 @@ public class Hunter extends Entity  implements Crappable
 
 	}
 	
+	@Override
+	public void onAddedToWorld( World hostWorld )
+	{		
+		m_world = hostWorld;
+	}
+	
+	/**
+	 *Hunter make a  Shoot
+	 */
+	public void Shoot() 
+	{
+		Vector3 hunterPos = getPosition();
+		//float m_facing = getFacing();
+		
+		m_tmpBulletPos.set(Vector3.EX).rotateZ( getFacing() ).scale(0.3f).add( hunterPos );		
+		m_world.addEntity( new Bullet( m_tmpBulletPos.m_x, m_tmpBulletPos.m_y, getFacing() ) );
+	}
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{

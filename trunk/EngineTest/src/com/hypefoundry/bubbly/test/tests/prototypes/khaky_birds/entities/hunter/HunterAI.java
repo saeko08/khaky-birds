@@ -89,6 +89,11 @@ public class HunterAI extends FiniteStateMachine
 	
 	class Shooting extends FSMState implements EntityEventListener
 	{	
+		
+		private float m_shootingDelay			= 1.5f;
+		private float m_shootingDelayCounter	= 0.0f;
+		
+		
 		@Override
 		public void activate()
 		{
@@ -100,6 +105,7 @@ public class HunterAI extends FiniteStateMachine
 		public void deactivate()
 		{
 			m_sb.clear();
+			m_shootingDelayCounter	= 0.0f;
 		}
 		
 		@Override
@@ -109,6 +115,16 @@ public class HunterAI extends FiniteStateMachine
 			{
 				// keep monitoring the bird's position, because we may need to start aiming
 				float angleDiff = MathLib.lookAtDiff( m_bird.getPosition(), m_hunter.getPosition(), m_hunter.m_facing );
+				
+				m_shootingDelayCounter	= m_shootingDelayCounter + deltaTime;
+				
+				if (m_shootingDelayCounter >= m_shootingDelay)
+				{
+					m_shootingDelayCounter = 0;
+					
+					m_hunter.Shoot();
+				}
+				
 				if ( angleDiff > MAX_AIM_TOLERANCE )
 				{
 					transitionTo( Aiming.class );

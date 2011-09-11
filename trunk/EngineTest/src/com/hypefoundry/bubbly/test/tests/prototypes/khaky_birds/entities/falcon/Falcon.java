@@ -43,8 +43,6 @@ public class Falcon extends Entity
 	{
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -1f, 0.2f, 0.2f, 1f ) );	// TODO: config
 		
-		// define events the entity responds to
-		registerEvent( Shocked.class, new EventFactory< Shocked >() { @Override public Shocked createObject() { return new Shocked (); } } );
 				
 		m_state = State.Hunting; 
 		

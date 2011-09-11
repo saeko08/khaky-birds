@@ -7,6 +7,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 import java.util.List;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Eaten;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shocked;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
@@ -146,7 +147,7 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Eaten || event instanceof Shocked )
+			if ( event instanceof Eaten || event instanceof Shocked || event instanceof Shot)
 			{
 				die();
 			}
@@ -183,9 +184,9 @@ public class BirdController extends FiniteStateMachine
 		}
 		
 		@Override
-		public void onEvent( EntityEvent event ) 
+		public void onEvent( EntityEvent event  ) 
 		{
-			if ( event instanceof Eaten )
+			if ( event instanceof Eaten || event instanceof Shot)
 			{
 				die();
 			}
@@ -336,7 +337,7 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Eaten )
+			if ( event instanceof Eaten || event instanceof Shot )
 			{
 				die();
 			}
@@ -390,7 +391,7 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Eaten || event instanceof Shocked )
+			if ( event instanceof Eaten || event instanceof Shocked || event instanceof Shot )
 			{
 				die();
 			}
@@ -428,6 +429,7 @@ public class BirdController extends FiniteStateMachine
 		// define events the entity responds to
 		m_bird.registerEvent( Eaten.class, new EventFactory< Eaten >() { @Override public Eaten createObject() { return new Eaten (); } } );
 		m_bird.registerEvent( Shocked.class, new EventFactory< Shocked >() { @Override public Shocked createObject() { return new Shocked (); } } );
+		m_bird.registerEvent( Shot.class, new EventFactory< Shot >() { @Override public Shot createObject() { return new Shot (); } } );
 	
 	}
 	

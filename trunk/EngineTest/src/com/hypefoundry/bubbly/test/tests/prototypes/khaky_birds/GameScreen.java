@@ -20,6 +20,8 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.FalconVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.Ground;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.GroundVisual;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Bullet;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.BulletVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Hunter;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.HunterAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.HunterVisual;
@@ -77,6 +79,7 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Crap.class, new EntityFactory() { @Override public Entity create() { return new Crap(); } } );
 		m_world.registerEntity( Falcon.class, new EntityFactory() { @Override public Entity create() { return new Falcon(); } } );
 		m_world.registerEntity( Hunter.class, new EntityFactory() { @Override public Entity create() { return new Hunter(); } } );
+		m_world.registerEntity( Bullet.class, new EntityFactory() { @Override public Entity create() { return new Bullet(); } } );
 		
 		// load the world
 		try 
@@ -103,6 +106,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Crap.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Falcon.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FalconVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Hunter.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new HunterVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Bullet.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BulletVisual( m_resourceManager, parentEntity ); } } );
 
 		// register controllers
 		m_controllersView = new ControllersView( this );
@@ -126,6 +130,7 @@ public class GameScreen extends Screen
 		m_physicsView.register( Crap.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Falcon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Hunter.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( Bullet.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		
 		// register the updatables
 		addUpdatable( m_world );

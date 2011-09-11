@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shocked;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
@@ -58,6 +59,7 @@ public class FalconAI extends FiniteStateMachine
 		
 		// define events the entity responds to
 		m_falcon.registerEvent( Shocked.class, new EventFactory< Shocked >() { @Override public Shocked createObject() { return new Shocked (); } } );
+		m_falcon.registerEvent( Shot.class, new EventFactory< Shot >() { @Override public Shot createObject() { return new Shot (); } } );
 		m_falcon.registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
 		m_falcon.registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
 			
@@ -167,7 +169,7 @@ public class FalconAI extends FiniteStateMachine
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Shocked )
+			if ( event instanceof Shocked || event instanceof Shot)
 			{
 				die();
 			}

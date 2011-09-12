@@ -74,6 +74,45 @@ You can also specify whether the animation should be played in a looped mode or 
 That tag has children - `<TextureRegion>` tags, each of which describes a region in a texture where an animation frame is located.
 The order of the tags specifies the order in which the key frames will be played.
 
+==Animation events==
+
+Each `TextureRegion` tag can contain a number of `<Event>` tags. Those allow you to define *animation events*.
+
+You can define an event like so:
+{{{
+<TextureRegion x='761' y='235' w='31' h='31'>
+	<Event type="Fire"/>
+</TextureRegion>
+}}}
+
+This particular frame of animation will emit an `EntityEvent` of type `Fire`.
+
+In order for an entity to be able to receive those events, you need to register them with it - and here's a little surprise - you only need to register event `AnimEvent` like so:
+{{{
+m_entity.registerEvent( AnimEvent.class, new EventFactory< AnimEvent >() { @Override public AnimEvent createObject() { return new AnimEvent (); } } );
+}}}
+
+and from that point on you can receive any event you wish.
+
+However - you also need to tell the deserializer that if it encounters this type of event, it should use a specific class for it.
+You do it like so:
+{{{
+Animation.registerAnimEvent( Fire.class, new AnimEventFactory() { @Override public EntityEvent create() { return new Fire(); } } );
+}}}
+
+The method is static and tells the `Animation` resource that if it encounters a type matching the event name, it should create an instance like that.
+
+Here's the method's signature:
+{{{
+/**
+ * Registers a new type of event the animations can send to entities.
+ * 
+ * @param type
+ * @param factory
+ */
+public static void registerAnimEvent( Class< ? extends EntityEvent > type, AnimEventFactory factory )
+}}}
+
 ===Playing animation===
 A resource can't be played by itself. In order to be played, we need to memorize the time of the animation somewhere, and since an animation is a resource, shared between many interested visuals that want to display it, it doesn't fit to keep such a runtime info in a static by nature instance.
 

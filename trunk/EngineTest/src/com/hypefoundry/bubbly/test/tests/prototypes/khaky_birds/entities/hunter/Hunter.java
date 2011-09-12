@@ -60,7 +60,7 @@ public class Hunter extends Entity  implements Crappable
 	/**
 	 *Hunter make a  Shoot
 	 */
-	public void Shoot() 
+	public void shoot() 
 	{
 		Vector3 hunterPos = getPosition();
 		//float m_facing = getFacing();
@@ -68,6 +68,7 @@ public class Hunter extends Entity  implements Crappable
 		m_tmpBulletPos.set(Vector3.EX).rotateZ( getFacing() ).scale(0.3f).add( hunterPos );		
 		m_world.addEntity( new Bullet( m_tmpBulletPos.m_x, m_tmpBulletPos.m_y, getFacing() ) );
 	}
+	
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{

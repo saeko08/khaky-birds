@@ -22,6 +22,7 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.GroundVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Bullet;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.BulletVisual;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Fire;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Hunter;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.HunterAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.HunterVisual;
@@ -37,6 +38,7 @@ import com.hypefoundry.engine.controllers.EntityControllerFactory;
 import com.hypefoundry.engine.util.FPSCounter;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
 import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.world.World;
@@ -48,6 +50,8 @@ import com.hypefoundry.engine.physics.bodies.CollisionBody;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.EntityVisualFactory;
 import com.hypefoundry.engine.renderer2D.Renderer2D;
+import com.hypefoundry.engine.renderer2D.animation.AnimEventFactory;
+import com.hypefoundry.engine.renderer2D.animation.Animation;
 
 public class GameScreen extends Screen 
 {
@@ -80,6 +84,9 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Falcon.class, new EntityFactory() { @Override public Entity create() { return new Falcon(); } } );
 		m_world.registerEntity( Hunter.class, new EntityFactory() { @Override public Entity create() { return new Hunter(); } } );
 		m_world.registerEntity( Bullet.class, new EntityFactory() { @Override public Entity create() { return new Bullet(); } } );
+		
+		// register animation events
+		Animation.registerAnimEvent( Fire.class, new AnimEventFactory() { @Override public EntityEvent create() { return new Fire(); } } );
 		
 		// load the world
 		try 

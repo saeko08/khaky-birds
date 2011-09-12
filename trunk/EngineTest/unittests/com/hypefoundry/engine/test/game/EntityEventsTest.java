@@ -1,5 +1,6 @@
 package com.hypefoundry.engine.test.game;
 
+import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventException;
@@ -20,6 +21,9 @@ public class EntityEventsTest extends AndroidTestCase
 		{
 			m_someData = someData;
 		}
+		
+		@Override
+		public void deserialize( DataLoader loader ) {}
 	}
 	
 	// ------------------------------------------------------------------------

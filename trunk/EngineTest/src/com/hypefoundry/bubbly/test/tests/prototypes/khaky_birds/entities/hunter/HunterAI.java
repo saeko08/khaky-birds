@@ -14,6 +14,7 @@ import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
+import com.hypefoundry.engine.renderer2D.animation.AnimEvent;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
@@ -38,9 +39,7 @@ public class HunterAI extends FiniteStateMachine
 	// ------------------------------------------------------------------------
 	
 	class Aiming extends FSMState implements EntityEventListener
-	{	
-		private Vector3 m_tmpDirVec 		= new Vector3();
-		
+	{			
 		@Override
 		public void activate()
 		{
@@ -89,11 +88,6 @@ public class HunterAI extends FiniteStateMachine
 	
 	class Shooting extends FSMState implements EntityEventListener
 	{	
-		
-		private float m_shootingDelay			= 1.5f;
-		private float m_shootingDelayCounter	= 0.0f;
-		
-		
 		@Override
 		public void activate()
 		{
@@ -105,7 +99,6 @@ public class HunterAI extends FiniteStateMachine
 		public void deactivate()
 		{
 			m_sb.clear();
-			m_shootingDelayCounter	= 0.0f;
 		}
 		
 		@Override
@@ -115,15 +108,6 @@ public class HunterAI extends FiniteStateMachine
 			{
 				// keep monitoring the bird's position, because we may need to start aiming
 				float angleDiff = MathLib.lookAtDiff( m_bird.getPosition(), m_hunter.getPosition(), m_hunter.m_facing );
-				
-				m_shootingDelayCounter	= m_shootingDelayCounter + deltaTime;
-				
-				if (m_shootingDelayCounter >= m_shootingDelay)
-				{
-					m_shootingDelayCounter = 0;
-					
-					m_hunter.Shoot();
-				}
 				
 				if ( angleDiff > MAX_AIM_TOLERANCE )
 				{
@@ -139,6 +123,14 @@ public class HunterAI extends FiniteStateMachine
 			{
 				// a bird crapped on us
 				transitionTo( Shitted.class );
+			}
+			else if ( event instanceof AnimEvent )
+			{
+				AnimEvent animEvent = (AnimEvent)event;
+				if ( animEvent.m_event instanceof Fire )
+				{
+					m_hunter.shoot();
+				}
 			}
 		}
 	}
@@ -184,6 +176,7 @@ public class HunterAI extends FiniteStateMachine
 		
 		// define events the entity responds to
 		m_hunter.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
+		m_hunter.registerEvent( AnimEvent.class, new EventFactory< AnimEvent >() { @Override public AnimEvent createObject() { return new AnimEvent (); } } );
 
 		// setup the state machine
 		register( new Aiming() );

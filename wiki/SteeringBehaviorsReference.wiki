@@ -15,7 +15,9 @@ If the entity doesn't have that aspect, it will stay imprevious to any movement 
 *CAUTION* :The behavior instance needs to be *updated* each tick.
 
 ==Behaviors list==
+
   * seek
+
 {{{
 /**
  * Makes the entity rush towards the specified goal position.
@@ -27,6 +29,7 @@ public SteeringBehaviors seek( Vector3 goal )
 }}}
 
   * arrive
+
 {{{
 /**
  * Makes the entity rush towards the specified goal position, and arrive at that position
@@ -41,7 +44,21 @@ public SteeringBehaviors seek( Vector3 goal )
 public SteeringBehaviors arrive( Vector3 goal, float breakDistanceFactor )
 }}}
 
+  * flee
+
+{{{
+/**
+ * Makes the entity flee from the specified point.
+ * 
+ * @param from
+ * 
+ * @return instance to self, allowing to chain commands
+ */
+public SteeringBehaviors flee( Vector3 from )
+}}}
+
   * wander ( there are 2 versions of this behavior )
+
 {{{
 /**
  * Makes the entity wander around aimlessly.
@@ -70,6 +87,19 @@ public SteeringBehaviors wander( Vector3 initialDir );
  * @return instance to self, allowing to chain commands
  */
 public SteeringBehaviors pursuit( Entity goal )
+}}}
+
+  * evade
+
+{{{
+/**
+ * Makes the entity run away from another entity.
+ * 
+ * @param pursuer
+ * 
+ * @return instance to self, allowing to chain commands
+ */
+public SteeringBehaviors evade( Entity pursuer )
 }}}
 
   * circle

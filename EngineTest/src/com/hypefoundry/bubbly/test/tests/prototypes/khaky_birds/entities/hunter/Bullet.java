@@ -21,7 +21,7 @@ import com.hypefoundry.engine.world.World;
 public class Bullet extends Entity implements EntityEventListener
 {
 
-	public final float m_speed 			 = 4.0f;
+	public final float maxLinearSpeed 			 = 4.0f;
 	public World 	m_world    				     = null;
 	public float m_facing					     = 0;
 	/**
@@ -44,7 +44,6 @@ public class Bullet extends Entity implements EntityEventListener
 		setFacing (facing);
 		m_facing = facing;
 		
-		final float maxLinearSpeed = 4.0f;
 		final float maxRotationSpeed = 180.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 		

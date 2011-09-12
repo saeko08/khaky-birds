@@ -3,8 +3,6 @@
  */
 package com.hypefoundry.engine.physics.locomotion;
 
-import java.util.*;
-
 import com.hypefoundry.engine.game.Updatable;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
@@ -23,7 +21,9 @@ public class SteeringBehaviors implements Updatable
 	
 	// behaviors indices
 	private final Seek							m_seek = new Seek();
+	private final Flee							m_flee = new Flee();
 	private final Pursuit						m_pursuit = new Pursuit();
+	private final Evade							m_evade = new Evade();
 	private final Circle						m_circle = new Circle();
 	private final Wander						m_wander = new Wander();
 	private final FaceMovementDirection 		m_faceMovementDirection = new FaceMovementDirection();
@@ -32,7 +32,9 @@ public class SteeringBehaviors implements Updatable
 	
 	private SteeringBehavior[]					m_behaviors = {
 			m_seek, 
+			m_flee,
 			m_pursuit,
+			m_evade,
 			m_circle,
 			m_wander,
 			m_faceMovementDirection,
@@ -95,6 +97,31 @@ public class SteeringBehaviors implements Updatable
 	
 	// ------------------------------------------------------------------------
 	
+	class Flee extends SteeringBehavior
+	{
+		private Vector3 	m_tmpDir = new Vector3();
+		Vector3				m_fromPt = new Vector3();
+		
+		void activate( Vector3 from )
+		{
+			m_isActive = true;
+			m_fromPt.set( from );
+		}
+		
+		@Override
+		void update( DynamicObject movable, float deltaTime )
+		{
+			Vector3 currPos = m_entity.getPosition();
+			m_tmpDir.set( currPos ).sub( m_fromPt );
+			m_tmpDir.m_z = 0;
+			
+			m_tmpDir.normalize2D().scale( movable.m_linearSpeed );
+			movable.m_velocity.set( m_tmpDir );
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
 	class Pursuit extends Seek
 	{
 		private Entity			m_goal;
@@ -124,6 +151,37 @@ public class SteeringBehaviors implements Updatable
 			super.update( movable, deltaTime );
 		}
 	};
+	
+	// ------------------------------------------------------------------------
+	
+	class Evade extends Flee
+	{
+		private Entity			m_pursuer;
+		private DynamicObject	m_pursuerDO;
+		
+		void activate( Entity pursuer )
+		{
+			m_isActive = true;
+			m_pursuer = pursuer;
+			m_pursuerDO = pursuer.query( DynamicObject.class );
+		}
+		
+		@Override
+		void update( DynamicObject movable, float deltaTime )
+		{
+			if ( m_pursuerDO != null )
+			{
+				m_fromPt.set( m_pursuerDO.m_velocity ).scale( deltaTime ).add( m_pursuer.getPosition() );
+			}
+			else
+			{
+				m_fromPt.set( m_pursuer.getPosition() );
+			}
+			
+			// regular seek
+			super.update( movable, deltaTime );
+		}
+	}
 	
 	// ------------------------------------------------------------------------
 	
@@ -325,10 +383,7 @@ public class SteeringBehaviors implements Updatable
 	 * @return instance to self, allowing to chain commands
 	 */
 	public SteeringBehaviors seek( Vector3 goal )
-	{
-		// deactivate other movement related behaviors
-		disableMovementBehaviors();
-				
+	{				
 		// activate the seek behavior
 		m_seek.activate( goal, 1.0f );
 		
@@ -346,13 +401,25 @@ public class SteeringBehaviors implements Updatable
 	 * @return instance to self, allowing to chain commands
 	 */
 	public SteeringBehaviors arrive( Vector3 goal, float breakDistanceFactor )
-	{
-		// deactivate other movement related behaviors
-		disableMovementBehaviors();
-		
+	{		
 		// activate the seek behavior
 		m_seek.activate( goal, breakDistanceFactor );
 				
+		return this;
+	}
+	
+	/**
+	 * Makes the entity flee from the specified point.
+	 * 
+	 * @param from
+	 * 
+	 * @return instance to self, allowing to chain commands
+	 */
+	public SteeringBehaviors flee( Vector3 from )
+	{
+		// activate the flee behavior
+		m_flee.activate( from );
+		
 		return this;
 	}
 	
@@ -364,12 +431,24 @@ public class SteeringBehaviors implements Updatable
 	 * @return instance to self, allowing to chain commands
 	 */
 	public SteeringBehaviors pursuit( Entity goal )
-	{
-		// deactivate other movement related behaviors
-		disableMovementBehaviors();
-		
+	{		
 		// activate the pursuit behavior
 		m_pursuit.activate( goal );
+				
+		return this;
+	}
+	
+	/**
+	 * Makes the entity run away from another entity.
+	 * 
+	 * @param pursuer
+	 * 
+	 * @return instance to self, allowing to chain commands
+	 */
+	public SteeringBehaviors evade( Entity pursuer )
+	{		
+		// activate the evade behavior
+		m_evade.activate( pursuer );
 				
 		return this;
 	}
@@ -383,10 +462,7 @@ public class SteeringBehaviors implements Updatable
 	 * @return instance to self, allowing to chain commands
 	 */
 	public SteeringBehaviors circle( Vector3 anchorPt, float radius )
-	{
-		// deactivate other movement related behaviors
-		disableMovementBehaviors();
-		
+	{	
 		// activate the circling behavior
 		m_circle.activate( anchorPt, radius );
 				
@@ -449,16 +525,6 @@ public class SteeringBehaviors implements Updatable
 	{
 		m_activeLookAt.activate( goal );
 		return this;
-	}
-	
-	/**
-	 * Disable all movement behaviors.
-	 */
-	private void disableMovementBehaviors()
-	{
-		m_seek.m_isActive = false;
-		m_pursuit.m_isActive = false;
-		m_circle.m_isActive = false;
 	}
 }
 

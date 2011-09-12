@@ -17,10 +17,11 @@ import com.hypefoundry.engine.world.Entity;
  */
 public class BulletVisual  extends EntityVisual
 {
-	private TextureRegion		m_pixmap;
-	private Bullet           	m_bullet;
-	private	Vector3 m_velocity  = new Vector3();
-	private float m_facing       = 0;
+	private TextureRegion m_pixmap;
+	private Bullet        m_bullet;
+	private	Vector3 m_velocity 		 = new Vector3();
+	private	Vector3 m_tempvelocity   = new Vector3();
+	private float m_facing           = 0;
 	
 	/**
 	 * Constructor.
@@ -47,9 +48,10 @@ public class BulletVisual  extends EntityVisual
 		
 		
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
-	
-		m_velocity.scale(deltaTime * m_bullet.m_speed);	
-		m_entity.translate(m_velocity.m_x, m_velocity.m_y, 0 );
+		
+		m_tempvelocity.set(m_velocity);
+		m_tempvelocity.scale(deltaTime * m_bullet.maxLinearSpeed);	
+		m_entity.translate(m_tempvelocity.m_x, m_tempvelocity.m_y, 0 );
 		
 		
 		

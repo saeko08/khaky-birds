@@ -48,7 +48,7 @@ public class BulletVisual  extends EntityVisual
 		
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
 	
-		m_velocity.scale(deltaTime * m_bullet.maxLinearSpeed);	
+		m_velocity.scale(deltaTime * m_bullet.m_speed);	
 		m_entity.translate(m_velocity.m_x, m_velocity.m_y, 0 );
 		
 		

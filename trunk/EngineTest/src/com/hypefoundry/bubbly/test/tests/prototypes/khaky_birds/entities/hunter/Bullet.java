@@ -5,6 +5,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter
 
 
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.events.CollisionEvent;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.world.Entity;
@@ -20,7 +21,7 @@ import com.hypefoundry.engine.world.World;
 public class Bullet extends Entity implements EntityEventListener
 {
 
-	public final float maxLinearSpeed 			 = 4.0f;
+	public final float m_speed 			 = 4.0f;
 	public World 	m_world    				     = null;
 	public float m_facing					     = 0;
 	/**
@@ -42,6 +43,11 @@ public class Bullet extends Entity implements EntityEventListener
 		setPosition( x, y, 0 );
 		setFacing (facing);
 		m_facing = facing;
+		
+		final float maxLinearSpeed = 4.0f;
+		final float maxRotationSpeed = 180.0f;
+		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
+		
 		setBoundingBox( new BoundingBox( -0.05f, -0.05f, -10.0f, 0.05f, 0.05f, 10.0f ) );	// TODO: config
 		//register events
 		registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );

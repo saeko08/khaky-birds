@@ -34,7 +34,7 @@ public class BulletVisual  extends EntityVisual
 		m_bullet = (Bullet)entity;
 		m_pixmap = resMgr.getResource( TextureRegion.class, "khaky_birds_prototype/textures/bullet.xml" );
 		m_velocity.set( 1, 0, 0 );
-		m_velocity.rotateZ( m_entity.m_facing );
+		m_velocity.rotateZ( m_entity.getFacing() );
 		
 	}
 

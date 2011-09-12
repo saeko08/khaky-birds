@@ -41,8 +41,7 @@ public class Bullet extends Entity implements EntityEventListener
 	public Bullet( float x, float y, float facing )
 	{
 		setPosition( x, y, 0 );
-		setFacing (facing);
-		m_facing = facing;
+		setFacing( facing );
 		
 		final float maxRotationSpeed = 180.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );

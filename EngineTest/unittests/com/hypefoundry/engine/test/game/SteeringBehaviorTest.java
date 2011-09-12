@@ -77,22 +77,69 @@ public class SteeringBehaviorTest extends AndroidTestCase
 		sb.lookAt( new Vector3( -1.0f, 0.0f, 0.0f ) );
 		
 		// nothing happens without a simulation
-		assertTrue( entity.m_facing == 0.0f );
+		assertTrue( entity.getFacing() == 0.0f );
 		
 		// so simulate the dynamics then - in 0.1s the body should rotate 72 degrees given its rotation speed
 		sb.update( 0.1f );
 		movable.simulate( 0.1f, entity );
-		assertTrue( entity.m_facing == 72.0f );
+		assertTrue( entity.getFacing() == 72.0f );
 		
 		// and so it goes
 		sb.update( 0.1f );
 		movable.simulate( 0.1f, entity );
-		assertTrue( entity.m_facing == 144.0f );
+		assertTrue( entity.getFacing() == 144.0f );
 		
 		// however there's no risk of overshooting
 		sb.update( 0.1f );
 		movable.simulate( 0.1f, entity );
-		assertTrue( entity.m_facing == 180.0f );
+		assertTrue( entity.getFacing() == 180.0f );
+	}
+	
+	public void testLookAtOtherSide()
+	{
+		MobileMock entity = new MobileMock( 1.0f, 720.0f );		
+		SteeringBehaviors sb = new SteeringBehaviors( entity );
+		DynamicObject movable = entity.query( DynamicObject.class );
+		
+		//  look back
+		sb.lookAt( new Vector3( 1, 0, 0 ).rotateZ( 359 ) );
+		
+		// nothing happens without a simulation
+		assertTrue( entity.getFacing() == 0.0f );
+		
+		// so simulate the dynamics then - in 0.1s the body should rotate 72 degrees given its rotation speed
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( Math.abs( entity.getFacing() - 359.0f ) < 1e-3 );
+		
+		// however there's no risk of overshooting
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( Math.abs( entity.getFacing() - 359.0f ) < 1e-3 );
+	}
+	
+	public void testLookAtInverse()
+	{
+		MobileMock entity = new MobileMock( 1.0f, 720.0f );
+		entity.setFacing( 359.0f );
+		SteeringBehaviors sb = new SteeringBehaviors( entity );
+		DynamicObject movable = entity.query( DynamicObject.class );
+		
+		//  look back
+		sb.lookAt( new Vector3( 1, 0, 0 ) );
+		
+		// nothing happens without a simulation
+		assertTrue( entity.getFacing() == 359.0f );
+		
+		// so simulate the dynamics then - in 0.1s the body should rotate 72 degrees given its rotation speed
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( Math.abs( entity.getFacing() ) < 1e-3 );
+		
+		// however there's no risk of overshooting
+		sb.update( 0.1f );
+		movable.simulate( 0.1f, entity );
+		assertTrue( Math.abs( entity.getFacing() ) < 1e-3 );
 	}
 	
 	public void testArrive()

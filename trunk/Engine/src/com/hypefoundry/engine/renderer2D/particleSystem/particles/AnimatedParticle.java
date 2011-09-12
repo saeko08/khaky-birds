@@ -3,9 +3,9 @@
  */
 package com.hypefoundry.engine.renderer2D.particleSystem.particles;
 
-import com.hypefoundry.engine.renderer2D.Animation;
-import com.hypefoundry.engine.renderer2D.AnimationPlayer;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
+import com.hypefoundry.engine.renderer2D.animation.Animation;
+import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
 import com.hypefoundry.engine.renderer2D.particleSystem.Particle;
 
 /**

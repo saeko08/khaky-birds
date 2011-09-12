@@ -4,6 +4,7 @@
 package com.hypefoundry.engine.physics.events;
 
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.EntityEvent;
 
 /**
@@ -57,5 +58,8 @@ public class OutOfWorldBounds implements EntityEvent
 			}
 		}
 	}
+	
+	@Override
+	public void deserialize( DataLoader loader ) {}
 }
 	

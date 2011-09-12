@@ -4,7 +4,7 @@
 package com.hypefoundry.engine.renderer2D.particleSystem.particles;
 
 import com.hypefoundry.engine.core.ResourceManager;
-import com.hypefoundry.engine.renderer2D.Animation;
+import com.hypefoundry.engine.renderer2D.animation.Animation;
 import com.hypefoundry.engine.renderer2D.particleSystem.Particle;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticlesFactory;
 import com.hypefoundry.engine.util.serialization.DataLoader;

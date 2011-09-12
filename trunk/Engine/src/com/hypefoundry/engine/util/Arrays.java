@@ -172,6 +172,33 @@ public final class Arrays
 		
 		return newArray;
 	}
+	
+	/**
+	 * Appends an int to an array, resizing it.
+	 * 
+	 * @param array
+	 * @return resized array
+	 */
+	public static int[] append( int[] array, int val )
+	{
+		int[] newArray = null;
+		if ( array == null )
+		{
+			newArray = new int[1];
+			newArray[0] = val;
+		}
+		else
+		{
+			newArray = new int[ array.length + 1 ];
+			for ( int i = 0; i < array.length; ++i )
+			{
+				newArray[i] = array[i];
+			}
+			newArray[array.length] = val;
+		}
+		
+		return newArray;
+	}
 
 	/**
 	 * Appends a particle emitter to an array, resizing it.
@@ -226,4 +253,5 @@ public final class Arrays
 		
 		return newArray;
 	}
+
 }

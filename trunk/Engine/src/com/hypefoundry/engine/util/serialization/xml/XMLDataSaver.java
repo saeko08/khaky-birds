@@ -119,6 +119,12 @@ public class XMLDataSaver implements DataSaver
 	{
 		m_element.setAttribute( id, value );
 	}
+	
+	@Override
+	public void setBoolValue( String id, boolean value )
+	{
+		m_element.setAttribute( id, value ? "true" : "false" );
+	}
 
 	@Override
 	public void setIntValue( String id, int value ) 

@@ -20,6 +20,23 @@ public interface DataLoader
 	String getStringValue( String id );
 	
 	/**
+	 * Reads a boolean value.
+	 * 
+	 * @param id				element id
+	 * @return
+	 */
+	boolean getBoolValue( String id );
+	
+	/**
+	 * Reads a boolean value and returns a default value if the attribute is not found.
+	 * 
+	 * @param id				element id
+	 * @param defaultValue
+	 * @return
+	 */
+	boolean getBoolValue( String id, boolean defaultValue );
+	
+	/**
 	 * Reads an integer value from the node.
 	 * 
 	 * @param id				element id

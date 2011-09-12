@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.BoundingShape;
+import com.hypefoundry.engine.math.MathLib;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.Pool;
@@ -29,7 +30,7 @@ public abstract class Entity
 	private BoundingBox						m_bb;
 	private BoundingBox						m_worldBB;
 	private Vector3							m_pos;
-	public float							m_facing;
+	private float							m_facing;
 	private List< Aspect >					m_aspects;
 	
 	private List< EventsPool > 				m_eventsPool;
@@ -299,15 +300,7 @@ public abstract class Entity
 	 */
 	public final void setFacing( float facing )
 	{
-		m_facing = facing;
-		while ( m_facing < 0 )
-		{
-			m_facing += 360.0f;
-		}
-		while ( m_facing > 360.0f )
-		{
-			m_facing -= 360.0f;
-		}
+		m_facing = MathLib.normalizeAngle( facing );
 	}
 	
 	/**
@@ -318,14 +311,7 @@ public abstract class Entity
 	public final void rotate( float angle )
 	{
 		m_facing += angle;
-		while ( m_facing < 0 )
-		{
-			m_facing += 360.0f;
-		}
-		while ( m_facing > 360.0f )
-		{
-			m_facing -= 360.0f;
-		}
+		m_facing = MathLib.normalizeAngle( m_facing );
 	}
 
 	/**

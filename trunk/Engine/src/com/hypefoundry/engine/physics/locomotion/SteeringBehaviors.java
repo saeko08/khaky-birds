@@ -4,6 +4,7 @@
 package com.hypefoundry.engine.physics.locomotion;
 
 import com.hypefoundry.engine.game.Updatable;
+import com.hypefoundry.engine.math.MathLib;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.world.Entity;
@@ -263,7 +264,8 @@ public class SteeringBehaviors implements Updatable
 		@Override
 		void update( DynamicObject movable, float deltaTime ) 
 		{
-			float rotationAngle = movable.m_velocity.angleXY() - m_entity.m_facing;
+			float rotationAngle = movable.m_velocity.angleXY() - m_entity.getFacing();
+			rotationAngle = MathLib.getDiffAngle( rotationAngle );
 			movable.m_rotation = movable.getRotationPerFrame( rotationAngle, deltaTime );
 		}
 	};
@@ -283,7 +285,8 @@ public class SteeringBehaviors implements Updatable
 		@Override
 		void update( DynamicObject movable, float deltaTime ) 
 		{
-			float rotationAngle = m_lookAtVec.angleXY() - m_entity.m_facing;
+			float rotationAngle = m_lookAtVec.angleXY() - m_entity.getFacing();
+			rotationAngle = MathLib.getDiffAngle( rotationAngle );
 			movable.m_rotation = movable.getRotationPerFrame( rotationAngle, deltaTime );
 		}
 	};

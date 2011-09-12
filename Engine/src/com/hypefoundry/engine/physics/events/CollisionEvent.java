@@ -3,6 +3,7 @@
  */
 package com.hypefoundry.engine.physics.events;
 
+import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 
@@ -15,4 +16,7 @@ import com.hypefoundry.engine.world.EntityEvent;
 public class CollisionEvent implements EntityEvent 
 {
 	public Entity		m_collider = null;
+	
+	@Override
+	public void deserialize( DataLoader loader ) {}
 }

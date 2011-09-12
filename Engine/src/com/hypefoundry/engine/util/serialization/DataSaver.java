@@ -29,6 +29,14 @@ public interface DataSaver
 	void setStringValue( String id, String value );
 	
 	/**
+	 * Saves a boolean value.
+	 * 
+	 * @param id				element id
+	 * @param value
+	 */
+	void setBoolValue( String id, boolean value );
+	
+	/**
 	 * Saves an integer value.
 	 * 
 	 * @param id				element id

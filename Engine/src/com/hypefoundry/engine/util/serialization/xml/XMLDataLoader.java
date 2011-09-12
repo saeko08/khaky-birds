@@ -114,6 +114,27 @@ public class XMLDataLoader implements DataLoader
 	{
 		return m_xmlElement.getAttribute( id );
 	}
+	
+	@Override
+	public boolean getBoolValue( String id )
+	{
+		String val = m_xmlElement.getAttribute( id );
+		return val.equalsIgnoreCase( "true" );
+	}
+	
+	@Override
+	public boolean getBoolValue( String id, boolean defaultValue )
+	{
+		if ( m_xmlElement.hasAttribute( id ) )
+		{
+			String val = m_xmlElement.getAttribute( id );
+			return val.equalsIgnoreCase( "true" );
+		}
+		else
+		{
+			return defaultValue;
+		}
+	}
 
 	@Override
 	public int getIntValue( String id ) 

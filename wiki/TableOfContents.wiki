@@ -51,6 +51,7 @@
         * [Renderer2DReference#XML_render_state_attrbutes XML render state attrbutes]
       * [Renderer2DReference#Animation Animation]
         * [Renderer2DReference#XML_animation_resource XML animation resource]
+        * [Renderer2DReference#Animation_events Animation events]
         * [Renderer2DReference#Playing_animation Playing animation]
       * [Renderer2DReference#Sprite_batcher Sprite batcher]
       * [Renderer2DReference#Entity_visual Entity visual]

@@ -17,11 +17,10 @@ import com.hypefoundry.engine.world.Entity;
  */
 public class BulletVisual  extends EntityVisual
 {
-	private TextureRegion m_pixmap;
-	private Bullet        m_bullet;
-	private	Vector3 m_velocity 		 = new Vector3();
-	private	Vector3 m_tempvelocity   = new Vector3();
-	private float m_facing           = 0;
+	private TextureRegion 	m_pixmap;
+	private Bullet        	m_bullet;
+	private	Vector3 		m_velocity 		 = new Vector3();
+	private	Vector3 		m_tempVelocity   = new Vector3();
 	
 	/**
 	 * Constructor.
@@ -34,9 +33,8 @@ public class BulletVisual  extends EntityVisual
 		super( entity );
 		m_bullet = (Bullet)entity;
 		m_pixmap = resMgr.getResource( TextureRegion.class, "khaky_birds_prototype/textures/bullet.xml" );
-		m_facing = m_entity.m_facing;
-		m_velocity.set(1, 0, 0);
-		m_velocity.rotateZ(m_facing );
+		m_velocity.set( 1, 0, 0 );
+		m_velocity.rotateZ( m_entity.m_facing );
 		
 	}
 
@@ -46,15 +44,11 @@ public class BulletVisual  extends EntityVisual
 		Vector3 pos = m_entity.getPosition();
 		BoundingShape bs = m_entity.getBoundingShape();
 		
-		
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
 		
-		m_tempvelocity.set(m_velocity);
-		m_tempvelocity.scale(deltaTime * m_bullet.maxLinearSpeed);	
-		m_entity.translate(m_tempvelocity.m_x, m_tempvelocity.m_y, 0 );
-		
-		
-		
+		m_tempVelocity.set( m_velocity );
+		m_tempVelocity.scale( deltaTime * m_bullet.maxLinearSpeed );	
+		m_entity.translate( m_tempVelocity.m_x, m_tempVelocity.m_y, 0 );
 	}
 }
 

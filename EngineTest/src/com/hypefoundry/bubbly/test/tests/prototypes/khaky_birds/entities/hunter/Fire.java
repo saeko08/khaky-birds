@@ -7,11 +7,14 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.EntityEvent;
 
 /**
- * @author azagor
- *
+ * Event telling when a bullet should be fired.
+ * 
+ * @author Paksas
  */
-public class Shot implements EntityEvent
+public class Fire implements EntityEvent 
 {
+
 	@Override
 	public void deserialize(DataLoader loader) {}
+
 }

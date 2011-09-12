@@ -3,14 +3,13 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
-import com.hypefoundry.engine.renderer2D.Animation;
-import com.hypefoundry.engine.renderer2D.AnimationPlayer;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
+import com.hypefoundry.engine.renderer2D.animation.Animation;
+import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
 import com.hypefoundry.engine.world.Entity;
 
 /**
@@ -80,6 +79,6 @@ public class HunterVisual extends EntityVisual
 		}
 		
 		// draw the hunter
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_hunter.m_facing, m_animationPlayer.getTextureRegion( deltaTime ) );	
+		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_hunter.m_facing, m_animationPlayer.getTextureRegion( m_hunter, deltaTime ) );	
 	}
 }

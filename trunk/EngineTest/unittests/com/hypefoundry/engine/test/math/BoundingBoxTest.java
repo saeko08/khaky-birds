@@ -1,6 +1,5 @@
 package com.hypefoundry.engine.test.math;
 
-import junit.framework.Assert;
 import android.test.AndroidTestCase;
 
 import com.hypefoundry.engine.math.BoundingBox;

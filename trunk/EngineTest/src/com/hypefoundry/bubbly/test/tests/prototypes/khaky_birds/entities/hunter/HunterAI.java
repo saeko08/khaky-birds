@@ -65,7 +65,7 @@ public class HunterAI extends FiniteStateMachine
 			if ( m_bird != null )
 			{
 				// look at the bird, but with some tolerance
-				float angleDiff = MathLib.lookAtDiff( m_bird.getPosition(), m_hunter.getPosition(), m_hunter.m_facing );
+				float angleDiff = MathLib.lookAtDiff( m_bird.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
 				if ( angleDiff < MIN_AIM_TOLERANCE )
 				{
 					transitionTo( Shooting.class );
@@ -107,7 +107,7 @@ public class HunterAI extends FiniteStateMachine
 			if ( m_bird != null )
 			{
 				// keep monitoring the bird's position, because we may need to start aiming
-				float angleDiff = MathLib.lookAtDiff( m_bird.getPosition(), m_hunter.getPosition(), m_hunter.m_facing );
+				float angleDiff = MathLib.lookAtDiff( m_bird.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
 				
 				if ( angleDiff > MAX_AIM_TOLERANCE )
 				{

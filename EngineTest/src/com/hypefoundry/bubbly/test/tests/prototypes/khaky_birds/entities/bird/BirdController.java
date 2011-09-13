@@ -42,7 +42,7 @@ public class BirdController extends FiniteStateMachine
 	
 	class Idle extends FSMState implements EntityEventListener
 	{
-		
+		private boolean	m_gestureStarted = false;
 		private	Vector3 m_goToPos  = new Vector3();
 		private	Vector3 m_gestureDir  = new Vector3();
 		
@@ -50,6 +50,7 @@ public class BirdController extends FiniteStateMachine
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Idle;
+			m_gestureStarted = false;
 			
 			// we're not interested in previous duration events
 			m_input.clearTouchDuration();
@@ -58,6 +59,7 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
+			m_gestureStarted = false;
 		}
 		
 		@Override
@@ -76,24 +78,40 @@ public class BirdController extends FiniteStateMachine
 		private void updateInput( float deltaTime ) 
 		{	
 			List< TouchEvent > inputEvents = m_input.getTouchEvents();
+			
+			// first check if we received a double tap event - if so, discard the rest
 			int count = inputEvents.size();
+			for ( int i = 0 ; i < count; ++i )
+			{	
+				TouchEvent lastEvent = inputEvents.get(i);
+				
+				// we double tapped the screen
+				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
+				{
+					transitionTo( Flying.class );
+					return;
+				}
+			}
+			
+			// ok - no double tap was received - start processing the gestures
 			for ( int i = 0 ; i < count; ++i )
 			{	
 				TouchEvent lastEvent = inputEvents.get(i);
 			
 				// maybe we are drawing a gesture
-				if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
+				if ( lastEvent.type == TouchEvent.TOUCH_DOWN && m_gestureStarted == false )
 				{
 					m_dragStart.m_x = lastEvent.x;
 					m_dragStart.m_y = lastEvent.y;
+					m_gestureStarted = true;
+					break;
 				}
 				
 				// we stopped drawing a gesture
-				if ( lastEvent.type == TouchEvent.TOUCH_UP)
+				if ( lastEvent.type == TouchEvent.TOUCH_UP && m_gestureStarted == true )
 				{			
 					float dx = lastEvent.x - m_dragStart.m_x;
-					float dy = lastEvent.y - m_dragStart.m_y;
-					
+					float dy = lastEvent.y - m_dragStart.m_y;	
 					
 					boolean canJump = calculateJumpPosition(dx, dy);
 					if ( canJump )
@@ -101,13 +119,7 @@ public class BirdController extends FiniteStateMachine
 						transitionTo( Jumping.class ).setJumpingPosition( m_goToPos );
 						break;
 					}
-				}
-				
-				// we double tapped the screen
-				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
-				{
-					transitionTo( Flying.class );
-					break;
+					m_gestureStarted = false;
 				}
 			}
 		}
@@ -241,13 +253,14 @@ public class BirdController extends FiniteStateMachine
 	{
 		
 		private	Vector3 m_goToPos  = new Vector3();
-		private	Vector3 m_gestureDir  = new Vector3();
+		private	Vector3 m_tmpPos  = new Vector3();
 		private boolean m_canFly      = false;
 
 		@Override
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Flying;
+			m_canFly = false;
 		}
 		
 		@Override
@@ -261,9 +274,10 @@ public class BirdController extends FiniteStateMachine
 		public void execute( float deltaTime )
 		{
 			updateInput( deltaTime );
-			if(m_canFly)
+			if( m_canFly )
 			{
 				m_sb.begin().arrive( m_goToPos, 1.5f ).faceMovementDirection();
+				m_canFly = false;
 			}
 		}
 		
@@ -271,29 +285,29 @@ public class BirdController extends FiniteStateMachine
 		{	
 			List< TouchEvent > inputEvents = m_input.getTouchEvents();
 			int count = inputEvents.size();
+			
+			// first check if we received a double tap event - if so, discard the rest
+			for ( int i = 0 ; i < count; ++i )
+			{	
+				TouchEvent lastEvent = inputEvents.get(i);
+				
+				// we double tapped the screen
+				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
+				{
+					tryLanding();
+					return;
+				}
+			}
+			
+			// no landing command - look for flight directions 
 			for ( int i = 0 ; i < count; ++i )
 			{	
 				TouchEvent lastEvent = inputEvents.get(i);
 			
 				// maybe we are drawing a gesture
 				if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
-				{
-					m_dragStart.m_x = lastEvent.x;
-					m_dragStart.m_y = lastEvent.y;
-					
-					float dx = lastEvent.x;
-					float dy = lastEvent.y;
-					
-					
-					m_canFly = calculateFlightPosition(dx, dy);
-					
-					
-				}
-				
-				// we double tapped the screen
-				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
-				{
-					tryLanding();
+				{					
+					calculateFlightPosition( lastEvent.x, lastEvent.y );
 					break;
 				}
 			}
@@ -306,33 +320,25 @@ public class BirdController extends FiniteStateMachine
 		 * @param dy
 		 * @return
 		 */
-		private boolean calculateFlightPosition( float dx, float dy ) 
+		private void calculateFlightPosition( float dx, float dy ) 
 		{
-		
 			// change the gesture direction from screen to model space
-			m_gestureDir.set( dx, dy, 0 );
+			m_tmpPos.set( dx, dy, 0 );
 			
 			//m_camera.directionToWorld( m_gestureDir );
-			m_camera.touchToWorld( m_gestureDir );
-			
-			// I need a desired position the gesture points to
-			m_goToPos.set( m_gestureDir );
-			
-			if (m_goToPos != m_bird.getPosition())
+			m_camera.touchToWorld( m_tmpPos );
+						
+			if ( m_tmpPos.distSq2D( m_bird.getPosition() ) > 1e-2 )
 			{
-				setFlightPosition( m_goToPos );
-				return true;
+				m_goToPos.set( m_tmpPos );
+				m_canFly = true;
 			}
 			else
 			{
-				return false;
+				m_canFly = false;
 			}
 		}
 		
-		private void setFlightPosition(Vector3 destination) 
-		{
-			m_goToPos.set(destination);
-		}
 		
 		@Override
 		public void onEvent( EntityEvent event ) 

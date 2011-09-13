@@ -3,7 +3,6 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
@@ -12,6 +11,7 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
+
 
 /**
  * Hunter that tries to shoot the bird down.
@@ -23,7 +23,8 @@ public class Hunter extends Entity  implements Crappable
 {
 	
 	private Vector3 			m_tmpBulletPos 		= new Vector3();
-	public World 				m_world    			= null;
+	private World 				m_world    			= null;
+
 	
 	enum State
 	{
@@ -44,7 +45,7 @@ public class Hunter extends Entity  implements Crappable
 		
 		// add movement capabilities
 		final float maxLinearSpeed = 0.0f;
-		final float maxRotationSpeed = 180.0f;
+		final float maxRotationSpeed = 70.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 		
 		m_state = State.Aiming;

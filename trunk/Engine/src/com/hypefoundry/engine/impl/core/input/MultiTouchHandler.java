@@ -95,20 +95,15 @@ public class MultiTouchHandler implements TouchHandler
 					m_touchDuration[pointerId] = 0;  // reset the touch timer
 					
 					touchEvent.type = TouchEvent.TOUCH_DOWN;
-					if ( m_doubleTapStartTimes[pointerId] < 0.0f )
+					
+					// check for a double tap event
+					float timeDiff = currTime - m_doubleTapStartTimes[pointerId];
+					if ( timeDiff <= m_doubleTapDuration )
 					{
-						// we're looking for a double tap
-						m_doubleTapStartTimes[pointerId] = currTime;
+						// we have a double tap
+						touchEvent.type = TouchEvent.TOUCH_DOUBLE_TAP;
 					}
-					else
-					{
-						if ( currTime - m_doubleTapStartTimes[pointerId] <= m_doubleTapDuration )
-						{
-							// we have a double tap
-							touchEvent.type = TouchEvent.TOUCH_DOUBLE_TAP;
-						}
-						m_doubleTapStartTimes[pointerId] = -1;
-					}
+					m_doubleTapStartTimes[pointerId] = currTime;
 					
 					m_touchEventsBuffer.add( touchEvent );
 					break;

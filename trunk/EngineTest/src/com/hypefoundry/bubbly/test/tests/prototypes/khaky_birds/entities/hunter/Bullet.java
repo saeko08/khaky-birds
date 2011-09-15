@@ -37,16 +37,18 @@ public class Bullet extends Entity implements EntityEventListener
 	 * 
 	 * @param x
 	 * @param y
+	 * @param facing
 	 */
 	public Bullet( float x, float y, float facing )
 	{
-		setPosition( x, y, 0 );
+		setPosition( x, y, 1 );
 		setFacing( facing );
+		
+		setBoundingBox( new BoundingBox( -0.05f, -0.05f, -0.1f, 0.05f, 0.05f, 10.0f ) );	// TODO: config
 		
 		final float maxRotationSpeed = 180.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 		
-		setBoundingBox( new BoundingBox( -0.05f, -0.05f, -10.0f, 0.05f, 0.05f, 10.0f ) );	// TODO: config
 		
 		//register events
 		registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );

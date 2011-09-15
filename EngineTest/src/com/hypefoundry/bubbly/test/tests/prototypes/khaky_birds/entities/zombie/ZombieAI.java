@@ -1,35 +1,37 @@
 /**
  * 
  */
-package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
-
+package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie;
 
 import java.util.Random;
 
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Bite;
-import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
+import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
-import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
+import com.hypefoundry.engine.physics.events.CollisionEvent;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
+import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.engine.world.EventFactory;
-
+import com.hypefoundry.engine.world.World;
 
 /**
- * AI of a pedestrian.
- * 
- * @author paksas
+ * @author azagor
  *
  */
-public class PedestrianAI extends FiniteStateMachine
+public class ZombieAI extends FiniteStateMachine
+
 {
-	private Pedestrian			m_pedestrian;
+
+	private Zombie			m_zombie;
 	private SteeringBehaviors 	m_sb;
+	private World 				m_world;
 
 	// ------------------------------------------------------------------------
 	
@@ -38,12 +40,11 @@ public class PedestrianAI extends FiniteStateMachine
 		private Vector3 m_tmpDirVec 		= new Vector3();
 		private Random m_randObserveChnce   = new Random();
 		private int m_toObserveChance       = 0;
-		private float m_walkingTime         = 0;
 		
 		@Override
 		public void activate()
 		{
-			m_pedestrian.m_state = Pedestrian.State.Wander;
+			m_zombie.m_state = Zombie.State.Wander;
 			m_sb.begin().wander().faceMovementDirection();
 		}
 		
@@ -71,20 +72,27 @@ public class PedestrianAI extends FiniteStateMachine
 			if ( event instanceof Crapped )
 			{
 				// a bird crapped on us
-				m_pedestrian.setHitWithShit( true );
-				transitionTo( Observe.class );
+				m_zombie.setHitWithShit( true );
+				die();
 			}
-			else if ( event instanceof Bite )
+			else if ( event instanceof Shot)
 			{
-				m_pedestrian.turnIntoZombie();
+				die();
+			}
+			else if ( event instanceof CollisionEvent )
+			{
+				// if it collides with another entity, it attempts eating it
+				Entity collider = ( (CollisionEvent)event ).m_collider;
+				collider.sendEvent( Bite.class );
+				transitionTo( Observe.class );
 			}
 			else if ( event instanceof OutOfWorldBounds )
 			{					
 				OutOfWorldBounds oowb = (OutOfWorldBounds)event;
 				
-				DynamicObject dynObject = m_pedestrian.query( DynamicObject.class );
+				DynamicObject dynObject = m_zombie.query( DynamicObject.class );
 				oowb.reflectVector( m_tmpDirVec, dynObject.m_velocity );
-				m_tmpDirVec.normalize2D().add( m_pedestrian.getPosition() );
+				m_tmpDirVec.normalize2D().add( m_zombie.getPosition() );
 				
 				transitionTo( TurnAround.class ).m_safePos.set( m_tmpDirVec );
 				
@@ -102,7 +110,7 @@ public class PedestrianAI extends FiniteStateMachine
 		@Override
 		public void activate()
 		{
-			m_pedestrian.m_state = Pedestrian.State.TurnAround;
+			m_zombie.m_state = Zombie.State.TurnAround;
 			m_sb.begin().seek( m_safePos ).faceMovementDirection();
 		}
 		
@@ -115,7 +123,7 @@ public class PedestrianAI extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-			Vector3 currPos = m_pedestrian.getPosition();
+			Vector3 currPos = m_zombie.getPosition();
 			float distSqToGoal = currPos.distSq2D( m_safePos );
 			if ( distSqToGoal < 1e-1 )
 			{
@@ -135,7 +143,7 @@ public class PedestrianAI extends FiniteStateMachine
 		@Override
 		public void activate()
 		{
-			m_pedestrian.m_state = Pedestrian.State.Observe;
+			m_zombie.m_state = Zombie.State.Observe;
 			m_wait = 6.0f;
 			
 			// register events listeners
@@ -163,11 +171,19 @@ public class PedestrianAI extends FiniteStateMachine
 			if ( event instanceof Crapped )
 			{
 				// a bird crapped on us
-				m_pedestrian.setHitWithShit( true );
+				m_zombie.setHitWithShit( true );
+				die();
 			}
-			else if ( event instanceof Bite )
+			else if ( event instanceof Shot)
 			{
-				m_pedestrian.turnIntoZombie();
+				die();
+			}
+			else if ( event instanceof CollisionEvent )
+			{
+				// if it collides with another entity, it attempts eating it
+				Entity collider = ( (CollisionEvent)event ).m_collider;
+				collider.sendEvent( Bite.class );
+
 			}
 		}
 	}
@@ -180,18 +196,19 @@ public class PedestrianAI extends FiniteStateMachine
 	 * @param world
 	 * @param pedestrian			controlled pedestrian
 	 */
-	public PedestrianAI( Entity pedestrian )
+	public ZombieAI( World world, Entity zombie )
 	{
-		super( pedestrian );
+		super( zombie );
 		
-		m_pedestrian = (Pedestrian)pedestrian;
-		m_sb = new SteeringBehaviors( m_pedestrian );
+		m_world = world;
+		m_zombie = (Zombie)zombie;
+		m_sb = new SteeringBehaviors( m_zombie );
 		
 		// define events the entity responds to
-		m_pedestrian.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
-		m_pedestrian.registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
-		m_pedestrian.registerEvent( Bite.class, new EventFactory< Bite >() { @Override public Bite createObject() { return new Bite (); } } );
-
+		m_zombie.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
+		m_zombie.registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
+		m_zombie.registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
+		m_zombie.registerEvent( Shot.class, new EventFactory< Shot >() { @Override public Shot createObject() { return new Shot (); } } );
 		// setup the state machine
 		register( new Wander() );
 		register( new TurnAround() );
@@ -204,4 +221,10 @@ public class PedestrianAI extends FiniteStateMachine
 	{
 		m_sb.update(deltaTime);
 	}
+	
+	void die()
+	{
+		m_zombie.m_world.removeEntity( m_zombie );
+	}
+
 }

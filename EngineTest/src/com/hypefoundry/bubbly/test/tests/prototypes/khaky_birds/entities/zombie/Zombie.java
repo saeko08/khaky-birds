@@ -1,31 +1,27 @@
-package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
+/**
+ * 
+ */
+package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Bullet;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
+import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
-import com.hypefoundry.engine.math.BoundingBox;
-import com.hypefoundry.engine.math.Vector3;
-import com.hypefoundry.engine.physics.DynamicObject;
-
 
 /**
- * A pedestrian populating the game world.
- * 
- * It's a walking target for the bird, and shitting on him
- * will earn us some points. 
- * 
- * @author paksas
+ * @author azagor
  *
  */
-public class Pedestrian extends Entity implements Crappable
+public class Zombie extends Entity implements Crappable
+
 {
-	boolean				m_hitWithShit;
-	public World 		m_world    				     = null;
-	
+boolean				m_hitWithShit;
+public World 		m_world    				     = null;
+
 	enum State
 	{
 		Wander,
@@ -38,24 +34,24 @@ public class Pedestrian extends Entity implements Crappable
 	/**
 	 * Serialization support constructor.
 	 */
-	public Pedestrian()
+	public Zombie()
 	{		
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
 		setPosition( 0, 0, 80 );
 		
 		// add movement capabilities
-		final float maxLinearSpeed = 1.0f;
+		final float maxLinearSpeed = 1.15f;
 		final float maxRotationSpeed = 180.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
 	}
 	
 	/**
-	 * Constructor.
+	 * default Constructor.
 	 *
 	 * @param spawnAreaWidth
 	 * @param spawnAreaHeight
 	 */
-	public Pedestrian( float spawnAreaWidth, float spawnAreaHeight )
+	public Zombie( float spawnAreaWidth, float spawnAreaHeight )
 	{
 		// call the default constructor first to perform the generic initialization
 		this();
@@ -69,6 +65,19 @@ public class Pedestrian extends Entity implements Crappable
 		m_hitWithShit = false;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param Vector3 pos
+	 */
+	public Zombie(Vector3 pos)
+	{
+		// call the default constructor first to perform the generic initialization
+		this();
+		
+		//initialize specified position
+		setPosition(pos );
+	}
 
 	/**
 	 * Tells that the pedestrian was hit with shit.
@@ -79,19 +88,13 @@ public class Pedestrian extends Entity implements Crappable
 	{
 		m_hitWithShit = flag;
 	}
-	
-	public void turnIntoZombie()
-	{
-		Vector3 pedestrianPos = getPosition();
-		m_world.addEntity( new Zombie(pedestrianPos));
-	}
-	
+
 	@Override
 	public void onAddedToWorld( World hostWorld )
 	{
 		m_world = hostWorld;
 	}
-
+	
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{
@@ -103,4 +106,5 @@ public class Pedestrian extends Entity implements Crappable
 	{
 		saver.setIntValue( "hitWithShit", m_hitWithShit ? 1 : 0  );
 	}
+
 }

@@ -7,12 +7,15 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedest
 import java.util.Random;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Bite;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
+import com.hypefoundry.engine.physics.events.CollisionEvent;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
@@ -37,6 +40,7 @@ public class PedestrianAI extends FiniteStateMachine
 	{	
 		private Vector3 m_tmpDirVec 		= new Vector3();
 		private Random m_randObserveChnce   = new Random();
+		Zombie 			m_noticedZombie		= null;
 		private int m_toObserveChance       = 0;
 		private float m_walkingTime         = 0;
 		
@@ -51,6 +55,7 @@ public class PedestrianAI extends FiniteStateMachine
 		public void deactivate()
 		{
 			m_sb.clear();
+			m_noticedZombie		= null;
 		}
 		
 		@Override
@@ -62,6 +67,12 @@ public class PedestrianAI extends FiniteStateMachine
 			if ( m_toObserveChance == 5 )
 			{
 				transitionTo( Observe.class );
+			}
+				m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 2, m_pedestrian.getPosition());
+			
+			if (m_noticedZombie != null)
+			{
+				transitionTo( Evade.class ).setEvadingTarget(m_noticedZombie);
 			}
 		}
 
@@ -77,6 +88,7 @@ public class PedestrianAI extends FiniteStateMachine
 			else if ( event instanceof Bite )
 			{
 				m_pedestrian.turnIntoZombie();
+				die();
 			}
 			else if ( event instanceof OutOfWorldBounds )
 			{					
@@ -131,6 +143,7 @@ public class PedestrianAI extends FiniteStateMachine
 		private Random m_randWaitTime   = new Random();
 		private int m_waitTimer         = 0;
 		private float 	m_wait 			= 0.f;
+		Zombie 			m_noticedZombie		= null;
 		
 		@Override
 		public void activate()
@@ -145,6 +158,7 @@ public class PedestrianAI extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
+			m_noticedZombie		= null;
 		}
 		
 		@Override
@@ -152,6 +166,58 @@ public class PedestrianAI extends FiniteStateMachine
 		{
 			m_wait -= deltaTime;
 			if ( m_wait < m_waitTimer )
+			{
+				transitionTo( Wander.class );
+			}	
+			
+			m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 2, m_pedestrian.getPosition());
+			
+			if (m_noticedZombie != null)
+			{
+				transitionTo( Evade.class ).setEvadingTarget(m_noticedZombie);
+			}
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				m_pedestrian.setHitWithShit( true );
+			}
+			else if ( event instanceof Bite )
+			{
+				m_pedestrian.turnIntoZombie();
+				die();
+			}
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	class Evade extends FSMState implements EntityEventListener
+	{
+		Zombie m_noticedZombie = null;
+		
+		@Override
+		public void activate()
+		{
+			m_pedestrian.m_state = Pedestrian.State.Evade;	
+			m_sb.begin().evade(m_noticedZombie).faceMovementDirection();
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.clear();
+			m_noticedZombie = null;
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			if ( m_noticedZombie == null )
 			{
 				transitionTo( Wander.class );
 			}				
@@ -168,11 +234,15 @@ public class PedestrianAI extends FiniteStateMachine
 			else if ( event instanceof Bite )
 			{
 				m_pedestrian.turnIntoZombie();
+				die();
 			}
 		}
+		
+		public void setEvadingTarget(Zombie noticedZombie)
+		{
+			m_noticedZombie = noticedZombie;
+		}
 	}
-	
-	// ------------------------------------------------------------------------
 	
 	/**
 	 * Constructor.
@@ -196,6 +266,7 @@ public class PedestrianAI extends FiniteStateMachine
 		register( new Wander() );
 		register( new TurnAround() );
 		register( new Observe() );
+		register( new Evade() );
 		begin( Wander.class );
 	}
 	
@@ -203,5 +274,10 @@ public class PedestrianAI extends FiniteStateMachine
 	public void onUpdate( float deltaTime )
 	{
 		m_sb.update(deltaTime);
+	}
+	
+	void die()
+	{
+		m_pedestrian.m_world.removeEntity( m_pedestrian );
 	}
 }

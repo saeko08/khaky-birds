@@ -58,7 +58,7 @@ public class ZombieVisual extends EntityVisual
 		BoundingShape bs = m_zombie.getBoundingShape();
 		
 	
-		if ( m_zombie.m_state == Zombie.State.Wander || m_zombie.m_state == Zombie.State.TurnAround)
+		if ( m_zombie.m_state == Zombie.State.Wander || m_zombie.m_state == Zombie.State.TurnAround ||m_zombie.m_state == Zombie.State.Chasing )
 		{
 			m_animationPlayer.select(ANIM_WANDER);
 		}

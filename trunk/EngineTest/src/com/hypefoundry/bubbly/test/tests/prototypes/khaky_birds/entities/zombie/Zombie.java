@@ -3,6 +3,9 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
@@ -26,7 +29,8 @@ public World 		m_world    				     = null;
 	{
 		Wander,
 		TurnAround,
-		Observe
+		Observe,
+		Chasing
 	}
 	
 	State		m_state;

@@ -30,7 +30,8 @@ public class Pedestrian extends Entity implements Crappable
 	{
 		Wander,
 		TurnAround,
-		Observe
+		Observe,
+		Evade
 	}
 	
 	State		m_state;

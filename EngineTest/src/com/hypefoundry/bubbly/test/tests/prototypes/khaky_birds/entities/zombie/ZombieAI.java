@@ -7,7 +7,11 @@ import java.util.Random;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Eaten;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shocked;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.math.Vector3;
@@ -29,17 +33,20 @@ public class ZombieAI extends FiniteStateMachine
 
 {
 
-	private Zombie			m_zombie;
+	private Zombie				m_zombie;
 	private SteeringBehaviors 	m_sb;
 	private World 				m_world;
+	
+
 
 	// ------------------------------------------------------------------------
 	
 	class Wander extends FSMState implements EntityEventListener
 	{	
-		private Vector3 m_tmpDirVec 		= new Vector3();
-		private Random m_randObserveChnce   = new Random();
-		private int m_toObserveChance       = 0;
+		private Vector3 m_tmpDirVec 				= new Vector3();
+		private Random m_randObserveChnce   		= new Random();
+		private Pedestrian 	m_noticedPedestrian 	= null;
+		private int m_toObserveChance       		= 0;
 		
 		@Override
 		public void activate()
@@ -52,6 +59,7 @@ public class ZombieAI extends FiniteStateMachine
 		public void deactivate()
 		{
 			m_sb.clear();
+			m_noticedPedestrian = null;
 		}
 		
 		@Override
@@ -63,6 +71,13 @@ public class ZombieAI extends FiniteStateMachine
 			if ( m_toObserveChance == 5 )
 			{
 				transitionTo( Observe.class );
+			}
+			
+			m_noticedPedestrian = (Pedestrian) m_zombie.m_world.findNearestEntity(Pedestrian.class, 2, m_zombie.getPosition());
+			
+			if (m_noticedPedestrian != null)
+			{
+				transitionTo( Chasing.class ).setChasingTarget(m_noticedPedestrian);
 			}
 		}
 
@@ -190,6 +205,58 @@ public class ZombieAI extends FiniteStateMachine
 	
 	// ------------------------------------------------------------------------
 	
+	class Chasing extends FSMState implements EntityEventListener
+	{
+		Pedestrian m_noticedPedestrian = null;
+		
+		@Override
+		public void activate()
+		{
+			m_zombie.m_state = Zombie.State.Chasing;	
+			m_sb.begin().pursuit(m_noticedPedestrian).faceMovementDirection();
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.clear();
+			m_noticedPedestrian = null;
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			if ( m_noticedPedestrian == null )
+			{
+				transitionTo( Wander.class );
+			}				
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if (event instanceof Shot)
+			{
+				die();
+			}
+			if ( event instanceof CollisionEvent )
+			{
+				// if it collides with another entity, it attempts eating it
+				Entity collider = ( (CollisionEvent)event ).m_collider;
+				collider.sendEvent( Bite.class );
+				transitionTo( Observe.class );
+
+			}
+		}
+		
+		public void setChasingTarget(Pedestrian noticedPedestrian)
+		{
+			m_noticedPedestrian = noticedPedestrian;
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
 	/**
 	 * Constructor.
 	 * 
@@ -213,6 +280,7 @@ public class ZombieAI extends FiniteStateMachine
 		register( new Wander() );
 		register( new TurnAround() );
 		register( new Observe() );
+		register( new Chasing() );
 		begin( Wander.class );
 	}
 	

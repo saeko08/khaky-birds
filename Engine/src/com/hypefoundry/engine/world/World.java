@@ -3,6 +3,7 @@ package com.hypefoundry.engine.world;
 import java.util.*;
 
 import com.hypefoundry.engine.game.Updatable;
+import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.world.serialization.EntityFactory;
@@ -275,6 +276,35 @@ public class World implements Updatable
 		return null;
 	}
 	
+
+	/**
+	 * Looks for the nearest  entity of the specified type
+	 * 
+	 * @param entityType
+	 * @return
+	 */
+	public Entity findNearestEntity( Class entityType, float range, Vector3 sourcePos ) 
+	{
+		int count 			= m_entities.size();
+		float distance 		= 0;
+		Vector3 targetPos	= new Vector3();
+		
+		for( int i = 0; i < count; ++i )
+		{
+			Entity entity = m_entities.get(i);
+			if ( entityType.isInstance( entity ) )
+			{
+				targetPos = entity.getPosition();
+				distance = sourcePos.dist2D(targetPos);
+				if (distance <= range)
+				{
+					return entity;
+				}
+			}
+		}
+		
+		return null;
+	}
 	// ------------------------------------------------------------------------
 	// Serialization
 	// ------------------------------------------------------------------------

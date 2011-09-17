@@ -68,7 +68,8 @@ public class PedestrianAI extends FiniteStateMachine
 			{
 				transitionTo( Observe.class );
 			}
-				m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 2, m_pedestrian.getPosition());
+			//zwróc uwagê, ¿e ta metoda w tym momencie wyszukuje pierwszeentity w podanym zasiêgu (niekoniecznie najbli¿sze)
+				m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 0.6f, m_pedestrian.getPosition());
 			
 			if (m_noticedZombie != null)
 			{
@@ -191,6 +192,7 @@ public class PedestrianAI extends FiniteStateMachine
 				m_pedestrian.turnIntoZombie();
 				die();
 			}
+			
 		}
 	}
 	
@@ -199,6 +201,7 @@ public class PedestrianAI extends FiniteStateMachine
 	class Evade extends FSMState implements EntityEventListener
 	{
 		Zombie m_noticedZombie = null;
+		private Vector3 m_tmpDirVec 		= new Vector3();
 		
 		@Override
 		public void activate()
@@ -235,6 +238,17 @@ public class PedestrianAI extends FiniteStateMachine
 			{
 				m_pedestrian.turnIntoZombie();
 				die();
+			}
+			else if ( event instanceof OutOfWorldBounds )
+			{					
+				OutOfWorldBounds oowb = (OutOfWorldBounds)event;
+				
+				DynamicObject dynObject = m_pedestrian.query( DynamicObject.class );
+				oowb.reflectVector( m_tmpDirVec, dynObject.m_velocity );
+				m_tmpDirVec.normalize2D().add( m_pedestrian.getPosition() );
+				
+				transitionTo( TurnAround.class ).m_safePos.set( m_tmpDirVec );
+				
 			}
 		}
 		

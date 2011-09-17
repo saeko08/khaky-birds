@@ -3,6 +3,7 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
@@ -25,6 +26,7 @@ public class PedestrianVisual extends EntityVisual
 
 	private int 				ANIM_WALK;
 	private int 				ANIM_WIPE_SHIT_OFF;
+	private int 				ANIM_OBSERVE;
 	
 	/**
 	 * Constructor.
@@ -41,11 +43,14 @@ public class PedestrianVisual extends EntityVisual
 		// load animations
 		Animation regularAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrianWalking.xml");
 		Animation wipeShitOffAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrianWipeShitOff.xml");
+		Animation observing = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrianObserving.xml");
+		
 		
 		// create an animation player
 		m_animationPlayer = new AnimationPlayer();
 		ANIM_WALK = m_animationPlayer.addAnimation( regularAnimation );
 		ANIM_WIPE_SHIT_OFF = m_animationPlayer.addAnimation( wipeShitOffAnimation );
+		ANIM_OBSERVE = m_animationPlayer.addAnimation( observing );
 	}
 
 	@Override
@@ -55,13 +60,18 @@ public class PedestrianVisual extends EntityVisual
 		BoundingShape bs = m_pedestrian.getBoundingShape();
 	
 		// select an animation appropriate to the state the pedestrian's in
-		if ( m_pedestrian.m_hitWithShit == false )
+		if ( m_pedestrian.m_hitWithShit == true)
 		{
-			m_animationPlayer.select( ANIM_WALK );
+			m_animationPlayer.select( ANIM_WIPE_SHIT_OFF );
+			
+		}
+		else if (m_pedestrian.m_state == Pedestrian.State.Observe )
+		{
+			m_animationPlayer.select( ANIM_OBSERVE );
 		}
 		else
 		{
-			m_animationPlayer.select( ANIM_WIPE_SHIT_OFF );
+			m_animationPlayer.select( ANIM_WALK );
 		}
 		
 		// draw the pedestrian

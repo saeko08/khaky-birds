@@ -1,5 +1,6 @@
 package com.hypefoundry.engine.world;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import com.hypefoundry.engine.game.Updatable;
@@ -283,11 +284,14 @@ public class World implements Updatable
 	 * @param entityType
 	 * @return
 	 */
+	
+	//trzeba tu zrobiæ dodatkow¹ tablicê, w kórej poprzez metodê sort(), z odpowiednim parametrem posortuje sie wyniki po odleg³osci
 	public Entity findNearestEntity( Class entityType, float range, Vector3 sourcePos ) 
 	{
 		int count 			= m_entities.size();
 		float distance 		= 0;
 		Vector3 targetPos	= new Vector3();
+		//float[] ranges;
 		
 		for( int i = 0; i < count; ++i )
 		{
@@ -299,6 +303,7 @@ public class World implements Updatable
 				if (distance <= range)
 				{
 					return entity;
+					
 				}
 			}
 		}

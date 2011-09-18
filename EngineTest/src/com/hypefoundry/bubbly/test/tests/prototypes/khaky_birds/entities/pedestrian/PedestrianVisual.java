@@ -3,7 +3,6 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
@@ -41,9 +40,9 @@ public class PedestrianVisual extends EntityVisual
 		m_pedestrian = (Pedestrian)entity;
 		
 		// load animations
-		Animation regularAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrianWalking.xml");
-		Animation wipeShitOffAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrianWipeShitOff.xml");
-		Animation observing = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrianObserving.xml");
+		Animation regularAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrian/walking.xml");
+		Animation wipeShitOffAnimation = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrian/wipeShitOff.xml");
+		Animation observing = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/pedestrian/observing.xml");
 		
 		
 		// create an animation player

@@ -5,13 +5,9 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie
 
 import java.util.Random;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Eaten;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shocked;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.math.Vector3;
@@ -23,20 +19,17 @@ import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.engine.world.EventFactory;
-import com.hypefoundry.engine.world.World;
+
 
 /**
  * @author azagor
  *
  */
 public class ZombieAI extends FiniteStateMachine
-
 {
-
 	private Zombie				m_zombie;
 	private SteeringBehaviors 	m_sb;
-	private World 				m_world;
-	
+	private final float			m_pedestrianLookoutRadius = 1.2f;
 
 
 	// ------------------------------------------------------------------------
@@ -181,8 +174,8 @@ public class ZombieAI extends FiniteStateMachine
 			{
 				transitionTo( Wander.class );
 			}
-			//zwróc uwagê, ¿e ta metoda w tym momencie wyszukuje pierwszeentity w podanym zasiêgu (niekoniecznie najbli¿sze)
-			m_noticedPedestrian = (Pedestrian) m_zombie.m_world.findNearestEntity(Pedestrian.class, 1.2f, m_zombie.getPosition());
+
+			m_noticedPedestrian = m_zombie.m_world.findNearestEntity( Pedestrian.class, m_pedestrianLookoutRadius, m_zombie.getPosition() );
 			
 			if (m_noticedPedestrian != null)
 			{
@@ -289,14 +282,12 @@ public class ZombieAI extends FiniteStateMachine
 	/**
 	 * Constructor.
 	 * 
-	 * @param world
 	 * @param pedestrian			controlled pedestrian
 	 */
-	public ZombieAI( World world, Entity zombie )
+	public ZombieAI( Entity zombie )
 	{
 		super( zombie );
 		
-		m_world = world;
 		m_zombie = (Zombie)zombie;
 		m_sb = new SteeringBehaviors( m_zombie );
 		
@@ -305,6 +296,7 @@ public class ZombieAI extends FiniteStateMachine
 		m_zombie.registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
 		m_zombie.registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
 		m_zombie.registerEvent( Shot.class, new EventFactory< Shot >() { @Override public Shot createObject() { return new Shot (); } } );
+		
 		// setup the state machine
 		register( new Wander() );
 		register( new TurnAround() );

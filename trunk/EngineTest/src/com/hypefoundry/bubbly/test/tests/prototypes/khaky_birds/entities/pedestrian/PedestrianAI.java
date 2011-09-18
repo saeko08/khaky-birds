@@ -7,7 +7,6 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedest
 import java.util.Random;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Bite;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
@@ -15,7 +14,6 @@ import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
-import com.hypefoundry.engine.physics.events.CollisionEvent;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
@@ -31,8 +29,11 @@ import com.hypefoundry.engine.world.EventFactory;
  */
 public class PedestrianAI extends FiniteStateMachine
 {
-	private Pedestrian			m_pedestrian;
-	private SteeringBehaviors 	m_sb;
+	private Pedestrian				m_pedestrian;
+	private SteeringBehaviors 		m_sb;
+	private final float 			m_zombieLookoutRadiusShort 	= 0.6f;
+	private final float 			m_zombieLookoutRadiusFar 	= 2.0f;
+	
 
 	// ------------------------------------------------------------------------
 	
@@ -41,8 +42,8 @@ public class PedestrianAI extends FiniteStateMachine
 		private Vector3 m_tmpDirVec 		= new Vector3();
 		private Random m_randObserveChnce   = new Random();
 		Zombie 			m_noticedZombie		= null;
-		private int m_toObserveChance       = 0;
-		private float m_walkingTime         = 0;
+		private int 	m_toObserveChance       = 0;
+
 		
 		@Override
 		public void activate()
@@ -68,12 +69,11 @@ public class PedestrianAI extends FiniteStateMachine
 			{
 				transitionTo( Observe.class );
 			}
-			//zwróc uwagê, ¿e ta metoda w tym momencie wyszukuje pierwszeentity w podanym zasiêgu (niekoniecznie najbli¿sze)
-				m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 0.6f, m_pedestrian.getPosition());
-			
-			if (m_noticedZombie != null)
+
+			m_noticedZombie = m_pedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_pedestrian.getPosition() );
+			if ( m_noticedZombie != null )
 			{
-				transitionTo( Evade.class ).setEvadingTarget(m_noticedZombie);
+				transitionTo( Evade.class ).setEvadingTarget( m_noticedZombie );
 			}
 		}
 
@@ -141,9 +141,9 @@ public class PedestrianAI extends FiniteStateMachine
 	
 	class Observe extends FSMState implements EntityEventListener
 	{
-		private Random m_randWaitTime   = new Random();
-		private int m_waitTimer         = 0;
-		private float 	m_wait 			= 0.f;
+		private Random m_randWaitTime   	= new Random();
+		private int m_waitTimer        		= 0;
+		private float 	m_wait 				= 0.f;
 		Zombie 			m_noticedZombie		= null;
 		
 		@Override
@@ -171,11 +171,10 @@ public class PedestrianAI extends FiniteStateMachine
 				transitionTo( Wander.class );
 			}	
 			
-			m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 2, m_pedestrian.getPosition());
-			
-			if (m_noticedZombie != null)
+			m_noticedZombie = m_pedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_pedestrian.getPosition() );
+			if ( m_noticedZombie != null )
 			{
-				transitionTo( Evade.class ).setEvadingTarget(m_noticedZombie);
+				transitionTo( Evade.class ).setEvadingTarget( m_noticedZombie );
 			}
 		}
 		

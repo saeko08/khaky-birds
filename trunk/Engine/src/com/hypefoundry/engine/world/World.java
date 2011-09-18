@@ -279,37 +279,49 @@ public class World implements Updatable
 	
 
 	/**
-	 * Looks for the nearest  entity of the specified type
+	 * Looks for the nearest entity of the specified type.
 	 * 
 	 * @param entityType
 	 * @return
 	 */
-	
-	//trzeba tu zrobiæ dodatkow¹ tablicê, w kórej poprzez metodê sort(), z odpowiednim parametrem posortuje sie wyniki po odleg³osci
-	public Entity findNearestEntity( Class entityType, float range, Vector3 sourcePos ) 
+	@SuppressWarnings("unchecked")
+	public < T extends Entity > T findNearestEntity( Class< T > entityType, float range, Vector3 sourcePos ) 
 	{
 		int count 			= m_entities.size();
-		float distance 		= 0;
-		Vector3 targetPos	= new Vector3();
-		//float[] ranges;
+		if ( count == 0 )
+		{
+			return null;
+		}
 		
+		float distanceSq		= 0;
+		float closestDistSq 	= range*range;
+		int closestEntIdx 		= -1;
+		Vector3 targetPos		= null;
+
 		for( int i = 0; i < count; ++i )
 		{
 			Entity entity = m_entities.get(i);
 			if ( entityType.isInstance( entity ) )
 			{
 				targetPos = entity.getPosition();
-				distance = sourcePos.dist2D(targetPos);
-				if (distance <= range)
+				distanceSq = sourcePos.distSq2D( targetPos );
+				if ( distanceSq <= closestDistSq )
 				{
-					return entity;
-					
+					closestEntIdx = i;	
 				}
 			}
 		}
 		
-		return null;
+		if ( closestEntIdx >= 0 )
+		{
+			return (T)m_entities.get( closestEntIdx );
+		}
+		else
+		{
+			return null;
+		}
 	}
+	
 	// ------------------------------------------------------------------------
 	// Serialization
 	// ------------------------------------------------------------------------

@@ -20,6 +20,10 @@ final public class BoundingBox implements BoundingShape
 	public float 			m_maxY;
 	public float 			m_maxZ;
 	private final Vector3 	m_massCenter = new Vector3();
+	
+	private final Vector3	m_tmpVec = new Vector3();
+	
+	
 	/**
 	 * Default constructor.
 	 * 
@@ -167,6 +171,186 @@ final public class BoundingBox implements BoundingShape
 		return m_minX <= pos.m_x && m_maxX >= pos.m_x && m_minY <= pos.m_y && m_maxY >= pos.m_y && m_minZ <= pos.m_z && m_maxZ >= pos.m_z;
 	}
 	
+	@Override 
+	public boolean doesOverlap( final Ray ray, Vector3 outIntersectPos )
+	{
+		m_tmpVec.set( ray.getDirection() ).scale( ray.getLength() );
+		
+		// Check for point inside box, trivial reject, and determine parametric
+		// distance to each front face
+		boolean inside = true;
+		
+		float xt;
+		if ( ray.m_origin.m_x < m_minX ) 
+		{
+			xt = m_minX - ray.m_origin.m_x;
+			if ( xt > m_tmpVec.m_x ) 
+			{
+				return false;
+			}
+			
+			xt /= m_tmpVec.m_x;
+			inside = false;
+		} 
+		else if ( ray.m_origin.m_x > m_maxX ) 
+		{
+			xt = m_maxX - ray.m_origin.m_x;
+			if ( xt < m_tmpVec.m_x ) 
+			{
+				return false;
+			}
+			
+			xt /= m_tmpVec.m_x;
+			inside = false;
+		} 
+		else 
+		{
+			xt = -1.0f;
+		}
+		
+		
+		float yt;
+		if ( ray.m_origin.m_y < m_minY ) 
+		{
+			yt = m_minY - ray.m_origin.m_y;
+			if ( yt > m_tmpVec.m_y )
+			{
+				return false;
+			}
+			
+			yt /= m_tmpVec.m_y;
+			inside = false;
+		} 
+		else if ( ray.m_origin.m_y > m_maxY ) 
+		{
+			yt = m_maxY - ray.m_origin.m_y;
+			if ( yt < m_tmpVec.m_y )
+			{ 
+				return false;
+			}
+			
+			yt /= m_tmpVec.m_y;
+			inside = false;
+		} 
+		else 
+		{
+			yt = -1.0f;
+		}
+		
+		float zt;
+		if ( ray.m_origin.m_z < m_minZ ) 
+		{
+			zt = m_minZ - ray.m_origin.m_z;
+			if ( zt > m_tmpVec.m_z )
+			{
+				return false;
+			}
+			zt /= m_tmpVec.m_z;
+			inside = false;
+		} 
+		else if ( ray.m_origin.m_z > m_maxZ ) 
+		{
+			zt = m_maxZ - ray.m_origin.m_z;
+			if ( zt < m_tmpVec.m_z )
+			{
+				return false;
+			}
+			
+			zt /= m_tmpVec.m_z;
+			inside = false;
+		} 
+		else 
+		{
+			zt = -1.0f;
+		}
+		
+		// Inside box?
+		if ( inside ) 
+		{
+			return true;
+		}
+		
+		// Select farthest plane - this is
+		// the plane of intersection.
+		int which = 0;
+		float t = xt;
+		if ( yt > t ) 
+		{
+			which = 1;
+			t = yt;
+		}
+		
+		if ( zt > t ) 
+		{
+			which = 2;
+			t = zt;
+		}
+		
+		if ( t < 0 || t > ray.getLength() )
+		{
+			return false;
+		}
+		
+		switch ( which ) 
+		{
+			case 0: // intersect with yz plane
+			{
+				float y = ray.m_origin.m_y + m_tmpVec.m_y * t;
+				if ( y < m_minY || y > m_maxY ) 
+				{ 
+					return false;
+				}
+				
+				float z = ray.m_origin.m_z + m_tmpVec.m_z * t;
+				if ( z < m_minZ || z > m_maxZ)
+				{ 
+					return false;
+				}
+				break;
+			} 
+			
+			case 1: // intersect with xz plane
+			{
+				float x = ray.m_origin.m_x + m_tmpVec.m_x * t;
+				if ( x < m_minX || x > m_maxX )
+				{
+					return false;
+				}
+				
+				float z = ray.m_origin.m_z + m_tmpVec.m_z * t;
+				if ( z < m_minZ || z > m_maxZ)
+				{ 
+					return false;
+				}
+				break;
+			} 
+			
+			case 2: // intersect with xy plane
+			{
+				float x = ray.m_origin.m_x + m_tmpVec.m_x * t;
+				if ( x < m_minX || x > m_maxX )
+				{
+					return false;
+				}
+				
+				float y = ray.m_origin.m_y + m_tmpVec.m_y * t;
+				if ( y < m_minY || y > m_maxY ) 
+				{ 
+					return false;
+				}
+				break;
+			} 
+		}
+		
+		if ( outIntersectPos != null )
+		{
+			// calculate the intersection pos
+			outIntersectPos.set( ray.getDirection() ).scale( t ).add( ray.m_origin );
+		}
+		
+		return true;
+	}
+	
 	@Override
 	final public boolean doesOverlap2D( final BoundingBox box )
 	{
@@ -184,6 +368,128 @@ final public class BoundingBox implements BoundingShape
 	final public boolean doesOverlap2D( final Vector3 pos )
 	{
 		return m_minX <= pos.m_x && m_maxX >= pos.m_x && m_minY <= pos.m_y && m_maxY >= pos.m_y;
+	}
+	
+	@Override 
+	public boolean doesOverlap2D( final Ray ray, Vector3 outIntersectPos )
+	{
+		m_tmpVec.set( ray.getDirection() ).scale( ray.getLength() );
+		
+		// Check for point inside box, trivial reject, and determine parametric
+		// distance to each front face
+		boolean inside = true;
+		
+		float xt;
+		if ( ray.m_origin.m_x < m_minX ) 
+		{
+			xt = m_minX - ray.m_origin.m_x;
+			if ( xt > m_tmpVec.m_x ) 
+			{
+				return false;
+			}
+			
+			xt /= m_tmpVec.m_x;
+			inside = false;
+		} 
+		else if ( ray.m_origin.m_x > m_maxX ) 
+		{
+			xt = m_maxX - ray.m_origin.m_x;
+			if ( xt < m_tmpVec.m_x ) 
+			{
+				return false;
+			}
+			
+			xt /= m_tmpVec.m_x;
+			inside = false;
+		} 
+		else 
+		{
+			xt = -1.0f;
+		}
+		
+		
+		float yt;
+		if ( ray.m_origin.m_y < m_minY ) 
+		{
+			yt = m_minY - ray.m_origin.m_y;
+			if ( yt > m_tmpVec.m_y )
+			{
+				return false;
+			}
+			
+			yt /= m_tmpVec.m_y;
+			inside = false;
+		} 
+		else if ( ray.m_origin.m_y > m_maxY ) 
+		{
+			yt = m_maxY - ray.m_origin.m_y;
+			if ( yt < m_tmpVec.m_y )
+			{ 
+				return false;
+			}
+			
+			yt /= m_tmpVec.m_y;
+			inside = false;
+		} 
+		else 
+		{
+			yt = -1.0f;
+		}
+		
+		// Inside box?
+		if ( inside ) 
+		{
+			return true;
+		}
+		
+		// Select farthest plane - this is
+		// the plane of intersection.
+		int which = 0;
+		float t = xt;
+		if ( yt > t ) 
+		{
+			which = 1;
+			t = yt;
+		}
+		
+		if ( t < 0 || t > ray.getLength() )
+		{
+			return false;
+		}
+		
+		switch ( which ) 
+		{
+			case 0: // intersect with yz plane
+			{
+				float y = ray.m_origin.m_y + m_tmpVec.m_y * t;
+				if ( y < m_minY || y > m_maxY ) 
+				{ 
+					return false;
+				}
+
+				break;
+			} 
+			
+			case 1: // intersect with xz plane
+			{
+				float x = ray.m_origin.m_x + m_tmpVec.m_x * t;
+				if ( x < m_minX || x > m_maxX )
+				{
+					return false;
+				}
+				
+				break;
+			} 
+		}
+		
+		if ( outIntersectPos != null )
+		{
+			// calculate the intersection pos
+			outIntersectPos.set( ray.getDirection() ).scale( t ).add( ray.m_origin );
+			outIntersectPos.m_z = m_massCenter.m_z;
+		}
+		
+		return true;
 	}
 	
 	@Override

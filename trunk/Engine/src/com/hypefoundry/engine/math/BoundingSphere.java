@@ -16,6 +16,8 @@ final public class BoundingSphere implements BoundingShape
 	public final 	Vector3 	m_center = new Vector3();
 	public 			float 		m_radius;
 	
+	private final	Vector3 	m_tmpVec = new Vector3();
+	
 	/**
 	 * Constructor.
 	 * 
@@ -104,6 +106,40 @@ final public class BoundingSphere implements BoundingShape
 		return distance <= m_radius * m_radius;
 	}
 	
+	@Override 
+	public boolean doesOverlap( final Ray ray, Vector3 outIntersectPos )
+	{
+		m_tmpVec.set( m_center ).sub( ray.m_origin );
+		float t = ray.getDirection().dot( m_tmpVec );
+		if ( t < 0 )
+		{
+			return false;
+		}
+		
+
+		float distToCenterSq = m_center.distSq( ray.m_origin );
+		float distToCastCenterSq = distToCenterSq - t*t;
+		if ( m_radius*m_radius < distToCastCenterSq )
+		{
+			return false;
+		}
+		
+		float distCastCenterToIntersectionSq = m_radius*m_radius - distToCastCenterSq;
+		float td = t - (float)Math.sqrt( distCastCenterToIntersectionSq );
+		if ( td < 0 || td > ray.getLength() )
+		{
+			return false;
+		}
+		
+		if ( outIntersectPos != null )
+		{
+			// calculate the intersection pos
+			outIntersectPos.set( ray.getDirection() ).scale( td ).add( ray.m_origin );
+		}
+		
+		return true;
+	}
+	
 	@Override
 	public boolean doesOverlap2D( final BoundingSphere sphere )
 	{
@@ -147,6 +183,41 @@ final public class BoundingSphere implements BoundingShape
 	{
 		float distance = m_center.distSq( point );
 		return distance <= m_radius * m_radius;
+	}
+	
+	@Override 
+	public boolean doesOverlap2D( final Ray ray, Vector3 outIntersectPos )
+	{
+		m_tmpVec.set( m_center ).sub( ray.m_origin );
+		float t = ray.getDirection().dot2D( m_tmpVec );
+		if ( t < 0 )
+		{
+			return false;
+		}
+		
+
+		float distToCenterSq = m_center.distSq2D( ray.m_origin );
+		float distToCastCenterSq = distToCenterSq - t*t;
+		if ( m_radius*m_radius < distToCastCenterSq )
+		{
+			return false;
+		}
+		
+		float distCastCenterToIntersectionSq = m_radius*m_radius - distToCastCenterSq;
+		float td = t - (float)Math.sqrt( distCastCenterToIntersectionSq );
+		if ( td < 0 || td > ray.getLength() )
+		{
+			return false;
+		}
+		
+		if ( outIntersectPos != null )
+		{
+			// calculate the intersection pos
+			outIntersectPos.set( ray.getDirection() ).scale( td ).add( ray.m_origin );
+			outIntersectPos.m_z = m_center.m_z;
+		}
+		
+		return true;
 	}
 	
 	@Override

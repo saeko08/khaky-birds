@@ -60,6 +60,15 @@ public interface BoundingShape
 	boolean doesOverlap2D( Vector3 point );
 	
 	/**
+	 * Checks if the shape overlaps a ray ( in 2D ).
+	 * 
+	 * @param ray
+	 * @param outIntersectPos		pass a vector here if you want to find out about the intersection point
+	 * @return
+	 */
+	boolean doesOverlap2D( Ray ray, Vector3 outIntersectPos );
+	
+	/**
 	 * Checks if the shape overlaps a sphere.
 	 * 
 	 * @param sphere
@@ -82,6 +91,16 @@ public interface BoundingShape
 	 * @return
 	 */
 	boolean doesOverlap( Vector3 point );
+	
+	/**
+	 * Checks if the shape overlaps a ray.
+	 * 
+	 * @param ray
+	 * @param outIntersectPos		pass a vector here if you want to find out about the intersection point
+	 * @return
+	 */
+	boolean doesOverlap( Ray ray, Vector3 outIntersectPos );
+	
 	
 	// ------------------------------------------------------------------------
 	// Serialization support

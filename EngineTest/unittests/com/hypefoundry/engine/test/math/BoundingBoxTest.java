@@ -4,6 +4,8 @@ import android.test.AndroidTestCase;
 
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.BoundingSphere;
+import com.hypefoundry.engine.math.Ray;
+import com.hypefoundry.engine.math.Vector3;
 
 
 public class BoundingBoxTest extends AndroidTestCase
@@ -69,5 +71,80 @@ public class BoundingBoxTest extends AndroidTestCase
 	    assertEquals( false, bb.doesOverlap( new BoundingBox( 101, 101, 101, 150, 150, 150 ) ) );
 	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, 0, 0, -1, 100, 100 ) ) );
 	    assertEquals( false, bb.doesOverlap( new BoundingBox( 0, -50, 0, 100, -1, 100 ) ) );
-	} 
+	}
+	
+	public void testSphereRayOverlap()
+	{
+		BoundingSphere bs = new BoundingSphere( 0, 0, 0, 10 );
+		
+		Vector3 intersectPos = new Vector3();
+		
+		Ray ray = new Ray( -11, 0, 0, 2, 0, 0 ); 
+		assertTrue( bs.doesOverlap( ray, intersectPos ) );
+		assertTrue( intersectPos.dist( -10, 0, 0 ) < 1e-3 );
+		
+		ray.setDirection( 0.5f, 0, 0 ); 
+		assertFalse( bs.doesOverlap( ray, intersectPos ) );
+		
+		ray.setDirection( 0, 1, 0 ); 
+		assertFalse( bs.doesOverlap( ray, intersectPos ) );
+		
+		ray.setDirection( -5, 0, 0 ); 
+		assertFalse( bs.doesOverlap( ray, intersectPos ) );
+		
+		ray.setDirection( 10, 2, 0 ); 
+		assertTrue( bs.doesOverlap( ray, intersectPos ) );
+		assertTrue( intersectPos.dist( -9.9979f, 0.2f, 0 ) < 1e-3 );
+		
+		ray.m_origin.set( 0, -15, 0 );
+		
+		ray.setDirection( 10, 2, 0 );
+		assertFalse( bs.doesOverlap( ray, intersectPos ) );
+		
+		ray.setDirection( 0, 4.9f, 0 ); 
+		assertFalse( bs.doesOverlap( ray, intersectPos ) );
+		
+		ray.setDirection( 0, 5.0f, 0 ); 
+		assertTrue( bs.doesOverlap( ray, intersectPos ) );
+		assertTrue( intersectPos.dist( 0, -10, 0 ) < 1e-3 );
+	}
+	
+	public void testBoxRayOverlap()
+	{
+		BoundingBox bb = new BoundingBox( 0, 0, 0, 10, 10, 10 );
+		
+		Ray ray = new Ray( -1, 0, 0, 2, 0, 0 ); 
+		assertTrue( bb.doesOverlap( ray, null ) );
+		
+		ray.setDirection( 0.5f, 0, 0 ); 
+		assertFalse( bb.doesOverlap( ray, null ) );
+		
+		ray.m_origin.set( 1, -1, 0 );
+		
+		ray.setDirection( 0.5f, 0, 0 ); 
+		assertFalse( bb.doesOverlap( ray, null ) );
+		
+		ray.setDirection( 0, 2, 0 ); 
+		assertTrue( bb.doesOverlap( ray, null ) );
+	}
+	
+	public void testBoxRayOverlap2D()
+	{
+		BoundingBox bb = new BoundingBox( 0, 0, 0, 10, 10, 10 );
+		
+		Ray ray = new Ray( -1, 0, 0, 2, 0, 100 ); 
+		assertTrue( bb.doesOverlap2D( ray, null ) );
+		
+		ray.setDirection( 0.5f, 0, 0 ); 
+		assertFalse( bb.doesOverlap2D( ray, null ) );
+		
+		ray.m_origin.set( 1, -1, 100 );
+		
+		ray.setDirection( 0.5f, 0, 0 ); 
+		assertFalse( bb.doesOverlap2D( ray, null ) );
+		
+		ray.setDirection( 0, 2, 0 ); 
+		assertTrue( bb.doesOverlap2D( ray, null ) );
+	}
 }
+

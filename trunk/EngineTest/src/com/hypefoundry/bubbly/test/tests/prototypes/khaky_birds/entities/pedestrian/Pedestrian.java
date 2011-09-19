@@ -25,6 +25,7 @@ public class Pedestrian extends Entity implements Crappable
 {
 	boolean				m_hitWithShit;
 	public World 		m_world    				     = null;
+	boolean 			m_wasBeaten 				 = false;
 	
 	enum State
 	{
@@ -83,8 +84,12 @@ public class Pedestrian extends Entity implements Crappable
 	
 	public void turnIntoZombie()
 	{
-		Vector3 pedestrianPos = getPosition();
-		m_world.addEntity( new Zombie(pedestrianPos));
+		if (m_wasBeaten == false)
+		{
+			m_wasBeaten = true;
+			Vector3 pedestrianPos = getPosition();
+			m_world.addEntity( new Zombie(pedestrianPos));
+		}
 	}
 	
 	@Override

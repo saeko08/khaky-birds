@@ -66,7 +66,7 @@ public class ZombieAI extends FiniteStateMachine
 				transitionTo( Chasing.class ).setChasingTarget(m_noticedPedestrian);
 			}
 			
-			m_toObserveChance = m_randObserveChnce.nextInt(10);
+			m_toObserveChance = m_randObserveChnce.nextInt(25);
 			
 			if ( m_toObserveChance == 5 )
 			{
@@ -154,10 +154,9 @@ public class ZombieAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_zombie.m_state = Zombie.State.Observe;
-			m_wait = 6.0f;
+			m_wait = 3.0f;
 			
-			// register events listeners
-			m_waitTimer = m_randWaitTime.nextInt(6);
+			m_waitTimer = m_randWaitTime.nextInt(3);
 		}
 		
 		@Override
@@ -233,7 +232,15 @@ public class ZombieAI extends FiniteStateMachine
 			if ( m_noticedPedestrian == null )
 			{
 				transitionTo( Wander.class );
-			}				
+			}	
+			
+			//testuje dynamiczne sprawdzanie nalbli¿szych zombiech i rakcjê na to - byc moze do wywalenia
+			m_noticedPedestrian = (Pedestrian) m_zombie.m_world.findNearestEntity(Pedestrian.class, 1.5f, m_zombie.getPosition());
+			
+			if (m_noticedPedestrian == null)
+			{
+				transitionTo( Wander.class );
+			}
 		}
 		
 		@Override

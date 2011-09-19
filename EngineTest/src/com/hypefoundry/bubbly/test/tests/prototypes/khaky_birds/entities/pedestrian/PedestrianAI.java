@@ -150,10 +150,10 @@ public class PedestrianAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_pedestrian.m_state = Pedestrian.State.Observe;
-			m_wait = 6.0f;
+			m_wait = 3.0f;
 			
 			// register events listeners
-			m_waitTimer = m_randWaitTime.nextInt(6);
+			m_waitTimer = m_randWaitTime.nextInt(3);
 		}
 		
 		@Override
@@ -222,7 +222,15 @@ public class PedestrianAI extends FiniteStateMachine
 			if ( m_noticedZombie == null )
 			{
 				transitionTo( Wander.class );
-			}				
+			}	
+			
+			//testuje dynamiczne sprawdzanie nalbli¿szych zombiech i rakcjê na to - byc moze do wywalenia
+			m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 1.5f, m_pedestrian.getPosition());
+			
+			if (m_noticedZombie == null)
+			{
+				transitionTo( Wander.class );
+			}
 		}
 		
 		@Override

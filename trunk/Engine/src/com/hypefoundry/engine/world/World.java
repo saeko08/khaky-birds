@@ -1,6 +1,5 @@
 package com.hypefoundry.engine.world;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import com.hypefoundry.engine.game.Updatable;
@@ -307,6 +306,7 @@ public class World implements Updatable
 				distanceSq = sourcePos.distSq2D( targetPos );
 				if ( distanceSq <= closestDistSq )
 				{
+					closestDistSq = distanceSq;
 					closestEntIdx = i;	
 				}
 			}

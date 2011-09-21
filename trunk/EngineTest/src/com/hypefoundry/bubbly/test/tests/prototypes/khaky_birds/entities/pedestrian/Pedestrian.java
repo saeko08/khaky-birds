@@ -2,6 +2,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedest
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Bullet;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Biteable;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.DataSaver;
@@ -21,7 +22,7 @@ import com.hypefoundry.engine.physics.DynamicObject;
  * @author paksas
  *
  */
-public class Pedestrian extends Entity implements Crappable
+public class Pedestrian extends Entity implements Crappable, Biteable
 {
 	boolean				m_hitWithShit;
 	public World 		m_world    				     = null;
@@ -32,7 +33,8 @@ public class Pedestrian extends Entity implements Crappable
 		Wander,
 		TurnAround,
 		Observe,
-		Evade
+		Evade,
+		Eaten
 	}
 	
 	State		m_state;

@@ -5,6 +5,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie
 
 import java.util.Random;
 
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
@@ -19,6 +20,8 @@ import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.engine.world.EventFactory;
+import com.hypefoundry.engine.world.World;
+import com.hypefoundry.engine.world.WorldView;
 
 
 /**
@@ -29,7 +32,12 @@ public class ZombieAI extends FiniteStateMachine
 {
 	private Zombie				m_zombie;
 	private SteeringBehaviors 	m_sb;
-	private final float			m_pedestrianLookoutRadius = 1.2f;
+	private final float			m_pedestrianLookoutRadius		= 1.2f;
+	private float               m_eatingTime 					= 2.5f;
+	
+	// ------------------------------------------------------------------------
+	//blackboard
+	private Entity			m_noticedBiteableEntity	  = null;
 
 
 	// ------------------------------------------------------------------------
@@ -38,7 +46,6 @@ public class ZombieAI extends FiniteStateMachine
 	{	
 		private Vector3 m_tmpDirVec 				= new Vector3();
 		private Random m_randObserveChnce   		= new Random();
-		private Pedestrian 	m_noticedPedestrian 	= null;
 		private int m_toObserveChance       		= 0;
 		
 		@Override
@@ -52,18 +59,18 @@ public class ZombieAI extends FiniteStateMachine
 		public void deactivate()
 		{
 			m_sb.clear();
-			m_noticedPedestrian = null;
+			//m_noticedPedestrian = null;
 		}
 		
 		@Override
 		public void execute( float deltaTime )
 		{
 			
-			m_noticedPedestrian = (Pedestrian) m_zombie.m_world.findNearestEntity(Pedestrian.class, 1.2f, m_zombie.getPosition());
+			m_noticedBiteableEntity = (Pedestrian) m_zombie.m_world.findNearestEntity(Pedestrian.class, 1.2f, m_zombie.getPosition());
 			
-			if (m_noticedPedestrian != null)
+			if (m_noticedBiteableEntity != null)
 			{
-				transitionTo( Chasing.class ).setChasingTarget(m_noticedPedestrian);
+				transitionTo( Chasing.class ).setChasingTarget(m_noticedBiteableEntity);
 			}
 			
 			m_toObserveChance = m_randObserveChnce.nextInt(25);
@@ -92,8 +99,11 @@ public class ZombieAI extends FiniteStateMachine
 			{
 				// if it collides with another entity, it attempts eating it
 				Entity collider = ( (CollisionEvent)event ).m_collider;
-				collider.sendEvent( Bite.class );
-				transitionTo( Observe.class );
+				if(collider instanceof Biteable)
+				{
+					collider.sendEvent( Bite.class );
+					transitionTo( Eat.class ).setChasingTarget(collider);
+				}
 			}
 			else if ( event instanceof OutOfWorldBounds )
 			{					
@@ -107,6 +117,7 @@ public class ZombieAI extends FiniteStateMachine
 				
 			}
 		}
+
 	}
 	
 	// ------------------------------------------------------------------------
@@ -148,7 +159,6 @@ public class ZombieAI extends FiniteStateMachine
 		private Random m_randWaitTime   = new Random();
 		private int m_waitTimer         = 0;
 		private float 	m_wait 			= 0.f;
-		private Pedestrian 	m_noticedPedestrian 	= null;
 		
 		@Override
 		public void activate()
@@ -162,7 +172,7 @@ public class ZombieAI extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
-			m_noticedPedestrian 	= null;
+			//m_noticedPedestrian 	= null;
 		}
 		
 		@Override
@@ -174,11 +184,11 @@ public class ZombieAI extends FiniteStateMachine
 				transitionTo( Wander.class );
 			}
 
-			m_noticedPedestrian = m_zombie.m_world.findNearestEntity( Pedestrian.class, m_pedestrianLookoutRadius, m_zombie.getPosition() );
+			m_noticedBiteableEntity = m_zombie.m_world.findNearestEntity( Pedestrian.class, m_pedestrianLookoutRadius, m_zombie.getPosition() );
 			
-			if (m_noticedPedestrian != null)
+			if (m_noticedBiteableEntity != null)
 			{
-				transitionTo( Chasing.class ).setChasingTarget(m_noticedPedestrian);
+				transitionTo( Chasing.class ).setChasingTarget(m_noticedBiteableEntity);
 			}
 		}
 		
@@ -199,45 +209,52 @@ public class ZombieAI extends FiniteStateMachine
 			{
 				// if it collides with another entity, it attempts eating it
 				Entity collider = ( (CollisionEvent)event ).m_collider;
-				collider.sendEvent( Bite.class );
+				if(collider instanceof Biteable)
+				{
+					collider.sendEvent( Bite.class );
+					transitionTo( Eat.class ).setChasingTarget(collider);
+				}
 
 			}
 		}
+
 	}
 	
 	// ------------------------------------------------------------------------
 	
-	class Chasing extends FSMState implements EntityEventListener
+	class Chasing extends FSMState implements EntityEventListener, WorldView
 	{
-		Pedestrian m_noticedPedestrian = null;
 		private Vector3 m_tmpDirVec 				= new Vector3();
 		
 		@Override
 		public void activate()
 		{
 			m_zombie.m_state = Zombie.State.Chasing;	
-			m_sb.begin().pursuit(m_noticedPedestrian).faceMovementDirection();
+			//na tym jest crash:
+			//m_zombie.m_world.attachView(this);
+			m_sb.begin().pursuit(m_noticedBiteableEntity).faceMovementDirection();
 		}
 		
 		@Override
 		public void deactivate()
 		{
 			m_sb.clear();
-			m_noticedPedestrian = null;
+			//na tym jest crash:
+			//m_zombie.m_world.detachView(this);
 		}
 		
 		@Override
 		public void execute( float deltaTime )
 		{
-			if ( m_noticedPedestrian == null )
+			if ( m_noticedBiteableEntity == null )
 			{
 				transitionTo( Wander.class );
 			}	
 			
 			//testuje dynamiczne sprawdzanie nalbli¿szych zombiech i rakcjê na to - byc moze do wywalenia
-			m_noticedPedestrian = (Pedestrian) m_zombie.m_world.findNearestEntity(Pedestrian.class, 1.5f, m_zombie.getPosition());
+			m_noticedBiteableEntity = (Pedestrian) m_zombie.m_world.findNearestEntity(Pedestrian.class, 1.5f, m_zombie.getPosition());
 			
-			if (m_noticedPedestrian == null)
+			if (m_noticedBiteableEntity == null)
 			{
 				transitionTo( Wander.class );
 			}
@@ -261,8 +278,11 @@ public class ZombieAI extends FiniteStateMachine
 			{
 				// if it collides with another entity, it attempts eating it
 				Entity collider = ( (CollisionEvent)event ).m_collider;
-				collider.sendEvent( Bite.class );
-				transitionTo( Observe.class );
+				if(collider instanceof Biteable)
+				{
+					collider.sendEvent( Bite.class );
+					transitionTo( Eat.class ).setChasingTarget(collider);
+				}
 
 			}
 			else if ( event instanceof OutOfWorldBounds )
@@ -278,14 +298,99 @@ public class ZombieAI extends FiniteStateMachine
 			}
 		}
 		
-		public void setChasingTarget(Pedestrian noticedPedestrian)
+		public void setChasingTarget(Entity noticedBiteableEntity)
 		{
-			m_noticedPedestrian = noticedPedestrian;
+			m_noticedBiteableEntity = noticedBiteableEntity;
+		}
+
+		@Override
+		public void onAttached(World world) 
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onDetached(World world) 
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onEntityAdded(Entity entity) 
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onEntityRemoved(Entity entity) 
+		{
+			if ((Pedestrian)entity == m_noticedBiteableEntity )
+			{
+				m_noticedBiteableEntity = null;
+			}
+			
 		}
 	}
 	
 	// ------------------------------------------------------------------------
 	
+	
+	
+		class Eat extends FSMState implements EntityEventListener
+		{
+			private float 	m_wait 			= 0.f;
+			
+			@Override
+			public void activate()
+			{
+				m_zombie.m_state = Zombie.State.Eat;
+				m_sb.begin().arrive(m_noticedBiteableEntity.getPosition(), 1.5f).faceMovementDirection();
+				
+			}
+			
+			@Override
+			public void deactivate()
+			{
+				m_wait 	= 0.f;
+				m_noticedBiteableEntity = null;
+				m_sb.clear();
+			}
+			
+			@Override
+			public void execute( float deltaTime )
+			{
+				m_wait += deltaTime;
+				if ( m_wait >= m_eatingTime )
+				{
+					transitionTo( Wander.class );
+				}
+
+			}
+			
+			public void setChasingTarget(Entity noticedBiteableEntity)
+			{
+				m_noticedBiteableEntity = noticedBiteableEntity;
+			}
+
+			@Override
+			public void onEvent(EntityEvent event) 
+			{
+				if ( event instanceof Crapped )
+				{
+					// a bird crapped on us
+					m_zombie.setHitWithShit( true );
+					die();
+				}
+				
+			}
+
+		}
+		
+	// ------------------------------------------------------------------------
+		
 	/**
 	 * Constructor.
 	 * 
@@ -309,6 +414,7 @@ public class ZombieAI extends FiniteStateMachine
 		register( new TurnAround() );
 		register( new Observe() );
 		register( new Chasing() );
+		register( new Eat() );
 		begin( Wander.class );
 	}
 	

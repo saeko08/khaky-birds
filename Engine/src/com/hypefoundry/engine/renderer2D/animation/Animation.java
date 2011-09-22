@@ -40,6 +40,7 @@ public class Animation extends Resource
 	// ------------------------------------------------------------------------
 	
 	private float								m_frameDuration;
+	private float								m_animationDuration;
 	TextureRegion[]								m_regions;
 	private EntityEvent[][]						m_events;
 	private boolean								m_looped;
@@ -52,6 +53,7 @@ public class Animation extends Resource
 	public Animation()
 	{
 		m_frameDuration = 0.0f;
+		m_animationDuration = 0.0f;
 		m_regions = null;
 		m_looped = true;
 	}
@@ -70,6 +72,8 @@ public class Animation extends Resource
 		m_looped = looped;
 		m_regions = regions;
 		m_events = events;
+		
+		m_animationDuration = frameDuration * regions.length;
 	}
 	
 	/**
@@ -81,6 +85,16 @@ public class Animation extends Resource
 	public static void registerAnimEvent( Class< ? extends EntityEvent > type, AnimEventFactory factory )
 	{
 		m_eventFactories.add( new EventFactoryData( type, factory ) );
+	}
+	
+	/**
+	 * Returns duration of the animation.
+	 * 
+	 * @return
+	 */
+	public float getDuration() 
+	{
+		return m_animationDuration;
 	}
 	
 	/**
@@ -193,6 +207,9 @@ public class Animation extends Resource
 					}
 				}
 			}
+			
+			// calculate animation duration
+			m_animationDuration = m_frameDuration * m_regions.length;
 		}
 	}
 	

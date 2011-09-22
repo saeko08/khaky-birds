@@ -7,7 +7,6 @@ import java.util.*;
 
 import com.hypefoundry.engine.renderer2D.TextureRegion;
 import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.engine.util.Arrays;
 
 
 /**
@@ -106,19 +105,36 @@ public class AnimationPlayer
 	 */
 	public TextureRegion getTextureRegion( Entity entity, float deltaTime )
 	{
+		float prevAnimTime = m_animationTime;
 		m_animationTime += deltaTime;
 		Animation animation = m_animations.get( m_activeAnimationIdx );
 		int frameIdx = animation.getFrameIdx( m_animationTime );
 		
 		// transmit the events
-		if ( frameIdx != m_lastEventFrameIdx )
+		boolean loopSkipped = ( frameIdx < m_lastEventFrameIdx ) || ( m_animationTime - prevAnimTime >= animation.getDuration() );
+		if ( loopSkipped )
 		{
-			if ( animation.transmitAnimEvents( entity, frameIdx ) )
+			for ( int i = m_lastEventFrameIdx + 1; i < animation.m_regions.length; ++i )
 			{
-				m_lastEventFrameIdx = frameIdx;
+				animation.transmitAnimEvents( entity, i );
+			}
+			
+			int endIdx = ( m_lastEventFrameIdx < frameIdx ) ? m_lastEventFrameIdx : frameIdx;
+			for ( int i = 0; i <= endIdx; ++i )
+			{
+				animation.transmitAnimEvents( entity, i );
 			}
 		}
-		
+		else
+		{
+			for ( int i = m_lastEventFrameIdx + 1; i <= frameIdx; ++i )
+			{
+				animation.transmitAnimEvents( entity, i );
+			}
+		}
+		m_lastEventFrameIdx = frameIdx;
+
+		// select the texture region
 		TextureRegion region = animation.m_regions[frameIdx];
 		return region;
 	}

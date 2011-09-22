@@ -1,12 +1,8 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Eaten;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shocked;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shootable;
 import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.engine.world.EntityEvent;
-import com.hypefoundry.engine.world.EntityEventListener;
-import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
@@ -21,7 +17,7 @@ import com.hypefoundry.engine.physics.DynamicObject;
  * @author paksas
  *
  */
-public class Bird extends Entity
+public class Bird extends Entity implements Shootable
 {
 	public CableProvider		m_cables			= null;
 	public int					m_cableIdx  		= 0;

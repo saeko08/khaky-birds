@@ -21,8 +21,8 @@ import com.hypefoundry.engine.world.World;
 public class Bullet extends Entity implements EntityEventListener
 {
 
-	public final float 	maxLinearSpeed 			 = 4.0f;
-	public World 		m_world    				     = null;
+	public final float 	maxLinearSpeed 			 	= 1.0f;
+	public World 		m_world						= null;
 
 	/**
 	 * Default constructor.
@@ -41,10 +41,10 @@ public class Bullet extends Entity implements EntityEventListener
 	 */
 	public Bullet( float x, float y, float facing )
 	{
-		setPosition( x, y, 1 );
+		setPosition( x, y, 50 );
 		setFacing( facing );
 		
-		setBoundingBox( new BoundingBox( -0.05f, -0.05f, -0.1f, 0.05f, 0.05f, 10.0f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.05f, -0.05f, -100.0f, 0.05f, 0.05f, 100.0f ) );	// TODO: config
 		
 		final float maxRotationSpeed = 180.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
@@ -70,8 +70,11 @@ public class Bullet extends Entity implements EntityEventListener
 		{
 			// if it collides with another entity, it attempts eating it
 			Entity collider = ( (CollisionEvent)event ).m_collider;
-			collider.sendEvent( Shot.class );   
-			die();
+			if ( collider instanceof Shootable )
+			{
+				collider.sendEvent( Shot.class );   
+				die();
+			}
 		}
 		if ( event instanceof OutOfWorldBounds )
 		{

@@ -130,6 +130,7 @@ public class ZombieAI extends FiniteStateMachine
 		@Override
 		public void activate()
 		{
+			m_noticedBiteableEntity	  = null;
 			m_zombie.m_state = Zombie.State.TurnAround;
 			m_sb.begin().seek( m_safePos ).faceMovementDirection();
 		}

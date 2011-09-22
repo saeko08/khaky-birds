@@ -29,7 +29,7 @@ import com.hypefoundry.engine.world.WorldView;
  * @author paksas
  *
  */
-public class PedestrianAI extends FiniteStateMachine
+public class PedestrianAI extends FiniteStateMachine implements WorldView
 {
 	private Pedestrian				m_pedestrian;
 	private SteeringBehaviors 		m_sb;
@@ -40,6 +40,37 @@ public class PedestrianAI extends FiniteStateMachine
 	// ------------------------------------------------------------------------
 	//blackboard
 	private Zombie 					m_noticedZombie				= null;
+	
+	@Override
+	public void onAttached(World world) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDetached(World world) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEntityAdded(Entity entity) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEntityRemoved(Entity entity) 
+	{
+		if ((Zombie)entity == m_noticedZombie )
+		{
+			m_noticedZombie = null;
+		}
+		
+	}
 	
 
 	// ------------------------------------------------------------------------
@@ -174,7 +205,7 @@ public class PedestrianAI extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
-			//m_noticedZombie		= null;
+
 		}
 		
 		@Override
@@ -212,7 +243,7 @@ public class PedestrianAI extends FiniteStateMachine
 	
 	// ------------------------------------------------------------------------
 	
-	class Evade extends FSMState implements EntityEventListener, WorldView
+	class Evade extends FSMState implements EntityEventListener
 	{
 		private Vector3 m_tmpDirVec 		= new Vector3();
 		
@@ -220,9 +251,11 @@ public class PedestrianAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_pedestrian.m_state = Pedestrian.State.Evade;	
-			//na tym jest crash:
-			//m_pedestrian.m_world.attachView(this);
-			m_sb.begin().evade(m_noticedZombie).faceMovementDirection();
+			Entity evadeEntity = (Entity)m_noticedZombie;
+			if ( evadeEntity != null )
+			{
+				m_sb.begin().evade(m_noticedZombie).faceMovementDirection();
+			}
 		}
 		
 		@Override
@@ -237,11 +270,6 @@ public class PedestrianAI extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-			if ( m_noticedZombie == null )
-			{
-				transitionTo( Wander.class );
-			}	
-			
 			//testuje dynamiczne sprawdzanie nalbli¿szych zombiech i rakcjê na to - byc moze do wywalenia
 			m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 1.5f, m_pedestrian.getPosition());
 			
@@ -281,36 +309,6 @@ public class PedestrianAI extends FiniteStateMachine
 			m_noticedZombie = noticedZombie;
 		}
 
-		@Override
-		public void onAttached(World world) 
-		{
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onDetached(World world) 
-		{
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onEntityAdded(Entity entity) 
-		{
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onEntityRemoved(Entity entity) 
-		{
-			if ((Zombie)entity == m_noticedZombie )
-			{
-				m_noticedZombie = null;
-			}
-			
-		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -322,7 +320,6 @@ public class PedestrianAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_pedestrian.m_state = Pedestrian.State.Eaten;
-			m_noticedZombie = null;
 			
 		}
 		
@@ -350,7 +347,6 @@ public class PedestrianAI extends FiniteStateMachine
 	/**
 	 * Constructor.
 	 * 
-	 * @param world
 	 * @param pedestrian			controlled pedestrian
 	 */
 	public PedestrianAI( Entity pedestrian )
@@ -364,6 +360,8 @@ public class PedestrianAI extends FiniteStateMachine
 		m_pedestrian.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
 		m_pedestrian.registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
 		m_pedestrian.registerEvent( Bite.class, new EventFactory< Bite >() { @Override public Bite createObject() { return new Bite (); } } );
+		
+		m_pedestrian.m_world.attachView(this);
 
 		// setup the state machine
 		register( new Wander() );
@@ -382,6 +380,7 @@ public class PedestrianAI extends FiniteStateMachine
 	
 	void die()
 	{
+		m_pedestrian.m_world.detachView( this );
 		m_pedestrian.m_world.removeEntity( m_pedestrian );
 	}
 }

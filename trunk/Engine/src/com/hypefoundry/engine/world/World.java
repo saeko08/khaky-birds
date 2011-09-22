@@ -284,7 +284,7 @@ public class World implements Updatable
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public < T extends Entity > T findNearestEntity( Class< T > entityType, float range, Vector3 sourcePos ) 
+	public < T > T findNearestEntity( Class< T > entityType, float range, Vector3 sourcePos ) 
 	{
 		int count 			= m_entities.size();
 		if ( count == 0 )

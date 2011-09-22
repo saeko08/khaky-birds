@@ -3,10 +3,9 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shootable;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
@@ -19,7 +18,7 @@ import com.hypefoundry.engine.world.World;
  * @author azagor
  *
  */
-public class Zombie extends Entity implements Crappable
+public class Zombie extends Entity implements Crappable, Shootable
 
 {
 boolean				m_hitWithShit;

@@ -3,16 +3,11 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter;
 
-import java.util.Random;
-
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.math.MathLib;
-import com.hypefoundry.engine.math.Vector3;
-import com.hypefoundry.engine.physics.DynamicObject;
-import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
 import com.hypefoundry.engine.renderer2D.animation.AnimEvent;
 import com.hypefoundry.engine.world.Entity;

@@ -5,24 +5,17 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon
 
 import java.util.Random;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird.State;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.Shocked;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shootable;
 import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.engine.world.EntityEvent;
-import com.hypefoundry.engine.world.EntityEventException;
-import com.hypefoundry.engine.world.EntityEventListener;
-import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.DynamicObject;
-import com.hypefoundry.engine.physics.events.CollisionEvent;
 
 /**
  * @author azagor
  *
  */
-public class Falcon extends Entity
+public class Falcon extends Entity implements Shootable
 {
 	public boolean   m_flyingFromLeft 			 = true;
 	public boolean   m_isChasing 			     = false;

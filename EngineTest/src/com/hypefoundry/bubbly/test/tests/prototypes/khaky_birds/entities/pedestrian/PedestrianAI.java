@@ -65,7 +65,7 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 	@Override
 	public void onEntityRemoved(Entity entity) 
 	{
-		if ((Zombie)entity == m_noticedZombie )
+		if ( entity == m_noticedZombie )
 		{
 			m_noticedZombie = null;
 		}
@@ -262,8 +262,6 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		public void deactivate()
 		{
 			m_sb.clear();
-			//na tym jest crash:
-			//m_pedestrian.m_world.detachView(this);
 			m_noticedZombie = null;
 		}
 		
@@ -308,7 +306,6 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		{
 			m_noticedZombie = noticedZombie;
 		}
-
 	}
 	
 	// ------------------------------------------------------------------------

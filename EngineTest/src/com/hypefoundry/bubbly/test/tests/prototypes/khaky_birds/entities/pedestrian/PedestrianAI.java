@@ -120,6 +120,7 @@ public class PedestrianAI extends FiniteStateMachine
 		@Override
 		public void activate()
 		{
+			m_noticedZombie				= null;
 			m_pedestrian.m_state = Pedestrian.State.TurnAround;
 			m_sb.begin().seek( m_safePos ).faceMovementDirection();
 		}

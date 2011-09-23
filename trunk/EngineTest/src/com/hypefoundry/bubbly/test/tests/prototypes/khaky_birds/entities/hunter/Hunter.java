@@ -4,6 +4,8 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Biteable;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
@@ -19,18 +21,22 @@ import com.hypefoundry.engine.world.World;
  * @author azagor
  *
  */
-public class Hunter extends Entity  implements Crappable
+public class Hunter extends Entity  implements Crappable, Biteable
 {
 	
 	private Vector3 			m_tmpBulletPos 		= new Vector3();
-	private World 				m_world    			= null;
+	public World 				m_world    			= null;
+	boolean 					m_wasBeaten 		= false;
 
 	
 	enum State
 	{
 		Aiming,
 		Shooting,
-		Shitted
+		Shitted,
+		Eaten,
+		AimingZombie,
+		ShootingZombie
 	}
 	
 	State		m_state;
@@ -67,6 +73,16 @@ public class Hunter extends Entity  implements Crappable
 		
 		m_tmpBulletPos.set(Vector3.EX).rotateZ( getFacing() ).scale(0.3f).add( hunterPos );		
 		m_world.addEntity( new Bullet( m_tmpBulletPos.m_x, m_tmpBulletPos.m_y, getFacing() ) );
+	}
+	
+	public void turnIntoZombie()
+	{
+		if (m_wasBeaten == false)
+		{
+			m_wasBeaten = true;
+			Vector3 hunterPos = getPosition();
+			m_world.addEntity( new Zombie(hunterPos));
+		}
 	}
 	
 	@Override

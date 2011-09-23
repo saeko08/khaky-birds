@@ -64,8 +64,18 @@ public class HunterVisual extends EntityVisual
 				m_animationPlayer.select( ANIM_AIM );
 				break;
 			}
+			case AimingZombie:
+			{
+				m_animationPlayer.select( ANIM_AIM );
+				break;
+			}
 			
 			case Shooting:
+			{
+				m_animationPlayer.select( ANIM_SHOOT );
+				break;
+			}
+			case ShootingZombie:
 			{
 				m_animationPlayer.select( ANIM_SHOOT );
 				break;
@@ -74,6 +84,11 @@ public class HunterVisual extends EntityVisual
 			case Shitted:
 			{
 				m_animationPlayer.select( ANIM_SHITTED );
+				break;
+			}
+			case Eaten:
+			{
+				m_animationPlayer.select( ANIM_AIM );
 				break;
 			}
 		}

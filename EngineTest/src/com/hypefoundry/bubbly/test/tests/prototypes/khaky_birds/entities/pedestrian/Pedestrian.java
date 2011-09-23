@@ -22,7 +22,7 @@ import com.hypefoundry.engine.physics.DynamicObject;
  * @author paksas
  *
  */
-public class Pedestrian extends Entity implements Crappable, Biteable, Shootable
+public class Pedestrian extends Entity implements Crappable, Biteable
 {
 	boolean				m_hitWithShit;
 	public World 		m_world    				     = null;

@@ -5,6 +5,9 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Bite;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.math.MathLib;
@@ -15,21 +18,65 @@ import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.world.World;
+import com.hypefoundry.engine.world.WorldView;
 
 /**
  * Hunter's AI.
  * 
  * @author azagor
  */
-public class HunterAI extends FiniteStateMachine
+public class HunterAI extends FiniteStateMachine implements WorldView
 {
 	private Hunter				m_hunter;
 	private SteeringBehaviors 	m_sb;
 	private Bird				m_bird;
+	private float 				m_eatingTime				= 1.5f;
 	
 	private final float			MAX_AIM_TOLERANCE = 15.0f; // TODO: config
 	private final float			MIN_AIM_TOLERANCE = 2.0f; // TODO: config
+	private final float 		m_zombieLookoutRadiusFar 	= 3.0f;
 	
+	
+
+	
+	// ------------------------------------------------------------------------
+	//blackboard
+	private Zombie 					m_noticedZombie				= null;
+	
+	@Override
+	public void onAttached(World world) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDetached(World world) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEntityAdded(Entity entity) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEntityRemoved(Entity entity) 
+	{
+		if ( entity == m_noticedZombie )
+		{
+			m_noticedZombie = null;
+		}
+		if ( entity == m_bird )
+		{
+			m_bird = null;
+		}
+		
+	}
 	
 	// ------------------------------------------------------------------------
 	
@@ -66,6 +113,12 @@ public class HunterAI extends FiniteStateMachine
 					transitionTo( Shooting.class );
 				}
 			}
+			
+			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
+			if ( m_noticedZombie != null )
+			{
+				transitionTo( AimingZombie.class );
+			}
 		}
 
 		@Override
@@ -75,6 +128,69 @@ public class HunterAI extends FiniteStateMachine
 			{
 				// a bird crapped on us
 				transitionTo( Shitted.class );
+			}
+			else if ( event instanceof Bite )
+			{
+				transitionTo( Eaten.class );
+			}
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	class AimingZombie extends FSMState implements EntityEventListener
+	{			
+		@Override
+		public void activate()
+		{
+			m_hunter.m_state = Hunter.State.AimingZombie;
+			m_sb.clear();
+			
+			Entity aimingEntity = (Entity)m_noticedZombie;
+			if ( aimingEntity != null )
+			{
+				// look at the zombie, but with some tolerance
+				m_sb.begin().lookAt( m_noticedZombie );
+			}
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.clear();
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			
+			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
+			if ( m_noticedZombie == null )
+			{
+				transitionTo( Aiming.class );
+			}
+			else 
+			{
+				// look at the zombie, but with some tolerance
+				float angleDiff = MathLib.lookAtDiff( m_noticedZombie.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
+				if ( angleDiff < MIN_AIM_TOLERANCE )
+				{
+					transitionTo( ShootingZombie.class );
+				}
+			}
+		}
+
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				transitionTo( Shitted.class );
+			}
+			else if ( event instanceof Bite )
+			{
+				transitionTo( Eaten.class );
 			}
 		}
 	}
@@ -108,7 +224,12 @@ public class HunterAI extends FiniteStateMachine
 				{
 					transitionTo( Aiming.class );
 				}
-			}			
+			}
+			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
+			if ( m_noticedZombie != null )
+			{
+				transitionTo( AimingZombie.class );
+			}
 		}
 		
 		@Override
@@ -126,6 +247,75 @@ public class HunterAI extends FiniteStateMachine
 				{
 					m_hunter.shoot();
 				}
+			}
+			else if ( event instanceof Bite )
+			{
+				transitionTo( Eaten.class );
+			}
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	class ShootingZombie extends FSMState implements EntityEventListener
+	{	
+		@Override
+		public void activate()
+		{
+			Entity aimingEntity = (Entity)m_noticedZombie;
+			if ( aimingEntity != null )
+			{
+				m_hunter.m_state = Hunter.State.ShootingZombie;
+				m_sb.clear();
+			}
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.clear();
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
+			if ( m_noticedZombie != null )
+			{
+				// keep monitoring the bird's position, because we may need to start aiming
+				float angleDiff = MathLib.lookAtDiff( m_noticedZombie.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
+				
+				if ( angleDiff > MAX_AIM_TOLERANCE )
+				{
+					transitionTo( AimingZombie.class );
+				}
+			}
+			else
+			{
+				transitionTo( Aiming.class );
+			}
+				
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				transitionTo( Shitted.class );
+			}
+			else if ( event instanceof AnimEvent )
+			{
+				AnimEvent animEvent = (AnimEvent)event;
+				if ( animEvent.m_event instanceof Fire )
+				{
+					m_hunter.shoot();
+				}
+			}
+			else if ( event instanceof Bite )
+			{
+				transitionTo( Eaten.class );
 			}
 		}
 	}
@@ -154,6 +344,38 @@ public class HunterAI extends FiniteStateMachine
 	}
 	
 	// ------------------------------------------------------------------------
+		class Eaten extends FSMState
+		{
+			private float 	m_wait 			= 0.f;
+			
+			@Override
+			public void activate()
+			{
+				m_hunter.m_state = Hunter.State.Eaten;
+				
+			}
+			
+			@Override
+			public void deactivate()
+			{
+				m_wait 			= 0.f;
+			}
+			
+			@Override
+			public void execute( float deltaTime )
+			{
+				m_wait += deltaTime;
+				if ( m_wait >= m_eatingTime )
+				{
+					m_hunter.turnIntoZombie();
+					die();
+				}
+
+			}
+
+		}
+	
+	// ------------------------------------------------------------------------
 	
 	/**
 	 * Constructor.
@@ -171,12 +393,18 @@ public class HunterAI extends FiniteStateMachine
 		
 		// define events the entity responds to
 		m_hunter.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
+		m_hunter.registerEvent( Bite.class, new EventFactory< Bite >() { @Override public Bite createObject() { return new Bite (); } } );
 		m_hunter.registerEvent( AnimEvent.class, new EventFactory< AnimEvent >() { @Override public AnimEvent createObject() { return new AnimEvent (); } } );
 
+		m_hunter.m_world.attachView(this);
+		
 		// setup the state machine
 		register( new Aiming() );
 		register( new Shooting() );
 		register( new Shitted() );
+		register( new Eaten() );
+		register( new AimingZombie() );
+		register( new ShootingZombie() );
 		begin( Aiming.class );
 	}
 	
@@ -184,5 +412,11 @@ public class HunterAI extends FiniteStateMachine
 	public void onUpdate( float deltaTime )
 	{
 		m_sb.update(deltaTime);
+	}
+	
+	void die()
+	{
+		m_hunter.m_world.detachView( this );
+		m_hunter.m_world.removeEntity( m_hunter );
 	}
 }

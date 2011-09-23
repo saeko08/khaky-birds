@@ -40,7 +40,10 @@
 	<Entity type="Zombie">
 		<position x='3' y='5' z='80' />
 	</Entity>
-
+	
+	<Entity type="Zombie">
+		<position x='4' y='1' z='80' />
+	</Entity>
 	
 	
 	<Entity type="Bird" />

@@ -105,7 +105,12 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 		@Override
 		public void execute( float deltaTime )
 		{
-			if ( m_bird != null )
+			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
+			if ( m_noticedZombie != null )
+			{
+				transitionTo( AimingZombie.class );
+			}
+			else if ( m_bird != null )
 			{
 				// look at the bird, but with some tolerance
 				float angleDiff = MathLib.lookAtDiff( m_bird.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
@@ -115,11 +120,6 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 				}
 			}
 			
-			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
-			if ( m_noticedZombie != null )
-			{
-				transitionTo( AimingZombie.class );
-			}
 		}
 
 		@Override

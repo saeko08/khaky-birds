@@ -332,8 +332,16 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			m_wait += deltaTime;
 			if ( m_wait >= m_eatingTime )
 			{
-				m_pedestrian.turnIntoZombie();
-				die();
+					m_noticedZombie = m_pedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_pedestrian.getPosition() );
+					if (m_noticedZombie != null)
+					{
+						m_pedestrian.turnIntoZombie();
+						die();
+					}
+					else
+					{
+						transitionTo( Wander.class );
+					}
 			}
 
 		}

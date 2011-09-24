@@ -31,6 +31,7 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 	private SteeringBehaviors 	m_sb;
 	private Bird				m_bird;
 	private float 				m_eatingTime				= 1.5f;
+	private float 				m_blindTime				= 4.5f;
 	
 	private final float			MAX_AIM_TOLERANCE = 15.0f; // TODO: config
 	private final float			MIN_AIM_TOLERANCE = 2.0f; // TODO: config
@@ -329,8 +330,11 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 	
 	// ------------------------------------------------------------------------
 	
-	class Shitted extends FSMState
+	class Shitted extends FSMState implements EntityEventListener
 	{
+		
+		private float 	m_wait 			= 0.f;
+		
 		@Override
 		public void activate()
 		{
@@ -341,12 +345,27 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 		@Override
 		public void deactivate()
 		{
+			m_wait 			= 0.f;
 		}
 		
 		@Override
 		public void execute( float deltaTime )
 		{
-			// TODO: jak wyjdzie za kamere, despawn
+			m_wait += deltaTime;
+			if ( m_wait >= m_blindTime )
+			{
+				transitionTo( Aiming.class );
+			}
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			
+		    if ( event instanceof Bite )
+			{
+		    	transitionTo( Eaten.class );
+			}
 		}
 	}
 	

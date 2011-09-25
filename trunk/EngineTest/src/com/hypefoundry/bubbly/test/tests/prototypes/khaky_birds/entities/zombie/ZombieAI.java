@@ -22,7 +22,7 @@ import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.WorldView;
-
+import  com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.NotWalkAble;
 
 /**
  * @author azagor
@@ -132,6 +132,11 @@ public class ZombieAI extends FiniteStateMachine implements WorldView
 					m_noticedBiteableEntity = (Biteable)collider;
 					transitionTo( Eat.class );
 				}
+				else if ( collider instanceof NotWalkAble)
+				{
+					m_tmpDirVec.set(collider.getPosition());
+					transitionTo( Avoid.class ).m_safePos.set( m_tmpDirVec );
+				}
 			}
 			else if ( event instanceof OutOfWorldBounds )
 			{					
@@ -150,7 +155,7 @@ public class ZombieAI extends FiniteStateMachine implements WorldView
 	
 	// ------------------------------------------------------------------------
 	
-	class TurnAround extends FSMState 
+	class TurnAround extends FSMState implements EntityEventListener
 	{	
 		private Vector3 m_safePos 		= new Vector3();
 		
@@ -178,6 +183,60 @@ public class ZombieAI extends FiniteStateMachine implements WorldView
 			{
 				transitionTo( Wander.class );
 			}				
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				m_zombie.setHitWithShit( true );
+				die();
+			}
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	class Avoid extends FSMState implements EntityEventListener
+	{	
+		private Vector3 m_safePos 		= new Vector3();
+		
+		
+		@Override
+		public void activate()
+		{
+			m_zombie.m_state = Zombie.State.Avoid;
+			m_sb.begin().flee( m_safePos ).faceMovementDirection();
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.clear();
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			Vector3 currPos = m_zombie.getPosition();
+			float distSqToGoal = currPos.distSq2D( m_safePos );
+			if ( distSqToGoal > 7e-1 )
+			{
+				transitionTo( Wander.class );
+			}				
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				m_zombie.setHitWithShit( true );
+				die();
+			}
 		}
 	}
 	
@@ -315,6 +374,11 @@ public class ZombieAI extends FiniteStateMachine implements WorldView
 					m_noticedBiteableEntity = (Biteable)collider;
 					transitionTo( Eat.class );
 				}
+				else if ( collider instanceof NotWalkAble)
+				{
+					m_tmpDirVec.set(collider.getPosition());
+					transitionTo( Avoid.class ).m_safePos.set( m_tmpDirVec );
+				}
 			}
 			else if ( event instanceof OutOfWorldBounds )
 			{					
@@ -411,6 +475,7 @@ public class ZombieAI extends FiniteStateMachine implements WorldView
 		register( new Observe() );
 		register( new Chasing() );
 		register( new Eat() );
+		register( new Avoid() );
 		begin( Wander.class );
 	}
 	

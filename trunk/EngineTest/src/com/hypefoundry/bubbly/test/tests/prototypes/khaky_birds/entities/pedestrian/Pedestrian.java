@@ -34,7 +34,8 @@ public class Pedestrian extends Entity implements Crappable, Biteable
 		TurnAround,
 		Observe,
 		Evade,
-		Eaten
+		Eaten,
+		Avoid
 	}
 	
 	State		m_state;

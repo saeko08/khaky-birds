@@ -30,7 +30,8 @@ public World 		m_world    				     = null;
 		TurnAround,
 		Observe,
 		Chasing,
-		Eat
+		Eat,
+		Avoid
 	}
 	
 	State		m_state;

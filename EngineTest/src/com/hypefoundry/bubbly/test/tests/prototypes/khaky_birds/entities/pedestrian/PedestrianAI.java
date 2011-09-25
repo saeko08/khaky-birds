@@ -7,6 +7,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedest
 import java.util.Random;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.NotWalkAble;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Bite;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
@@ -14,6 +15,7 @@ import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
+import com.hypefoundry.engine.physics.events.CollisionEvent;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
@@ -93,7 +95,6 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		public void deactivate()
 		{
 			m_sb.clear();
-			//m_noticedZombie		= null;
 		}
 		
 		@Override
@@ -126,6 +127,16 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			else if ( event instanceof Bite )
 			{
 				transitionTo( Eaten.class );
+			}
+			else if ( event instanceof CollisionEvent )
+			{
+				Entity collider = ( (CollisionEvent)event ).m_collider;
+				
+				if ( collider instanceof NotWalkAble)
+					{
+						m_tmpDirVec.set(collider.getPosition());
+						transitionTo( Avoid.class ).m_safePos.set( m_tmpDirVec );
+					}
 			}
 			else if ( event instanceof OutOfWorldBounds )
 			{					
@@ -185,6 +196,54 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 	}
 	
 	// ------------------------------------------------------------------------
+	class Avoid extends FSMState implements EntityEventListener
+	{	
+		private Vector3 m_safePos 		= new Vector3();
+		
+		
+		@Override
+		public void activate()
+		{
+			m_pedestrian.m_state = Pedestrian.State.Avoid;
+			m_sb.begin().flee( m_safePos ).faceMovementDirection();
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.clear();
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			Vector3 currPos = m_pedestrian.getPosition();
+			float distSqToGoal = currPos.distSq2D( m_safePos );
+			if ( distSqToGoal > 7e-1 )
+			{
+				transitionTo( Wander.class );
+			}				
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				m_pedestrian.setHitWithShit( true );
+				die();
+			}
+			else if ( event instanceof Bite )
+			{
+				transitionTo( Eaten.class );
+			}
+			
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
 	
 	class Observe extends FSMState implements EntityEventListener
 	{
@@ -289,6 +348,16 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			{
 				transitionTo( Eaten.class );
 			}
+			else if ( event instanceof CollisionEvent )
+			{
+				Entity collider = ( (CollisionEvent)event ).m_collider;
+				
+				if ( collider instanceof NotWalkAble)
+					{
+						m_tmpDirVec.set(collider.getPosition());
+						transitionTo( Avoid.class ).m_safePos.set( m_tmpDirVec );
+					}
+			}
 			else if ( event instanceof OutOfWorldBounds )
 			{					
 				OutOfWorldBounds oowb = (OutOfWorldBounds)event;
@@ -365,7 +434,8 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		m_pedestrian.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );
 		m_pedestrian.registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
 		m_pedestrian.registerEvent( Bite.class, new EventFactory< Bite >() { @Override public Bite createObject() { return new Bite (); } } );
-		
+		m_pedestrian.registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
+	
 		m_pedestrian.m_world.attachView(this);
 
 		// setup the state machine
@@ -374,6 +444,7 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		register( new Observe() );
 		register( new Evade() );
 		register( new Eaten() );
+		register( new Avoid() );
 		begin( Wander.class );
 	}
 	

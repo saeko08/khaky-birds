@@ -37,6 +37,7 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 	private final float			MIN_AIM_TOLERANCE = 2.0f; // TODO: config
 	private final float 		m_zombieLookoutRadiusFar 	= 3.0f;
 	private final float 		m_zombieLookoutRadiusClose 	= 1.0f;
+	private final float 		m_maxAimingDistance 		= 3f;
 	
 	
 
@@ -141,7 +142,9 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 	// ------------------------------------------------------------------------
 	
 	class AimingZombie extends FSMState implements EntityEventListener
-	{			
+	{		
+		
+		
 		@Override
 		public void activate()
 		{
@@ -173,11 +176,19 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 			}
 			else 
 			{
-				// look at the zombie, but with some tolerance
-				float angleDiff = MathLib.lookAtDiff( m_noticedZombie.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
-				if ( angleDiff < MIN_AIM_TOLERANCE )
+				float currAimingDistance = m_noticedZombie.getPosition().distSq2D(m_hunter.getPosition());
+				if (currAimingDistance > m_maxAimingDistance)
 				{
-					transitionTo( ShootingZombie.class );
+					transitionTo( AimingZombie.class );
+				}
+				// look at the zombie, but with some tolerance
+				else
+				{
+					float angleDiff = MathLib.lookAtDiff( m_noticedZombie.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
+					if ( angleDiff < MIN_AIM_TOLERANCE )
+					{
+						transitionTo( ShootingZombie.class );
+					}
 				}
 			}
 		}
@@ -290,10 +301,12 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
 			if ( m_noticedZombie != null )
 			{
+				
 				// keep monitoring the bird's position, because we may need to start aiming
 				float angleDiff = MathLib.lookAtDiff( m_noticedZombie.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
+				float currAimingDistance = m_noticedZombie.getPosition().distSq2D(m_hunter.getPosition());
 				
-				if ( angleDiff > MAX_AIM_TOLERANCE )
+				if ( angleDiff > MAX_AIM_TOLERANCE || currAimingDistance > m_maxAimingDistance)
 				{
 					transitionTo( AimingZombie.class );
 				}

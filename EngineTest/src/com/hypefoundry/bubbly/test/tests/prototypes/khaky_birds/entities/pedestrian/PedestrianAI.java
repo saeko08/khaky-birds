@@ -36,11 +36,12 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 {
 	private Pedestrian				m_pedestrian;
 	private SteeringBehaviors 		m_sb;
-	private final float 			m_zombieLookoutRadiusShort 	= 0.6f;
+	private final float 			m_zombieLookoutRadiusShort 	= 0.8f;
 	private final float 			m_zombieLookoutRadiusFar 	= 2.0f;
 	private float 					m_eatingTime				= 1.5f;
 	private final float 			m_maxZombieDistance 		= 2f;
 	private final float 			m_hideoutLookoutRadiusFar	= 10f;
+	private final float 			m_hideoutLookoutRadiusShort	= 3.5f;
 	
 	// ------------------------------------------------------------------------
 	//blackboard
@@ -196,8 +197,12 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			{
 				Vector3 currPos = m_pedestrian.getPosition();
 				float distSqToGoal = currPos.distSq2D( m_hideoutPos );
-				if ( distSqToGoal < 1e-1 )
+				if ( distSqToGoal < 2e-1 )
 				{
+					if (m_pedestrian.m_hitWithShit == false)
+					{
+						m_hideoutEntity.m_pedestrians +=1;
+					}
 					die();
 				}	
 			}
@@ -424,6 +429,14 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 				if (currZombieDistance > m_maxZombieDistance)
 				{
 					transitionTo( Wander.class );
+				}
+				else
+				{
+					m_hideoutEntity = m_pedestrian.m_world.findNearestEntity( Hideout.class, m_hideoutLookoutRadiusShort, m_pedestrian.getPosition() );
+					if (m_hideoutEntity != null)
+					{
+						transitionTo( Hiding.class );
+					}
 				}
 			}
 		}

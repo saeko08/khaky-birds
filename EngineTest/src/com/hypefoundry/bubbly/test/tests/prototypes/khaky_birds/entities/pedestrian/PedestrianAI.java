@@ -7,6 +7,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedest
 import java.util.Random;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.Hideout;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.NotWalkAble;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Bite;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
@@ -38,10 +39,13 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 	private final float 			m_zombieLookoutRadiusShort 	= 0.6f;
 	private final float 			m_zombieLookoutRadiusFar 	= 2.0f;
 	private float 					m_eatingTime				= 1.5f;
+	private final float 			m_maxZombieDistance 		= 2f;
+	private final float 			m_hideoutLookoutRadiusFar	= 10f;
 	
 	// ------------------------------------------------------------------------
 	//blackboard
 	private Zombie 					m_noticedZombie				= null;
+	private Hideout					m_hideoutEntity				= null;
 	
 	@Override
 	public void onAttached(World world) 
@@ -70,6 +74,10 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		if ( entity == m_noticedZombie )
 		{
 			m_noticedZombie = null;
+		}
+		if ( entity == m_hideoutEntity )
+		{
+			m_hideoutEntity = null;
 		}
 		
 	}
@@ -122,7 +130,7 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			{
 				// a bird crapped on us
 				m_pedestrian.setHitWithShit( true );
-				transitionTo( Observe.class );
+				transitionTo( Shitted.class );
 			}
 			else if ( event instanceof Bite )
 			{
@@ -138,6 +146,81 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 						transitionTo( Avoid.class ).m_safePos.set( m_tmpDirVec );
 					}
 			}
+			else if ( event instanceof OutOfWorldBounds )
+			{					
+				OutOfWorldBounds oowb = (OutOfWorldBounds)event;
+				
+				DynamicObject dynObject = m_pedestrian.query( DynamicObject.class );
+				oowb.reflectVector( m_tmpDirVec, dynObject.m_velocity );
+				m_tmpDirVec.normalize2D().add( m_pedestrian.getPosition() );
+				
+				transitionTo( TurnAround.class ).m_safePos.set( m_tmpDirVec );
+				
+			}
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	class Hiding extends FSMState implements EntityEventListener
+	{	
+		private Vector3 m_tmpDirVec 		= new Vector3();
+		
+		private Vector3 m_hideoutPos 		= new Vector3();
+	
+
+		
+		@Override
+		public void activate()
+		{
+			Entity hideoutEntity = (Entity)m_hideoutEntity;
+			if ( hideoutEntity != null )
+			{
+				m_hideoutPos.set(m_hideoutEntity.getPosition());
+				
+				m_pedestrian.m_state = Pedestrian.State.Hiding;
+				m_sb.begin().arrive( m_hideoutPos, 0.5f).faceMovementDirection();
+			}
+		}
+		
+		@Override
+		public void deactivate()
+		{
+			m_sb.clear();
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			if (m_hideoutEntity != null)
+			{
+				Vector3 currPos = m_pedestrian.getPosition();
+				float distSqToGoal = currPos.distSq2D( m_hideoutPos );
+				if ( distSqToGoal < 1e-1 )
+				{
+					die();
+				}	
+			}
+			else
+			{
+				transitionTo( Wander.class );
+			}
+		}
+
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				m_pedestrian.setHitWithShit( true );
+				transitionTo( Shitted.class );
+			}
+			else if ( event instanceof Bite )
+			{
+				transitionTo( Eaten.class );
+			}
+			
 			else if ( event instanceof OutOfWorldBounds )
 			{					
 				OutOfWorldBounds oowb = (OutOfWorldBounds)event;
@@ -232,7 +315,7 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			{
 				// a bird crapped on us
 				m_pedestrian.setHitWithShit( true );
-				die();
+				transitionTo(Shitted.class );
 			}
 			else if ( event instanceof Bite )
 			{
@@ -290,6 +373,7 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			{
 				// a bird crapped on us
 				m_pedestrian.setHitWithShit( true );
+				transitionTo( Shitted.class );
 			}
 			else if ( event instanceof Bite )
 			{
@@ -328,11 +412,19 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		public void execute( float deltaTime )
 		{
 			//testuje dynamiczne sprawdzanie nalbli¿szych zombiech i rakcjê na to - byc moze do wywalenia
-			m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 1.5f, m_pedestrian.getPosition());
+			//m_noticedZombie = (Zombie) m_pedestrian.m_world.findNearestEntity(Zombie.class, 1.5f, m_pedestrian.getPosition());
 			
-			if (m_noticedZombie == null)
+			if (m_noticedZombie == null )
 			{
 				transitionTo( Wander.class );
+			}
+			else
+			{
+				float currZombieDistance =  m_noticedZombie.getPosition().distSq2D(m_pedestrian.getPosition());
+				if (currZombieDistance > m_maxZombieDistance)
+				{
+					transitionTo( Wander.class );
+				}
 			}
 		}
 		
@@ -418,6 +510,72 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 	}
 	
 // ------------------------------------------------------------------------
+	class Shitted extends FSMState implements EntityEventListener
+	{
+		private Random m_randWaitTime   	= new Random();
+		private int m_waitTimer        		= 0;
+		private float 	m_wait 				= 0.f;
+		
+		@Override
+		public void activate()
+		{
+			m_pedestrian.m_state = Pedestrian.State.Shitted;
+			m_wait = 3.0f;
+			
+			m_waitTimer = m_randWaitTime.nextInt(3);
+		}
+		
+		@Override
+		public void deactivate()
+		{
+
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			m_noticedZombie = m_pedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_pedestrian.getPosition() );
+			if ( m_noticedZombie != null )
+			{
+				transitionTo( Evade.class ).setEvadingTarget( m_noticedZombie );
+			}
+			
+			m_wait -= deltaTime;
+			if ( m_wait < m_waitTimer )
+			{
+				m_hideoutEntity = m_pedestrian.m_world.findNearestEntity( Hideout.class, m_hideoutLookoutRadiusFar, m_pedestrian.getPosition() );
+				if (m_hideoutEntity != null)
+				{
+					transitionTo( Hiding.class );
+				}
+				else
+				{
+					transitionTo( Wander.class );
+				}
+				
+			}	
+			
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Crapped )
+			{
+				// a bird crapped on us
+				m_pedestrian.setHitWithShit( true );
+				transitionTo( Shitted.class );
+			}
+			else if ( event instanceof Bite )
+			{
+				transitionTo( Eaten.class );
+			}
+			
+		}
+
+	}
+	
+	// ------------------------------------------------------------------------
 	/**
 	 * Constructor.
 	 * 
@@ -445,6 +603,8 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		register( new Evade() );
 		register( new Eaten() );
 		register( new Avoid() );
+		register( new Hiding() );
+		register( new Shitted() );
 		begin( Wander.class );
 	}
 	

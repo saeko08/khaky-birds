@@ -4,9 +4,11 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shootable;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.world.World;
 
 /**
  * @author azagor
@@ -14,7 +16,10 @@ import com.hypefoundry.engine.world.Entity;
  */
 public class Hideout extends Entity implements NotWalkAble, Shootable
 {
-
+	
+	public int						m_pedestrians 	= 0;
+	private World 					m_world;
+	
 	/**
 	 * Default constructor.
 	 */
@@ -28,7 +33,6 @@ public class Hideout extends Entity implements NotWalkAble, Shootable
 	 * 
 	 * @param x
 	 * @param y
-	 * @param facing
 	 */
 	public Hideout( float x, float y)
 	{
@@ -42,5 +46,15 @@ public class Hideout extends Entity implements NotWalkAble, Shootable
 		
 	}
 	
+	@Override
+	public void onAddedToWorld( World hostWorld )
+	{
+		m_world = hostWorld;
+	}
+	
+	public void goOut()
+	{
+		m_world.addEntity( new Pedestrian(getPosition() ) );
+	}
 
 }

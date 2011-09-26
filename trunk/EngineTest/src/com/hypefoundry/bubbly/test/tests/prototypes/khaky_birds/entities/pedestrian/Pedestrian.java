@@ -75,6 +75,23 @@ public class Pedestrian extends Entity implements Crappable, Biteable
 		
 		m_hitWithShit = false;
 	}
+	
+	/**
+	 * Constructor.
+	 *
+	 * @param Vector3
+	 *
+	 */
+	public Pedestrian( Vector3 spawnPos )
+	{
+		// call the default constructor first to perform the generic initialization
+		this();
+		
+		setPosition( spawnPos.m_x, spawnPos.m_y, 80 );
+		
+		m_hitWithShit = false;
+	}
+
 
 
 	/**

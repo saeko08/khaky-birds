@@ -34,6 +34,7 @@ public class ZombieAI extends FiniteStateMachine implements WorldView
 	private SteeringBehaviors 	m_sb;
 	private final float			m_pedestrianLookoutRadius		= 1.2f;
 	private float               m_eatingTime 					= 2.5f;
+	private final float 		m_maxVictimDistance 				= 3f;
 	
 	// ------------------------------------------------------------------------
 	// temp data
@@ -344,10 +345,19 @@ public class ZombieAI extends FiniteStateMachine implements WorldView
 		public void execute( float deltaTime )
 		{		
 			// testuje dynamiczne sprawdzanie nalbli¿szych zombiech i rakcjê na to - byc moze do wywalenia
-			m_noticedBiteableEntity = m_zombie.m_world.findNearestEntity( Biteable.class, 1.5f, m_zombie.getPosition() );
+			//m_noticedBiteableEntity = m_zombie.m_world.findNearestEntity( Biteable.class, 1.5f, m_zombie.getPosition() );
+
 			if ( m_noticedBiteableEntity == null )
 			{
 				transitionTo( Wander.class );
+			}
+			else
+			{
+				float currVictimDistance = ((Entity) m_noticedBiteableEntity).getPosition().distSq2D(m_zombie.getPosition());
+				if (currVictimDistance > m_maxVictimDistance )
+				{
+					
+				}
 			}
 		}
 		

@@ -64,7 +64,7 @@ public class PedestrianVisual extends EntityVisual
 			m_animationPlayer.select( ANIM_WIPE_SHIT_OFF );
 			
 		}
-		else if (m_pedestrian.m_state == Pedestrian.State.Observe ||  m_pedestrian.m_state == Pedestrian.State.Eaten)
+		else if (m_pedestrian.m_state == Pedestrian.State.Observe ||  m_pedestrian.m_state == Pedestrian.State.Eaten ||  m_pedestrian.m_state == Pedestrian.State.Shitted)
 		{
 			m_animationPlayer.select( ANIM_OBSERVE );
 		}

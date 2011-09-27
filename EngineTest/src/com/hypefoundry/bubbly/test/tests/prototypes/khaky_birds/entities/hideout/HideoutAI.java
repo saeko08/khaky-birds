@@ -3,10 +3,7 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.engine.controllers.EntityController;
-import com.hypefoundry.engine.math.Vector3;
-import com.hypefoundry.engine.renderer2D.Spline;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
 

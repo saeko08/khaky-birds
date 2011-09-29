@@ -32,6 +32,9 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.PedestrianAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.PedestrianVisual;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.perkPedestrian.PerkPedestrian;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.perkPedestrian.PerkPedestrianAI;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.perkPedestrian.PerkPedestrianVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShock;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShockAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.shock.ElectricShockVisual;
@@ -92,6 +95,7 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Bullet.class, new EntityFactory() { @Override public Entity create() { return new Bullet(); } } );
 		m_world.registerEntity( Zombie.class, new EntityFactory() { @Override public Entity create() { return new Zombie(); } } );
 		m_world.registerEntity( Hideout.class, new EntityFactory() { @Override public Entity create() { return new Hideout(); } } );
+		m_world.registerEntity( PerkPedestrian.class, new EntityFactory() { @Override public Entity create() { return new PerkPedestrian(); } } );
 		
 		// register animation events
 		Animation.registerAnimEvent( Fire.class, new AnimEventFactory() { @Override public EntityEvent create() { return new Fire(); } } );
@@ -124,6 +128,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Bullet.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BulletVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Zombie.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ZombieVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Hideout.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new HideoutVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( PerkPedestrian.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PerkPedestrianVisual( m_resourceManager, parentEntity ); } } );
 
 		// register controllers
 		m_controllersView = new ControllersView( this );
@@ -138,6 +143,7 @@ public class GameScreen extends Screen
 		m_controllersView.register( Hunter.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new HunterAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Zombie.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ZombieAI( parentEntity ); } } );
 		m_controllersView.register( Hideout.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new HideoutAI( m_world, parentEntity ); } } );
+		m_controllersView.register( PerkPedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PerkPedestrianAI( parentEntity ); } } );
 		
 		// register physics
 		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
@@ -152,6 +158,7 @@ public class GameScreen extends Screen
 		m_physicsView.register( Bullet.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Zombie.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Hideout.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( PerkPedestrian.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		
 		// register the updatables
 		addUpdatable( m_world );

@@ -5,6 +5,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideou
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shootable;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.perkPedestrian.PerkPedestrian;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.world.Entity;
@@ -17,7 +18,8 @@ import com.hypefoundry.engine.world.World;
 public class Hideout extends Entity implements NotWalkAble, Shootable
 {
 	
-	public int						m_pedestrians 	= 0;
+	public int						m_pedestrians 		= 0;
+	public int						m_perkPedestrians	= 0;
 	private World 					m_world;
 	
 	/**
@@ -57,4 +59,9 @@ public class Hideout extends Entity implements NotWalkAble, Shootable
 		m_world.addEntity( new Pedestrian(getPosition() ) );
 	}
 
+	public void perkPedestrianGoOut()
+	{
+		//tu trzeba bêdzie przekazywaæ instancjê hideouta
+		m_world.addEntity( new PerkPedestrian(getPosition(), this ) );
+	}
 }

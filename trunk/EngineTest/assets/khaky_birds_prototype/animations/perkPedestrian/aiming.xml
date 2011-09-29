@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.5' atlasName='khaky_birds_prototype/atlas.png' alphaOp='test' >
+	<TextureRegion x='955' y='180' w='31' h='26' />
+</Animation>

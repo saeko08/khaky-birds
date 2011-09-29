@@ -36,7 +36,7 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 	private final float			MAX_AIM_TOLERANCE = 15.0f; // TODO: config
 	private final float			MIN_AIM_TOLERANCE = 2.0f; // TODO: config
 	private final float 		m_zombieLookoutRadiusFar 	= 3.0f;
-	private final float 		m_zombieLookoutRadiusClose 	= 1.0f;
+	private final float 		m_zombieLookoutRadiusClose 	= 0.8f;
 	private final float 		m_maxAimingDistance 		= 3f;
 	
 	

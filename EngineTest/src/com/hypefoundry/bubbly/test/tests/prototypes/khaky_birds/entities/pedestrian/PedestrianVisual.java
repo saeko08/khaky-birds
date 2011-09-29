@@ -59,12 +59,12 @@ public class PedestrianVisual extends EntityVisual
 		BoundingShape bs = m_pedestrian.getBoundingShape();
 	
 		// select an animation appropriate to the state the pedestrian's in
-		if ( m_pedestrian.m_hitWithShit == true)
+		if ( m_pedestrian.m_hitWithShit == true  ||  m_pedestrian.m_state == Pedestrian.State.Shitted)
 		{
 			m_animationPlayer.select( ANIM_WIPE_SHIT_OFF );
 			
 		}
-		else if (m_pedestrian.m_state == Pedestrian.State.Observe ||  m_pedestrian.m_state == Pedestrian.State.Eaten ||  m_pedestrian.m_state == Pedestrian.State.Shitted)
+		else if (m_pedestrian.m_state == Pedestrian.State.Observe ||  m_pedestrian.m_state == Pedestrian.State.Eaten)
 		{
 			m_animationPlayer.select( ANIM_OBSERVE );
 		}

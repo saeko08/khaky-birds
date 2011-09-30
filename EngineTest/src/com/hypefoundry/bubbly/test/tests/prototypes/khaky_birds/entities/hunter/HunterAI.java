@@ -35,9 +35,9 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 	
 	private final float			MAX_AIM_TOLERANCE = 15.0f; // TODO: config
 	private final float			MIN_AIM_TOLERANCE = 2.0f; // TODO: config
-	private final float 		m_zombieLookoutRadiusFar 	= 3.0f;
-	private final float 		m_zombieLookoutRadiusClose 	= 0.8f;
-	private final float 		m_maxAimingDistance 		= 3f;
+	private final float 		m_zombieLookoutRadiusFar 	= 3.5f;
+	private final float 		m_zombieLookoutRadiusShort 	= 3f;
+	private final float 		m_zombieLookoutRadiusNear 	= 0.3f;
 	
 	
 
@@ -107,7 +107,7 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 		@Override
 		public void execute( float deltaTime )
 		{
-			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
+			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_hunter.getPosition() );
 			if ( m_noticedZombie != null )
 			{
 				transitionTo( AimingZombie.class );
@@ -177,7 +177,7 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 			else 
 			{
 				float currAimingDistance = m_noticedZombie.getPosition().distSq2D(m_hunter.getPosition());
-				if (currAimingDistance > m_maxAimingDistance)
+				if (currAimingDistance > m_zombieLookoutRadiusFar)
 				{
 					transitionTo( Aiming.class );
 				}
@@ -228,7 +228,7 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 		@Override
 		public void execute( float deltaTime )
 		{
-			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_hunter.getPosition() );
+			m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_hunter.getPosition() );
 			if ( m_noticedZombie != null )
 			{
 				transitionTo( AimingZombie.class );
@@ -306,7 +306,7 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 				float angleDiff = MathLib.lookAtDiff( m_noticedZombie.getPosition(), m_hunter.getPosition(), m_hunter.getFacing() );
 				float currAimingDistance = m_noticedZombie.getPosition().distSq2D(m_hunter.getPosition());
 				
-				if ( angleDiff > MAX_AIM_TOLERANCE || currAimingDistance > m_maxAimingDistance)
+				if ( angleDiff > MAX_AIM_TOLERANCE || currAimingDistance > m_zombieLookoutRadiusFar)
 				{
 					transitionTo( Aiming.class );
 				}
@@ -406,7 +406,7 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 				m_wait += deltaTime;
 				if ( m_wait >= m_eatingTime )
 				{
-					m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusClose, m_hunter.getPosition() );
+					m_noticedZombie = m_hunter.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusNear, m_hunter.getPosition() );
 					if (m_noticedZombie != null)
 					{
 						m_hunter.turnIntoZombie();

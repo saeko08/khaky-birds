@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Animation frameDuration='0.5' atlasName='khaky_birds_prototype/atlas.png' alphaOp='test' >
-	<TextureRegion x='955' y='180' w='31' h='26' />
-	<TextureRegion x='957' y='212' w='25' h='26' />
-	<TextureRegion x='958' y='244' w='32' h='26'>
+	<TextureRegion x='955' y='180' w='36' h='31' />
+	<TextureRegion x='955' y='210' w='36' h='31' />
+	<TextureRegion x='955' y='240' w='36' h='31'>
 		<Event type="Fire"/>
 	</TextureRegion>
-	<TextureRegion x='955' y='180' w='31' h='26' />
-	<TextureRegion x='957' y='212' w='25' h='26' />
+	<TextureRegion x='955' y='180' w='36' h='31' />
+	<TextureRegion x='955' y='210' w='36' h='31' />
 </Animation>

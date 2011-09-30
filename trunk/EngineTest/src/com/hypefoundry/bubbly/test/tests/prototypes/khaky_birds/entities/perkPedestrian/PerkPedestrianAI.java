@@ -35,10 +35,10 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 {
 	private PerkPedestrian			m_perkPedestrian;
 	private SteeringBehaviors 		m_sb;
-	private final float 			m_zombieLookoutRadiusShort 	= 0.8f;
-	private final float 			m_zombieLookoutRadiusFar 	= 2.6f;
+	private final float 			m_zombieLookoutRadiusShort 	= 2f;
+	private final float 			m_zombieLookoutRadiusNear 	= 0.3f;
+	private final float 			m_zombieLookoutRadiusFar 	= 3f;
 	private float 					m_eatingTime				= 1.5f;
-	private final float 			m_maxZombieDistance 		= 2.6f;
 	private final float 			m_hideoutLookoutRadiusFar	= 10f;
 	private final float 			m_hideoutLookoutRadiusShort	= 3.5f;
 	
@@ -201,7 +201,7 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 			else 
 			{
 				float currAimingDistance = m_noticedZombie.getPosition().distSq2D(m_perkPedestrian.getPosition());
-				if (currAimingDistance > m_maxZombieDistance )
+				if (currAimingDistance > m_zombieLookoutRadiusFar )
 				{
 					transitionTo( Observe.class );
 				}
@@ -264,7 +264,7 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 				float angleDiff = MathLib.lookAtDiff( m_noticedZombie.getPosition(), m_perkPedestrian.getPosition(), m_perkPedestrian.getFacing() );
 				float currAimingDistance = m_noticedZombie.getPosition().distSq2D(m_perkPedestrian.getPosition());
 				
-				if ( angleDiff > MAX_AIM_TOLERANCE || currAimingDistance > m_maxZombieDistance)
+				if ( angleDiff > MAX_AIM_TOLERANCE || currAimingDistance > m_zombieLookoutRadiusFar)
 				{
 					transitionTo( Wander.class );
 				}
@@ -498,7 +498,7 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 				transitionTo( Wander.class );
 			}	
 			
-			m_noticedZombie = m_perkPedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_perkPedestrian.getPosition() );
+			m_noticedZombie = m_perkPedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_perkPedestrian.getPosition() );
 			if ( m_noticedZombie != null )
 			{
 				transitionTo( Aiming.class );
@@ -548,7 +548,7 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 			m_wait += deltaTime;
 			if ( m_wait >= m_eatingTime )
 			{
-					m_noticedZombie = m_perkPedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_perkPedestrian.getPosition() );
+					m_noticedZombie = m_perkPedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusNear, m_perkPedestrian.getPosition() );
 					if (m_noticedZombie != null)
 					{
 						m_perkPedestrian.turnIntoZombie();

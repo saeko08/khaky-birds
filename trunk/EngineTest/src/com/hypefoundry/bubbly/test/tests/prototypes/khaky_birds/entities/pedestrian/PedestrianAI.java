@@ -36,10 +36,10 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 {
 	private Pedestrian				m_pedestrian;
 	private SteeringBehaviors 		m_sb;
-	private final float 			m_zombieLookoutRadiusShort 	= 0.8f;
+	private final float 			m_zombieLookoutRadiusNear	= 0.3f;
+	private final float 			m_zombieLookoutRadiusShort 	= 1.8f;
 	private final float 			m_zombieLookoutRadiusFar 	= 2.0f;
 	private float 					m_eatingTime				= 1.5f;
-	private final float 			m_maxZombieDistance 		= 2f;
 	private final float 			m_hideoutLookoutRadiusFar	= 10f;
 	private final float 			m_hideoutLookoutRadiusShort	= 3.5f;
 	
@@ -364,7 +364,7 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 				transitionTo( Wander.class );
 			}	
 			
-			m_noticedZombie = m_pedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusFar, m_pedestrian.getPosition() );
+			m_noticedZombie = m_pedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_pedestrian.getPosition() );
 			if ( m_noticedZombie != null )
 			{
 				transitionTo( Evade.class ).setEvadingTarget( m_noticedZombie );
@@ -426,7 +426,7 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			else
 			{
 				float currZombieDistance =  m_noticedZombie.getPosition().distSq2D(m_pedestrian.getPosition());
-				if (currZombieDistance > m_maxZombieDistance)
+				if (currZombieDistance > m_zombieLookoutRadiusFar)
 				{
 					transitionTo( Wander.class );
 				}
@@ -506,7 +506,7 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			m_wait += deltaTime;
 			if ( m_wait >= m_eatingTime )
 			{
-					m_noticedZombie = m_pedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_pedestrian.getPosition() );
+					m_noticedZombie = m_pedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusNear, m_pedestrian.getPosition() );
 					if (m_noticedZombie != null)
 					{
 						m_pedestrian.turnIntoZombie();

@@ -4,7 +4,6 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap;
 
 import com.hypefoundry.engine.core.ResourceManager;
-import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
@@ -13,13 +12,13 @@ import com.hypefoundry.engine.renderer2D.animation.Animation;
 import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystem;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystemPlayer;
+import com.hypefoundry.engine.world.Entity;
 
 /**
- * Crap visualisation
  * @author azagor
  *
  */
-public class CrapVisual extends EntityVisual 
+public class DemolisheCrapVisual extends EntityVisual 
 {
 	private AnimationPlayer			m_animationPlayer;
 	private int 					ANIM_FALL;
@@ -27,7 +26,7 @@ public class CrapVisual extends EntityVisual
 	
 	private ParticleSystemPlayer	m_crapHitFx;
 	
-	private Crap            		m_crap;
+	private DemolisheCrap           m_crap;
 	float                  			m_scaleFactor = 1.f;
 	float                  			m_scaleCounter = 0.05f;
 
@@ -37,10 +36,10 @@ public class CrapVisual extends EntityVisual
 	 * @param resMgr 
 	 * @param entity
 	 */
-	public CrapVisual( ResourceManager resMgr, Entity entity ) 
+	public DemolisheCrapVisual( ResourceManager resMgr, Entity entity ) 
 	{
 		super(entity);
-		m_crap = (Crap)entity;
+		m_crap = (DemolisheCrap)entity;
 		
 		// load animations
 		Animation fallingShit = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/fallingShit.xml");
@@ -62,7 +61,7 @@ public class CrapVisual extends EntityVisual
 		Vector3 pos = m_crap.getPosition();
 		BoundingShape bs = m_crap.getBoundingShape();
 		
-		if( m_crap.m_state == Crap.State.Falling || m_crap.m_state == Crap.State.Hitting )
+		if( m_crap.m_state == DemolisheCrap.State.Falling || m_crap.m_state == DemolisheCrap.State.Hitting )
 		{
 			m_animationPlayer.select(ANIM_FALL);
 			
@@ -85,18 +84,18 @@ public class CrapVisual extends EntityVisual
 			height *= m_scaleFactor;
 			m_crap.setBoundingBox( width, height );
 		}
-		else if ( m_crap.m_state == Crap.State.Splat )
+		else if ( m_crap.m_state == DemolisheCrap.State.Splat )
 		{
 			m_animationPlayer.select(ANIM_HIT);
 		}
 		
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_animationPlayer.getTextureRegion( deltaTime ) );
 		
-		// draw the fx - atm this is only in special craps
-		/*if ( m_crap.m_state == Crap.State.Splat )
+		// draw the fx
+		if ( m_crap.m_state == DemolisheCrap.State.Splat )
 		{
 			m_crapHitFx.draw( pos.m_x, pos.m_y, batcher, deltaTime );
-		}*/
+		}
 	}
 
 }

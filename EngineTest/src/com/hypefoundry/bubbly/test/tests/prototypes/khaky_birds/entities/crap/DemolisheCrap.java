@@ -1,16 +1,18 @@
+/**
+ * 
+ */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap;
 
-import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap.State;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.DynamicObject;
+import com.hypefoundry.engine.world.Entity;
 
 /**
- * Crap a bird makes.
- * 
  * @author azagor
  *
  */
-public class Crap extends Entity 
+public class DemolisheCrap extends Entity 
 {
 	public boolean   pedestrianHit           = false;
 	public boolean    m_canHit				 = false;	
@@ -29,7 +31,7 @@ public class Crap extends Entity
 	/**
 	 * Default constructor.
 	 */
-	public Crap()
+	public DemolisheCrap()
 	{
 		this( 0, 0 );
 	}
@@ -40,10 +42,10 @@ public class Crap extends Entity
 	 * @param x
 	 * @param y
 	 */
-	public Crap( float x, float y )
+	public DemolisheCrap( float x, float y )
 	{
 		setPosition( x, y, 70 );
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 15f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 15f) );	// TODO: config
 		
 		// add movement capabilities
 		final float maxLinearSpeed = 5.0f;

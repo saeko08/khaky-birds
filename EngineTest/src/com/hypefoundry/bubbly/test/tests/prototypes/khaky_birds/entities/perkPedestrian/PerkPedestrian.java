@@ -112,6 +112,7 @@ public class PerkPedestrian  extends Entity implements Crappable, Biteable
 	public void onAddedToWorld( World hostWorld )
 	{
 		m_world = hostWorld;
+		m_hideout.m_perkPedestrians += 1;
 	}
 	@Override
 	public void onRemovedFromWorld( World hostWorld )

@@ -15,6 +15,12 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.cables.
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapVisual;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.DemolisheCrap;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.DemolisheCrapAI;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.DemolisheCrapVisual;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.GranadeCrap;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.GranadeCrapAI;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.GranadeCrapVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.FalconAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.FalconVisual;
@@ -90,6 +96,8 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Ground.class, new EntityFactory() { @Override public Entity create() { return new Ground(); } } );
 		m_world.registerEntity( Pedestrian.class, new EntityFactory() { @Override public Entity create() { return new Pedestrian(); } } );
 		m_world.registerEntity( Crap.class, new EntityFactory() { @Override public Entity create() { return new Crap(); } } );
+		m_world.registerEntity( DemolisheCrap.class, new EntityFactory() { @Override public Entity create() { return new DemolisheCrap(); } } );
+		m_world.registerEntity( GranadeCrap.class, new EntityFactory() { @Override public Entity create() { return new GranadeCrap(); } } );
 		m_world.registerEntity( Falcon.class, new EntityFactory() { @Override public Entity create() { return new Falcon(); } } );
 		m_world.registerEntity( Hunter.class, new EntityFactory() { @Override public Entity create() { return new Hunter(); } } );
 		m_world.registerEntity( Bullet.class, new EntityFactory() { @Override public Entity create() { return new Bullet(); } } );
@@ -123,6 +131,8 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Ground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GroundVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Pedestrian.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PedestrianVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Crap.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new CrapVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( DemolisheCrap.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new DemolisheCrapVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( GranadeCrap.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new GranadeCrapVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Falcon.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FalconVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Hunter.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new HunterVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Bullet.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BulletVisual( m_resourceManager, parentEntity ); } } );
@@ -139,6 +149,8 @@ public class GameScreen extends Screen
 		m_controllersView.register( ElectricShock.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricShockAI( parentEntity ); } } );
 		m_controllersView.register( Pedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PedestrianAI( parentEntity ); } } );
 		m_controllersView.register( Crap.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new CrapAI( m_world, parentEntity ); } } );
+		m_controllersView.register( DemolisheCrap.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new DemolisheCrapAI( m_world, parentEntity ); } } );
+		m_controllersView.register( GranadeCrap.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new GranadeCrapAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Falcon.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new FalconAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Hunter.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new HunterAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Zombie.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ZombieAI( parentEntity ); } } );
@@ -153,6 +165,8 @@ public class GameScreen extends Screen
 		m_physicsView.register( ElectricShock.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Pedestrian.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Crap.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( DemolisheCrap.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( GranadeCrap.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Falcon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Hunter.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Bullet.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );

@@ -1,5 +1,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
+import java.util.Random;
+
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shootable;
 import com.hypefoundry.engine.world.Entity;
@@ -25,6 +27,7 @@ public class Bird extends Entity implements Shootable
 	
 	private Vector3 			m_tmpCrapPos 		= new Vector3();
 	
+	
 	public enum State
 	{
 		Idle,
@@ -36,6 +39,20 @@ public class Bird extends Entity implements Shootable
 	
 	public State				m_state;
 	
+//////////////////////////////////////////////////////////////////////////////////////////////////////	
+	public enum CrapType
+	{
+		NormalCrap,
+		SpecialGranadeCrap,
+		SpecialDemolishCrap
+	};
+	
+	public CrapType			m_crapType;
+	private Random 			m_randCrapType  			= new Random();
+	private int				m_specialCrapTypeAmount		= 1;
+	private int				m_currentSpecialCrapAmount	= 0;
+///////////////////////////////////////////////////////////////////////////////////////////////////////	
+	
 	/**
 	 * Constructor.
 	 */
@@ -44,6 +61,7 @@ public class Bird extends Entity implements Shootable
 		setPosition( 0, 0, 0 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
 		m_state = State.Flying; 
+		m_crapType = CrapType.NormalCrap;
 					
 		// add movement capabilities
 		final float maxLinearSpeed = 3.0f;
@@ -73,6 +91,57 @@ public class Bird extends Entity implements Shootable
 		Vector3 birdPos = getPosition();
 		
 		m_tmpCrapPos.set(Vector3.EX).rotateZ( getFacing() ).scale(-0.3f).add( birdPos );		
-		m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
+		
+		if (m_currentSpecialCrapAmount == 0)
+		{
+			m_crapType = CrapType.NormalCrap;
+		}
+		
+		switch( m_crapType )
+		{
+			case NormalCrap:
+			{
+				m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
+				break;
+			}
+			case SpecialGranadeCrap:
+			{
+				m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
+				m_currentSpecialCrapAmount =- 1;
+				break;
+			}
+			
+			case SpecialDemolishCrap:
+			{
+				m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
+				m_currentSpecialCrapAmount =- 1;
+				break;
+			}
+	
+		}
+	}
+	
+	/**
+	 * Bird gets special crap.
+	 */
+	public void setSpecialCrap()
+	{
+		int m_crapTypeNumber = 0;
+		
+		m_crapTypeNumber = m_randCrapType.nextInt(m_specialCrapTypeAmount);
+		
+		m_currentSpecialCrapAmount =+ 1;
+		
+		if (m_crapTypeNumber == 0)
+		{
+			m_crapType = CrapType.SpecialGranadeCrap;
+		}
+		else if (m_crapTypeNumber == 1)
+		{
+			m_crapType = CrapType.SpecialDemolishCrap;
+		}
+		
+		
+		
 	}
 }

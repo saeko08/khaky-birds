@@ -5,6 +5,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.perkPe
 
 import java.util.Random;
 
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.Hideout;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.NotWalkAble;
@@ -35,6 +36,7 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 {
 	private PerkPedestrian			m_perkPedestrian;
 	private SteeringBehaviors 		m_sb;
+	private Bird					m_bird;
 	private final float 			m_zombieLookoutRadiusShort 	= 2f;
 	private final float 			m_zombieLookoutRadiusNear 	= 0.3f;
 	private final float 			m_zombieLookoutRadiusFar 	= 3f;
@@ -492,17 +494,17 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 		@Override
 		public void execute( float deltaTime )
 		{
-			m_wait -= deltaTime;
-			if ( m_wait < m_waitTimer )
-			{
-				transitionTo( Wander.class );
-			}	
-			
 			m_noticedZombie = m_perkPedestrian.m_world.findNearestEntity( Zombie.class, m_zombieLookoutRadiusShort, m_perkPedestrian.getPosition() );
 			if ( m_noticedZombie != null )
 			{
 				transitionTo( Aiming.class );
 			}
+			
+			m_wait -= deltaTime;
+			if ( m_wait < m_waitTimer )
+			{
+				transitionTo( Wander.class );
+			}	
 		}
 		
 		@Override
@@ -578,6 +580,11 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 			m_wait = 3.0f;
 			
 			m_waitTimer = m_randWaitTime.nextInt(3);
+			
+			if (m_bird != null)
+			{
+				m_bird.setSpecialCrap();
+			}
 		}
 		
 		@Override
@@ -630,12 +637,13 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 	 * 
 	 * @param pedestrian			controlled pedestrian
 	 */
-	public PerkPedestrianAI( Entity perkPedestrian )
+	public PerkPedestrianAI(World world, Entity perkPedestrian )
 	{
 		super( perkPedestrian );
 		
 		m_perkPedestrian = (PerkPedestrian)perkPedestrian;
 		m_sb = new SteeringBehaviors( m_perkPedestrian );
+		m_bird = (Bird) world.findEntity(Bird.class);
 		
 		// define events the entity responds to
 		m_perkPedestrian.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );

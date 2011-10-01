@@ -18,6 +18,9 @@ import com.hypefoundry.engine.world.Entity;
 public class HideoutVisual extends EntityVisual 
 {
 private TextureRegion		m_pixmap;
+private TextureRegion		m_pixmapDestroyed;
+private Hideout				m_hideout;
+
 	
 	/**
 	 * Constructor.
@@ -28,8 +31,9 @@ private TextureRegion		m_pixmap;
 	public HideoutVisual( ResourceManager resMgr, Entity entity ) 
 	{
 		super( entity );
-		
+		m_hideout = (Hideout)entity;
 		m_pixmap = resMgr.getResource( TextureRegion.class, "khaky_birds_prototype/textures/hideouts/hideout1.xml" );
+		m_pixmapDestroyed = resMgr.getResource( TextureRegion.class, "khaky_birds_prototype/textures/hideouts/hideout1_destroyed.xml" );
 	}
 
 	@Override
@@ -38,7 +42,14 @@ private TextureRegion		m_pixmap;
 		Vector3 pos = m_entity.getPosition();
 		BoundingShape bs = m_entity.getBoundingShape();
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
+		if(m_hideout.m_isDemolished == false)
+		{
+			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
+		}
+		else
+		{
+			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmapDestroyed );
+		}
 	}
 
 }

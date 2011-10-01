@@ -24,6 +24,7 @@ public class Bird extends Entity implements Shootable
 	public CableProvider		m_cables			= null;
 	public int					m_cableIdx  		= 0;
 	public World 				m_world    			= null;
+	private int					m_maxSpecialCraps	= 2;
 	
 	private Vector3 			m_tmpCrapPos 		= new Vector3();
 	
@@ -130,7 +131,7 @@ public class Bird extends Entity implements Shootable
 		
 		m_crapTypeNumber = m_randCrapType.nextInt(m_specialCrapTypeAmount);
 		
-		m_currentSpecialCrapAmount =+ 1;
+		m_currentSpecialCrapAmount = m_maxSpecialCraps;
 		
 		if (m_crapTypeNumber == 0)
 		{

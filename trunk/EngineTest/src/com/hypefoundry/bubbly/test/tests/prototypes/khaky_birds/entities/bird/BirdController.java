@@ -159,7 +159,7 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Eaten || event instanceof Shocked || event instanceof Shot)
+			if ( event instanceof Shocked || event instanceof Shot)
 			{
 				die();
 			}
@@ -273,12 +273,22 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-			updateInput( deltaTime );
+		
+		
+			if ( m_input.getTouchDuriation( 0 ) > AIM_TIMER )
+			{
+				transitionTo( FlyingShitting.class );
+			}
+			else
+			{
+				updateInput( deltaTime );
+			}
 			if( m_canFly )
 			{
 				m_sb.begin().arrive( m_goToPos, 1.5f ).faceMovementDirection();
 				m_canFly = false;
 			}
+
 		}
 		
 		private void updateInput( float deltaTime ) 
@@ -397,7 +407,48 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Eaten || event instanceof Shocked || event instanceof Shot )
+			if (event instanceof Shocked || event instanceof Shot )
+			{
+				die();
+			}
+		}
+	}
+	
+	// ----------------------------------------------------------------
+	class FlyingShitting extends FSMState implements EntityEventListener
+	{
+		@Override
+		public void activate()
+		{
+			m_bird.m_state = Bird.State.FlyingShitting;
+		}
+		
+		@Override
+		public void deactivate()
+		{
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			List< TouchEvent > inputEvents = m_input.getTouchEvents();
+			int count = inputEvents.size();
+			for ( int i = 0 ; i < count; ++i )
+			{	
+				TouchEvent lastEvent = inputEvents.get(i);	
+				if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
+				{
+					m_bird.makeShit();
+					transitionTo( Flying.class );
+					break;
+				}
+			}
+		}
+		
+		@Override
+		public void onEvent( EntityEvent event ) 
+		{
+			if ( event instanceof Eaten || event instanceof Shot )
 			{
 				die();
 			}
@@ -428,6 +479,7 @@ public class BirdController extends FiniteStateMachine
 		register( new Jumping() );
 		register( new Flying() );
 		register( new Shitting() );
+		register( new FlyingShitting() );
 		register( new Landing() );
 		
 		begin( Flying.class ).tryLanding();

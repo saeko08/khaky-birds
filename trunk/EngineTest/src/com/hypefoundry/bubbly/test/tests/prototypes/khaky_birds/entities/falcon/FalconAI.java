@@ -98,21 +98,30 @@ public class FalconAI extends FiniteStateMachine
 		public void execute( float deltaTime )
 		{
 			// falcon start chasing bird if the bird exist and if its close close enough
-			if (m_bird!=null)
+			if (m_bird != null)
 			{
 				m_falconPos.set(m_falcon.getPosition());
 				m_birdPos.set(m_bird.getPosition());
-				
-				float distToBird = m_falconPos.dist2D(m_birdPos);
-				if (distToBird <= m_maxChasingDist)
+				if(m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Jumping || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.FlyingShitting)
 				{
-					int chasingChance = m_randChasingChance.nextInt(2);
+					m_falconPos.set(m_falcon.getPosition());
+					m_birdPos.set(m_bird.getPosition());
+					float distToBird = m_falconPos.dist2D(m_birdPos);
 					
-					if (chasingChance == 1)
+					if (distToBird <= m_maxChasingDist )
 					{
-						transitionTo( Chasing.class );
+						int chasingChance = m_randChasingChance.nextInt(2);
+						
+						if (chasingChance == 1)
+						{
+							transitionTo( Chasing.class );
+						}
 					}
 				}
+			}
+			else
+			{
+				m_bird = (Bird) m_world.findEntity(Bird.class);
 			}
 			
 			// changing circling radius every once in a while
@@ -164,6 +173,16 @@ public class FalconAI extends FiniteStateMachine
 		public void deactivate()
 		{
 			m_sb.clear();
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			if (m_bird.m_state == Bird.State.Idle || m_bird.m_state == Bird.State.Shitting)
+			{
+				transitionTo( Hunting.class );
+			}
+			
 		}
 		
 		@Override

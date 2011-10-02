@@ -53,6 +53,11 @@
 		<position x='2.4' y='4.8' z= '70'/>
 	</Entity>
 	
+	<Entity type="Falcon" />
+	
+	<Entity type="Hunter">
+		<position x='2' y='2' z='80' />
+	</Entity>
 	
 	<Entity type="Bird" />
 	

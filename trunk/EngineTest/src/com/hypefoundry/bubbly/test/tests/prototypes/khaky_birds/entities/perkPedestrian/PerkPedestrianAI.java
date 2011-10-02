@@ -351,13 +351,7 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Crapped )
-			{
-				// a bird crapped on us
-				m_perkPedestrian.setHitWithShit( true );
-				transitionTo( Shitted.class );
-			}
-			else if ( event instanceof Bite )
+			if ( event instanceof Bite )
 			{
 				transitionTo( Eaten.class );
 			}
@@ -616,13 +610,7 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Crapped )
-			{
-				// a bird crapped on us
-				m_perkPedestrian.setHitWithShit( true );
-				transitionTo( Shitted.class );
-			}
-			else if ( event instanceof Bite )
+		 if ( event instanceof Bite )
 			{
 				transitionTo( Eaten.class );
 			}

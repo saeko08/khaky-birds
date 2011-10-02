@@ -46,6 +46,7 @@ public class Hideout extends Entity implements NotWalkAble, Shootable, Crappable
 		final float maxRotationSpeed = 0.0f;
 		final float maxLinearSpeed = 0.0f;
 		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
+		m_state = State.Default;
 
 	}
 	
@@ -67,6 +68,12 @@ public class Hideout extends Entity implements NotWalkAble, Shootable, Crappable
 	
 	@Override
 	public void onAddedToWorld( World hostWorld )
+	{
+		m_world = hostWorld;
+	}
+	//debug
+	@Override
+	public void onRemovedFromWorld( World hostWorld )
 	{
 		m_world = hostWorld;
 	}

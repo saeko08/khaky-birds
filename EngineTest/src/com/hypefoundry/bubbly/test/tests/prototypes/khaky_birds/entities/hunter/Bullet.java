@@ -55,7 +55,28 @@ public class Bullet extends Entity implements EntityEventListener
 		registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
 	}
 	
-	
+	/**
+	 * Constructor.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param facing
+	 */
+	public Bullet( float x, float y, float z, float min_z_bBox, float max_z_bBox,  float facing )
+	{
+		setPosition( x, y, z );
+		setFacing( facing );
+		
+		setBoundingBox( new BoundingBox( -0.05f, -0.05f, min_z_bBox, 0.05f, 0.05f, max_z_bBox ) );	// TODO: config
+		
+		final float maxRotationSpeed = 180.0f;
+		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
+		
+		
+		//register events
+		registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
+		registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
+	}
 	@Override
 	public void onAddedToWorld( World hostWorld )
 	{

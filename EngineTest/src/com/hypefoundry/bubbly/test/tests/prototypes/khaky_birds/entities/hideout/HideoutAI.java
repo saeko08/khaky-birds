@@ -3,7 +3,6 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Demolishe;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
@@ -199,7 +198,7 @@ public class HideoutAI extends FiniteStateMachine
 	}
 	
 	@Override
-	public void update(float deltaTime) 
+	public void onUpdate(float deltaTime) 
 	{
 		m_sb.update(deltaTime);
 	}

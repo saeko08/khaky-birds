@@ -3,6 +3,8 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 import java.util.Random;
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crap;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.DemolisheCrap;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.GranadeCrap;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shootable;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
@@ -50,7 +52,7 @@ public class Bird extends Entity implements Shootable
 	
 	public CrapType			m_crapType;
 	private Random 			m_randCrapType  			= new Random();
-	private int				m_specialCrapTypeAmount		= 1;
+	private int				m_specialCrapTypeAmount		= 2;
 	private int				m_currentSpecialCrapAmount	= 0;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////	
 	
@@ -107,15 +109,15 @@ public class Bird extends Entity implements Shootable
 			}
 			case SpecialGranadeCrap:
 			{
-				m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
-				m_currentSpecialCrapAmount =- 1;
+				m_world.addEntity( new GranadeCrap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
+				m_currentSpecialCrapAmount -= 1;
 				break;
 			}
 			
 			case SpecialDemolishCrap:
 			{
-				m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
-				m_currentSpecialCrapAmount =- 1;
+				m_world.addEntity( new DemolisheCrap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
+				m_currentSpecialCrapAmount -= 1;
 				break;
 			}
 	
@@ -135,11 +137,11 @@ public class Bird extends Entity implements Shootable
 		
 		if (m_crapTypeNumber == 0)
 		{
-			m_crapType = CrapType.SpecialGranadeCrap;
-		}
-		else if (m_crapTypeNumber == 1)
-		{
 			m_crapType = CrapType.SpecialDemolishCrap;
+		}
+		else
+		{
+			m_crapType = CrapType.SpecialGranadeCrap;
 		}
 		
 		

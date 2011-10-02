@@ -459,6 +459,10 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 	public void onUpdate( float deltaTime )
 	{
 		m_sb.update(deltaTime);
+		if (m_bird == null)
+		{
+			m_bird = (Bird) m_hunter.m_world.findEntity(Bird.class);
+		}
 	}
 	
 	void die()

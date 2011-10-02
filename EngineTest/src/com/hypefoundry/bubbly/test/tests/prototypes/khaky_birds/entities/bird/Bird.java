@@ -38,7 +38,8 @@ public class Bird extends Entity implements Shootable
 		Shitting,
 		Flying,
 		Landing,
-	};
+		FlyingShitting
+	}
 	
 	public State				m_state;
 	

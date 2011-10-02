@@ -24,6 +24,7 @@ public class BirdVisual extends EntityVisual
 	private int 			ANIM_IDLE;
 	private int 			ANIM_FLY;
 	private int 			ANIM_SHIT;
+	private int 			ANIM_FLY_SHIT;
 	
 	/**
 	 * Constructor.
@@ -40,13 +41,15 @@ public class BirdVisual extends EntityVisual
 		// load animations
 		Animation idleBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/idleBird.xml");
 		Animation flyingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/flyingBird.xml");
-		Animation shittingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/shittingBird.xml");		
+		Animation shittingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/shittingBird.xml");	
+		Animation flyingShittingBird = resMgr.getResource( Animation.class, "khaky_birds_prototype/animations/flyingShittingBird.xml");		
 		
 		// create an animation player
 		m_animationPlayer = new AnimationPlayer();
 		ANIM_IDLE = m_animationPlayer.addAnimation( idleBird );
 		ANIM_FLY = m_animationPlayer.addAnimation( flyingBird );
 		ANIM_SHIT = m_animationPlayer.addAnimation( shittingBird );
+		ANIM_FLY_SHIT = m_animationPlayer.addAnimation( flyingShittingBird );
 	}
 
 	@Override
@@ -58,6 +61,10 @@ public class BirdVisual extends EntityVisual
 		if( m_bird.m_state == Bird.State.Shitting )
 		{
 			m_animationPlayer.select(ANIM_SHIT);
+		}
+		else if( m_bird.m_state == Bird.State.FlyingShitting )
+		{
+			m_animationPlayer.select(ANIM_FLY_SHIT);
 		}
 		else if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.Jumping)
 		{

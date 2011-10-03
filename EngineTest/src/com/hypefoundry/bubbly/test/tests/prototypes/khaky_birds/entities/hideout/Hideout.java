@@ -9,6 +9,7 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestr
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.perkPedestrian.PerkPedestrian;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.DynamicObject;
+import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
 
@@ -19,12 +20,17 @@ import com.hypefoundry.engine.world.World;
 public class Hideout extends Entity implements NotWalkAble, Shootable, Crappable
 {
 	
-	public int						m_pedestrians 		= 0;
-	public int						m_perkPedestrians	= 0;
-	public int						m_maxPerkPedestrianNumber	= 2;
+	public int						m_pedestrians 				= 0;
+	public int						m_perkPedestrians			= 0;
+	public int						m_maxPerkPedestrianNumber	= 0;
 	private World 					m_world;
-	public boolean					m_isDemolished		= false;
+	public boolean					m_isDemolished				= false;
 	
+	float							m_defaultPedestrianRespawnTime 		= 10.0f;
+	float							m_defaultPerkPedestrianRespawnTime 	= 10.0f;
+	float							m_bombedPedestrianRespawnTime 		= 0.5f;
+	float							m_bombedPerkPedestrianRespawnTime 	= 0.5f;
+	float 							m_panicTime							= 4.0f;
 	
 	public enum State
 	{
@@ -33,13 +39,13 @@ public class Hideout extends Entity implements NotWalkAble, Shootable, Crappable
 	}
 	
 	State				m_state;
+	
 	/////////////////////////////////////////////////////////////
 	/**
 	 * Default constructor.
 	 */
 	public Hideout()
 	{
-	
 		setBoundingBox( new BoundingBox( -0.7f, -0.7f, -15f, 0.7f, 0.7f, 15f ) );	// TODO: config
 		setPosition( 0, 0, 70 );
 		
@@ -86,11 +92,36 @@ public class Hideout extends Entity implements NotWalkAble, Shootable, Crappable
 	public void perkPedestrianGoOut()
 	{
 		//tu trzeba bêdzie przekazywaæ instancjê hideouta
-		m_world.addEntity( new PerkPedestrian(getPosition(), this ) );
+		m_world.addEntity( new PerkPedestrian( getPosition(), this ) );
 	}
 	
 	public void bombed()
 	{
 		m_isDemolished		= true;
+	}
+	
+	// ------------------------------------------------------------------------
+	// Serialization support
+	// ------------------------------------------------------------------------
+	
+	@Override
+	public void onLoad( DataLoader loader ) 
+	{
+		DataLoader pedestrianLoader = loader.getChild( "Pedestrian" );
+		if ( pedestrianLoader != null )
+		{
+			m_defaultPedestrianRespawnTime 			= pedestrianLoader.getFloatValue("defaultRespawnTime");
+			m_bombedPedestrianRespawnTime 			= pedestrianLoader.getFloatValue("bombedRespawnTime");
+		}
+		
+		DataLoader perkPedestrianLoader = loader.getChild( "PerkPedestrian" );
+		if ( perkPedestrianLoader != null )
+		{
+			m_defaultPedestrianRespawnTime 			= perkPedestrianLoader.getFloatValue("defaultRespawnTime");
+			m_bombedPedestrianRespawnTime 			= perkPedestrianLoader.getFloatValue("bombedRespawnTime");
+		}
+		
+		m_panicTime = loader.getFloatValue( "panicTime" );	
+		m_maxPerkPedestrianNumber = loader.getIntValue( "maxPerkPedestrians" );
 	}
 }

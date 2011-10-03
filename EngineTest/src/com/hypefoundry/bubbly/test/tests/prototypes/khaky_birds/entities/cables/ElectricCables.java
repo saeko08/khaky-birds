@@ -89,6 +89,10 @@ public class ElectricCables extends Entity implements CableProvider
 		m_wires[cableIdx].getNearestPosition( currPos, outPos );
 	}
 
+	// ------------------------------------------------------------------------
+	// Serialization support
+	// ------------------------------------------------------------------------
+	
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{

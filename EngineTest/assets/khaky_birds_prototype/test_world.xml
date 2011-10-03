@@ -51,8 +51,10 @@
 		<position x='4' y='2' z='80' />
 	</Entity>
 	
-	<Entity type="Hideout">
+	<Entity type="Hideout" maxPerkPedestrians='2' panicTime='4'>
 		<position x='2.4' y='4.8' z= '70'/>
+		<Pedestrian defaultRespawnTime='10' bombedRespawnTime='0.5' />
+		<PerkPedestrian defaultRespawnTime='10' bombedRespawnTime='0.5' />
 	</Entity>
 	
 	<Entity type="Falcon" />

@@ -335,6 +335,11 @@ public class World implements Updatable
 	@SuppressWarnings("unchecked")
 	public < T > void findEntitiesInRange( Class< T > entityType, float range, Vector3 sourcePos, ArrayList< T > outEntities ) 
 	{
+		if ( outEntities == null )
+		{
+			return;
+		}
+		
 		int count 			= m_entities.size();
 		if ( count == 0 )
 		{

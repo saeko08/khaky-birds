@@ -19,15 +19,13 @@ import com.hypefoundry.engine.world.World;
  */
 public class HideoutAI extends FiniteStateMachine
 {
-	private World 					m_world;
 	private Hideout					m_hideout;
 	private SteeringBehaviors 		m_sb;
-	private  float 					m_pedestrianRespawnTime		= 10f;
-	private float					m_pedestrianCounter			= 0f;
-	private float 					m_perkPedestrianRespawnTime	= 10f;
-	private float					m_perkPedestrianCounter		= 0f;
 	
-	private final float 			m_panicTime	= 4f;
+	private float 					m_pedestrianRespawnTime		= 0;
+	private float					m_pedestrianCounter			= 0;
+	private float 					m_perkPedestrianRespawnTime	= 0;
+	private float					m_perkPedestrianCounter		= 0;
 
 	
 	
@@ -39,8 +37,9 @@ public class HideoutAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_hideout.m_state = Hideout.State.Default;
-			m_pedestrianRespawnTime		= 10f;
-			m_perkPedestrianRespawnTime	= 10f;
+			
+			m_pedestrianRespawnTime		= m_hideout.m_defaultPedestrianRespawnTime;
+			m_perkPedestrianRespawnTime	= m_hideout.m_defaultPerkPedestrianRespawnTime;
 		
 		}
 		@Override
@@ -111,8 +110,8 @@ public class HideoutAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_hideout.m_state = Hideout.State.Bombed;
-			m_pedestrianRespawnTime		= 0.5f;
-			m_perkPedestrianRespawnTime	= 0.5f;
+			m_pedestrianRespawnTime		= m_hideout.m_bombedPedestrianRespawnTime;
+			m_perkPedestrianRespawnTime	= m_hideout.m_bombedPerkPedestrianRespawnTime;
 		
 		}
 		
@@ -128,7 +127,7 @@ public class HideoutAI extends FiniteStateMachine
 		public void execute( float deltaTime )
 		{
 			m_wait += deltaTime;
-			if (m_wait < m_panicTime || m_hideout.m_pedestrians > 0 && m_hideout.m_perkPedestrians > 0 )
+			if (m_wait < m_hideout.m_panicTime || m_hideout.m_pedestrians > 0 && m_hideout.m_perkPedestrians > 0 )
 			{
 				m_pedestrianCounter += deltaTime;
 				if (m_pedestrianCounter >= m_pedestrianRespawnTime )
@@ -184,7 +183,6 @@ public class HideoutAI extends FiniteStateMachine
 		super(hideout);
 		
 		m_hideout = (Hideout)hideout;
-		m_world = world;
 		m_sb = new SteeringBehaviors( m_hideout);
 		
 		// define events the entity responds to

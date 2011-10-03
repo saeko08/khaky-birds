@@ -281,6 +281,8 @@ public class World implements Updatable
 	 * Looks for the nearest entity of the specified type.
 	 * 
 	 * @param entityType
+	 * @param range
+	 * @param sourcePos
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -319,6 +321,42 @@ public class World implements Updatable
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * Looks for the entities of the specified type in the specified query range.
+	 * 
+	 * @param entityType
+	 * @param range
+	 * @param sourcePos
+	 * @param outEntities
+	 */
+	@SuppressWarnings("unchecked")
+	public < T > void findEntitiesInRange( Class< T > entityType, float range, Vector3 sourcePos, ArrayList< T > outEntities ) 
+	{
+		int count 			= m_entities.size();
+		if ( count == 0 )
+		{
+			return;
+		}
+		
+		float distanceSq		= 0;
+		float radiusSq 			= range*range;
+		Vector3 targetPos		= null;
+
+		for( int i = 0; i < count; ++i )
+		{
+			Entity entity = m_entities.get(i);
+			if ( entityType.isInstance( entity ) )
+			{
+				targetPos = entity.getPosition();
+				distanceSq = sourcePos.distSq2D( targetPos );
+				if ( distanceSq <= radiusSq )
+				{
+					outEntities.add( (T)entity );
+				}
+			}
 		}
 	}
 	

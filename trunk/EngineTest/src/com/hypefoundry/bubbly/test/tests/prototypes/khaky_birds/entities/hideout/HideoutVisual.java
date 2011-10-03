@@ -4,7 +4,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout;
 
 import com.hypefoundry.engine.core.ResourceManager;
-import com.hypefoundry.engine.math.BoundingShape;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
@@ -40,7 +40,7 @@ private Hideout				m_hideout;
 	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_entity.getPosition();
-		BoundingShape bs = m_entity.getBoundingShape();
+		BoundingBox bs = m_entity.getBoundingShape();
 		
 		if(m_hideout.m_isDemolished == false)
 		{

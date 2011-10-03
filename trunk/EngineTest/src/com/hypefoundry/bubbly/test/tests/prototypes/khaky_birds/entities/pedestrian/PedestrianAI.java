@@ -279,7 +279,6 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 			{
 				transitionTo( Eaten.class );
 			}
-			
 		}
 	}
 	
@@ -352,7 +351,6 @@ public class PedestrianAI extends FiniteStateMachine implements WorldView
 		@Override
 		public void deactivate()
 		{
-
 		}
 		
 		@Override

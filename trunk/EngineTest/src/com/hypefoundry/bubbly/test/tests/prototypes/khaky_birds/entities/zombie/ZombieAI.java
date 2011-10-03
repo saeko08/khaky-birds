@@ -5,10 +5,8 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie
 
 import java.util.Random;
 
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crappable;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Shot;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.math.Vector3;

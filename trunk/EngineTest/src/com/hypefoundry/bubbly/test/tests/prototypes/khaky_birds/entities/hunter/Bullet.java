@@ -21,15 +21,17 @@ import com.hypefoundry.engine.world.World;
 public class Bullet extends Entity implements EntityEventListener
 {
 
-	public final float 	maxLinearSpeed 			 	= 1.0f;
-	public World 		m_world						= null;
-
+	public final float 		maxLinearSpeed 			 	= 1.0f;
+	public World 			m_world						= null;
+	private Class			m_shootableClass;
+	
+	
 	/**
 	 * Default constructor.
 	 */
 	public Bullet()
 	{
-		this( 0, 0, 0 );
+		this( 0, 0, 0, null );
 	}
 	
 	/**
@@ -38,8 +40,9 @@ public class Bullet extends Entity implements EntityEventListener
 	 * @param x
 	 * @param y
 	 * @param facing
+	 * @param shootable
 	 */
-	public Bullet( float x, float y, float facing )
+	public Bullet( float x, float y, float facing, Class shootable )
 	{
 		setPosition( x, y, 50 );
 		setFacing( facing );
@@ -47,36 +50,17 @@ public class Bullet extends Entity implements EntityEventListener
 		setBoundingBox( new BoundingBox( -0.05f, -0.05f, -100.0f, 0.05f, 0.05f, 100.0f ) );	// TODO: config
 		
 		final float maxRotationSpeed = 180.0f;
-		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
+		DynamicObject dynObj = new DynamicObject( maxLinearSpeed, maxRotationSpeed );
+		defineAspect( dynObj );
 		
+		m_shootableClass = shootable;
 		
 		//register events
 		registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
 		registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
 	}
 	
-	/**
-	 * Constructor.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param facing
-	 */
-	public Bullet( float x, float y, float z, float min_z_bBox, float max_z_bBox,  float facing )
-	{
-		setPosition( x, y, z );
-		setFacing( facing );
-		
-		setBoundingBox( new BoundingBox( -0.05f, -0.05f, min_z_bBox, 0.05f, 0.05f, max_z_bBox ) );	// TODO: config
-		
-		final float maxRotationSpeed = 180.0f;
-		defineAspect( new DynamicObject( maxLinearSpeed, maxRotationSpeed ) );
-		
-		
-		//register events
-		registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds (); } } );
-		registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent (); } } );
-	}
+	
 	@Override
 	public void onAddedToWorld( World hostWorld )
 	{
@@ -91,7 +75,7 @@ public class Bullet extends Entity implements EntityEventListener
 		{
 			// if it collides with another entity, it attempts eating it
 			Entity collider = ( (CollisionEvent)event ).m_collider;
-			if ( collider instanceof Shootable )
+			if ( m_shootableClass != null && m_shootableClass.isInstance( collider ) )
 			{
 				collider.sendEvent( Shot.class );   
 				die();

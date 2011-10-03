@@ -42,7 +42,7 @@ public class Crap extends Entity
 	 */
 	public Crap( float x, float y )
 	{
-		setPosition( x, y, 70 );
+		setPosition( x, y, 80 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 15f ) );	// TODO: config
 		
 		// add movement capabilities

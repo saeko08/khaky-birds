@@ -5,7 +5,6 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter
 
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird.Bird;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Crapped;
-import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.pedestrian.Pedestrian;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Bite;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie.Zombie;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
@@ -61,10 +60,12 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 	}
 
 	@Override
-	public void onEntityAdded(Entity entity) 
+	public void onEntityAdded( Entity entity ) 
 	{
-		// TODO Auto-generated method stub
-		
+		if ( entity instanceof Bird )
+		{
+			m_bird = (Bird)entity;
+		}
 	}
 
 	@Override
@@ -78,7 +79,6 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 		{
 			m_bird = null;
 		}
-		
 	}
 	
 	// ------------------------------------------------------------------------
@@ -436,7 +436,6 @@ public class HunterAI extends FiniteStateMachine implements WorldView
 		
 		m_hunter = (Hunter)hunter;
 		m_sb = new SteeringBehaviors( m_hunter );
-		m_bird = (Bird) world.findEntity(Bird.class);
 		
 		// define events the entity responds to
 		m_hunter.registerEvent( Crapped.class, new EventFactory< Crapped >() { @Override public Crapped createObject() { return new Crapped (); } } );

@@ -4,7 +4,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.zombie;
 
 import com.hypefoundry.engine.core.ResourceManager;
-import com.hypefoundry.engine.math.BoundingShape;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
@@ -55,9 +55,8 @@ public class ZombieVisual extends EntityVisual
 	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_zombie.getPosition();
-		BoundingShape bs = m_zombie.getBoundingShape();
+		BoundingBox bs = m_zombie.getBoundingShape();
 		
-	
 		if ( m_zombie.m_state == Zombie.State.Wander || m_zombie.m_state == Zombie.State.TurnAround ||m_zombie.m_state == Zombie.State.Chasing )
 		{
 			m_animationPlayer.select(ANIM_WANDER);

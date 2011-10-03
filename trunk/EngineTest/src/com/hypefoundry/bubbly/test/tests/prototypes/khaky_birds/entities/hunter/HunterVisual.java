@@ -4,7 +4,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter;
 
 import com.hypefoundry.engine.core.ResourceManager;
-import com.hypefoundry.engine.math.BoundingShape;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
@@ -54,7 +54,7 @@ public class HunterVisual extends EntityVisual
 	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_hunter.getPosition();
-		BoundingShape bs = m_hunter.getBoundingShape();
+		BoundingBox bs = m_hunter.getBoundingShape();
 	
 		// select an animation appropriate to the state the pedestrian's in
 		switch( m_hunter.m_state )

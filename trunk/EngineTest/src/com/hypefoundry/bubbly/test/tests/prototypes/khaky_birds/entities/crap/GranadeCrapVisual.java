@@ -4,7 +4,7 @@
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap;
 
 import com.hypefoundry.engine.core.ResourceManager;
-import com.hypefoundry.engine.math.BoundingShape;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
@@ -59,7 +59,7 @@ public class GranadeCrapVisual extends EntityVisual
 	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_crap.getPosition();
-		BoundingShape bs = m_crap.getBoundingShape();
+		BoundingBox bs = m_crap.getBoundingShape();
 		
 		if( m_crap.m_state == GranadeCrap.State.Falling || m_crap.m_state == GranadeCrap.State.Hitting )
 		{

@@ -30,6 +30,7 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.HideoutAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.HideoutVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Bullet;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.BulletBody;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.BulletVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Fire;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hunter.Hunter;
@@ -120,11 +121,13 @@ public class GameScreen extends Screen
 			throw new RuntimeException( e );
 		}
 		
-		// create the renderer
+		// create the views
 		m_worldRenderer = new Renderer2D( game );
-		m_world.attachView( m_worldRenderer );
+		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
+		m_controllersView = new ControllersView( this );
 		
 		// register visuals
+		m_world.attachView( m_worldRenderer );
 		m_worldRenderer.register( Bird.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BirdVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( ElectricCables.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricCablesVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( ElectricShock.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ElectricShockVisual( m_resourceManager, parentEntity ); } } );
@@ -141,9 +144,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( PerkPedestrian.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PerkPedestrianVisual( m_resourceManager, parentEntity ); } } );
 
 		// register controllers
-		m_controllersView = new ControllersView( this );
 		m_world.attachView( m_controllersView );
-		
 		m_controllersView.register( Bird.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new BirdController( m_game.getInput(), m_worldRenderer.getCamera(), parentEntity ); } } );
 		m_controllersView.register( ElectricCables.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricCablesAI( m_world, parentEntity ); } } );
 		m_controllersView.register( ElectricShock.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricShockAI( parentEntity ); } } );
@@ -158,9 +159,7 @@ public class GameScreen extends Screen
 		m_controllersView.register( PerkPedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PerkPedestrianAI(m_world, parentEntity ); } } );
 		
 		// register physics
-		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
 		m_world.attachView( m_physicsView );
-		
 		m_physicsView.register( Bird.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( ElectricShock.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Pedestrian.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
@@ -169,7 +168,7 @@ public class GameScreen extends Screen
 		m_physicsView.register( GranadeCrap.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Falcon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Hunter.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
-		m_physicsView.register( Bullet.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( Bullet.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new BulletBody( parentEntity ); } } );
 		m_physicsView.register( Zombie.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Hideout.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( PerkPedestrian.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );

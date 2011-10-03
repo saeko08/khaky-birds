@@ -176,6 +176,16 @@ public final class Vector3
 	}
 	
 	/**
+	 * Magnitude ( length ) of the vector ( squared version ).
+	 * @return
+	 */
+	public float magSq()
+	{
+		float mag = m_x*m_x + m_y*m_y + m_z*m_z;
+		return mag;
+	}
+	
+	/**
 	 * Calculates a 2D magnitude of the vector.
 	 *  
 	 * @return
@@ -183,6 +193,17 @@ public final class Vector3
 	public float mag2D() 
 	{
 		float mag = (float) Math.sqrt( m_x*m_x + m_y*m_y );
+		return mag;
+	}
+	
+	/**
+	 * Calculates a 2D magnitude of the vector ( squared version ).
+	 *  
+	 * @return
+	 */
+	public float magSq2D() 
+	{
+		float mag = m_x*m_x + m_y*m_y;
 		return mag;
 	}
 	
@@ -378,7 +399,6 @@ public final class Vector3
 	{
 		float distX = m_x - rhs.m_x;
 		float distY = m_y - rhs.m_y;
-		float distZ = m_z - rhs.m_z;
 		return FloatMath.sqrt( distX * distX + distY * distY );
 	}
 	
@@ -494,7 +514,7 @@ public final class Vector3
 	}
 	
 	/**
-	 * Calculates a cross product of two vectors
+	 * Calculates a cross product of two vectors.
 	 * 
 	 * @param rhs		other vector
 	 * @param outVec	result
@@ -504,6 +524,17 @@ public final class Vector3
 		outVec.m_x = m_y * rhs.m_z - m_z * rhs.m_y;
 		outVec.m_y = m_z * rhs.m_x - m_x * rhs.m_z;
 		outVec.m_z = m_x * rhs.m_y - m_y * rhs.m_x;
+	}
+	
+	/**
+	 * Calculates a cross product of two vectors in 2D.
+	 * 
+	 * @param rhs		other vector
+	 * @return
+	 */
+	public float cross2D( Vector3 rhs )
+	{
+		return m_x * rhs.m_y - m_y * rhs.m_x;
 	}
 	
 	// ------------------------------------------------------------------------

@@ -186,7 +186,7 @@ public abstract class Entity
 	 * 
 	 * @return
 	 */
-	public final BoundingShape getBoundingShape()
+	public final BoundingBox getBoundingShape()
 	{
 		return m_bb;
 	}

@@ -68,6 +68,8 @@ public class ControllersView extends GenericFactory< Entity, EntityController > 
 		EntityController controller = findControllerFor( entity );
 		if ( controller != null )
 		{
+			controller.deinitialize();
+			
 			// remove it from the update manager
 			m_updatesMgr.removeUpdatable( controller );
 			

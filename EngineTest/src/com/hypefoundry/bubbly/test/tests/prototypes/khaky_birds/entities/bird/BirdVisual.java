@@ -2,7 +2,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.bird;
 
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.engine.math.BoundingShape;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
@@ -56,7 +56,7 @@ public class BirdVisual extends EntityVisual
 	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_bird.getPosition();
-		BoundingShape bs = m_bird.getBoundingShape();
+		BoundingBox bs = m_bird.getBoundingShape();
 		
 		if( m_bird.m_state == Bird.State.Shitting )
 		{

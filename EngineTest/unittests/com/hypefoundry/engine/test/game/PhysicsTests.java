@@ -30,8 +30,7 @@ public class PhysicsTests extends AndroidTestCase
 		{
 			super();
 			
-			defineAspect( new DynamicObject( 1.0f, 180.0f ) );
-			
+			defineAspect( new DynamicObject( 1.0f, 180.0f ) );	
 			setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.2f, 0.2f, 0.2f, 0.2f ) );
 			m_collisions = 0;
 		}
@@ -44,18 +43,12 @@ public class PhysicsTests extends AndroidTestCase
 				m_collisions++;
 			}
 		}
-			
-		public void reset()
-		{
-			m_collisions = 0;
-		}
 	}
 	
 	// ------------------------------------------------------------------------
 	
 	private class PhysicalBodyMock extends PhysicalBody
-	{
-
+	{		
 		public PhysicalBodyMock( Entity entity ) 
 		{
 			super( entity, true );
@@ -65,11 +58,37 @@ public class PhysicsTests extends AndroidTestCase
 		}
 		
 		@Override
-		public void respondToCollision( PhysicalBody collider )
+		public void respondToCollision( PhysicalBody collider, Vector3 collisionPoint )
 		{
 			// nothing to do here
 		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	private class BouncyPhysicalBodyMock extends PhysicalBody
+	{
+		private Vector3		m_alteredVelocity = new Vector3();
 		
+		
+		public BouncyPhysicalBodyMock( Entity entity ) 
+		{
+			super( entity, new BoundingBox( 0.5f, 0.5f, 0.5f ), true );
+			EntityMock mock = (EntityMock)entity;
+				
+			mock.attachEventListener( mock );
+		}	
+		
+		@Override
+		public void respondToCollision( PhysicalBody collider, Vector3 collisionPoint )
+		{
+			DynamicObject dynObj = m_entity.query( DynamicObject.class );
+			if ( dynObj.m_velocity.magSq2D() > 0 )
+			{
+				m_alteredVelocity.set( collisionPoint ).sub( m_entity.getPosition() );
+				dynObj.m_velocity.set( m_alteredVelocity );
+			}
+		}	
 	}
 		
 	// ------------------------------------------------------------------------
@@ -115,7 +134,7 @@ public class PhysicsTests extends AndroidTestCase
 		e2.setPosition( 3.4f, 3.4f, 0 );
 		world.update( 0 );
 		physics.update( 0 );
-		// not yet - the events will be processed at the beginng of the next frame
+		// not yet - the events will be processed at the beginning of the next frame
 		assertEquals( 0, e1.m_collisions );
 		assertEquals( 0, e2.m_collisions );
 		
@@ -160,5 +179,35 @@ public class PhysicsTests extends AndroidTestCase
 			dist = pos.dist( new Vector3( 10, i, 0 ) );
 			assertTrue( 0.1f > dist );
 		}
+	}
+	
+	public void testBouncingOff()
+	{
+		World world = new World();
+		world.setSize( 4, 4 );
+		EntityMock e1 = new EntityMock();
+		EntityMock e2 = new EntityMock();
+			
+		world.addEntity( e1 );
+		world.addEntity( e2 );
+		world.update( 1 );
+		
+		PhysicsView physics = new PhysicsView( 2 );
+		physics.register( EntityMock.class, new PhysicalBodyFactory() { @Override public PhysicalBody instantiate(Entity parentEntity) { return new BouncyPhysicalBodyMock( parentEntity ); } } );
+		world.attachView( physics );
+			
+		// setup one moving and one static object
+		e1.setPosition( 1, 1, 0 );
+		e2.setPosition( 3, 3, 0 );
+		e1.query( DynamicObject.class ).m_velocity.set( 1.5f, 1.5f, 0 );
+		
+		physics.update( 1 );
+		world.update( 1 );
+		assertEquals( 1, e1.m_collisions );
+		assertEquals( 1, e2.m_collisions );
+	
+		// verify that the objects stopped
+		assertTrue( e2.getPosition().dist( 3, 3, 0 ) < 1e-3 );
+		assertTrue( e1.getPosition().dist( 2.75f, 2.75f, 0 ) < 1e-3 ); // not too acurate, but it's ok for now
 	}
 }

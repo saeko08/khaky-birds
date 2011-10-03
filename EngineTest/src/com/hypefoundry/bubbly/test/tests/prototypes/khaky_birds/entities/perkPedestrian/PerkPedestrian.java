@@ -105,7 +105,7 @@ public class PerkPedestrian  extends Entity implements Crappable, Biteable
 		Vector3 hunterPos = getPosition();
 		
 		m_tmpBulletPos.set(Vector3.EX).rotateZ( getFacing() ).scale(0.3f).add( hunterPos );		
-		m_world.addEntity( new Bullet( m_tmpBulletPos.m_x, m_tmpBulletPos.m_y, 70f,-10f, 10f, getFacing() ) );
+		m_world.addEntity( new Bullet( m_tmpBulletPos.m_x, m_tmpBulletPos.m_y, getFacing(), Zombie.class ) );
 	}
 	
 	@Override

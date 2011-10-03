@@ -9,7 +9,7 @@ import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.animation.Animation;
 import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
-import com.hypefoundry.engine.math.BoundingShape;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
 /**
@@ -47,7 +47,7 @@ public class FalconVisual extends EntityVisual
 	public void draw( SpriteBatcher batcher, float deltaTime ) 
 	{
 		Vector3 pos = m_falcon.getPosition();
-		BoundingShape bs = m_falcon.getBoundingShape();
+		BoundingBox bs = m_falcon.getBoundingShape();
 		
 		m_animationPlayer.select(ANIM_FLY);
 		

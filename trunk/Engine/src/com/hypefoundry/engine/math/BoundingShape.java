@@ -14,83 +14,65 @@ import com.hypefoundry.engine.util.serialization.DataSaver;
  *
  */
 public interface BoundingShape 
-{
+{	
 	/**
-	 * Returns the width of the shape.
-	 * 
-	 * @return
-	 */
-	float getWidth();
-	
-	/**
-	 * Returns the height of the shape.
-	 * 
-	 * @return
-	 */
-	float getHeight();
-	
-	/**
-	 * Returns the geometrical center of mass.
-	 * @return
-	 */
-	Vector3 getMassCenter();
-	
-	/**
-	 * Checks if the shape overlaps a sphere ( in 2D ).
-	 * 
-	 * @param sphere
-	 * @return
-	 */
-	boolean doesOverlap2D( BoundingSphere sphere );
-
-	/**
-	 * Checks if the shape overlaps a box ( in 2D ).
+	 * Returns an axis aligned bounding box of the shape.
 	 * 
 	 * @param box
-	 * @return
 	 */
-	boolean doesOverlap2D( BoundingBox box );
+	void getBoundingBox( BoundingBox box );
 	
 	/**
-	 * Checks if the shape overlaps a point ( in 2D ).
+	 * Creates a new shape and initializes it based on this shape's
+	 * characteristics around the specified origin as if it was extruded
+	 * in the specified direction.
 	 * 
-	 * @param point
+	 * @param origin
+	 * @param direction
+	 * @param outExtrudedShape
 	 * @return
 	 */
-	boolean doesOverlap2D( Vector3 point );
+	BoundingShape extrude( Vector3 origin, Vector3 direction, BoundingShape outExtrudedShape );
+	
+	// ------------------------------------------------------------------------
+	// Overlap tests
+	// ------------------------------------------------------------------------
 	
 	/**
-	 * Checks if the shape overlaps a ray ( in 2D ).
+	 * Checks if the shape overlaps another shape.
 	 * 
-	 * @param ray
+	 * @param shape
 	 * @param outIntersectPos		pass a vector here if you want to find out about the intersection point
 	 * @return
 	 */
-	boolean doesOverlap2D( Ray ray, Vector3 outIntersectPos );
-	
+	boolean doesOverlap( BoundingShape shape, Vector3 outIntersectPos );
+		
 	/**
 	 * Checks if the shape overlaps a sphere.
 	 * 
 	 * @param sphere
+	 * @param outIntersectPos		pass a vector here if you want to find out about the intersection point
 	 * @return
 	 */
-	boolean doesOverlap( BoundingSphere sphere );
+	boolean doesOverlap( BoundingSphere sphere, Vector3 outIntersectPos );
 
 	/**
 	 * Checks if the shape overlaps a box.
 	 * 
 	 * @param box
+	 * @param outIntersectPos		pass a vector here if you want to find out about the intersection point
 	 * @return
 	 */
-	boolean doesOverlap( BoundingBox box );
+	boolean doesOverlap( BoundingBox box, Vector3 outIntersectPos );
 	
 	/**
 	 * Checks if the shape overlaps a point.
 	 * 
 	 * @param point
+	 * @param outIntersectPos		pass a vector here if you want to find out about the intersection point
 	 * @return
 	 */
-	boolean doesOverlap( Vector3 point );
+	boolean doesOverlap( Vector3 point, Vector3 outIntersectPos );
 	
 	/**
 	 * Checks if the shape overlaps a ray.

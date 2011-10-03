@@ -19,6 +19,14 @@ final public class BoundingSphere implements BoundingShape
 	private final	Vector3 	m_tmpVec = new Vector3();
 	
 	/**
+	 * Default constructor.
+	 */
+	public BoundingSphere() 
+	{
+		m_radius = 0;
+	}
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param x
@@ -32,35 +40,72 @@ final public class BoundingSphere implements BoundingShape
 		m_radius = radius;
 	}
 	
-	@Override
-	public float getWidth()
+	/**
+	 * Sets the sphere's parameters.
+	 * 
+	 * @param origin
+	 * @param radius
+	 */
+	public void set( Vector3 origin, float radius )
 	{
-		return m_radius;
+		m_center.set( origin );
+		m_radius = radius;
 	}
 	
 	@Override
-	public float getHeight()
+	public void getBoundingBox( BoundingBox box )
 	{
-		return m_radius;
+		box.set( m_center.m_x - m_radius, m_center.m_y - m_radius, m_center.m_z - m_radius, m_center.m_x + m_radius, m_center.m_y + m_radius, m_center.m_z + m_radius );
 	}
 	
 	@Override
-	public Vector3 getMassCenter()
+	public BoundingShape extrude( Vector3 origin, Vector3 direction, BoundingShape outExtrudedShape )
 	{
-		return m_center;
+		// create the shape if it hasn't been created yet
+		if ( outExtrudedShape == null )
+		{
+			outExtrudedShape = new BoundingSphere();
+		}
+		
+		// get the type-specific shape
+		if ( ( outExtrudedShape instanceof BoundingSphere ) == false )
+		{
+			throw new RuntimeException( "Invalid extruded shape type for the BoundingSphere" );
+		}
+		BoundingSphere sphere = (BoundingSphere)outExtrudedShape;
+		
+		// calculate new center of the extruded sphere
+		m_tmpVec.set( origin ).add( direction );
+		
+		// initialize the shape
+		sphere.set( m_tmpVec, m_radius );
+		
+		return outExtrudedShape;
+	}
+	
+	// ------------------------------------------------------------------------
+	// Overlap tests
+	// ------------------------------------------------------------------------
+	
+	@Override 
+	public boolean doesOverlap( BoundingShape shape, Vector3 outIntersectPos )
+	{
+		return shape.doesOverlap( this, outIntersectPos );
 	}
 	
 	@Override
-	public boolean doesOverlap( final BoundingSphere sphere )
+	public boolean doesOverlap( final BoundingSphere sphere, Vector3 outIntersectPos )
 	{
+		// TODO: outIntersectPos
 		float distance = m_center.distSq( sphere.m_center );
 		float radiusSum = m_radius + sphere.m_radius;
 		return distance <= radiusSum * radiusSum;
 	}
 
 	@Override
-	public boolean doesOverlap( final BoundingBox box ) 
+	public boolean doesOverlap( final BoundingBox box, Vector3 outIntersectPos ) 
 	{
+		// TODO: outIntersectPos
 		float closestX = m_center.m_x;
 		float closestY = m_center.m_y;
 		float closestZ = m_center.m_z;
@@ -100,10 +145,18 @@ final public class BoundingSphere implements BoundingShape
 	}
 
 	@Override
-	public boolean doesOverlap( final Vector3 point ) 
+	public boolean doesOverlap( final Vector3 point, Vector3 outIntersectPos ) 
 	{
 		float distance = m_center.distSq( point );
-		return distance <= m_radius * m_radius;
+		if ( distance <= m_radius * m_radius )
+		{
+			outIntersectPos.set( point );
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	@Override 
@@ -140,85 +193,9 @@ final public class BoundingSphere implements BoundingShape
 		return true;
 	}
 	
-	@Override
-	public boolean doesOverlap2D( final BoundingSphere sphere )
-	{
-		float distance = m_center.distSq( sphere.m_center );
-		float radiusSum = m_radius + sphere.m_radius;
-		return distance <= radiusSum * radiusSum;
-	}
-
-	@Override
-	public boolean doesOverlap2D( final BoundingBox box ) 
-	{
-		float closestX = m_center.m_x;
-		float closestY = m_center.m_y;
-
-		// find the X coordinate of the closest point on the box
-		if ( m_center.m_x < box.m_minX ) 
-		{
-			closestX = box.m_minX;
-		}
-		else if ( m_center.m_x > box.m_maxX ) 
-		{
-			closestX = box.m_maxX;
-		}
-		
-		// find the Y coordinate of the closest point on the box
-		if ( m_center.m_y < box.m_minY ) 
-		{
-			closestY = box.m_minY;
-		}
-		else if ( m_center.m_y > box.m_maxY ) 
-		{
-			closestY = box.m_maxY;
-		}
-		
-		// calculate the distance to the point and see if it's in the sphere's radius
-		return m_center.distSq( closestX, closestY, 0.0f ) < m_radius * m_radius;
-	}
-
-	@Override
-	public boolean doesOverlap2D( final Vector3 point ) 
-	{
-		float distance = m_center.distSq( point );
-		return distance <= m_radius * m_radius;
-	}
-	
-	@Override 
-	public boolean doesOverlap2D( final Ray ray, Vector3 outIntersectPos )
-	{
-		m_tmpVec.set( m_center ).sub( ray.m_origin );
-		float t = ray.getDirection().dot2D( m_tmpVec );
-		if ( t < 0 )
-		{
-			return false;
-		}
-		
-
-		float distToCenterSq = m_center.distSq2D( ray.m_origin );
-		float distToCastCenterSq = distToCenterSq - t*t;
-		if ( m_radius*m_radius < distToCastCenterSq )
-		{
-			return false;
-		}
-		
-		float distCastCenterToIntersectionSq = m_radius*m_radius - distToCastCenterSq;
-		float td = t - (float)Math.sqrt( distCastCenterToIntersectionSq );
-		if ( td < 0 || td > ray.getLength() )
-		{
-			return false;
-		}
-		
-		if ( outIntersectPos != null )
-		{
-			// calculate the intersection pos
-			outIntersectPos.set( ray.getDirection() ).scale( td ).add( ray.m_origin );
-			outIntersectPos.m_z = m_center.m_z;
-		}
-		
-		return true;
-	}
+	// ------------------------------------------------------------------------
+	// Serialization support
+	// ------------------------------------------------------------------------
 	
 	@Override
 	public void load( String id, DataLoader loader )

@@ -36,4 +36,12 @@ public abstract class EntityController implements Updatable
 	{
 		return m_entity.equals( entity );
 	}
+	
+	/**
+	 * Called when a controller gets deinitialized.
+	 */
+	public void deinitialize()
+	{
+		// nothing to do here
+	}
 }

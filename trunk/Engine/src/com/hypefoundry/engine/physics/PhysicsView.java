@@ -13,9 +13,9 @@ import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.WorldView;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
-import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.util.GenericFactory;
 import com.hypefoundry.engine.util.SpatialGrid2D;
+
 
 /**
  * This world view runs the physics simulation.
@@ -34,7 +34,11 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	private List< Entity >		 				m_bodiesToAdd;
 	private List< Entity > 						m_bodiesToRemove;
 	
+	// ------------------------------------------------------------------------
+	// runtime data
+	// ------------------------------------------------------------------------
 	private PhysicalBody[]						m_queryResults = new PhysicalBody[MAX_ENTITIES];
+	
 	
 	/**
 	 * Constructor.
@@ -57,14 +61,17 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 		
 		manageBodies();
 		
-		// run physics simulation
-		simulateForces( deltaTime );
+		// calculate the bounding shapes for the bodies
+		calculateCollisionShapes( deltaTime );
 		
 		// update the positions of dynamic objects in the grid AFTER the simulation changed them
 		m_bodiesGrid.update();
 		
 		// resolve collisions
 		resolveCollisions();
+		
+		// run physics simulation
+		simulateForces( deltaTime );
 	}
 	
 	@Override
@@ -210,9 +217,9 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 				{
 					PhysicalBody collider = m_queryResults[j];
 					
-					if ( collider != body && body.doesOverlap( collider ) )
+					if ( collider != body )
 					{
-						body.onCollision( collider );
+						body.checkCollision( collider );
 					}
 				}
 			}
@@ -240,6 +247,21 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 	}
 	
 	/**
+	 * Calculates the collision shapes of the bodies for the present frame of simulation.
+	 *  
+	 * @param deltaTime
+	 */
+	private void calculateCollisionShapes( float deltaTime )
+	{
+		int count = m_bodies.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			PhysicalBody body = m_bodies.get(i); 
+			body.calculateCollisionShapes( deltaTime );
+		}
+	}
+	
+	/**
 	 * Simulates the forces that apply to particular physical bodies.
 	 * 
 	 * @param deltaTime
@@ -249,7 +271,8 @@ public class PhysicsView extends GenericFactory< Entity, PhysicalBody > implemen
 		int count = m_bodies.size();
 		for ( int i = 0; i < count; ++i )
 		{
-			m_bodies.get(i).simulate( deltaTime );
+			PhysicalBody body = m_bodies.get(i); 
+			body.simulate( deltaTime );
 		}
 	}
 

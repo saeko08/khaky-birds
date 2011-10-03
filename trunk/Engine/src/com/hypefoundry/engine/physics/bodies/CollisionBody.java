@@ -3,6 +3,7 @@
  */
 package com.hypefoundry.engine.physics.bodies;
 
+import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.PhysicalBody;
 import com.hypefoundry.engine.world.Entity;
 
@@ -29,7 +30,7 @@ public class CollisionBody extends PhysicalBody
 	}
 
 	@Override
-	public void respondToCollision( PhysicalBody collider )
+	public void respondToCollision( PhysicalBody collider, Vector3 collisionPoint )
 	{
 		// nothing to do here
 	}

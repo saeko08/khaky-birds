@@ -8,6 +8,7 @@ import java.util.*;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.world.Entity;
 
+
 /**
  * Finite state machine controller.
  * 
@@ -35,7 +36,7 @@ public class FiniteStateMachine extends EntityController
 	}
 
 	@Override
-	public void update( float deltaTime )
+	public final void update( float deltaTime )
 	{
 		if ( m_stateToActivate != null )
 		{
@@ -150,6 +151,15 @@ public class FiniteStateMachine extends EntityController
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public void deinitialize() 
+	{
+		if ( m_activeState != null )
+		{
+			m_activeState.deactivateState();
+		}
 	}
 	
 	// ------------------------------------------------------------------------

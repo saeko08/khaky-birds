@@ -3,9 +3,12 @@
  */
 package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap;
 
+import java.util.ArrayList;
+
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapAI.Falling;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapAI.Hitting;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.CrapAI.Splat;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.Hideout;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.physics.events.CollisionEvent;
@@ -25,6 +28,7 @@ public class DemolisheCrapAI extends FiniteStateMachine
 	private DemolisheCrap		m_crap;
 	private World 				m_world;
 	private SteeringBehaviors	m_sb;
+	ArrayList<Crappable> 		m_victims;
 
 	/**
 	 * Constructor
@@ -38,6 +42,7 @@ public class DemolisheCrapAI extends FiniteStateMachine
 		m_world = world;
 		m_sb = new SteeringBehaviors( m_crap);
 		
+		m_victims = new ArrayList<Crappable>();
 		//register states
 		
 		register( new Falling() );
@@ -58,7 +63,18 @@ public class DemolisheCrapAI extends FiniteStateMachine
 		public void activate()
 		{
 			m_crap.m_state = DemolisheCrap.State.Hitting;
-		
+			
+			m_world.findEntitiesInRange(Crappable.class, 1.0f, m_crap.getPosition(), m_victims);
+			if (m_victims.isEmpty()== false)
+			{
+				for ( int i = 0 ; i < m_victims.size(); ++i )
+				{
+					Entity victim =  (Entity) m_victims.get(i);
+					victim.sendEvent( Crapped.class );
+				}
+				
+			}
+			transitionTo( Splat.class );
 		}
 		
 		@Override
@@ -78,9 +94,8 @@ public class DemolisheCrapAI extends FiniteStateMachine
 			{
 				// if it collides with Pedestrian it splats
 				Entity collider = ( (CollisionEvent)event ).m_collider;
-				if(collider instanceof Crappable)
+				if(collider instanceof  Hideout)
 				{
-					collider.sendEvent( Crapped.class );
 					collider.sendEvent( Demolishe.class );
 					transitionTo( Splat.class );
 				}

@@ -140,7 +140,7 @@ public class BirdController extends FiniteStateMachine
 			
 			// change the gesture direction from screen to model space
 			m_gestureDir.set( dx, dy, 0 );
-			m_camera.directionToWorld( m_gestureDir );
+			m_camera.screenVecToWorld( m_gestureDir, m_gestureDir );
 			
 			// I need a desired position the gesture points to
 			m_goToPos.set( m_bird.getPosition() ).add( m_gestureDir );
@@ -252,9 +252,10 @@ public class BirdController extends FiniteStateMachine
 	class Flying extends FSMState implements EntityEventListener
 	{
 		
-		private	Vector3 m_goToPos  = new Vector3();
-		private	Vector3 m_tmpPos  = new Vector3();
-		private boolean m_canFly      = false;
+		private	Vector3 m_goToPos  		= new Vector3();
+		private	Vector3 m_tmpScreenPos	= new Vector3();
+		private	Vector3 m_tmpWorldPos  	= new Vector3();
+		private boolean m_canFly      	= false;
 
 		@Override
 		public void activate()
@@ -333,14 +334,14 @@ public class BirdController extends FiniteStateMachine
 		private void calculateFlightPosition( float dx, float dy ) 
 		{
 			// change the gesture direction from screen to model space
-			m_tmpPos.set( dx, dy, 0 );
+			m_tmpScreenPos.set( dx, dy, 0 );
 			
 			//m_camera.directionToWorld( m_gestureDir );
-			m_camera.touchToWorld( m_tmpPos );
+			m_camera.screenPosToWorld( m_tmpScreenPos, m_tmpWorldPos );
 						
-			if ( m_tmpPos.distSq2D( m_bird.getPosition() ) > 1e-2 )
+			if ( m_tmpWorldPos.distSq2D( m_bird.getPosition() ) > 1e-2 )
 			{
-				m_goToPos.set( m_tmpPos );
+				m_goToPos.set( m_tmpWorldPos );
 				m_canFly = true;
 			}
 			else

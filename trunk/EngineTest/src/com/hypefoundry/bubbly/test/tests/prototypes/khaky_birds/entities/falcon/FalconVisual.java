@@ -5,6 +5,7 @@ package com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon
 
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.world.Entity;
+import com.hypefoundry.engine.renderer2D.Camera2D;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.animation.Animation;
@@ -44,7 +45,7 @@ public class FalconVisual extends EntityVisual
 	}
 
 	@Override
-	public void draw( SpriteBatcher batcher, float deltaTime ) 
+	public void draw( SpriteBatcher batcher, Camera2D camera, float deltaTime ) 
 	{
 		Vector3 pos = m_falcon.getPosition();
 		BoundingBox bs = m_falcon.getBoundingShape();

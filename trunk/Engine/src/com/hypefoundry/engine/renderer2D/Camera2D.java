@@ -71,24 +71,38 @@ public class Camera2D
 	/**
 	 * Translates the touch position to the world coordinates
 	 * 
-	 * @param touch
+	 * @param screen
+	 * @param world
 	 */
-	public void touchToWorld( Vector3 touch ) 
+	public void screenPosToWorld( Vector3 screen, Vector3 world ) 
 	{
-		touch.m_x = (touch.m_x / (float) m_graphics.getWidth()) * m_frustumWidth * m_zoom;
-		touch.m_y = (1 - touch.m_y / (float) m_graphics.getHeight()) * m_frustumHeight * m_zoom;
-		touch.add( m_position ).sub( m_frustumWidth * m_zoom / 2, m_frustumHeight * m_zoom / 2, 0 );
+		world.m_x = (screen.m_x / (float) m_graphics.getWidth()) * m_frustumWidth * m_zoom;
+		world.m_y = (1 - screen.m_y / (float) m_graphics.getHeight()) * m_frustumHeight * m_zoom;
+		world.add( m_position ).sub( m_frustumWidth * m_zoom / 2, m_frustumHeight * m_zoom / 2, 0 );
 	}
 	
 	/**
 	 * Translates a direction vector from the screen to world coordinates
 	 * 
-	 * @param touch
+	 * @param screen
+	 * @param world
 	 */
-	public void directionToWorld( Vector3 touch ) 
+	public void screenVecToWorld( Vector3 screen, Vector3 world ) 
 	{
-		touch.m_x = (touch.m_x / (float) m_graphics.getWidth()) * m_frustumWidth * m_zoom;
-		touch.m_y = (-touch.m_y / (float) m_graphics.getHeight()) * m_frustumHeight * m_zoom;
+		world.m_x = (screen.m_x / (float) m_graphics.getWidth()) * m_frustumWidth * m_zoom;
+		world.m_y = (-screen.m_y / (float) m_graphics.getHeight()) * m_frustumHeight * m_zoom;
+	}
+	
+	/**
+	 * Translates a dimension vector from the screen to world coordinates
+	 * 
+	 * @param screen
+	 * @param world
+	 */
+	public void screenDimToWorld( Vector3 screen, Vector3 world ) 
+	{
+		world.m_x = (screen.m_x / (float) m_graphics.getWidth()) * m_frustumWidth * m_zoom;
+		world.m_y = (screen.m_y / (float) m_graphics.getHeight()) * m_frustumHeight * m_zoom;
 	}
 
 	/**

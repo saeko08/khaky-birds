@@ -125,7 +125,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		
 		for ( int i = 0; i < count; ++i )
 		{
-			m_queryResult[i].draw( m_batcher, deltaTime );
+			m_queryResult[i].draw( m_batcher, m_camera, deltaTime );
 		}
 		m_batcher.flush();
 	}

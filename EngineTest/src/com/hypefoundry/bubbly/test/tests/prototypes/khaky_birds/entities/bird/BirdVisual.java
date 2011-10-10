@@ -4,10 +4,13 @@ import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.renderer2D.Camera2D;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.animation.Animation;
 import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
+import com.hypefoundry.engine.renderer2D.font.Font;
+import com.hypefoundry.engine.renderer2D.font.Text;
 
 
 /**
@@ -25,6 +28,9 @@ public class BirdVisual extends EntityVisual
 	private int 			ANIM_FLY;
 	private int 			ANIM_SHIT;
 	private int 			ANIM_FLY_SHIT;
+	
+	private Font			m_tmpFont;
+	private Text			m_tmpText;
 	
 	/**
 	 * Constructor.
@@ -50,10 +56,14 @@ public class BirdVisual extends EntityVisual
 		ANIM_FLY = m_animationPlayer.addAnimation( flyingBird );
 		ANIM_SHIT = m_animationPlayer.addAnimation( shittingBird );
 		ANIM_FLY_SHIT = m_animationPlayer.addAnimation( flyingShittingBird );
+		
+		// tmp tmp tmp
+		m_tmpFont = resMgr.getResource( Font.class, "khaky_birds_prototype/font.xml" );
+		m_tmpText = new Text( m_tmpFont, "A Bird :)" );
 	}
 
 	@Override
-	public void draw( SpriteBatcher batcher, float deltaTime ) 
+	public void draw( SpriteBatcher batcher, Camera2D camera, float deltaTime ) 
 	{
 		Vector3 pos = m_bird.getPosition();
 		BoundingBox bs = m_bird.getBoundingShape();
@@ -76,6 +86,9 @@ public class BirdVisual extends EntityVisual
 		}
 		
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_bird.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
+		
+		// tmp tmp tmp
+		m_tmpText.draw( batcher, camera, pos.m_x, pos.m_y );
 	}
 
 }

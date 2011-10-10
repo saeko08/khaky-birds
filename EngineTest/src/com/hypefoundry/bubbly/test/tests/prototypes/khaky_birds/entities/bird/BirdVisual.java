@@ -29,9 +29,6 @@ public class BirdVisual extends EntityVisual
 	private int 			ANIM_SHIT;
 	private int 			ANIM_FLY_SHIT;
 	
-	private Font			m_tmpFont;
-	private Text			m_tmpText;
-	
 	/**
 	 * Constructor.
 	 * 
@@ -56,10 +53,6 @@ public class BirdVisual extends EntityVisual
 		ANIM_FLY = m_animationPlayer.addAnimation( flyingBird );
 		ANIM_SHIT = m_animationPlayer.addAnimation( shittingBird );
 		ANIM_FLY_SHIT = m_animationPlayer.addAnimation( flyingShittingBird );
-		
-		// tmp tmp tmp
-		m_tmpFont = resMgr.getResource( Font.class, "khaky_birds_prototype/font.xml" );
-		m_tmpText = new Text( m_tmpFont, "A Bird :)" );
 	}
 
 	@Override
@@ -86,9 +79,6 @@ public class BirdVisual extends EntityVisual
 		}
 		
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_bird.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
-		
-		// tmp tmp tmp
-		m_tmpText.draw( batcher, camera, pos.m_x, pos.m_y );
 	}
 
 }

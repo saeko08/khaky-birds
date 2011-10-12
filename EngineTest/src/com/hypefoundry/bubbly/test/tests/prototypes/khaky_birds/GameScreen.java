@@ -24,6 +24,8 @@ import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.crap.Gr
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.Falcon;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.FalconAI;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.falcon.FalconVisual;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.gameCamera.GameCamera;
+import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.gameCamera.GameCameraController;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.Ground;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.ground.GroundVisual;
 import com.hypefoundry.bubbly.test.tests.prototypes.khaky_birds.entities.hideout.Hideout;
@@ -105,6 +107,7 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Zombie.class, new EntityFactory() { @Override public Entity create() { return new Zombie(); } } );
 		m_world.registerEntity( Hideout.class, new EntityFactory() { @Override public Entity create() { return new Hideout(); } } );
 		m_world.registerEntity( PerkPedestrian.class, new EntityFactory() { @Override public Entity create() { return new PerkPedestrian(); } } );
+		m_world.registerEntity( GameCamera.class, new EntityFactory() { @Override public Entity create() { return new GameCamera(); } } );
 		
 		// register animation events
 		Animation.registerAnimEvent( Fire.class, new AnimEventFactory() { @Override public EntityEvent create() { return new Fire(); } } );
@@ -156,7 +159,8 @@ public class GameScreen extends Screen
 		m_controllersView.register( Hunter.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new HunterAI( m_world, parentEntity ); } } );
 		m_controllersView.register( Zombie.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ZombieAI( parentEntity ); } } );
 		m_controllersView.register( Hideout.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new HideoutAI( m_world, parentEntity ); } } );
-		m_controllersView.register( PerkPedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PerkPedestrianAI(m_world, parentEntity ); } } );
+		m_controllersView.register( PerkPedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PerkPedestrianAI( m_world, parentEntity ); } } );
+		m_controllersView.register( GameCamera.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new GameCameraController( m_world, parentEntity, m_worldRenderer.getCamera() ); } } );
 		
 		// register physics
 		m_world.attachView( m_physicsView );
@@ -176,6 +180,9 @@ public class GameScreen extends Screen
 		// register the updatables
 		addUpdatable( m_world );
 		addUpdatable( m_physicsView );
+		
+		// add the game camera to the world
+		m_world.addEntity( new GameCamera() );
 	}
 
 	@Override

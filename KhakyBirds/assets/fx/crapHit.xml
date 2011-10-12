@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParticleSystem >
+	<Emitter type="RadialParticleEmitter" speed='1' frequency='0.1' timeToLive='7' amountEmittedEachTick='3' totalAmount='3' width='0.5' height='0.5' particleType="TexturedParticle" texturePath="textures/crapHitParticle.xml" >
+		<pos x='0' y='0' z='0' />
+	</Emitter>
+</ParticleSystem>

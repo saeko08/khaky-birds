@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.5' atlasName='atlas.png' alphaOp='test' >
+	<TextureRegion x='955' y='270' w='36' h='31' />
+	<TextureRegion x='955' y='300' w='36' h='31' />
+</Animation>

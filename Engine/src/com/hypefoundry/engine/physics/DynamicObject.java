@@ -17,8 +17,8 @@ import com.hypefoundry.engine.math.Vector3;
 public final class DynamicObject implements Aspect
 {
 	// dynamics attributes
-	public final float				m_linearSpeed;
-	public final float				m_rotationSpeed;
+	public float					m_linearSpeed;
+	public float					m_rotationSpeed;
 	
 	// state members
 	public final Vector3 			m_velocity = new Vector3( 0, 0, 0 );

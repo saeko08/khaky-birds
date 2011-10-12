@@ -490,5 +490,40 @@ public class World implements Updatable
 		// factory definition not found
 		return null;
 	}
+
+	/**
+	 * Constrains the specified position to lie inside the world boundaries.
+	 * 
+	 * @param pos
+	 * @param xBoundary			boundary on the OX axis
+	 * @param yBoundary			boundary on the OY axis
+	 */
+	public void constrainToWorldBoundaries( Vector3 pos, float xBoundary, float yBoundary ) 
+	{
+		final float minX = xBoundary;
+		final float maxX = m_width - xBoundary;
+		final float minY = yBoundary;
+		final float maxY = m_height - yBoundary;
+		
+		// OX axis
+		if ( pos.m_x < minX ) 
+		{ 
+			pos.m_x = minX; 
+		}
+		else if ( pos.m_x > maxX ) 
+		{ 
+			pos.m_x = maxX; 
+		}
+		
+		// OY axis
+		if ( pos.m_y < minY ) 
+		{ 
+			pos.m_y = minY; 
+		}
+		else if ( pos.m_y > maxY ) 
+		{ 
+			pos.m_y = maxY; 
+		}
+	}
 }
 

@@ -42,7 +42,7 @@ public class Camera2D
 		
 		m_frustum = new BoundingBox( 0, 0, -1, m_frustumWidth, m_frustumHeight, 1 );
 	}
-	
+		
 	/**
 	 * Positions the camera in the world before rendering.
 	 */
@@ -114,4 +114,5 @@ public class Camera2D
 	{
 		return m_frustum;
 	}
+
 }

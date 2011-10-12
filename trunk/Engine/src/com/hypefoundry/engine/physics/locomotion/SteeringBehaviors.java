@@ -127,13 +127,16 @@ public class SteeringBehaviors implements Updatable
 	{
 		private Entity			m_goal;
 		private DynamicObject	m_goalDO;
+		private float			m_predictionFactor;
 		
-		void activate( Entity goal )
+		
+		void activate( Entity goal, float predictionFactor )
 		{
 			m_isActive = true;
 			m_goal = goal;
 			m_goalDO = goal.query( DynamicObject.class );
 			m_breakDistanceFactor = 1;
+			m_predictionFactor = predictionFactor;
 		}
 		
 		@Override
@@ -141,7 +144,7 @@ public class SteeringBehaviors implements Updatable
 		{
 			if ( m_goalDO != null )
 			{
-				m_staticGoal.set( m_goalDO.m_velocity ).scale( deltaTime ).add( m_goal.getPosition() );
+				m_staticGoal.set( m_goalDO.m_velocity ).scale( deltaTime * m_predictionFactor ).add( m_goal.getPosition() );
 			}
 			else
 			{
@@ -427,6 +430,22 @@ public class SteeringBehaviors implements Updatable
 	}
 	
 	/**
+	 * Makes the entity follow another entity ( pursuit without prediction ).
+	 * 
+	 * @param goal
+	 * 
+	 * @return instance to self, allowing to chain commands
+	 */
+	public SteeringBehaviors follow( Entity goal )
+	{		
+		// activate the pursuit behavior
+		m_pursuit.activate( goal, 0.0f );
+				
+		return this;
+	}
+	
+	
+	/**
 	 * Makes the entity chase another entity.
 	 * 
 	 * @param goal
@@ -436,7 +455,7 @@ public class SteeringBehaviors implements Updatable
 	public SteeringBehaviors pursuit( Entity goal )
 	{		
 		// activate the pursuit behavior
-		m_pursuit.activate( goal );
+		m_pursuit.activate( goal, 1.0f );
 				
 		return this;
 	}

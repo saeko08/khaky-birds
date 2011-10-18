@@ -84,8 +84,9 @@ public class GameScreen extends Screen
 	 * Constructor.
 	 * 
 	 * @param game				host game
+	 * @param levelIdx			level index
 	 */
-	public GameScreen( Game game ) 
+	public GameScreen( Game game, int levelIdx ) 
 	{
 		super( game );
 		
@@ -115,7 +116,8 @@ public class GameScreen extends Screen
 		// load the world
 		try 
 		{
-			InputStream worldFileStream = game.getFileIO().readAsset( "test_world.xml" );
+			String levelPath = getLevelPath( levelIdx );
+			InputStream worldFileStream = game.getFileIO().readAsset( levelPath );
 			m_world.load( XMLDataLoader.parse( worldFileStream, "World" ) );
 		} 
 		catch ( IOException e ) 
@@ -183,6 +185,38 @@ public class GameScreen extends Screen
 		
 		// add the game camera to the world
 		m_world.addEntity( new GameCamera() );
+	}
+	
+	/**
+	 * Creates a path to the specified game level.
+	 * 
+	 * @param levelIdx
+	 * @return
+	 */
+	private String getLevelPath( int levelIdx )
+	{
+		// assert the input data
+		if ( levelIdx < 1 )
+		{
+			levelIdx = 1;
+		}
+		else if ( levelIdx > 99 )
+		{
+			levelIdx = 99;
+		}
+		
+		// build the path
+		StringBuilder levelPath = new StringBuilder();
+		levelPath.append( "campaign/l" );
+		if ( levelIdx < 10 )
+		{
+			levelPath.append( "0" );
+		}
+		levelPath.append( levelIdx );
+
+		levelPath.append( "/world.xml" );
+		
+		return levelPath.toString();
 	}
 
 	@Override

@@ -10,7 +10,7 @@ public class KhakyBirds extends GLGame
 	@Override
 	public Screen getStartScreen()
 	{
-		return new GameScreen( this );
+		return new GameScreen( this, 1 );
 	}
 }
 

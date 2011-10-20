@@ -167,12 +167,22 @@ public class BoundingBoxTest extends AndroidTestCase
 		assertFalse( ray1.doesOverlap( new Vector3( 0.5f, 1, 0 ), null ) );
 		assertFalse( ray1.doesOverlap( new Vector3( 0.5f, 1, 1 ), null ) );
 		
+		// 2d tests
 		ray1.m_origin.set( 10, 20, 30 );
 		ray1.setDirection( 1, 2, 3 );
 		assertFalse( ray1.doesOverlap( new Vector3( 0, 0, 0 ), null ) );
 		assertTrue( ray1.doesOverlap( new Vector3( 10, 20, 30 ), null ) );
-		assertTrue( ray1.doesOverlap( new Vector3( 11, 22, 33 ), null ) );
 		assertTrue( ray1.doesOverlap( new Vector3( 10.5f, 21, 31.5f ), null ) );
+		assertTrue( ray1.doesOverlap( new Vector3( 11, 22, 33 ), null ) );
+		
+		// 3d tests
+		ray1.m_origin.set( 10, 20, 30 );
+		ray1.setDirection( 1, 2, 3 );
+		ray1.set3DTesting();
+		assertFalse( ray1.doesOverlap( new Vector3( 0, 0, 0 ), null ) );
+		assertTrue( ray1.doesOverlap( new Vector3( 10, 20, 30 ), null ) );
+		assertTrue( ray1.doesOverlap( new Vector3( 10.5f, 21, 31.5f ), null ) );
+		assertTrue( ray1.doesOverlap( new Vector3( 11, 22, 33 ), null ) );
 	}
 }
 

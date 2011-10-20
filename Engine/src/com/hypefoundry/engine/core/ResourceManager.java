@@ -40,11 +40,14 @@ public class ResourceManager
 	 * @param assetPath
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public < T extends Resource > T getResource( Class< T > type, String assetPath )
 	{
 		// try finding an existing resource that matches the name and the type
-		for ( Resource res : m_resources )
+		int count = m_resources.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			Resource res = m_resources.get( i );
 			String resAssetPath = res.getAssetPath();
 			if ( type.isInstance( res ) && resAssetPath.equals( assetPath ) )
 			{
@@ -88,8 +91,10 @@ public class ResourceManager
 	public void loadResources() 
 	{
 		m_isActive = true;
-		for ( Resource res : m_resources )
+		int count = m_resources.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			Resource res = m_resources.get( i );
 			res.load();
 		}
 		
@@ -101,8 +106,10 @@ public class ResourceManager
 	 */
 	public void releaseResources() 
 	{
-		for ( Resource res : m_resources )
+		int count = m_resources.size();
+		for ( int i = 0; i < count; ++i )
 		{
+			Resource res = m_resources.get( i );
 			res.release();
 		}
 		m_isActive = false;

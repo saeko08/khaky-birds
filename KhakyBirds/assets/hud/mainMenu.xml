@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout>
+	<Widget type="Frame" width='200' height='300'>
+		<pos x='10' y='100' z='0' />
+	</Widget>
+</Layout>

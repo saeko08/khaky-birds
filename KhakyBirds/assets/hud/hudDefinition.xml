@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HUD>
+	<Frame elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
+		<TopLeftCorner x='0' y='0' w='5' h='5'/>
+		<TopEdge x='5' y='0' w='5' h='5'/>
+		<TopRightCorner x='10' y='0' w='5' h='5'/>
+		<LeftEdge x='0' y='5' w='5' h='5'/>
+		<Center x='5' y='5' w='5' h='5'/>
+		<RightEdge x='10' y='5' w='5' h='5'/>
+		<BottomLeftCorner x='0' y='10' w='5' h='5'/>
+		<BottomEdge x='5' y='10' w='5' h='5'/>
+		<BottomRightCorner x='10' y='10' w='5' h='5'/>
+	</Frame>
+</HUD>

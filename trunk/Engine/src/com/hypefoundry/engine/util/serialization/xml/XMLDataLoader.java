@@ -168,7 +168,17 @@ public class XMLDataLoader implements DataLoader
 	public int getChildrenCount( String id ) 
 	{
 		NodeList children = m_xmlElement.getElementsByTagName( id );
-		return children.getLength();
+		int childrenCount = children.getLength();
+		int count = children.getLength();
+		for ( int i = 0; i < count; ++i )
+		{
+			if ( children.item(i).getNodeType() == Node.ELEMENT_NODE && children.item(i) == m_xmlElement )
+			{
+				--childrenCount;
+			}
+		}
+		
+		return childrenCount < 0 ? 0 : childrenCount;
 	}
 
 	@Override
@@ -180,7 +190,7 @@ public class XMLDataLoader implements DataLoader
 		int count = children.getLength();
 		for ( int i = 0; i < count; ++i )
 		{
-			if ( children.item(i).getNodeType() == Node.ELEMENT_NODE )
+			if ( children.item(i).getNodeType() == Node.ELEMENT_NODE && children.item(i) != m_xmlElement )
 			{
 				return new XMLDataLoader( children, i );
 			}

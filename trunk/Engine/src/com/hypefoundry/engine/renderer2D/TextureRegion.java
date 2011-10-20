@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.hypefoundry.engine.core.Resource;
-import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
 

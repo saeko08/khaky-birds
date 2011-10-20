@@ -69,6 +69,23 @@ public class Camera2D
 	}
 	
 	/**
+	 * Sets a unit world matrix for the HUD rendering purposes. 
+	 */
+	public void setHudMatrices()
+	{
+		// set the viewport
+		GL10 gl = m_graphics.getGL();
+				
+		gl.glViewport( 0, 0, m_graphics.getWidth(), m_graphics.getHeight() );
+		gl.glMatrixMode( GL10.GL_PROJECTION );
+		gl.glLoadIdentity();
+		gl.glOrthof( 0, m_frustumWidth, 0, m_frustumHeight, 1, -1 );
+				
+		gl.glMatrixMode( GL10.GL_MODELVIEW );
+		gl.glLoadIdentity();
+	}
+	
+	/**
 	 * Translates the touch position to the world coordinates
 	 * 
 	 * @param screen

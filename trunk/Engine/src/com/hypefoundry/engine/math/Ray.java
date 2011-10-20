@@ -53,9 +53,10 @@ public final class Ray implements BoundingShape
 	{
 		m_origin		= new Vector3( ox, oy, oz );
 		m_fullDirection = new Vector3( dx, dy, dz );
-		m_direction		= new Vector3( dx, dy, dz );
+		m_direction		= new Vector3( dx, dy, 0 );
 		m_length 		= m_direction.mag();
 		m_direction.normalize();
+		m_2dTesting 	= true;
 	}
 	
 	/**
@@ -66,11 +67,13 @@ public final class Ray implements BoundingShape
 	 */
 	public Ray( Vector3 origin, Vector3 direction )
 	{
-		m_origin = origin;
+		m_origin 		= origin;
 		m_fullDirection = direction;
-		m_direction = new Vector3( direction );
-		m_length = m_direction.mag();
+		m_direction 	= new Vector3( direction );
+		m_direction.m_z = 0;
+		m_length 		= m_direction.mag();
 		m_direction.normalize();
+		m_2dTesting 	= true;
 	}
 	
 	/**
@@ -81,6 +84,11 @@ public final class Ray implements BoundingShape
 	public Ray set3DTesting()
 	{
 		m_2dTesting = false;
+		
+		m_direction = new Vector3( m_fullDirection );
+		m_length = m_direction.mag();
+		m_direction.normalize();
+		
 		return this;
 	}
 	
@@ -93,6 +101,11 @@ public final class Ray implements BoundingShape
 	{
 		m_fullDirection.set( direction );
 		m_direction.set( direction );
+		if ( m_2dTesting )
+		{
+			m_direction.m_z = 0;
+		}
+		
 		m_length = m_direction.mag();
 		m_direction.normalize();
 	}
@@ -108,6 +121,11 @@ public final class Ray implements BoundingShape
 	{
 		m_fullDirection.set( dx, dy, dz );
 		m_direction.set( dx, dy, dz );
+		if ( m_2dTesting )
+		{
+			m_direction.m_z = 0;
+		}
+		
 		m_length = m_direction.mag();
 		m_direction.normalize();
 	}
@@ -269,7 +287,7 @@ public final class Ray implements BoundingShape
 		m_tmpOriginsDir.m_z = 0;
 		
 		float distToPtSq = m_tmpOriginsDir.magSq2D();
-		float d = m_direction.dot( m_tmpOriginsDir );
+		float d = m_direction.dot2D( m_tmpOriginsDir );
 		if ( d < 0 || distToPtSq > m_length*m_length )
 		{
 			return false;

@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout>
-	<Widget type="Frame" width='200' height='300'>
-		<pos x='10' y='100' z='0' />
+	<Widget type="FrameWidget" visualClass="MyFrame" width='1' height='1'>
+		<pos x='0' y='0' z='0' />
+		
+		<Widget type="ButtonWidget" visualClass="MyButton" id="Button1" width='0.3' height='0.1' caption="Dupa" >
+			<pos x='0.1' y='0.1' z='0' />
+		</Widget>
+		
+		<Widget type="ImageWidget" visualClass="MyImage" path="textures/crapHitParticle.xml" width='0.1' height='0.1' >
+			<pos x='0.1' y='0.3' z='0' />
+		</Widget>
+		
+		<Widget type="AnimationWidget" visualClass="MyAnimation" path="animations/perkPedestrian/walking.xml" width='0.1' height='0.1' >
+			<pos x='0.1' y='0.5' z='0' />
+		</Widget>
+		
+		<Widget type="ButtonWidget" visualClass="PrettyButton" id="Button2" width='0.6' height='0.1' caption="Dupa 2" >
+			<pos x='0.1' y='0.7' z='0' />
+		</Widget>
+		
+		<Widget type="CounterWidget" visualClass="MyCounter" width='0.3' height='0.1' min='0' max='10' >
+			<pos x='0.5' y='0.1' z='0' />
+		</Widget>
+		
 	</Widget>
 </Layout>

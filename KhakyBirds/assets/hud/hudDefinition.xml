@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HUD>
-	<Frame elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
+	<Template type="DefaultFrameVisualTemplate" class="MyFrame" elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
 		<TopLeftCorner x='0' y='0' w='5' h='5'/>
 		<TopEdge x='5' y='0' w='5' h='5'/>
 		<TopRightCorner x='10' y='0' w='5' h='5'/>
@@ -10,5 +10,78 @@
 		<BottomLeftCorner x='0' y='10' w='5' h='5'/>
 		<BottomEdge x='5' y='10' w='5' h='5'/>
 		<BottomRightCorner x='10' y='10' w='5' h='5'/>
-	</Frame>
+	</Template>
+	
+	<Template type="DefaultButtonVisualTemplate" class="MyButton" fontPath="font.xml" elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
+		<Released>
+			<TopLeftCorner x='15' y='0' w='5' h='5'/>
+			<TopEdge x='20' y='0' w='5' h='5'/>
+			<TopRightCorner x='25' y='0' w='5' h='5'/>
+			<LeftEdge x='15' y='5' w='5' h='5'/>
+			<Center x='20' y='5' w='5' h='5'/>
+			<RightEdge x='25' y='5' w='5' h='5'/>
+			<BottomLeftCorner x='15' y='10' w='5' h='5'/>
+			<BottomEdge x='20' y='10' w='5' h='5'/>
+			<BottomRightCorner x='25' y='10' w='5' h='5'/>
+		</Released>
+		
+		<Highlighed>
+			<TopLeftCorner x='0' y='15' w='5' h='5'/>
+			<TopEdge x='5' y='15' w='5' h='5'/>
+			<TopRightCorner x='10' y='15' w='5' h='5'/>
+			<LeftEdge x='0' y='20' w='5' h='5'/>
+			<Center x='5' y='20' w='5' h='5'/>
+			<RightEdge x='10' y='20' w='5' h='5'/>
+			<BottomLeftCorner x='0' y='25' w='5' h='5'/>
+			<BottomEdge x='5' y='25' w='5' h='5'/>
+			<BottomRightCorner x='10' y='25' w='5' h='5'/>
+		</Highlighed>
+		
+		<Pressed>
+			<TopLeftCorner x='15' y='15' w='5' h='5'/>
+			<TopEdge x='20' y='15' w='5' h='5'/>
+			<TopRightCorner x='25' y='15' w='5' h='5'/>
+			<LeftEdge x='15' y='20' w='5' h='5'/>
+			<Center x='20' y='20' w='5' h='5'/>
+			<RightEdge x='25' y='20' w='5' h='5'/>
+			<BottomLeftCorner x='15' y='25' w='5' h='5'/>
+			<BottomEdge x='20' y='25' w='5' h='5'/>
+			<BottomRightCorner x='25' y='20' w='5' h='5'/>
+		</Pressed>
+	</Template>
+	
+	<Template type="CustomButtonVisualTemplate" class="PrettyButton" fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
+		<Released x='30' y='0' w='218' h='50'/>
+		<Highlighed x='30' y='50' w='218' h='50'/>
+		<Pressed x='30' y='100' w='218' h='50'/>
+	</Template>
+	
+	<Template type="CounterVisualTemplate" class="MyCounter" fontPath="font.xml" buttonWidth='5' buttonHeight='10'>
+		<Frame elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
+			<TopLeftCorner x='0' y='0' w='5' h='5'/>
+			<TopEdge x='5' y='0' w='5' h='5'/>
+			<TopRightCorner x='10' y='0' w='5' h='5'/>
+			<LeftEdge x='0' y='5' w='5' h='5'/>
+			<Center x='5' y='5' w='5' h='5'/>
+			<RightEdge x='10' y='5' w='5' h='5'/>
+			<BottomLeftCorner x='0' y='10' w='5' h='5'/>
+			<BottomEdge x='5' y='10' w='5' h='5'/>
+			<BottomRightCorner x='10' y='10' w='5' h='5'/>
+		</Frame>
+		
+		<IncreaseButton fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
+			<Released x='0' y='30' w='5' h='10'/>
+			<Highlighed x='0' y='30' w='5' h='10'/>
+			<Pressed x='10' y='30' w='5' h='10'/>
+		</IncreaseButton>
+		
+		<DecreaseButton fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
+			<Released x='5' y='30' w='5' h='10'/>
+			<Highlighed x='5' y='30' w='5' h='10'/>
+			<Pressed x='15' y='30' w='5' h='10'/>
+		</DecreaseButton>
+	</Template>
+	
+	<Template type="ImageVisualTemplate" class="MyImage" />
+	<Template type="AnimationVisualTemplate" class="MyAnimation" />
 </HUD>

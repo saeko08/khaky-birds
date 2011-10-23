@@ -3,6 +3,7 @@
  */
 package com.hypefoundry.khakyBirds;
 
+import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.hud.Hud;
@@ -15,6 +16,7 @@ import com.hypefoundry.engine.hud.HudRenderer;
  */
 public class MenuScreen extends Screen 
 {
+	Input								m_input;
 	HudRenderer							m_hudRenderer;
 	HudLayout 							m_hudLayout = null;
 	
@@ -27,7 +29,7 @@ public class MenuScreen extends Screen
 	{
 		super( game );
 		
-		m_hudRenderer = new HudRenderer( game );
+		m_input = game.getInput();
 		
 		// load the HUD
 		Hud hud = m_resourceManager.getResource( Hud.class, "hud/hudDefinition.xml" );
@@ -36,12 +38,13 @@ public class MenuScreen extends Screen
 			throw new RuntimeException( "No HUD definition" );
 		}
 		
+		m_hudRenderer = new HudRenderer( game, hud );
+		
 		// load the menu layout
 		if ( m_hudLayout == null )
 		{
 			m_hudLayout = m_resourceManager.getResource( HudLayout.class, "hud/mainMenu.xml" );
-			m_hudLayout.setHud( hud );
-			m_hudRenderer.setLayout( m_hudLayout );
+			m_hudLayout.attachRenderer( m_hudRenderer ); 
 		}
 	}
 

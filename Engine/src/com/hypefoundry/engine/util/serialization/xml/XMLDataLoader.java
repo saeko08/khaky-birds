@@ -172,7 +172,8 @@ public class XMLDataLoader implements DataLoader
 		int count = children.getLength();
 		for ( int i = 0; i < count; ++i )
 		{
-			if ( children.item(i).getNodeType() == Node.ELEMENT_NODE && children.item(i) == m_xmlElement )
+			Node childNode = children.item(i); 
+			if ( childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getParentNode() != m_xmlElement )
 			{
 				--childrenCount;
 			}
@@ -190,7 +191,8 @@ public class XMLDataLoader implements DataLoader
 		int count = children.getLength();
 		for ( int i = 0; i < count; ++i )
 		{
-			if ( children.item(i).getNodeType() == Node.ELEMENT_NODE && children.item(i) != m_xmlElement )
+			Node childNode = children.item(i); 
+			if ( childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getParentNode() == m_xmlElement )
 			{
 				return new XMLDataLoader( children, i );
 			}
@@ -207,7 +209,8 @@ public class XMLDataLoader implements DataLoader
 		int count = m_siblings.getLength();
 		for ( int i = m_elemIdx + 1; i < count; ++i )
 		{
-			if ( m_siblings.item(i).getNodeType() == Node.ELEMENT_NODE )
+			Node childNode = m_siblings.item(i); 
+			if ( childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getParentNode() == m_xmlElement.getParentNode() )
 			{
 				return new XMLDataLoader( m_siblings, i );
 			}

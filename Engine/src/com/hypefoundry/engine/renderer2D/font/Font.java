@@ -66,6 +66,19 @@ public class Font extends Resource
 		outGlyphScreenDim.set( m_glyphWidth, m_glyphHeight, 0 );
 	}
 	
+	/**
+	 * Returns the number of characters that will fit the specified number of pixels.
+	 * 
+	 * @param screenWidth
+	 * @param viewportWidth
+	 * @return
+	 */
+	public int getDesiredCharactersCount( float screenWidth, float viewportWidth )
+	{
+		float viewportGlyphWidth = (float)m_glyphWidth / viewportWidth;
+		return (int)( screenWidth / viewportGlyphWidth );
+	}
+	
 	// ------------------------------------------------------------------------
 	// Resource implementation
 	// ------------------------------------------------------------------------

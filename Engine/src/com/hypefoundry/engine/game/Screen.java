@@ -2,9 +2,6 @@ package com.hypefoundry.engine.game;
 
 import java.util.*;
 
-import android.util.Log;
-
-import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.core.ResourceManager;
 
 /**

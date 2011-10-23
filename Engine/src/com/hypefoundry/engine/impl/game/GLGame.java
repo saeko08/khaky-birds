@@ -13,7 +13,6 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -21,7 +20,6 @@ import com.hypefoundry.engine.core.Audio;
 import com.hypefoundry.engine.core.FileIO;
 import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.core.Input;
-import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.impl.core.AndroidAudio;

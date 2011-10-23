@@ -5,14 +5,13 @@ package com.hypefoundry.engine.hud;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 
 import com.hypefoundry.engine.core.Resource;
-import com.hypefoundry.engine.hud.Hud;
 import com.hypefoundry.engine.hud.HudComposite;
-import com.hypefoundry.engine.hud.HudElement;
-import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
+
 
 /**
  * Defines the HUD contents.
@@ -22,54 +21,104 @@ import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
  */
 public class HudLayout extends Resource
 {
-	HudComposite		m_hudElements;
-	Hud					m_hud;
+	private HudComposite			m_hudElements;
+	private HudRenderer				m_renderer;
 	
-	public void setHud( Hud hud )
+	private	List< ButtonListener >	m_buttonListeners = new ArrayList< ButtonListener >();
+	
+	// ------------------------------------------------------------------------
+	// Renderer management
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * Attaches a renderer.
+	 * 
+	 * @param renderer
+	 */
+	public void attachRenderer( HudRenderer renderer )
 	{
-		m_hud = hud;
+		if ( renderer == null )
+		{
+			return;
+		}
+		
+		// make sure we inform the old renderer that we no longer want to use it
+		detachRenderer( renderer );
+		
+		// set the new renderer
+		m_renderer = renderer;
 		
 		if ( m_hudElements != null )
 		{
-			m_hudElements.setParentHud( hud );
+			// inform it about the elements of the layout
+			ArrayList< HudWidget > widgets = new ArrayList< HudWidget >();
+			m_hudElements.gatherWidgets( widgets );
+			
+			m_renderer.onLayoutLoaded( widgets );
 		}
-	}
-
-	/**
-	 * Clears the existing HUD.
-	 */
-	public void clear()
-	{
-		m_hudElements = new HudComposite();
 	}
 	
 	/**
-	 * Adds a new HUD element. 
+	 * Detaches a renderer.
 	 * 
-	 * @param element
+	 * @param renderer
 	 */
-	public void addElement( HudElement element )
+	public void detachRenderer( HudRenderer renderer )
 	{
-		if ( m_hudElements != null )
+		if ( renderer != null && m_renderer == renderer )
 		{
-			m_hudElements.addElement( element );
+			m_renderer.onLayoutReleased();
+			m_renderer = null;
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	// Widget listeners
+	// ------------------------------------------------------------------------
+		
+	/**
+	 * Attaches a button listener.
+	 * 
+	 * @param listener
+	 */
+	public void attachButtonListener( ButtonListener listener )
+	{
+		if ( listener != null )
+		{
+			m_buttonListeners.add( listener );
 		}
 	}
 	
 	/**
-	 * Draws the HUD on the screen.
+	 * Detaches a button listener.
 	 * 
-	 * @param batcher
-	 * @param deltaTime
+	 * @param listener
 	 */
-	public void draw( SpriteBatcher batcher, float deltaTime )
+	public void detachButtonListener( ButtonListener listener )
 	{
-		if ( m_hudElements != null )
+		if ( listener != null )
 		{
-			m_hudElements.draw( batcher, deltaTime );
-		}
+			m_buttonListeners.remove( listener );
+		} 
 	}
 	
+	// ------------------------------------------------------------------------
+	// Notifications
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * Called when a button is pressed.
+	 * 
+	 * @param id
+	 */
+	public void onButtonPressed( String id )
+	{
+		int count = m_buttonListeners.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			m_buttonListeners.get(i).onButtonPressed( id );
+		}
+	}
 	
 	// ------------------------------------------------------------------------
 	// Resource implementation
@@ -94,11 +143,16 @@ public class HudLayout extends Resource
 		DataLoader hudNode = XMLDataLoader.parse( stream, "Layout" );
 		if ( hudNode != null )
 		{
-			m_hudElements.load( hudNode );
+			m_hudElements.load( m_resMgr, hudNode );
+			m_hudElements.initialize( null, this );
 			
-			if ( m_hud != null )
+			// inform the renderer about the layout elements
+			if ( m_renderer != null )
 			{
-				m_hudElements.setParentHud( m_hud );
+				ArrayList< HudWidget > widgets = new ArrayList< HudWidget >();
+				m_hudElements.gatherWidgets( widgets );
+						
+				m_renderer.onLayoutLoaded( widgets );
 			}
 		}
 	}
@@ -106,5 +160,9 @@ public class HudLayout extends Resource
 	@Override
 	public void release() 
 	{
+		if ( m_renderer != null )
+		{
+			m_renderer.onLayoutReleased();
+		}
 	}
 }

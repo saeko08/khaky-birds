@@ -226,6 +226,18 @@ public class MultiTouchHandler implements TouchHandler
 	{
 		synchronized ( this ) 
 		{
+			// copy the touch events
+			int len = m_touchEvents.size();
+			for ( int i = 0; i < len; i++ )
+			{
+				m_touchEventPool.free( m_touchEvents.get( i ) );
+			}
+			m_touchEvents.clear();
+			
+			m_touchEvents.addAll( m_touchEventsBuffer );
+			m_touchEventsBuffer.clear();
+			
+			// update the touch timers
 			for ( int i = 0; i < MAX_POINTERS_COUNT; ++i )
 			{
 				if ( m_isTouched[i] )
@@ -240,17 +252,7 @@ public class MultiTouchHandler implements TouchHandler
 	public List<TouchEvent> getTouchEvents() 
 	{
 		synchronized ( this ) 
-		{
-			int len = m_touchEvents.size();
-			for ( int i = 0; i < len; i++ )
-			{
-				m_touchEventPool.free( m_touchEvents.get( i ) );
-			}
-			m_touchEvents.clear();
-			
-			m_touchEvents.addAll( m_touchEventsBuffer );
-			m_touchEventsBuffer.clear();
-			
+		{			
 			return m_touchEvents;
 		}
 	}

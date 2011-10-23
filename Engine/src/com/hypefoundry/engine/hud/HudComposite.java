@@ -3,11 +3,12 @@
  */
 package com.hypefoundry.engine.hud;
 
-import com.hypefoundry.engine.hud.Frame;
-import com.hypefoundry.engine.hud.Hud;
-import com.hypefoundry.engine.hud.HudElement;
-import com.hypefoundry.engine.renderer2D.SpriteBatcher;
+
+import java.util.List;
+
 import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.hud.widgets.*;
 
 
 /**
@@ -16,22 +17,22 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
  * @author Paksas
  *
  */
-class HudComposite extends HudElement 
+public class HudComposite extends HudWidget 
 {
 	// ------------------------------------------------------------------------
 	// Element factories
 	// ------------------------------------------------------------------------
 	static interface ElementFactory
 	{
-		HudElement create();
+		HudWidget create();
 	}
 	
 	static class ElementFactoryData
 	{
-		Class< ? extends HudElement >		m_type;
+		Class< ? extends HudWidget >		m_type;
 		ElementFactory						m_factory;
 		
-		ElementFactoryData( Class< ? extends HudElement > type, ElementFactory factory )
+		ElementFactoryData( Class< ? extends HudWidget > type, ElementFactory factory )
 		{
 			m_type = type;
 			m_factory = factory;
@@ -39,7 +40,11 @@ class HudComposite extends HudElement
 	}
 	
 	private static ElementFactoryData[]	m_elementFactories = {
-		new ElementFactoryData( Frame.class, new ElementFactory() { @Override public HudElement create() { return new Frame(); } } ),
+		new ElementFactoryData( FrameWidget.class, new ElementFactory() { @Override public HudWidget create() { return new FrameWidget(); } } ),
+		new ElementFactoryData( ButtonWidget.class, new ElementFactory() { @Override public HudWidget create() { return new ButtonWidget(); } } ),
+		new ElementFactoryData( ImageWidget.class, new ElementFactory() { @Override public HudWidget create() { return new ImageWidget(); } } ),
+		new ElementFactoryData( AnimationWidget.class, new ElementFactory() { @Override public HudWidget create() { return new AnimationWidget(); } } ),
+		new ElementFactoryData( CounterWidget.class, new ElementFactory() { @Override public HudWidget create() { return new CounterWidget(); } } ),
 	};
 	
 	/**
@@ -64,14 +69,14 @@ class HudComposite extends HudElement
 	// ------------------------------------------------------------------------
 	// Composite definition
 	// ------------------------------------------------------------------------
-	private HudElement[]			m_elements = null;
+	private HudWidget[]			m_elements = null;
 	
 	/**
 	 * Adds a new HUD element. 
 	 * 
 	 * @param element
 	 */
-	void addElement( HudElement element )
+	void addElement( HudWidget element )
 	{
 		if ( element == null )
 		{
@@ -79,15 +84,15 @@ class HudComposite extends HudElement
 		}
 		
 		// append the new element to the array of elements
-		HudElement[] newArray = null;
+		HudWidget[] newArray = null;
 		if ( m_elements == null )
 		{
-			newArray = new HudElement[1];
+			newArray = new HudWidget[1];
 			newArray[0] = element;
 		}
 		else
 		{
-			newArray = new HudElement[ m_elements.length + 1 ];
+			newArray = new HudWidget[ m_elements.length + 1 ];
 			for ( int i = 0; i < m_elements.length; ++i )
 			{
 				newArray[i] = m_elements[i];
@@ -97,23 +102,25 @@ class HudComposite extends HudElement
 	}
 	
 	@Override
-	public void draw( SpriteBatcher batcher, float deltaTime )
+	void initialize( HudWidget parentWidget, HudLayout layout )
 	{
+		super.initialize( parentWidget, layout );
+		
 		for ( int i = 0; i < m_elements.length; ++i )
 		{
 			if ( m_elements[i] != null )
 			{
-				m_elements[i].draw( batcher, deltaTime );
+				m_elements[i].initialize( this, layout );
 			}
 		}
 	}
 
 	@Override
-	public void onLoad( DataLoader loader ) 
+	public void onLoad( ResourceManager resMgr, DataLoader loader ) 
 	{
 		// resize the elements array
 		int childrenCount = loader.getChildrenCount( "Widget" );
-		m_elements = new HudElement[childrenCount];
+		m_elements = new HudWidget[childrenCount];
 		
 		// load all the children
 		int childIdx = 0;
@@ -124,8 +131,8 @@ class HudComposite extends HudElement
 			ElementFactory factory = findElementFactory( type );
 			if ( factory != null )
 			{
-				HudElement element = factory.create();
-				element.load( child );
+				HudWidget element = factory.create();
+				element.load( resMgr, child );
 				
 				m_elements[childIdx] = element;
 				++childIdx;
@@ -134,16 +141,15 @@ class HudComposite extends HudElement
 	}
 	
 	@Override
-	void setParentHud( Hud hud )
+	void gatherWidgets( List< HudWidget > widgets )
 	{
-		super.setParentHud( hud );
+		super.gatherWidgets( widgets );
 		
-		// reparent all the children
 		for ( int i = 0; i < m_elements.length; ++i )
 		{
 			if ( m_elements[i] != null )
 			{
-				m_elements[i].setParentHud( hud );
+				m_elements[i].gatherWidgets( widgets );
 			}
 		}
 	}

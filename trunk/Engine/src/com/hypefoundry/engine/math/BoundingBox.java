@@ -266,7 +266,7 @@ final public class BoundingBox implements BoundingShape
 	final public boolean doesOverlap( final Vector3 pos, Vector3 outIntersectPos )
 	{
 		boolean overlaps = ( m_minX <= pos.m_x && m_maxX >= pos.m_x && m_minY <= pos.m_y && m_maxY >= pos.m_y && m_minZ <= pos.m_z && m_maxZ >= pos.m_z );
-		if ( overlaps )
+		if ( overlaps && outIntersectPos != null )
 		{
 			outIntersectPos.set( pos );
 		}

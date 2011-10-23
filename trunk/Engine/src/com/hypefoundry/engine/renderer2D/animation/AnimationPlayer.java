@@ -138,5 +138,16 @@ public class AnimationPlayer
 		TextureRegion region = animation.m_regions[frameIdx];
 		return region;
 	}
+
+
+	/**
+	 * Sets new value of the animation timeline.
+	 * 
+	 * @param time
+	 */
+	public void setTime( float time ) 
+	{
+		m_animationTime = time;
+	}
 }
 

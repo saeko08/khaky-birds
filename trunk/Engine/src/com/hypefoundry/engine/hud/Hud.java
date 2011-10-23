@@ -5,13 +5,13 @@ package com.hypefoundry.engine.hud;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 
 import com.hypefoundry.engine.core.Resource;
-import com.hypefoundry.engine.renderer2D.RenderState;
-import com.hypefoundry.engine.renderer2D.SpriteBatcher;
-import com.hypefoundry.engine.renderer2D.TextureRegion;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
+import com.hypefoundry.engine.hud.visuals.*;
+
 
 /**
  * Hud display.
@@ -21,66 +21,88 @@ import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
  */
 public class Hud extends Resource
 {
-	// --------------------------------------------------------------------
-	// Frame elements
-	// --------------------------------------------------------------------
-	private TextureRegion			FRAME_TOP_LEFT_CORNER;
-	private TextureRegion			FRAME_TOP_RIGHT_CORNER;
-	private TextureRegion			FRAME_BOTTOM_LEFT_CORNER;
-	private TextureRegion			FRAME_BOTTOM_RIGHT_CORNER;
-	private TextureRegion			FRAME_TOP_EDGE;
-	private TextureRegion			FRAME_BOTTOM_EDGE;
-	private TextureRegion			FRAME_LEFT_EDGE;
-	private TextureRegion			FRAME_RIGHT_EDGE;
-	private TextureRegion			FRAME_CENTER;
-
-	private float					m_frameElementSize;
+	// ------------------------------------------------------------------------
+	// Template factories definitions
+	// ------------------------------------------------------------------------
+	private static interface HudTemplateFactory
+	{
+		HudWidgetVisualTemplate create();
+	}
+	
+	private static class TemplateDefinition
+	{
+		Class< ? extends HudWidgetVisualTemplate >		m_type;
+		HudTemplateFactory								m_factory;
+		
+		TemplateDefinition( Class< ? extends HudWidgetVisualTemplate > type, HudTemplateFactory factory )
+		{
+			m_type = type;
+			m_factory = factory;
+		}
+	}
+	
+	private static TemplateDefinition[]		m_definitions = {
+		new TemplateDefinition( DefaultFrameVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new DefaultFrameVisualTemplate(); } } ),
+		new TemplateDefinition( CustomFrameVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new CustomFrameVisualTemplate(); } } ),
+		new TemplateDefinition( DefaultButtonVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new DefaultButtonVisualTemplate(); } } ),
+		new TemplateDefinition( CustomButtonVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new CustomButtonVisualTemplate(); } } ),
+		new TemplateDefinition( ImageVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new ImageVisualTemplate(); } } ),
+		new TemplateDefinition( AnimationVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new AnimationVisualTemplate(); } } ),
+		new TemplateDefinition( CounterVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new CounterVisualTemplate(); } } ),
+	};
+	
+	private static HudTemplateFactory findTemplateFactory( String type )
+	{
+		for ( int i = 0; i < m_definitions.length; ++i )
+		{
+			if ( m_definitions[i].m_type.getSimpleName().equals( type ) )
+			{
+				return m_definitions[i].m_factory;
+			}
+		}
+		
+		return null;
+	}
 	
 	// ------------------------------------------------------------------------
-	// Drawing different shapes
+	// Templates to user-defined classes associations
 	// ------------------------------------------------------------------------
-	/**
-	 * Draws the frame itself.
-	 * 
-	 * @param batcher
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 */
-	void drawFrame( SpriteBatcher batcher, float x, float y, float width, float height )
+
+	private static class TemplateAssociation
 	{
-		float xs = x + m_frameElementSize;
-		float xe = x + width - m_frameElementSize;
-		float ys = y + m_frameElementSize;
-		float ye = y + height - m_frameElementSize;
-		int horizElementsCount = (int)( ( width - 2 * m_frameElementSize ) / m_frameElementSize );
-		int vertElementsCount = (int)( ( height - 2 * m_frameElementSize ) / m_frameElementSize );
+		String						m_className;
+		HudWidgetVisualTemplate		m_template;
 		
-		// draw the background
-		batcher.drawSprite( xs, ys, xe - xs, ye - ys, FRAME_CENTER );
-		
-		// draw the corners
-		batcher.drawSprite( xs - m_frameElementSize, 	ys - m_frameElementSize, 	m_frameElementSize, m_frameElementSize, FRAME_TOP_LEFT_CORNER );
-		batcher.drawSprite( xe, 						ys - m_frameElementSize, 	m_frameElementSize, m_frameElementSize, FRAME_TOP_RIGHT_CORNER );
-		batcher.drawSprite( xs - m_frameElementSize, 	ye, 						m_frameElementSize, m_frameElementSize, FRAME_BOTTOM_LEFT_CORNER );
-		batcher.drawSprite( xe, 						ye, 						m_frameElementSize, m_frameElementSize, FRAME_BOTTOM_RIGHT_CORNER );
-		
-		// draw the top & bottom corners
-		float edgeX = xs;
-		for( int i = 0; i < horizElementsCount; ++i, edgeX += m_frameElementSize )
+		TemplateAssociation( String className, HudWidgetVisualTemplate template )
 		{
-			batcher.drawSprite( edgeX, ys, m_frameElementSize, m_frameElementSize, FRAME_TOP_EDGE );
-			batcher.drawSprite( edgeX, ye, m_frameElementSize, m_frameElementSize, FRAME_BOTTOM_EDGE );
+			m_className = className;
+			m_template = template;
+		}
+	}
+	
+	private List< TemplateAssociation >		m_templates = new ArrayList< TemplateAssociation >();
+	
+	/**
+	 * Creates a visual representation of a widget.
+	 * 
+	 * @param renderer
+	 * @param widget
+	 * @return
+	 */
+	HudWidgetVisual createVisual( HudRenderer renderer, HudWidget widget )
+	{		
+		int count = m_templates.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			TemplateAssociation association = m_templates.get(i);
+			
+			if ( association.m_className.equals( widget.m_visualName ) )
+			{
+				return association.m_template.instantiate( renderer, widget );
+			}
 		}
 		
-		// draw the left & right corners
-		float edgeY = ys;
-		for( int i = 0; i < vertElementsCount; ++i, edgeY += m_frameElementSize )
-		{
-			batcher.drawSprite( xs, edgeY, m_frameElementSize, m_frameElementSize, FRAME_LEFT_EDGE );
-			batcher.drawSprite( xe, edgeY, m_frameElementSize, m_frameElementSize, FRAME_RIGHT_EDGE );
-		}
+		return null;
 	}
 	
 	// ------------------------------------------------------------------------
@@ -89,6 +111,8 @@ public class Hud extends Resource
 	@Override
 	public void load() 
 	{
+		m_templates.clear();
+		
 		InputStream stream = null;
 		try 
 		{
@@ -103,82 +127,23 @@ public class Hud extends Resource
 		DataLoader hudNode = XMLDataLoader.parse( stream, "HUD" );
 		if ( hudNode != null )
 		{
-			DataLoader frameNode = hudNode.getChild( "Frame" );
-			if ( frameNode != null )
+			for ( DataLoader child = hudNode.getChild( "Template" ); child != null; child = child.getSibling() )
 			{
-				loadFrameDefinition( frameNode );
+				String type = child.getStringValue( "type" );
+				HudTemplateFactory templateFactory = findTemplateFactory( type );
+				
+				if ( templateFactory != null )
+				{
+					HudWidgetVisualTemplate template = templateFactory.create();
+					template.load( m_resMgr, child );
+					
+					String className = child.getStringValue( "class" );
+					m_templates.add( new TemplateAssociation( className, template ) );
+					
+				}
 			}
-			
-			
-		}
-	}
 
-	/**
-	 * Loads a frame definition.
-	 * @param loader
-	 */
-	private void loadFrameDefinition( DataLoader loader )
-	{
-		RenderState rs = new RenderState();
-		rs.deserialize( m_resMgr, loader );
-		
-		m_frameElementSize = loader.getFloatValue( "elemSize" );
-		
-		DataLoader elemNode;
-		
-		if ( ( elemNode = loader.getChild( "TopLeftCorner" ) ) != null )
-		{
-			FRAME_TOP_LEFT_CORNER = new TextureRegion( rs );
-			FRAME_TOP_LEFT_CORNER.deserializeCoordinates( elemNode );
 		}
-		
-		if ( ( elemNode = loader.getChild( "TopRightCorner" ) ) != null )
-		{
-			FRAME_TOP_RIGHT_CORNER = new TextureRegion( rs );
-			FRAME_TOP_RIGHT_CORNER.deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "BottomLeftCorner" ) ) != null )
-		{
-			FRAME_BOTTOM_LEFT_CORNER = new TextureRegion( rs );
-			FRAME_BOTTOM_LEFT_CORNER.deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "BottomRightCorner" ) ) != null )
-		{
-			FRAME_BOTTOM_RIGHT_CORNER = new TextureRegion( rs );
-			FRAME_BOTTOM_RIGHT_CORNER.deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "TopEdge" ) ) != null )
-		{
-			FRAME_TOP_EDGE = new TextureRegion( rs );
-			FRAME_TOP_EDGE.deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "BottomEdge" ) ) != null )
-		{
-			FRAME_BOTTOM_EDGE = new TextureRegion( rs );
-			FRAME_BOTTOM_EDGE.deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "LeftEdge" ) ) != null )
-		{
-			FRAME_LEFT_EDGE = new TextureRegion( rs );
-			FRAME_LEFT_EDGE.deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "RightEdge" ) ) != null )
-		{
-			FRAME_RIGHT_EDGE = new TextureRegion( rs );
-			FRAME_RIGHT_EDGE.deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "Center" ) ) != null )
-		{
-			FRAME_CENTER = new TextureRegion( rs );
-			FRAME_CENTER.deserializeCoordinates( elemNode );
-		}		
 	}
 
 	@Override

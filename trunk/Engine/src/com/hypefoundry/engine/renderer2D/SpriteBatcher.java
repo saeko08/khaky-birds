@@ -24,7 +24,8 @@ public class SpriteBatcher
 		Lines,
 		Sprites
 	};
-		
+			
+	public GLGraphics			m_graphics;
 	private GL10				m_gl;
 	private final float[] 		m_verticesBuffer;
 	private int 				m_bufferIndex;
@@ -52,6 +53,7 @@ public class SpriteBatcher
 	 */
 	public SpriteBatcher( GLGraphics graphics, int maxSprites ) 
 	{	
+		m_graphics = graphics;
 		m_gl = graphics.getGL();
 		
 		m_verticesBuffer = new float[ maxSprites * 4 * 4 ];
@@ -263,6 +265,51 @@ public class SpriteBatcher
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
 		
+		m_numSprites++;
+	}
+	
+	/**
+	 * Draws an unaligned sprite ( one for which the x,y coordinates specify the top-left corner position ) with the texture defined for the batch.
+	 * 
+	 * CAUTION: it draws the sprite in an inverse orientation ( assuming that 0 is at the top of the viewport, and the viewport Y axis extends downwards ).
+	 *          For this reason it should only be used for the HUD rendering.
+	 * 
+	 * @param x				sprite center X coordinate
+	 * @param y				sprite center Y coordinate
+	 * @param width			desired sprite width
+	 * @param height		desired sprite height
+	 * @param region		texture region to draw the sprite with
+	 */
+	public void drawUnalignedSprite( float x, float y, float width, float height, TextureRegion region ) 
+	{
+		// we'll be drawing sprites now, so flush the buffer if something else was drawn before
+		switchTo( DrawItem.Sprites );
+		
+		// set the render state
+		setRenderState( region.m_renderState );
+						
+		// add the new sprite to the batcher	
+		float x1 = x;
+		float y1 = y;
+		float x2 = x + width;
+		float y2 = y + height;
+		
+		m_verticesBuffer[ m_bufferIndex++ ] = x1;
+		m_verticesBuffer[ m_bufferIndex++ ] = y2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
+		m_verticesBuffer[ m_bufferIndex++ ] = x2;
+		m_verticesBuffer[ m_bufferIndex++ ] = y2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
+		m_verticesBuffer[ m_bufferIndex++ ] = x2;
+		m_verticesBuffer[ m_bufferIndex++ ] = y1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
+		m_verticesBuffer[ m_bufferIndex++ ] = x1;
+		m_verticesBuffer[ m_bufferIndex++ ] = y1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
 		m_numSprites++;
 	}
 	

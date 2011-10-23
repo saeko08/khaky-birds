@@ -162,6 +162,19 @@ public class SingleTouchHandler implements TouchHandler
 	{
 		synchronized ( this ) 
 		{	
+			// copy the touch events
+			int len = m_touchEvents.size();
+			for( int i = 0; i < len; i++ )
+			{
+				m_touchEventPool.free( m_touchEvents.get( i ) );
+			}
+			m_touchEvents.clear();
+			
+
+			m_touchEvents.addAll( m_touchEventsBuffer );
+			m_touchEventsBuffer.clear();
+			
+			// update the touch timers
 			if ( m_isTouched )
 			{
 				m_touchDuration += deltaTime;
@@ -174,18 +187,6 @@ public class SingleTouchHandler implements TouchHandler
 	{
 		synchronized( this ) 
 		{
-			// free old events back to the pool
-			int len = m_touchEvents.size();
-			for( int i = 0; i < len; i++ )
-			{
-				m_touchEventPool.free( m_touchEvents.get( i ) );
-			}
-			m_touchEvents.clear();
-			
-
-			m_touchEvents.addAll( m_touchEventsBuffer );
-			m_touchEventsBuffer.clear();
-			
 			return m_touchEvents;
 		}
 	}

@@ -1,0 +1,147 @@
+=HUD=
+
+==Introduction==
+A HUD allows you to define a set of controls visible controls and display widgets ( such as buttons, animations, images ) in order to establish a simple user interface.
+
+HUD is divided into a *LAYOUT* and *WIDGETS DEFINITION*.
+
+A layout describes what widgets create a HUD and how are they located in the viewport.
+
+Widgets definition describes how particular widgets look like.
+
+At this moment we have the following widgets at your disposal:
+  * *AnimationWidget* - for displaying animation
+  * *ButtonWidget* - a control that can be clicked
+  * *CounterWidget* - allows to specify and change a number
+  * *FrameWidget* - a storage place for other widgets
+  * *ImageWidget* - displays a static image
+
+==Widgets Definition==
+
+The definition is specified in an XML file. Here's a sample file:
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<HUD>
+	<Template type="DefaultFrameVisualTemplate" class="MyFrame" elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
+		<TopLeftCorner x='0' y='0' w='5' h='5'/>
+		<TopEdge x='5' y='0' w='5' h='5'/>
+		<TopRightCorner x='10' y='0' w='5' h='5'/>
+		<LeftEdge x='0' y='5' w='5' h='5'/>
+		<Center x='5' y='5' w='5' h='5'/>
+		<RightEdge x='10' y='5' w='5' h='5'/>
+		<BottomLeftCorner x='0' y='10' w='5' h='5'/>
+		<BottomEdge x='5' y='10' w='5' h='5'/>
+		<BottomRightCorner x='10' y='10' w='5' h='5'/>
+	</Template>
+	
+	<Template type="DefaultButtonVisualTemplate" class="MyButton" fontPath="font.xml" elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
+		<Released>
+			<TopLeftCorner x='15' y='0' w='5' h='5'/>
+			<TopEdge x='20' y='0' w='5' h='5'/>
+			<TopRightCorner x='25' y='0' w='5' h='5'/>
+			<LeftEdge x='15' y='5' w='5' h='5'/>
+			<Center x='20' y='5' w='5' h='5'/>
+			<RightEdge x='25' y='5' w='5' h='5'/>
+			<BottomLeftCorner x='15' y='10' w='5' h='5'/>
+			<BottomEdge x='20' y='10' w='5' h='5'/>
+			<BottomRightCorner x='25' y='10' w='5' h='5'/>
+		</Released>
+		
+		<Highlighed>
+			<TopLeftCorner x='0' y='15' w='5' h='5'/>
+			<TopEdge x='5' y='15' w='5' h='5'/>
+			<TopRightCorner x='10' y='15' w='5' h='5'/>
+			<LeftEdge x='0' y='20' w='5' h='5'/>
+			<Center x='5' y='20' w='5' h='5'/>
+			<RightEdge x='10' y='20' w='5' h='5'/>
+			<BottomLeftCorner x='0' y='25' w='5' h='5'/>
+			<BottomEdge x='5' y='25' w='5' h='5'/>
+			<BottomRightCorner x='10' y='25' w='5' h='5'/>
+		</Highlighed>
+		
+		<Pressed>
+			<TopLeftCorner x='15' y='15' w='5' h='5'/>
+			<TopEdge x='20' y='15' w='5' h='5'/>
+			<TopRightCorner x='25' y='15' w='5' h='5'/>
+			<LeftEdge x='15' y='20' w='5' h='5'/>
+			<Center x='20' y='20' w='5' h='5'/>
+			<RightEdge x='25' y='20' w='5' h='5'/>
+			<BottomLeftCorner x='15' y='25' w='5' h='5'/>
+			<BottomEdge x='20' y='25' w='5' h='5'/>
+			<BottomRightCorner x='25' y='20' w='5' h='5'/>
+		</Pressed>
+	</Template>
+	
+	<Template type="CustomButtonVisualTemplate" class="PrettyButton" fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
+		<Released x='30' y='0' w='218' h='50'/>
+		<Highlighed x='30' y='50' w='218' h='50'/>
+		<Pressed x='30' y='100' w='218' h='50'/>
+	</Template>
+	
+	<Template type="CounterVisualTemplate" class="MyCounter" fontPath="font.xml" buttonWidth='5' buttonHeight='10'>
+		<Frame elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
+			<TopLeftCorner x='0' y='0' w='5' h='5'/>
+			<TopEdge x='5' y='0' w='5' h='5'/>
+			<TopRightCorner x='10' y='0' w='5' h='5'/>
+			<LeftEdge x='0' y='5' w='5' h='5'/>
+			<Center x='5' y='5' w='5' h='5'/>
+			<RightEdge x='10' y='5' w='5' h='5'/>
+			<BottomLeftCorner x='0' y='10' w='5' h='5'/>
+			<BottomEdge x='5' y='10' w='5' h='5'/>
+			<BottomRightCorner x='10' y='10' w='5' h='5'/>
+		</Frame>
+		
+		<IncreaseButton fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
+			<Released x='0' y='30' w='5' h='10'/>
+			<Highlighed x='0' y='30' w='5' h='10'/>
+			<Pressed x='10' y='30' w='5' h='10'/>
+		</IncreaseButton>
+		
+		<DecreaseButton fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
+			<Released x='5' y='30' w='5' h='10'/>
+			<Highlighed x='5' y='30' w='5' h='10'/>
+			<Pressed x='15' y='30' w='5' h='10'/>
+		</DecreaseButton>
+	</Template>
+	
+	<Template type="ImageVisualTemplate" class="MyImage" />
+	<Template type="AnimationVisualTemplate" class="MyAnimation" />
+</HUD>
+}}}
+
+
+==Layout Definition==
+
+The layout is specified in an XML file as well. Here's a sample file:
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout>
+	<Widget type="FrameWidget" visualClass="MyFrame" width='1' height='1'>
+		<pos x='0' y='0' z='0' />
+		
+		<Widget type="ButtonWidget" visualClass="MyButton" id="Button1" width='0.8' height='0.1' caption="Exit" >
+			<pos x='0.5' y='0.1' z='0' />
+		</Widget>
+		
+		<Widget type="ImageWidget" visualClass="MyImage" path="textures/crapHitParticle.xml" width='0.1' height='0.1' >
+			<pos x='0.1' y='0.3' z='0' />
+		</Widget>
+		
+		<Widget type="AnimationWidget" visualClass="MyAnimation" path="animations/perkPedestrian/walking.xml" width='0.1' height='0.1' >
+			<pos x='0.1' y='0.5' z='0' />
+		</Widget>
+		
+		<Widget type="ButtonWidget" visualClass="PrettyButton" id="Button2" width='0.6' height='0.1' caption="Dupa 2" >
+			<pos x='0.1' y='0.7' z='0' />
+		</Widget>
+		
+		<Widget type="CounterWidget" visualClass="MyCounter" width='0.3' height='0.1' min='0' max='10' >
+			<pos x='0.5' y='0.1' z='0' />
+		</Widget>
+		
+	</Widget>
+</Layout>
+
+}}}

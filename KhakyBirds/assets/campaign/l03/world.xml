@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<World width='4.8' height='9.6'>
+	<Entity type="Ground" />
+	
+	<Entity type="ElectricCables" textureWidth="275">
+		<Cable pos='46'/>
+		<Cable pos='108'/>
+		<Cable pos='172'/>
+		<Cable pos='233'/>
+	</Entity>
+	
+	<Entity type="Bird" />
+		
+	<Entity type="Pedestrian">
+		<position x='1' y='1' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian">
+		<position x='2' y='1' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian">
+		<position x='3' y='1' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian">
+		<position x='1' y='3' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian">
+		<position x='2' y='3' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian">
+		<position x='3' y='3' z='80' />
+	</Entity>
+	
+	<Entity type="Pedestrian">
+		<position x='2' y='4' z='80' />
+	</Entity>
+	
+	<Entity type="Zombie">
+		<position x='3' y='5' z='80' />
+	</Entity>
+	
+	<Entity type="Zombie">
+		<position x='4' y='1' z='80' />
+	</Entity>
+	
+	<Entity type="Zombie">
+		<position x='4' y='2' z='80' />
+	</Entity>
+	
+	<Entity type="Hideout" maxPerkPedestrians='2' panicTime='4'>
+		<position x='2.4' y='4.8' z= '70'/>
+		<Pedestrian defaultRespawnTime='10' bombedRespawnTime='0.5' />
+		<PerkPedestrian defaultRespawnTime='10' bombedRespawnTime='0.5' />
+	</Entity>
+	
+	<Entity type="Falcon" />
+	
+	<Entity type="Hunter">
+		<position x='2' y='2' z='80' />
+	</Entity>
+	
+
+	
+</World>

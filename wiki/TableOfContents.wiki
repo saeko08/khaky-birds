@@ -95,6 +95,6 @@
       * [HUD#Introduction Introduction]
       * [HUD#Widgets_Definition Widgets Definition]
       * [HUD#Layout_Definition Layout Definition]
-      * [HUD#Layout_Definition Layout Definition]
-      * [HUD#Layout_Definition Layout Definition]
+        * [HUD#Positions_and_sizes Positions and sizes]
+        * [HUD#Widgets Widgets]
       * [HUD#Layout_Definition Layout Definition]

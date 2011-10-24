@@ -22,6 +22,7 @@ public abstract class HudWidget
 	public float			m_width;
 	public float			m_height;
 	public String			m_visualName;
+	public String			m_id;
 	
 	public HudWidget 		m_parent;
 	public HudLayout		m_layout;
@@ -50,6 +51,7 @@ public abstract class HudWidget
 		m_width = loader.getFloatValue( "width" );
 		m_height = loader.getFloatValue( "height" );
 		m_visualName = loader.getStringValue( "visualClass" );
+		m_id = loader.getStringValue( "id" );
 		onLoad( resMgr, loader );
 	}
 	

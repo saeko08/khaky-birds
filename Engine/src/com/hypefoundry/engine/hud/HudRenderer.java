@@ -28,7 +28,7 @@ public class HudRenderer
 	private Hud 						m_hud; 
 	
 	private List< HudWidgetVisual >		m_visuals = new ArrayList< HudWidgetVisual >();
-	
+	private boolean						m_contentsInvalidated = false;
 	
 	/**
 	 * Constructor.
@@ -51,7 +51,9 @@ public class HudRenderer
 	 */
 	public void onLayoutLoaded( List< HudWidget > widgets )
 	{		
-		m_visuals.clear();		
+		m_visuals.clear();
+		m_contentsInvalidated = true;
+		
 		if ( m_hud != null )
 		{
 			int count = widgets.size();
@@ -74,6 +76,7 @@ public class HudRenderer
 	public void onLayoutReleased()
 	{
 		m_visuals.clear();
+		m_contentsInvalidated = true;
 	}
 	
 	/**
@@ -93,6 +96,7 @@ public class HudRenderer
 		handleInput( deltaTime );
 		
 		// render the layout
+		count = m_visuals.size();
 		setRenderingMatrices();
 		for ( int i = 0; i < count; ++i )
 		{
@@ -143,9 +147,16 @@ public class HudRenderer
 			if ( visual != null )
 			{
 				visual.handleInput( m_input, this, deltaTime );
+				
+				if ( m_contentsInvalidated == true )
+				{
+					// an input command caused the hud to be invalidated - break out
+					break;
+				}
 			}
 		}
 		
+		m_contentsInvalidated = false;
 	}
 	
 	/**

@@ -7,6 +7,7 @@ import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.hud.HudRenderer;
 import com.hypefoundry.engine.hud.HudWidget;
 import com.hypefoundry.engine.hud.HudWidgetVisual;
+import com.hypefoundry.engine.renderer2D.RenderState;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
 import com.hypefoundry.engine.util.serialization.DataLoader;
@@ -24,8 +25,11 @@ public class CustomFrameVisualTemplate implements FrameVisualTemplate
 	@Override
 	public void load( ResourceManager resMgr, DataLoader loader ) 
 	{
-		String texturePath = loader.getStringValue( "texturePath" );
-		m_region = resMgr.getResource( TextureRegion.class, texturePath );
+		RenderState rs = new RenderState();
+		rs.deserialize( resMgr, loader );
+		
+		m_region = new TextureRegion( rs );
+		m_region.deserializeCoordinates( loader );
 	}
 
 	@Override

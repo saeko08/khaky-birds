@@ -17,13 +17,11 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
  */
 public class ButtonWidget extends HudWidget implements ClickableHudWidget, CaptionedHudWidget
 {
-	public String				m_id					= "";
 	public String				m_caption				= "";
 
 	@Override
 	public void onLoad( ResourceManager resMgr, DataLoader loader ) 
 	{
-		m_id			= loader.getStringValue( "id" );
 		m_caption		= loader.getStringValue( "caption" );
 	}
 

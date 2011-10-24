@@ -140,15 +140,18 @@ public class CounterVisualTemplate implements HudWidgetVisualTemplate
 	@Override
 	public HudWidgetVisual instantiate( HudRenderer renderer, HudWidget widget ) 
 	{
-		float buttonWidth = m_buttonWidth / (float)renderer.m_graphics.getWidth();
-		float buttonHeight = m_buttonHeight / (float)renderer.m_graphics.getHeight();
+		float buttonWidth0 = m_buttonWidth / (float)renderer.m_graphics.getWidth();
+		float buttonHeight0 = m_buttonHeight / (float)renderer.m_graphics.getHeight();
+		float buttonHeight = widget.m_height * 0.5f;
+		float buttonWidth = ( buttonWidth0 * buttonHeight ) / buttonHeight0;
 		
+		float frameWidth = widget.m_width - buttonWidth;
 		CompositeHudWidgetVisual composite = new CompositeHudWidgetVisual();
-		composite.addWidget( m_frameTemplate.instantiate( renderer, widget ) );
-		composite.addWidget( new CounterVisual( widget, this ) );
+		composite.addWidget( m_frameTemplate.instantiate( renderer, widget ).resize( frameWidth, widget.m_height ) );
+		composite.addWidget( new CounterVisual( widget, this ).resize( frameWidth, widget.m_height ) );
 		
-		composite.addWidget( m_incButtonTemplate.instantiate( renderer, widget ).setOffset( widget.m_width, 0 ).resize( buttonWidth, buttonHeight ) );
-		composite.addWidget( m_decButtonTemplate.instantiate( renderer, widget ).setOffset( widget.m_width, widget.m_height * 0.5f ).resize( buttonWidth, buttonHeight ) );
+		composite.addWidget( m_incButtonTemplate.instantiate( renderer, widget ).setOffset( frameWidth, 0 ).resize( buttonWidth, buttonHeight ) );
+		composite.addWidget( m_decButtonTemplate.instantiate( renderer, widget ).setOffset( frameWidth, widget.m_height * 0.5f ).resize( buttonWidth, buttonHeight ) );
 		
 		return composite;
 	}

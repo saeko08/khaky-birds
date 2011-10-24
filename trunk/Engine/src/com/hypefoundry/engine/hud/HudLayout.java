@@ -102,6 +102,32 @@ public class HudLayout extends Resource
 		} 
 	}
 	
+	/**
+	 * Looks for a widget with the specified ID in the current layout.
+	 * 
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public < T extends HudWidget > T getWidget( Class< T > type, String id )
+	{
+		ArrayList< HudWidget > widgets = new ArrayList< HudWidget >();
+		m_hudElements.gatherWidgets( widgets );
+		
+		int count = widgets.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			HudWidget widget = widgets.get(i);
+			if ( widget.m_id.equals( id ) && type.isInstance( widget ) )
+			{
+				return (T)widget;
+			}
+		}
+		
+		return null;
+	}
+	
 	// ------------------------------------------------------------------------
 	// Notifications
 	// ------------------------------------------------------------------------

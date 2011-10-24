@@ -91,3 +91,7 @@
       * [BoundingShapeReference BoundingShape]
     * [ Utils ]
       * [GenericFactory Generic factory]
+    * [ HUD ]
+      * [HUD#Introduction Introduction]
+      * [HUD#Widgets_Definition Widgets Definition]
+      * [HUD#Layout_Definition Layout Definition]

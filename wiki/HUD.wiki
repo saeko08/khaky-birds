@@ -10,11 +10,11 @@ A layout describes what widgets create a HUD and how are they located in the vie
 Widgets definition describes how particular widgets look like.
 
 At this moment we have the following widgets at your disposal:
-  * *AnimationWidget* - for displaying animation
-  * *ButtonWidget* - a control that can be clicked
-  * *CounterWidget* - allows to specify and change a number
-  * *FrameWidget* - a storage place for other widgets
-  * *ImageWidget* - displays a static image
+  * `AnimationWidget` - for displaying animation
+  * `ButtonWidget` - a control that can be clicked
+  * `CounterWidget` - allows to specify and change a number
+  * `FrameWidget` - a storage place for other widgets
+  * `ImageWidget` - displays a static image
 
 ==Widgets Definition==
 

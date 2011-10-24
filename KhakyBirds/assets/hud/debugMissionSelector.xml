@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout>
+	<Widget type="FrameWidget" visualClass="MyFrame" width='1' height='1'>
+		<pos x='0' y='0' z='0' />
+		
+		<Widget type="CounterWidget" visualClass="MyCounter" id="LevelIdx" width='0.2' height='0.1' min='1' max='2' >
+			<pos x='0.05' y='0.1' z='0' />
+		</Widget>
+		
+		<Widget type="ButtonWidget" visualClass="MyButton" id="StartDebugLevel" width='0.5' height='0.1' caption="Start" >
+			<pos x='0.3' y='0.1' z='0' />
+		</Widget>
+		
+		<Widget type="ButtonWidget" visualClass="MyButton" id="BackToMainMenu" width='0.8' height='0.1' caption="Back" >
+			<pos x='0.1' y='0.3' z='0' />
+		</Widget>
+		
+	</Widget>
+</Layout>

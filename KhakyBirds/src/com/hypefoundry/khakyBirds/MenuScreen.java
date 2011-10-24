@@ -6,15 +6,17 @@ package com.hypefoundry.khakyBirds;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
+import com.hypefoundry.engine.hud.ButtonListener;
 import com.hypefoundry.engine.hud.Hud;
 import com.hypefoundry.engine.hud.HudLayout;
 import com.hypefoundry.engine.hud.HudRenderer;
+import com.hypefoundry.engine.hud.widgets.CounterWidget;
 
 /**
  * @author Paksas
  *
  */
-public class MenuScreen extends Screen 
+public class MenuScreen extends Screen implements ButtonListener
 {
 	Input								m_input;
 	HudRenderer							m_hudRenderer;
@@ -45,6 +47,7 @@ public class MenuScreen extends Screen
 		{
 			m_hudLayout = m_resourceManager.getResource( HudLayout.class, "hud/mainMenu.xml" );
 			m_hudLayout.attachRenderer( m_hudRenderer ); 
+			m_hudLayout.attachButtonListener( this );
 		}
 	}
 
@@ -52,7 +55,7 @@ public class MenuScreen extends Screen
 	@Override
 	public void present( float deltaTime ) 
 	{			
-		// draw the world contents
+		// draw the hud contents
 		m_hudRenderer.draw( deltaTime );
 	}
 
@@ -71,6 +74,43 @@ public class MenuScreen extends Screen
 	@Override
 	public void dispose() 
 	{
+	}
+
+
+	@Override
+	public void onButtonPressed( String id ) 
+	{
+		if ( id.equals( "Campaign" ) )
+		{
+			
+		}
+		else if ( id.equals( "Debug" ) )
+		{
+			m_hudLayout.detachButtonListener( this );
+			m_hudLayout = m_resourceManager.getResource( HudLayout.class, "hud/debugMissionSelector.xml" );
+			m_hudLayout.attachRenderer( m_hudRenderer );
+			m_hudLayout.attachButtonListener( this );
+		}
+		else if ( id.equals( "Exit" ) )
+		{
+			
+		}
+		else if ( id.equals( "StartDebugLevel" ) )
+		{
+			CounterWidget counter = m_hudLayout.getWidget( CounterWidget.class, "LevelIdx" );
+			if ( counter != null )
+			{
+				int levelIdx = counter.getValue();
+				m_game.setScreen( new GameScreen( m_game, levelIdx ) );
+			}
+		}
+		else if ( id.equals( "BackToMainMenu" ) )
+		{
+			m_hudLayout.detachButtonListener( this );
+			m_hudLayout = m_resourceManager.getResource( HudLayout.class, "hud/mainMenu.xml" );
+			m_hudLayout.attachRenderer( m_hudRenderer );
+			m_hudLayout.attachButtonListener( this );
+		}
 	}
 
 }

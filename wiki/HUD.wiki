@@ -264,7 +264,7 @@ public void detachButtonListener( ButtonListener listener );
 	</Widget>
 }}}
 
-`path` attribute desribes a path to a [Renderer2DReference#XML_animation_resource texture] resource that should be displayed.
+`path` attribute desribes a path to a [Renderer2DReference#XML_texture_definition texture] resource that should be displayed.
 
   * `AnimationWidget` - displays animations
 

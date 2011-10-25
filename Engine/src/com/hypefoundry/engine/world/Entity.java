@@ -2,16 +2,10 @@ package com.hypefoundry.engine.world;
 
 import java.util.*;
 
-import android.util.Log;
-
 import com.hypefoundry.engine.math.BoundingBox;
-import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.MathLib;
 import com.hypefoundry.engine.math.Vector3;
-import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.util.Pool;
-import com.hypefoundry.engine.util.PoolObjectFactory;
-import com.hypefoundry.engine.util.SpatialGridObject;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.DataSaver;
 
@@ -33,6 +27,7 @@ public abstract class Entity
 	private float							m_facing;
 	private List< Aspect >					m_aspects;
 	
+	@SuppressWarnings("rawtypes")
 	private List< EventsPool > 				m_eventsPool;
 	private List< EntityEventListener > 	m_eventListeners;
 	
@@ -86,6 +81,7 @@ public abstract class Entity
 		 * @param rhs		compared event type
 		 * @return
 		 */
+		@SuppressWarnings("rawtypes")
 		public boolean equals( Class eventType )
 		{
 			return m_idClass.equals( eventType );
@@ -139,6 +135,7 @@ public abstract class Entity
 	/**
 	 * Constructor.
 	 */
+	@SuppressWarnings("rawtypes")
 	protected Entity()
 	{
 		m_bb = new BoundingBox( 0, 0, 0, 0, 0, 0 );
@@ -363,6 +360,7 @@ public abstract class Entity
 	 * @param type
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public final < T extends Aspect > T query( Class< T > type )
 	{
 		int count = m_aspects.size();
@@ -472,6 +470,7 @@ public abstract class Entity
 	 * @param eventClass
 	 * @param factory			factory that will create the events
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public final < T extends EntityEvent > void registerEvent( Class< T > eventClass, EventFactory< T > factory )
 	{
 		// check if the event isn't already registered.
@@ -498,6 +497,7 @@ public abstract class Entity
 	 * @param eventClass
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private < T extends EntityEvent > EventsPool< T > getEventsPool( final Class< T > eventClass )
 	{
 		int count = m_eventsPool.size();

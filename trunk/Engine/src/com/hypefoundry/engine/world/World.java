@@ -261,6 +261,7 @@ public class World implements Updatable
 	 * @param entityType
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public Entity findEntity( Class entityType ) 
 	{
 		int count = m_entities.size();
@@ -500,10 +501,20 @@ public class World implements Updatable
 	 */
 	public void constrainToWorldBoundaries( Vector3 pos, float xBoundary, float yBoundary ) 
 	{
-		final float minX = xBoundary;
-		final float maxX = m_width - xBoundary;
-		final float minY = yBoundary;
-		final float maxY = m_height - yBoundary;
+		float minX = xBoundary;
+		float maxX = m_width - xBoundary;
+		float minY = yBoundary;
+		float maxY = m_height - yBoundary;
+		
+		// safeguard the case when the view frustum is actually larger than the world.
+		if ( minX > maxX )
+		{
+			maxX = minX;
+		}
+		if ( minY > maxY )
+		{
+			maxY = minY;
+		}
 		
 		// OX axis
 		if ( pos.m_x < minX ) 

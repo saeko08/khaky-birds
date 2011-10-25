@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='4.8' height='9.6'>
-	<Entity type="Ground" />
+
+	<Entity type="Ground" texturePath="textures/ground.xml">
+		<localBounds minX='-2.4' minY='-4.8' minZ='-0.5' maxX='2.4' maxY='4.8' maxZ='0.5' />
+		<position x='2.4' y='4.8' z='100' />
+	</Entity>
 	
 	<Entity type="ElectricCables" textureWidth="275">
 		<Cable pos='46'/>

@@ -21,6 +21,8 @@ import com.hypefoundry.khakyBirds.entities.crap.DemolisheCrapVisual;
 import com.hypefoundry.khakyBirds.entities.crap.GranadeCrap;
 import com.hypefoundry.khakyBirds.entities.crap.GranadeCrapAI;
 import com.hypefoundry.khakyBirds.entities.crap.GranadeCrapVisual;
+import com.hypefoundry.khakyBirds.entities.decoration.AnimatedDecoration;
+import com.hypefoundry.khakyBirds.entities.decoration.AnimatedDecorationVisual;
 import com.hypefoundry.khakyBirds.entities.falcon.Falcon;
 import com.hypefoundry.khakyBirds.entities.falcon.FalconAI;
 import com.hypefoundry.khakyBirds.entities.falcon.FalconVisual;
@@ -109,7 +111,8 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Hideout.class, new EntityFactory() { @Override public Entity create() { return new Hideout(); } } );
 		m_world.registerEntity( PerkPedestrian.class, new EntityFactory() { @Override public Entity create() { return new PerkPedestrian(); } } );
 		m_world.registerEntity( GameCamera.class, new EntityFactory() { @Override public Entity create() { return new GameCamera(); } } );
-		
+		m_world.registerEntity( AnimatedDecoration.class, new EntityFactory() { @Override public Entity create() { return new AnimatedDecoration(); } } );
+
 		// register animation events
 		Animation.registerAnimEvent( Fire.class, new AnimEventFactory() { @Override public EntityEvent create() { return new Fire(); } } );
 		
@@ -147,6 +150,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Zombie.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ZombieVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Hideout.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new HideoutVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( PerkPedestrian.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new PerkPedestrianVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( AnimatedDecoration.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new AnimatedDecorationVisual( m_resourceManager, parentEntity ); } } );
 
 		// register controllers
 		m_world.attachView( m_controllersView );

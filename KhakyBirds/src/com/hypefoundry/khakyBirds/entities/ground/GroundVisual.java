@@ -33,7 +33,9 @@ public class GroundVisual extends EntityVisual
 	{
 		super( entity );
 		
-		m_pixmap = resMgr.getResource( TextureRegion.class, "textures/ground.xml" );
+		Ground ground = (Ground)entity;
+		
+		m_pixmap = resMgr.getResource( TextureRegion.class, ground.m_texturePath );
 	}
 
 	@Override

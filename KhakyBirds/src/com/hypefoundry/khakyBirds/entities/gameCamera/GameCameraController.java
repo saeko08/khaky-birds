@@ -4,7 +4,6 @@
 package com.hypefoundry.khakyBirds.entities.gameCamera;
 
 import com.hypefoundry.khakyBirds.entities.bird.Bird;
-import com.hypefoundry.khakyBirds.entities.zombie.Zombie;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.math.Vector3;

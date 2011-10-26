@@ -24,7 +24,9 @@ public class ControllerTest extends AndroidTestCase
 
 		@Override
 		public void removeUpdatable(Updatable updatable) {}
-		
+
+		@Override
+		public void pause(boolean enable) {}
 	}
 	
 	class Chair extends Entity
@@ -38,12 +40,9 @@ public class ControllerTest extends AndroidTestCase
 	String m_report = "";
 	public class ReportingControllerMock extends EntityController
 	{
-		private String 	m_id;
 		public ReportingControllerMock( String id, Entity parentEntity )
 		{
-			super( parentEntity );
-			m_id = id;
-			
+			super( parentEntity );			
 			m_report += id;
 			m_report += ";";
 		}

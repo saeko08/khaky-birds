@@ -6,6 +6,8 @@ import java.io.InputStream;
 
 import android.util.Log;
 
+import com.hypefoundry.khakyBirds.campaign.Level01;
+import com.hypefoundry.khakyBirds.campaign.Level01Controller;
 import com.hypefoundry.khakyBirds.entities.bird.Bird;
 import com.hypefoundry.khakyBirds.entities.bird.BirdController;
 import com.hypefoundry.khakyBirds.entities.bird.BirdVisual;
@@ -55,12 +57,15 @@ import com.hypefoundry.khakyBirds.entities.zombie.ZombieVisual;
 import com.hypefoundry.engine.controllers.ControllersView;
 import com.hypefoundry.engine.controllers.EntityController;
 import com.hypefoundry.engine.controllers.EntityControllerFactory;
+import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.util.FPSCounter;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
+import com.hypefoundry.engine.hud.Hud;
+import com.hypefoundry.engine.hud.HudRenderer;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.serialization.EntityFactory;
 import com.hypefoundry.engine.physics.PhysicalBody;
@@ -75,10 +80,11 @@ import com.hypefoundry.engine.renderer2D.animation.Animation;
 
 public class GameScreen extends Screen 
 {
-	World										m_world;
+	public World								m_world;
 	Renderer2D									m_worldRenderer;
 	ControllersView								m_controllersView;
 	PhysicsView									m_physicsView;
+	public HudRenderer							m_hudRenderer;
 	
 	FPSCounter									m_fpsCounter = new FPSCounter();
 	
@@ -91,6 +97,8 @@ public class GameScreen extends Screen
 	public GameScreen( Game game, int levelIdx ) 
 	{
 		super( game );
+		
+		final GameScreen gameScreen = this;
 		
 		// create the game world
 		m_world = new World();
@@ -112,7 +120,10 @@ public class GameScreen extends Screen
 		m_world.registerEntity( PerkPedestrian.class, new EntityFactory() { @Override public Entity create() { return new PerkPedestrian(); } } );
 		m_world.registerEntity( GameCamera.class, new EntityFactory() { @Override public Entity create() { return new GameCamera(); } } );
 		m_world.registerEntity( AnimatedDecoration.class, new EntityFactory() { @Override public Entity create() { return new AnimatedDecoration(); } } );
-
+		
+		// register campaign levels
+		m_world.registerEntity( Level01.class, new EntityFactory() { @Override public Entity create() { return new Level01(); } } );
+		
 		// register animation events
 		Animation.registerAnimEvent( Fire.class, new AnimEventFactory() { @Override public EntityEvent create() { return new Fire(); } } );
 		
@@ -168,6 +179,8 @@ public class GameScreen extends Screen
 		m_controllersView.register( PerkPedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PerkPedestrianAI( m_world, parentEntity ); } } );
 		m_controllersView.register( GameCamera.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new GameCameraController( m_world, parentEntity, m_worldRenderer.getCamera() ); } } );
 		
+		m_controllersView.register( Level01.class, new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new Level01Controller( gameScreen, parentEntity ); } } );
+		
 		// register physics
 		m_world.attachView( m_physicsView );
 		m_physicsView.register( Bird.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
@@ -189,6 +202,21 @@ public class GameScreen extends Screen
 		
 		// add the game camera to the world
 		m_world.addEntity( new GameCamera() );
+		
+		// initialize the HUD renderer
+		Hud hud = m_resourceManager.getResource( Hud.class, "hud/hudDefinition.xml" );
+		m_hudRenderer = new HudRenderer( game, hud );
+		
+	}
+	
+	/**
+	 * Returns the active resource manager instance.
+	 *  
+	 * @return
+	 */
+	public ResourceManager getResourceManager()
+	{
+		return m_resourceManager;
 	}
 	
 	/**
@@ -223,11 +251,19 @@ public class GameScreen extends Screen
 		return levelPath.toString();
 	}
 
+	// ------------------------------------------------------------------------
+	// Screen implementation
+	// ------------------------------------------------------------------------
 	@Override
 	public void present( float deltaTime ) 
 	{			
-		// draw the world contents
-		m_worldRenderer.draw( deltaTime );
+		// draw the world contents ( but don't update the animations etc.
+		// if the game is paused - wa want to have a still-frame effect )
+		m_worldRenderer.draw( m_running ? deltaTime : 0 );
+		
+		// draw the hud
+		m_hudRenderer.draw( deltaTime );
+		
 		// m_fpsCounter.logFrame();
 	}
 
@@ -246,6 +282,17 @@ public class GameScreen extends Screen
 	@Override
 	public void dispose() 
 	{
+	}
+
+	// ------------------------------------------------------------------------
+	// Game flow control
+	// ------------------------------------------------------------------------
+	/**
+	 * Makes the game exit to main menu.
+	 */
+	public void exitToMenu() 
+	{
+		m_game.setScreen( new MenuScreen( m_game ) );
 	}
 
 }

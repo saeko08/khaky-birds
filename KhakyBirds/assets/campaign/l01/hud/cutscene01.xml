@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout>
+	<Widget type="FrameWidget" visualClass="MyFrame" width='0.7' height='0.7'>
+		<pos x='0.15' y='0.15' z='0' />
+		
+		<Widget type="AnimationWidget" visualClass="MyAnimation" id="CutsceneAnimation" width='0.9' height='0.5' path="campaign/l01/animations/cutscene01.xml" >
+			<pos x='0.05' y='0.02' z='0' />
+		</Widget>
+		
+		<Widget type="AnimationWidget" visualClass="MyAnimation" id="TextAnimation" width='0.9' height='0.1' path="campaign/l01/animations/cutscene01Text.xml" >
+			<pos x='0.05' y='0.55' z='0' />
+		</Widget>
+		
+		<Widget type="ButtonWidget" visualClass="MyButton" id="Continue" width='0.8' height='0.1' caption="Play" >
+			<pos x='0.1' y='0.85' z='0' />
+		</Widget>
+		
+	</Widget>
+</Layout>

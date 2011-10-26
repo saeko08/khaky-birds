@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Animation frameDuration='0.5' atlasName='atlas.png' alphaOp='test' >
-	<TextureRegion x='955' y='180' w='36' h='31' />
+	<Frame type="StaticRegion" x='955' y='180' w='36' h='31' />
 </Animation>

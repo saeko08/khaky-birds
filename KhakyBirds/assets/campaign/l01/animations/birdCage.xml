@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Animation frameDuration='0.1' atlasName='campaign/l01/backgroundAtlas.png' alphaOp='none' >
-	<TextureRegion x='481' y='0' w='68' h='49' />
-	<TextureRegion x='550' y='0' w='68' h='49' />
-	<TextureRegion x='550' y='0' w='68' h='49' />
-	<TextureRegion x='619' y='0' w='68' h='49' />
-	<TextureRegion x='619' y='0' w='68' h='49' />
-	<TextureRegion x='619' y='0' w='68' h='49' />
-	<TextureRegion x='550' y='0' w='68' h='49' />
-	<TextureRegion x='550' y='0' w='68' h='49' />
-	<TextureRegion x='481' y='0' w='68' h='49' />
-	<TextureRegion x='688' y='0' w='68' h='49' />
-	<TextureRegion x='688' y='0' w='68' h='49' />
-	<TextureRegion x='757' y='0' w='68' h='49' />
-	<TextureRegion x='757' y='0' w='68' h='49' />
-	<TextureRegion x='757' y='0' w='68' h='49' />
-	<TextureRegion x='688' y='0' w='68' h='49' />
-	<TextureRegion x='688' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='481' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='550' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='550' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='619' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='619' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='619' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='550' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='550' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='481' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='688' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='688' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='757' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='757' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='757' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='688' y='0' w='68' h='49' />
+	<Frame type="StaticRegion" x='688' y='0' w='68' h='49' />
 </Animation>

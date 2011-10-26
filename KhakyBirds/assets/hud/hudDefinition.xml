@@ -50,7 +50,7 @@
 		</Pressed>
 	</Template>
 	
-	<Template type="CustomButtonVisualTemplate" class="PrettyButton" fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
+	<Template type="CustomButtonVisualTemplate" class="PrettyButton" fontPath="font.xml" borderSize='5' alphaOp='none' atlasName='hud/hudAtlas.png' >
 		<Released x='30' y='0' w='218' h='50'/>
 		<Highlighed x='30' y='50' w='218' h='50'/>
 		<Pressed x='30' y='100' w='218' h='50'/>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='campaign/l01/animations/cutscene01Atlas.png' alphaOp='none' looped='false' >
+	<Frame type="LinearInterpolation" duration='14' >
+		<From x='106' y='110' w='189' h='147' />
+		<To x='0' y='0' w='500' h='343' />
+	</Frame>
+	
+	<Frame type="LinearInterpolation" duration='10' >
+		<From x='502' y='69' w='286' h='251' />
+		<To x='521' y='2' w='454' h='328' />
+	</Frame>
+	
+	<Frame type="LinearInterpolation" duration='4' >
+		<From x='77' y='405' w='311' h='217' />
+		<To x='3' y='346' w='468' h='314' />
+	</Frame>
+	
+	<Frame type="LinearInterpolation" duration='10' >
+		<From x='515' y='345' w='503' h='324' />
+		<To x='705' y='396' w='170' h='149' />
+	</Frame>
+	
+	<Frame type="LinearInterpolation" duration='1' >
+		<From x='26' y='767' w='185' h='163' />
+		<To x='12' y='667' w='185' h='163' />
+	</Frame>
+	<Frame type="LinearInterpolation" duration='1' >
+		<From x='12' y='667' w='185' h='163' />
+		<To x='17' y='857' w='185' h='163' />
+	</Frame>
+	<Frame type="LinearInterpolation" duration='1.5' >
+		<From x='17' y='857' w='185' h='163' />
+		<To x='224' y='928' w='109' h='96' />
+	</Frame>
+	<Frame type="LinearInterpolation" duration='1' >
+		<From x='224' y='928' w='109' h='96' />
+		<To x='108' y='687' w='349' h='307' />
+	</Frame>
+	
+</Animation>

@@ -51,7 +51,9 @@ public class MenuScreen extends Screen implements ButtonListener
 		}
 	}
 
-
+	// ------------------------------------------------------------------------
+	// Screen implementation
+	// ------------------------------------------------------------------------
 	@Override
 	public void present( float deltaTime ) 
 	{			
@@ -76,7 +78,9 @@ public class MenuScreen extends Screen implements ButtonListener
 	{
 	}
 
-
+	// ------------------------------------------------------------------------
+	// ButtonListener implementation
+	// ------------------------------------------------------------------------
 	@Override
 	public void onButtonPressed( String id ) 
 	{

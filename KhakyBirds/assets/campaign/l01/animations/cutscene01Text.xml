@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='campaign/l01/animations/cutscene01Atlas.png' alphaOp='none' looped='false' >
+
+	<Frame type="LinearInterpolation" duration='14' >
+		<From x='528' y='700' w='471' h='34' />
+		<To x='528' y='765' w='471' h='34' />
+	</Frame>
+	
+	<Frame type="LinearInterpolation" duration='10' >
+		<From x='528' y='797' w='471' h='34' />
+		<To x='528' y='797' w='471' h='34' />
+	</Frame>
+	
+	<Frame type="LinearInterpolation" duration='4' >
+		<From x='528' y='832' w='471' h='34' />
+		<To x='528' y='832' w='471' h='34' />
+	</Frame>
+	
+	<Frame type="LinearInterpolation" duration='10' >
+		<From x='528' y='865' w='471' h='34' />
+		<To x='528' y='865' w='471' h='34' />
+	</Frame>
+	
+	<Frame type="LinearInterpolation" duration='5' >
+		<From x='528' y='899' w='471' h='34' />
+		<To x='528' y='899' w='471' h='34' />
+	</Frame>
+	
+</Animation>

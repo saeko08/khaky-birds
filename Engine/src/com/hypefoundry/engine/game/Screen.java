@@ -23,6 +23,8 @@ public abstract class Screen implements UpdatesManager
 	private List<Updatable>				m_updatablesToAdd;
 	private List<Updatable>				m_updatablesToRemove;
 	
+	protected boolean					m_running;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -37,6 +39,8 @@ public abstract class Screen implements UpdatesManager
 		m_updatables = new ArrayList<Updatable>();
 		m_updatablesToAdd = new ArrayList<Updatable>();
 		m_updatablesToRemove = new ArrayList<Updatable>();
+		
+		m_running = true;
 	}
 	
 	/**
@@ -69,11 +73,14 @@ public abstract class Screen implements UpdatesManager
 		}
 		m_updatablesToAdd.clear();
 		
-		// update updatables	
-		count = m_updatables.size();
-		for ( int i = 0; i < count; ++i )
+		// update updatables
+		if ( m_running )
 		{
-			m_updatables.get(i).update( deltaTime );
+			count = m_updatables.size();
+			for ( int i = 0; i < count; ++i )
+			{
+				m_updatables.get(i).update( deltaTime );
+			}
 		}
 	}
 	
@@ -82,7 +89,7 @@ public abstract class Screen implements UpdatesManager
 	 * 
 	 * @param deltaTime
 	 */
-	public abstract void present(float deltaTime);
+	public abstract void present( float deltaTime );
 	
 	/**
 	 * Called when the screen's functionality should be paused.
@@ -101,6 +108,10 @@ public abstract class Screen implements UpdatesManager
 	 */
 	public abstract void dispose();
 	
+	
+	// ------------------------------------------------------------------------
+	// UpdatesManager implementation
+	// ------------------------------------------------------------------------
 	@Override
 	public void addUpdatable( Updatable updatable )
 	{
@@ -119,5 +130,11 @@ public abstract class Screen implements UpdatesManager
 			m_updatablesToAdd.remove( updatable );
 			m_updatablesToRemove.add( updatable );
 		}
+	}
+	
+	@Override
+	public void pause( boolean enable )
+	{
+		m_running = !enable;
 	}
 }

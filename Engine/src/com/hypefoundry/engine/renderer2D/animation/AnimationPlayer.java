@@ -114,7 +114,7 @@ public class AnimationPlayer
 		boolean loopSkipped = ( frameIdx < m_lastEventFrameIdx ) || ( m_animationTime - prevAnimTime >= animation.getDuration() );
 		if ( loopSkipped )
 		{
-			for ( int i = m_lastEventFrameIdx + 1; i < animation.m_regions.length; ++i )
+			for ( int i = m_lastEventFrameIdx + 1; i < animation.m_framesCount; ++i )
 			{
 				animation.transmitAnimEvents( entity, i );
 			}

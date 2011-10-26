@@ -221,6 +221,22 @@ public final class Vector3
 	}
 	
 	/**
+	 * Scales the vector non-uniformally.
+	 * 
+	 * @param sx
+	 * @param sy
+	 * @param sz
+	 * @return  this vector
+	 */
+	public Vector3 scale( float sx, float sy, float sz )
+	{
+		m_x *= sx;
+		m_y *= sy;
+		m_z *= sz;
+		return this;
+	}
+	
+	/**
 	 * Copies the specified vector and scales it uniformally in three directions.
 	 * 
 	 * @param rhs

@@ -40,8 +40,35 @@ public class ResourceManager
 	 * @param assetPath
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public < T extends Resource > T getResource( Class< T > type, String assetPath )
+	{
+		return getResource( type, assetPath, true );
+	}
+	
+	/**
+	 * Instantiates a resource of the specified type without storing it for future use.
+	 * However, if such a resource already exists and the manager is keeping track of it,
+	 * that copy will be returned.
+	 * 
+	 * @param type
+	 * @param assetPath
+	 * @return
+	 */
+	public < T extends Resource > T instantiateResource( Class< T > type, String assetPath )
+	{
+		return getResource( type, assetPath, false );
+	}
+	
+	/**
+	 * Returns a resource of the specified type.
+	 * 
+	 * @param type
+	 * @param assetPath
+	 * @param manageNewResource		should the manage keep track of the resource?
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private < T extends Resource > T getResource( Class< T > type, String assetPath, boolean manageNewResource )
 	{
 		// try finding an existing resource that matches the name and the type
 		int count = m_resources.size();

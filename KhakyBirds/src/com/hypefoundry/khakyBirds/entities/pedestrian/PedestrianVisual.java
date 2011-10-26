@@ -23,10 +23,6 @@ public class PedestrianVisual extends EntityVisual
 {
 	private Pedestrian			m_pedestrian;
 	private AnimationPlayer		m_animationPlayer;
-
-	private int 				ANIM_WALK;
-	private int 				ANIM_WIPE_SHIT_OFF;
-	private int 				ANIM_OBSERVE;
 	
 	/**
 	 * Constructor.
@@ -40,17 +36,15 @@ public class PedestrianVisual extends EntityVisual
 		
 		m_pedestrian = (Pedestrian)entity;
 		
-		// load animations
-		Animation regularAnimation = resMgr.getResource( Animation.class, "animations/pedestrian/walking.xml");
-		Animation wipeShitOffAnimation = resMgr.getResource( Animation.class, "animations/pedestrian/wipeShitOff.xml");
-		Animation observing = resMgr.getResource( Animation.class, "animations/pedestrian/observing.xml");
-		
-		
 		// create an animation player
 		m_animationPlayer = new AnimationPlayer();
-		ANIM_WALK = m_animationPlayer.addAnimation( regularAnimation );
-		ANIM_WIPE_SHIT_OFF = m_animationPlayer.addAnimation( wipeShitOffAnimation );
-		ANIM_OBSERVE = m_animationPlayer.addAnimation( observing );
+		Pedestrian.Animation[] nodes = Pedestrian.Animation.values();
+		for( int i = 0; i < nodes.length; ++i )
+		{
+			String path = m_pedestrian.m_animPaths[i];
+			Animation anim = resMgr.getResource( Animation.class, path );
+			m_animationPlayer.addAnimation( anim );
+		}
 	}
 
 	@Override
@@ -62,17 +56,18 @@ public class PedestrianVisual extends EntityVisual
 		// select an animation appropriate to the state the pedestrian's in
 		if ( m_pedestrian.m_hitWithShit == true  ||  m_pedestrian.m_state == Pedestrian.State.Shitted)
 		{
-			m_animationPlayer.select( ANIM_WIPE_SHIT_OFF );
+			m_animationPlayer.select( Pedestrian.Animation.ANIM_WIPE_SHIT_OFF.m_id );
 			
 		}
 		else if (m_pedestrian.m_state == Pedestrian.State.Observe ||  m_pedestrian.m_state == Pedestrian.State.Eaten)
 		{
-			m_animationPlayer.select( ANIM_OBSERVE );
+			m_animationPlayer.select( Pedestrian.Animation.ANIM_OBSERVE.m_id );
 		}
 		else
 		{
-			m_animationPlayer.select( ANIM_WALK );
+			m_animationPlayer.select( Pedestrian.Animation.ANIM_WALK.m_id );
 		}
+	
 		
 		// draw the pedestrian
 		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pedestrian.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );	

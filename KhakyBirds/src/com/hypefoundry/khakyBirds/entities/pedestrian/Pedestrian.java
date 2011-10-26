@@ -1,7 +1,6 @@
 package com.hypefoundry.khakyBirds.entities.pedestrian;
 
 import com.hypefoundry.khakyBirds.entities.crap.Crappable;
-import com.hypefoundry.khakyBirds.entities.hunter.Shootable;
 import com.hypefoundry.khakyBirds.entities.zombie.Biteable;
 import com.hypefoundry.khakyBirds.entities.zombie.Zombie;
 import com.hypefoundry.engine.util.serialization.DataLoader;
@@ -24,6 +23,28 @@ import com.hypefoundry.engine.physics.DynamicObject;
  */
 public class Pedestrian extends Entity implements Crappable, Biteable
 {
+	// visual data
+	enum Animation
+	{
+		ANIM_WALK( 0, "WalkAnim" ),
+		ANIM_WIPE_SHIT_OFF( 1, "WipeShitOffAnim" ),
+		ANIM_OBSERVE( 2, "ObservingAnim" );
+		
+		int				m_id;
+		String			m_xmlId;
+		Animation( int id, String xmlId )
+		{
+			m_id = id;
+			m_xmlId = xmlId;
+		}
+	}
+	String[]			m_animPaths = {
+			"animations/pedestrian/walking.xml",
+			"animations/pedestrian/wipeShitOff.xml",
+			"animations/pedestrian/observing.xml",
+	};
+	
+	// entity data
 	boolean				m_hitWithShit;
 	public World 		m_world    				     = null;
 	boolean 			m_wasBeaten 				 = false;
@@ -37,7 +58,7 @@ public class Pedestrian extends Entity implements Crappable, Biteable
 		Eaten,
 		Avoid,
 		Hiding,
-		Shitted
+		Shitted,
 	}
 	
 	State		m_state;
@@ -120,10 +141,29 @@ public class Pedestrian extends Entity implements Crappable, Biteable
 		m_world = hostWorld;
 	}
 
+	// ------------------------------------------------------------------------
+	// Serialization support
+	// ------------------------------------------------------------------------
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{
 		m_hitWithShit = ( loader.getIntValue( "hitWithShit" ) == 1 );
+		
+		// deserialize visual aspect of the entity
+		
+		DataLoader visualNode = loader.getChild( "Visual" );
+		if ( visualNode != null )
+		{			
+			Animation[] nodes = Animation.values();
+			for( int i = 0; i < nodes.length; ++i )
+			{
+				DataLoader animNode = visualNode.getChild( nodes[i].m_xmlId );
+				if ( animNode != null )
+				{
+					m_animPaths[i] = animNode.getStringValue( "path" );
+				}
+			}
+		}
 	}
 	
 	@Override

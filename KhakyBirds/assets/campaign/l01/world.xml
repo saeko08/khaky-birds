@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='3.4' height='7.3'>
-
 	<Entity type="Level01" gameplayTime='60' />
 
 	<Entity type="Ground" texturePath="campaign/l01/textures/ground.xml">
@@ -17,6 +16,12 @@
 		
 	<Entity type="Pedestrian">
 		<position x='1.7' y='6.5' z='80' />
+		
+		<Visual>
+			<WalkAnim path="animations/pedestrian/walking.xml" />
+			<WipeShitOffAnim path="animations/pedestrian/wipeShitOff.xml"/>
+			<ObservingAnim path="animations/pedestrian/observing.xml"/>
+		</Visual>
 	</Entity>
 	
 </World>

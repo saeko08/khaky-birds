@@ -16,12 +16,14 @@ import com.hypefoundry.engine.renderer2D.SpriteBatcher;
  */
 public abstract class HudWidgetVisual 
 {
-	private Vector3			m_drawingOffset		= new Vector3();
-	private HudWidget		m_widget;
+	private HudWidgetVisual		m_parentVisual;
+	HudWidget					m_widget;
 	
-	protected float			m_width, m_height;
-	protected Vector3		m_globalPos			= new Vector3();
-	protected BoundingBox	m_bb				= new BoundingBox();
+	private Vector3				m_drawingOffset		= new Vector3();
+	protected float				m_width				= 1;
+	protected float				m_height			= 1;
+	protected Vector3			m_globalPos			= new Vector3();
+	protected BoundingBox		m_bb				= new BoundingBox();
 	
 	
 	/**
@@ -34,27 +36,46 @@ public abstract class HudWidgetVisual
 	/**
 	 * Constructor.
 	 * 
+	 * @param parentVisual
 	 * @param widget
 	 */
 	protected HudWidgetVisual( HudWidget widget )
 	{
+		m_parentVisual = null;
 		m_widget = widget;
 		
 		// calculate the global position
+		m_globalPos.set( m_drawingOffset ).add( m_widget.m_position );
+		m_width = m_widget.m_width;
+		m_height = m_widget.m_height;
+		
+		recalculateBounds();
+	}
+	
+	/**
+	 * Sets the parent visual.
+	 * 
+	 * @param parentVisual
+	 */
+	public void setParent( HudWidgetVisual parentVisual )
+	{
+		m_parentVisual = parentVisual;
+		
+		// calculate the global position
 		m_globalPos.set( m_drawingOffset );
-		
-		HudWidget parent = m_widget;
-		while( parent != null )
+		if ( m_widget != null )
 		{
-			m_globalPos.add( parent.m_position );
-			parent = parent.m_parent;
+			m_globalPos.add( m_widget.m_position );
+			m_width = m_widget.m_width;
+			m_height = m_widget.m_height;
 		}
-		
-		m_width = widget.m_width;
-		m_height = widget.m_height;
-		
-		// calculate the bounding box
-		m_bb.set( m_globalPos.m_x, m_globalPos.m_y, -1, m_globalPos.m_x + m_width, m_globalPos.m_y + m_height, 1 );
+		else
+		{
+			m_width = 1;
+			m_height = 1;
+		}
+				
+		recalculateBounds();
 	}
 	
 	/**
@@ -65,12 +86,22 @@ public abstract class HudWidgetVisual
 	 */
 	public HudWidgetVisual setOffset( float x, float y )
 	{
-		m_globalPos.sub( m_drawingOffset );
 		m_drawingOffset.set( x, y, 0 );
-		m_globalPos.add( m_drawingOffset );
 		
-		// calculate the bounding box
-		m_bb.set( m_globalPos.m_x, m_globalPos.m_y, -1, m_globalPos.m_x + m_width, m_globalPos.m_y + m_height, 1 );
+		m_globalPos.set( m_drawingOffset );
+		if ( m_widget != null )
+		{
+			m_globalPos.add( m_widget.m_position );
+			m_width = m_widget.m_width;
+			m_height = m_widget.m_height;
+		}
+		else
+		{
+			m_width = 1;
+			m_height = 1;
+		}
+		
+		recalculateBounds();
 		
 		return this;
 	}
@@ -83,13 +114,32 @@ public abstract class HudWidgetVisual
 	 */
 	public HudWidgetVisual resize( float width, float height )
 	{
+		// recalculate the global position and size
+		m_globalPos.set( m_drawingOffset );
+		if ( m_widget != null )
+		{
+			m_globalPos.add( m_widget.m_position );
+		}
 		m_width = width;
 		m_height = height;
 		
-		// calculate the bounding box
-		m_bb.set( m_globalPos.m_x, m_globalPos.m_y, -1, m_globalPos.m_x + m_width, m_globalPos.m_y + m_height, 1 );
+		recalculateBounds();
 				
 		return this;
+	}
+	
+	private void recalculateBounds()
+	{
+		if ( m_parentVisual != null )
+		{
+			m_width *= m_parentVisual.m_width;
+			m_height *= m_parentVisual.m_height;
+					
+			m_globalPos.scale( m_parentVisual.m_width, m_parentVisual.m_height, 0 ).add( m_parentVisual.m_globalPos );
+		}
+		
+		// calculate the bounding box
+		m_bb.set( m_globalPos.m_x, m_globalPos.m_y, -1, m_globalPos.m_x + m_width, m_globalPos.m_y + m_height, 1 );
 	}
 	
 	/**

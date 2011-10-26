@@ -163,6 +163,19 @@ public class XMLDataLoader implements DataLoader
 		}
 		return val;
 	}
+	
+	@Override
+	public float getFloatValue( String id, float defaultValue )
+	{
+		if ( m_xmlElement.hasAttribute( id ) )
+		{
+			return getFloatValue( id );
+		}
+		else
+		{
+			return defaultValue;
+		}
+	}
 
 	@Override
 	public int getChildrenCount( String id ) 

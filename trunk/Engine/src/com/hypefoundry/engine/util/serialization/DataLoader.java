@@ -53,6 +53,14 @@ public interface DataLoader
 	float getFloatValue( String id );
 	
 	/**
+	 * Reads a float value and returns a default value if the attribute is not found.
+	 * 
+	 * @param id				element id
+	 * @return
+	 */
+	float getFloatValue( String id, float defaultValue );
+	
+	/**
 	 * Returns the number of children with the specified id.
 	 * 
 	 * @param id

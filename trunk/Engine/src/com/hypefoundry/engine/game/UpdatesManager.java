@@ -25,4 +25,11 @@ public interface UpdatesManager
 	 * @param updatable
 	 */
 	void removeUpdatable( Updatable updatable );
+	
+	/**
+	 * Pauses/unpauses the manager.
+	 * 
+	 * @param enable
+	 */
+	void pause( boolean enable );
 }

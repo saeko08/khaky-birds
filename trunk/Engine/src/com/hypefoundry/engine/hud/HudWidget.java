@@ -18,9 +18,9 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
  */
 public abstract class HudWidget
 {
-	public Vector3			m_position = new Vector3();
-	public float			m_width;
-	public float			m_height;
+	public Vector3			m_position 		= new Vector3();
+	public float			m_width			= 1;
+	public float			m_height		= 1;
 	public String			m_visualName;
 	public String			m_id;
 	
@@ -48,8 +48,8 @@ public abstract class HudWidget
 	public final void load( ResourceManager resMgr, DataLoader loader )
 	{
 		m_position.load( "pos", loader );
-		m_width = loader.getFloatValue( "width" );
-		m_height = loader.getFloatValue( "height" );
+		m_width = loader.getFloatValue( "width", 1 );
+		m_height = loader.getFloatValue( "height", 1 );
 		m_visualName = loader.getStringValue( "visualClass" );
 		m_id = loader.getStringValue( "id" );
 		onLoad( resMgr, loader );

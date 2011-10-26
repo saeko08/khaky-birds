@@ -64,12 +64,40 @@ public class HudRenderer
 				HudWidgetVisual visual = m_hud.createVisual( this, widget );
 				if ( visual != null )
 				{
+					// find the parent for the visual
+					if ( widget.m_parent != null )
+					{
+						HudWidgetVisual parentVisual = findVisualFor( widget.m_parent );
+						visual.setParent( parentVisual );
+					}
+					
 					m_visuals.add( visual );
 				}
 			}
 		}
 	}
 	
+	/**
+	 * Finds a visual that corresponds to the specified widget.
+	 * 
+	 * @param widget
+	 * @return
+	 */
+	private HudWidgetVisual findVisualFor( HudWidget widget ) 
+	{
+		int count = m_visuals.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			HudWidgetVisual visual = m_visuals.get(i);
+			if ( visual.m_widget == widget )
+			{
+				return visual;
+			}
+		}
+		
+		return null;
+	}
+
 	/**
 	 * Called when the layout is released.
 	 */

@@ -111,6 +111,12 @@ The definition is an extended version of the `DefaultFrameVisualTemplate`, and i
 </Template>
 }}}
 
+  * `AnimatedButtonVisualTemplate` - customized version of the `DefaultButtonVisualTemplate`, one that uses an animation to display the button.
+
+{{{
+<Template type="AnimatedButtonVisualTemplate" class="MyAnimatedButton" path="hud/hudAtlas.xml" />
+}}}
+
   * `CounterVisualTemplate` - a visual of a counter widget - a widget composed of a frame in which a number is displayed, and two control buttons for incrementing and decrementing the value display by the frame's side.
 
 {{{

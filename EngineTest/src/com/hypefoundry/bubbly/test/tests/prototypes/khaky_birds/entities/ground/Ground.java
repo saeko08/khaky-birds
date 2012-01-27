@@ -20,7 +20,7 @@ public class Ground extends Entity
 		float halfWidth = 2.4f; 	// TODO: config
 		float halfHeight = 4.8f; 	// TODO: config
 		setPosition( halfWidth, halfHeight, 100 );
-		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, 0.0f, halfWidth, halfHeight, 0.0f ) );
+		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, halfWidth, halfHeight ) );
 	}
 	
 }

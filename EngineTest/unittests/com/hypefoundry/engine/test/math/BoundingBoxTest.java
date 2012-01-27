@@ -12,7 +12,7 @@ public class BoundingBoxTest extends AndroidTestCase
 {
 	public void testPointOverlap() 
 	{  
-	    BoundingBox bb = new BoundingBox( 0, 0, 0, 100, 100, 100 );
+	    BoundingBox bb = new BoundingBox( 0, 0, 100, 100 );
 	    
 	    assertEquals( true, bb.doesOverlap( 1, 1, 1 ) );
 	    assertEquals( true, bb.doesOverlap( 0, 0, 0 ) );
@@ -31,25 +31,25 @@ public class BoundingBoxTest extends AndroidTestCase
 	
 	public void testBoxOverlap() 
 	{  
-	    BoundingBox bb = new BoundingBox( 0, 0, 0, 100, 100, 100 );
+	    BoundingBox bb = new BoundingBox( 0, 0, 100, 100 );
 	    
-	    assertEquals( true, bb.doesOverlap( new BoundingBox( 50, 50, 50, 150, 150, 150 ), null ) );
-	    assertEquals( true, bb.doesOverlap( new BoundingBox( -50, -50, -50, 50, 50, 50 ), null ) );
-	    assertEquals( true, bb.doesOverlap( new BoundingBox( 0, -50, 0, 50, 50, 50 ), null ) );
-	    assertEquals( true, bb.doesOverlap( new BoundingBox( 0, 50, 0, 50, 150, 50 ), null ) );
-	    assertEquals( true, bb.doesOverlap( new BoundingBox( -50, 0, 0, 50, 50, 50 ), null ) );
-	    assertEquals( true, bb.doesOverlap( new BoundingBox( 50, 0, 0, 150, 50, 50 ), null ) );
+	    assertEquals( true, bb.doesOverlap( new BoundingBox( 50, 50, 150, 150 ), null ) );
+	    assertEquals( true, bb.doesOverlap( new BoundingBox( -50, -50, 50, 50 ), null ) );
+	    assertEquals( true, bb.doesOverlap( new BoundingBox( 0, -50, 50, 50 ), null ) );
+	    assertEquals( true, bb.doesOverlap( new BoundingBox( 0, 50, 50, 150 ), null ) );
+	    assertEquals( true, bb.doesOverlap( new BoundingBox( -50, 0, 50, 50 ), null ) );
+	    assertEquals( true, bb.doesOverlap( new BoundingBox( 50, 0, 150, 50), null ) );
 	    
-	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, -50, -50, -1, -1, -1 ), null ) );
-	    assertEquals( false, bb.doesOverlap( new BoundingBox( 101, 101, 101, 150, 150, 150 ), null ) );
-	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, 0, 0, -1, 100, 100 ), null ) );
-	    assertEquals( false, bb.doesOverlap( new BoundingBox( 0, -50, 0, 100, -1, 100 ), null ) );
+	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, -50, -1, -1 ), null ) );
+	    assertEquals( false, bb.doesOverlap( new BoundingBox( 101, 101, 150, 150 ), null ) );
+	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, 0, -1, 100 ), null ) );
+	    assertEquals( false, bb.doesOverlap( new BoundingBox( 0, -50, 100, -1 ), null ) );
 	}
 	
 	public void testBoxSphereOverlap() 
 	{  
-	    BoundingBox bb = new BoundingBox( 0, 0, 0, 100, 100, 100 );
-	    BoundingSphere bs = new BoundingSphere( 0, 0, 0, 50 );
+	    BoundingBox bb = new BoundingBox( 0, 0, 100, 100 );
+	    BoundingSphere bs = new BoundingSphere( 0, 0, 50 );
 	    
 	    assertEquals( true, bb.doesOverlap( bs, null ) );
 	    
@@ -62,24 +62,24 @@ public class BoundingBoxTest extends AndroidTestCase
 	    
 	    bs.m_center.set( 200, 0, 0 ); assertEquals( false, bb.doesOverlap( bs, null ) );
 	    bs.m_center.set( 0, 200, 0 ); assertEquals( false, bb.doesOverlap( bs, null ) );
-	    bs.m_center.set( 0, 0, 200 ); assertEquals( false, bb.doesOverlap( bs, null ) );
+	    bs.m_center.set( 0, 0, 200 ); assertEquals( true, bb.doesOverlap( bs, null ) );
 	    bs.m_center.set( -200, 0, 0 ); assertEquals( false, bb.doesOverlap( bs, null ) );
 	    bs.m_center.set( 0, -200, 0 ); assertEquals( false, bb.doesOverlap( bs, null ) );
-	    bs.m_center.set( 0, 0, -200 ); assertEquals( false, bb.doesOverlap( bs, null ) );
+	    bs.m_center.set( 0, 0, -200 ); assertEquals( true, bb.doesOverlap( bs, null ) );
 	    
-	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, -50, -50, -1, -1, -1 ), null ) );
-	    assertEquals( false, bb.doesOverlap( new BoundingBox( 101, 101, 101, 150, 150, 150 ), null ) );
-	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, 0, 0, -1, 100, 100 ), null ) );
-	    assertEquals( false, bb.doesOverlap( new BoundingBox( 0, -50, 0, 100, -1, 100 ), null ) );
+	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, -50, -1, -1 ), null ) );
+	    assertEquals( false, bb.doesOverlap( new BoundingBox( 101, 101, 150, 150 ), null ) );
+	    assertEquals( false, bb.doesOverlap( new BoundingBox( -50, 0, -1, 100 ), null ) );
+	    assertEquals( false, bb.doesOverlap( new BoundingBox( 0, -50, 100, -1 ), null ) );
 	}
 	
 	public void testSphereRayOverlap()
 	{
-		BoundingSphere bs = new BoundingSphere( 0, 0, 0, 10 );
+		BoundingSphere bs = new BoundingSphere( 0, 0, 10 );
 		
 		Vector3 intersectPos = new Vector3();
 		
-		Ray ray = new Ray( -11, 0, 0, 2, 0, 0 ); 
+		Ray ray = new Ray( -11, 0, 2, 0 ); 
 		assertTrue( bs.doesOverlap( ray, intersectPos ) );
 		assertTrue( intersectPos.dist( -10, 0, 0 ) < 1e-3 );
 		
@@ -111,9 +111,9 @@ public class BoundingBoxTest extends AndroidTestCase
 	
 	public void testBoxRayOverlap()
 	{
-		BoundingBox bb = new BoundingBox( 0, 0, 0, 10, 10, 10 );
+		BoundingBox bb = new BoundingBox( 0, 0, 10, 10 );
 		
-		Ray ray = new Ray( -1, 0, 0, 2, 0, 0 ); 
+		Ray ray = new Ray( -1, 0, 2, 0 ); 
 		assertTrue( bb.doesOverlap( ray, null ) );
 		
 		ray.setDirection( 0.5f, 0, 0 ); 
@@ -130,8 +130,8 @@ public class BoundingBoxTest extends AndroidTestCase
 	
 	public void testRayOverlapRay()
 	{
-		Ray ray1 = new Ray( 0, 0, 0, 1, 0, 0 );
-		Ray ray2 = new Ray( 0, 0, 0, 1, 0, 0 );
+		Ray ray1 = new Ray( 0, 0, 1, 0 );
+		Ray ray2 = new Ray( 0, 0, 1, 0 );
 		Vector3 intersectPos = new Vector3();
 		
 		assertFalse( ray1.doesOverlap( ray2, intersectPos ) );
@@ -156,7 +156,7 @@ public class BoundingBoxTest extends AndroidTestCase
 	
 	public void testRayOverlapPoint()
 	{
-		Ray ray1 = new Ray( 0, 0, 0, 1, 0, 0 );
+		Ray ray1 = new Ray( 0, 0, 1, 0 );
 		
 		assertTrue( ray1.doesOverlap( new Vector3( 0, 0, 0 ), null ) );
 		assertTrue( ray1.doesOverlap( new Vector3( 0.5f, 0, 0 ), null ) );
@@ -167,18 +167,8 @@ public class BoundingBoxTest extends AndroidTestCase
 		assertFalse( ray1.doesOverlap( new Vector3( 0.5f, 1, 0 ), null ) );
 		assertFalse( ray1.doesOverlap( new Vector3( 0.5f, 1, 1 ), null ) );
 		
-		// 2d tests
 		ray1.m_origin.set( 10, 20, 30 );
 		ray1.setDirection( 1, 2, 3 );
-		assertFalse( ray1.doesOverlap( new Vector3( 0, 0, 0 ), null ) );
-		assertTrue( ray1.doesOverlap( new Vector3( 10, 20, 30 ), null ) );
-		assertTrue( ray1.doesOverlap( new Vector3( 10.5f, 21, 31.5f ), null ) );
-		assertTrue( ray1.doesOverlap( new Vector3( 11, 22, 33 ), null ) );
-		
-		// 3d tests
-		ray1.m_origin.set( 10, 20, 30 );
-		ray1.setDirection( 1, 2, 3 );
-		ray1.set3DTesting();
 		assertFalse( ray1.doesOverlap( new Vector3( 0, 0, 0 ), null ) );
 		assertTrue( ray1.doesOverlap( new Vector3( 10, 20, 30 ), null ) );
 		assertTrue( ray1.doesOverlap( new Vector3( 10.5f, 21, 31.5f ), null ) );

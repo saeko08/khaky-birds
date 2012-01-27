@@ -31,7 +31,7 @@ public class PhysicsTests extends AndroidTestCase
 			super();
 			
 			defineAspect( new DynamicObject( 1.0f, 180.0f ) );	
-			setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.2f, 0.2f, 0.2f, 0.2f ) );
+			setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );
 			m_collisions = 0;
 		}
 			
@@ -73,7 +73,7 @@ public class PhysicsTests extends AndroidTestCase
 		
 		public BouncyPhysicalBodyMock( Entity entity ) 
 		{
-			super( entity, new BoundingBox( 0.5f, 0.5f, 0.5f ), true );
+			super( entity, new BoundingBox( 0.5f, 0.5f ), true );
 			EntityMock mock = (EntityMock)entity;
 				
 			mock.attachEventListener( mock );

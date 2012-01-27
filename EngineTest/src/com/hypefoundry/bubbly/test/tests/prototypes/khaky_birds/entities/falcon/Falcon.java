@@ -34,7 +34,7 @@ public class Falcon extends Entity implements Shootable
 	
 	public Falcon()
 	{
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -1f, 0.2f, 0.2f, 1f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		
 				
 		m_state = State.Hunting; 

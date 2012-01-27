@@ -37,8 +37,8 @@ public class SpatialGrid2DUpdatePerformanceTests extends AndroidTestCase
 	{
 		final short MAX_ENTITIES_COUNT = 5;
 		SpatialGrid2D grid = new SpatialGrid2D( 1000, 1000, 5, MAX_ENTITIES_COUNT );
-		grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
-		grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) ) );
+		grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( 2, 2, 2 ) ) );
+		grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( 7, 7, 2 ) ) );
 	
 		long startTime = System.nanoTime();
 		for ( int i = 0; i < MAX_CLIENT_SYSTEMS; ++i )
@@ -57,7 +57,7 @@ public class SpatialGrid2DUpdatePerformanceTests extends AndroidTestCase
 				
 		for ( int i = 0; i < MAX_ENTITIES_COUNT; ++i )
 		{
-			grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( (float)( Math.random() * 8.0f + 1.0f ), (float)( Math.random() * 8.0f + 1.0f ), 0, 0.5f ) ) );
+			grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( (float)( Math.random() * 8.0f + 1.0f ), (float)( Math.random() * 8.0f + 1.0f ), 0.5f ) ) );
 		}
 		
 		long startTime = System.nanoTime();

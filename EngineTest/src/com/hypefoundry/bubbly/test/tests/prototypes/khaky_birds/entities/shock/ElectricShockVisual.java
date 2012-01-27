@@ -39,7 +39,7 @@ public class ElectricShockVisual extends EntityVisual
 		m_electricShock = (ElectricShock)entity;
 
 		m_fx = new LightningFX( m_electricShock.m_hostWire, 1.0f, 0.2f, 10, Color.RED );
-		m_electricShock.setBoundingBox( new BoundingBox( -0.1f, 0, -10, 0.1f, 1.0f, 10 ) );
+		m_electricShock.setBoundingBox( new BoundingBox( -0.1f, 0, 0.1f, 1.0f ) );
 	}
 
 	@Override

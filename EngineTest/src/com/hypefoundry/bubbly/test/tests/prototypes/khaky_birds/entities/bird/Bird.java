@@ -63,7 +63,7 @@ public class Bird extends Entity implements Shootable
 	public Bird()
 	{
 		setPosition( 0, 0, 0 );
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		m_state = State.Flying; 
 		m_crapType = CrapType.NormalCrap;
 					

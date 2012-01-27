@@ -47,7 +47,7 @@ public class Bullet extends Entity implements EntityEventListener
 		setPosition( x, y, 50 );
 		setFacing( facing );
 		
-		setBoundingBox( new BoundingBox( -0.05f, -0.05f, -100.0f, 0.05f, 0.05f, 100.0f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.05f, -0.05f, 0.05f, 0.05f ) );	// TODO: config
 		
 		final float maxRotationSpeed = 180.0f;
 		DynamicObject dynObj = new DynamicObject( maxLinearSpeed, maxRotationSpeed );

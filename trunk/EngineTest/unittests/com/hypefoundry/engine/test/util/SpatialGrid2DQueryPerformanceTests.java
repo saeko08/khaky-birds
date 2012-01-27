@@ -35,10 +35,10 @@ public class SpatialGrid2DQueryPerformanceTests extends AndroidTestCase
 	{
 		final short MAX_ENTITIES_COUNT = 5;
 		SpatialGrid2D grid = new SpatialGrid2D( 1000, 1000, 5, MAX_ENTITIES_COUNT );
-		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
-		grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) ) );
+		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 2 ) ) );
+		grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( 7, 7, 2 ) ) );
 		
-		GridObjectMock queryObj = new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) );
+		GridObjectMock queryObj = new GridObjectMock( new BoundingSphere( 7, 7, 2 ) );
 		grid.insertDynamicObject( queryObj);
 		grid.update();
 		
@@ -62,14 +62,14 @@ public class SpatialGrid2DQueryPerformanceTests extends AndroidTestCase
 		
 		for ( int i = 0; i < STATIC_ENTITIES_COUNT; ++i )
 		{
-			grid.insertStaticObject( new GridObjectMock( new BoundingSphere( (float)( Math.random() * 8.0f + 1.0f ), (float)( Math.random() * 8.0f + 1.0f ), 0, 0.5f ) ) );
+			grid.insertStaticObject( new GridObjectMock( new BoundingSphere( (float)( Math.random() * 8.0f + 1.0f ), (float)( Math.random() * 8.0f + 1.0f ), 0.5f ) ) );
 		}
 		for ( int i = 0; i < DYNAMIC_ENTITIES_COUNT; ++i )
 		{
-			grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( (float)( Math.random() * 8.0f + 1.0f ), (float)( Math.random() * 8.0f + 1.0f ), 0, 0.5f ) ) );
+			grid.insertDynamicObject( new GridObjectMock( new BoundingSphere( (float)( Math.random() * 8.0f + 1.0f ), (float)( Math.random() * 8.0f + 1.0f ), 0.5f ) ) );
 		}
 		
-		GridObjectMock queryObj = new GridObjectMock( new BoundingSphere( (float)( Math.random() * 8.0f + 1.0f ), (float)( Math.random() * 8.0f + 1.0f ), 0, 0.5f ) );
+		GridObjectMock queryObj = new GridObjectMock( new BoundingSphere( (float)( Math.random() * 8.0f + 1.0f ), (float)( Math.random() * 8.0f + 1.0f ), 0.5f ) );
 		grid.insertDynamicObject( queryObj);
 		grid.update();
 		

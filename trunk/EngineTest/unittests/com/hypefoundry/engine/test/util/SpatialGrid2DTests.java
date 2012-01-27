@@ -35,9 +35,9 @@ public class SpatialGrid2DTests extends AndroidTestCase
 	{	
 		final short MAX_ENTITIES_COUNT = 5;
 		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 5, MAX_ENTITIES_COUNT );
-		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
+		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 2 ) ) );
 		
-		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) );
+		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 2 ) );
 		grid.insertDynamicObject( movable );
 		
 		grid.update();
@@ -56,10 +56,10 @@ public class SpatialGrid2DTests extends AndroidTestCase
 	{	
 		final short MAX_ENTITIES_COUNT = 5;
 		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 5, MAX_ENTITIES_COUNT );
-		GridObjectMock movable1 = new GridObjectMock( new BoundingSphere( 2, 2, 0, 1.5f ) );
+		GridObjectMock movable1 = new GridObjectMock( new BoundingSphere( 2, 2, 1.5f ) );
 		grid.insertDynamicObject( movable1 );
 		
-		GridObjectMock movable2 = new GridObjectMock( new BoundingSphere( 7, 7, 0, 1.5f ) );
+		GridObjectMock movable2 = new GridObjectMock( new BoundingSphere( 7, 7, 1.5f ) );
 		grid.insertDynamicObject( movable2 );
 		
 		grid.update();
@@ -82,9 +82,9 @@ public class SpatialGrid2DTests extends AndroidTestCase
 	{
 		final short MAX_ENTITIES_COUNT = 5;
 		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 5, MAX_ENTITIES_COUNT );
-		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 0, 2 ) ) );
+		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 2, 2, 2 ) ) );
 		
-		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 0, 2 ) );
+		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 7, 7, 2 ) );
 		grid.insertDynamicObject( movable );
 		
 		grid.update();
@@ -103,9 +103,9 @@ public class SpatialGrid2DTests extends AndroidTestCase
 	{
 		final short MAX_ENTITIES_COUNT = 5;
 		SpatialGrid2D grid = new SpatialGrid2D( 10, 10, 2, MAX_ENTITIES_COUNT );
-		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 1, 1, 0, 2 ) ) );
+		grid.insertStaticObject( new GridObjectMock( new BoundingSphere( 1, 1, 2 ) ) );
 		
-		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 8, 8, 0, 2 ) );
+		GridObjectMock movable = new GridObjectMock( new BoundingSphere( 8, 8, 2 ) );
 		grid.insertDynamicObject( movable );
 		
 		grid.update();
@@ -114,7 +114,7 @@ public class SpatialGrid2DTests extends AndroidTestCase
 		assertEquals( 1, collidersCount );
 			
 		grid.update();
-		collidersCount = grid.getPotentialColliders( new BoundingBox( -100, -100, -100, 100, 100, 100 ), colliders );
+		collidersCount = grid.getPotentialColliders( new BoundingBox( -100, -100, 100, 100 ), colliders );
 		assertEquals( 2, collidersCount );
 	}
 }

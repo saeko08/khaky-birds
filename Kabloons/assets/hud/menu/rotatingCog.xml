@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.2' atlasName='hud/menu/mainMenuAtlas.png' alphaOp='test' >
+	<Frame type="StaticRegion" x='481' y='350' w='212' h='215' />
+	<Frame type="StaticRegion" x='694' y='350' w='212' h='215' />
+	<Frame type="StaticRegion" x='481' y='566' w='212' h='215' />
+	<Frame type="StaticRegion" x='694' y='566' w='212' h='215' />
+	<Frame type="StaticRegion" x='481' y='782' w='212' h='215' />
+</Animation>

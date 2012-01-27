@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Definitions>
+
+	<!--  Baloons  -->
+	
+	<Baloon floatingAnim="gameplay/floatingBaloon.xml">
+		<localBounds minX='-0.255' minY='-0.345' maxX='0.255' maxY='0.345' />
+	</Baloon>
+	
+	
+	<!-- Fans -->
+	
+	<Fan direction="Left" fanOnAnim="gameplay/leftFanOn.xml" fanOffAnim="gameplay/leftFanOff.xml">
+		<localBounds minX='-2.0' minY='-0.975' maxX='0.17' maxY='0.975' />
+		<BlowForce x='-0.1' y='0' z='0' />
+	</Fan>
+	
+	<Fan direction="Right" fanOnAnim="gameplay/rightFanOn.xml" fanOffAnim="gameplay/rightFanOff.xml">
+		<localBounds minX='-0.17' minY='-0.975' maxX='2.0' maxY='0.975' />
+		<BlowForce x='0.1' y='0' z='0' />
+	</Fan>
+	
+</Definitions>

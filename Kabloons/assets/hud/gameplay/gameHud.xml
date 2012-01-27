@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout>
+	<Widget type="FrameWidget" visualClass="BackgroundFrame" width='1' height='0.056'>
+		<pos x='0' y='0.944' z='0' />
+				
+		<Widget type="CheckboxWidget" visualClass="LeftFanButtonTemplate" id="LeftFan" width='0.058' height='0.92' >
+			<pos x='0.1' y='0.04' z='0' />
+		</Widget>
+		
+		<Widget type="ImageWidget" visualClass="FansCounter" id="LeftFansCounter" width='0.23' height='0.92' >
+			<pos x='0.16' y='0.04' z='0' />
+		</Widget>
+		
+		<Widget type="CheckboxWidget" visualClass="RightFanButtonTemplate" id="RightFan" width='0.058' height='0.92' >
+			<pos x='0.4' y='0.04' z='0' />
+		</Widget>
+		
+		<Widget type="ImageWidget" visualClass="FansCounter" id="RightFansCounter" width='0.23' height='0.92' >
+			<pos x='0.46' y='0.04' z='0' />
+		</Widget>
+				
+	</Widget>
+</Layout>

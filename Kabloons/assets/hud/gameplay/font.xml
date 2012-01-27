@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Font atlasName="hud/gameplay/gameHudAtlas.png" alphaOp="test" >
+	<Glyph char="1" x="0" y="88" w="18" h="28" />
+	<Glyph char="2" x="28" y="88" w="27" h="28" />
+	<Glyph char="3" x="56" y="88" w="27" h="28" />
+	<Glyph char="4" x="84" y="88" w="27" h="28" />
+	<Glyph char="5" x="112" y="88" w="27" h="28" />
+	<Glyph char="6" x="140" y="88" w="27" h="28" />
+	<Glyph char="7" x="168" y="88" w="27" h="28" />
+	<Glyph char="8" x="0" y="117" w="27" h="28" />
+	<Glyph char="9" x="28" y="117" w="27" h="28" />
+	<Glyph char="0" x="56" y="117" w="27" h="28" />
+</Font>

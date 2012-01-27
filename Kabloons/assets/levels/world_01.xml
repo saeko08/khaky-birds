@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<World width='4.8' height='8.0'>
+
+	<Entity type="Background" path="backgrounds/meadow/meadow.xml" >
+		<localBounds minX='-2.4' minY='-4.0' minZ='-0.5' maxX='2.4' maxY='4.0' maxZ='0.5' />
+		<position x='2.4' y='4.0' z='100' />
+	</Entity>
+	
+	<Entity type="ExitDoor" path="gameplay/trapDoor.xml">
+		<localBounds minX='-0.64' minY='-0.09' minZ='-100' maxX='0.64' maxY='0.09' maxZ='100' />
+		<position x='2.4' y='7.91' z='50' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Left">
+		<position x='3.0' y='3.6' z='60' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Right">
+		<position x='1.5' y='1.4' z='60' />
+	</Entity>
+	
+	<Entity type="Player" leftFans='1' rightFans='1' />
+	<Entity type="Level01" />
+		
+</World>

@@ -3,13 +3,8 @@
  */
 package com.hypefoundry.engine.util;
 
-import java.util.*;
-
 import com.hypefoundry.engine.math.BoundingBox;
-import com.hypefoundry.engine.math.Vector3;
-
 import android.util.FloatMath;
-import android.util.Log;
 
 /**
  * A tool for a simple 2D world division
@@ -32,7 +27,6 @@ public class SpatialGrid2D
 	 * @param cellSize
 	 * @param maxObjects		max objects that can be placed in the grid
 	 */
-	@SuppressWarnings( "unchecked" )
 	public SpatialGrid2D( float worldWidth, float worldHeight, float cellSize, short maxObjects ) 
 	{		
 		// create the grids
@@ -167,7 +161,6 @@ class Grid
 	 * @param cellSize
 	 * @param maxObjects		max objects that can be placed in the grid
 	 */
-	@SuppressWarnings( "unchecked" )
 	Grid( float worldWidth, float worldHeight, float cellSize, short maxObjects )
 	{	
 		// memorize the basic data about the grid size

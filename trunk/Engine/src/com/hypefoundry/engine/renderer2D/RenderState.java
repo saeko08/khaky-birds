@@ -23,7 +23,7 @@ public class RenderState
 	private AlphaFunc		m_srcAlphaFunc = AlphaFunc.AF_One;
 	private AlphaFunc		m_destAlphaFunc = AlphaFunc.AF_Zero;
 	private float			m_lineWidth = 1.0f;
-	Texture					m_texture = null;
+	public Texture			m_texture = null;
 	
 	/**
 	 * Compares two render states.
@@ -125,6 +125,8 @@ public class RenderState
 		if ( m_texture != null )
 		{
 			gl.glEnable( GL10.GL_TEXTURE_2D );
+			gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
+			gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );
 			m_texture.bind();
 		}
 		else

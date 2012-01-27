@@ -139,7 +139,7 @@ public abstract class HudWidgetVisual
 		}
 		
 		// calculate the bounding box
-		m_bb.set( m_globalPos.m_x, m_globalPos.m_y, -1, m_globalPos.m_x + m_width, m_globalPos.m_y + m_height, 1 );
+		m_bb.set( m_globalPos.m_x, m_globalPos.m_y, m_globalPos.m_x + m_width, m_globalPos.m_y + m_height );
 	}
 	
 	/**
@@ -156,6 +156,7 @@ public abstract class HudWidgetVisual
 	 * @param input
 	 * @param renderer
 	 * @param deltaTime
+	 * @return 'true' if the widget handled user's input, 'false' otherwise
 	 */
-	public abstract void handleInput( Input input, HudRenderer renderer, float deltaTime );
+	public abstract boolean handleInput( Input input, HudRenderer renderer, float deltaTime );
 }

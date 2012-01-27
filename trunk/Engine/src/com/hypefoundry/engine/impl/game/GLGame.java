@@ -252,6 +252,9 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		m_screen.pause();
 		m_screen.dispose();
 		
+		// clear the input
+		m_input.clear();
+		
 		// start up the new screen
 		screen.resume();
 		screen.update(0);
@@ -264,5 +267,11 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	public Screen getCurrentScreen() 
 	{
 		return m_screen;
+	}
+	
+	@Override
+	public void closeGame()
+	{
+		super.finish();
 	}
 }

@@ -20,10 +20,10 @@ public class Text
 	private String				m_text				= "";
 	private Font				m_font;
 	private TextureRegion[]		m_regions;
+	private Vector3				m_textSizeScreen	= new Vector3();
 	private Vector3				m_glyphSizeScreen	= new Vector3();
 	private Vector3				m_glyphSizeWorld	= new Vector3();
-	private float				m_length;
-	
+	private Font.TextMetrics	m_textMetrics		= new Font.TextMetrics();
 	
 	/**
 	 * Default constructor.
@@ -89,18 +89,15 @@ public class Text
 		
 		if ( m_font != null )
 		{
-			m_font.getGlyphDimensions( m_glyphSizeScreen ); 
+			m_font.calculateTextDimensions( m_text, m_textSizeScreen ); 
+
+			// acquire the texture regions from which the text will be concatenated
+			for ( int i = 0; i < strLen; ++i )
+			{
+				char c = m_text.charAt( i );
+				m_regions[i] = m_font.getCharacter( c );
+			}
 		}
-		
-		// acquire the texture regions from which the text will be concatenated
-		for ( int i = 0; i < strLen; ++i )
-		{
-			char c = m_text.charAt( i );
-			m_regions[i] = m_font != null ? m_font.getCharacter( c ) : null;
-		}
-		
-		// calculate the length ( in pixels ) the text will occupy
-		m_length = strLen * m_glyphSizeScreen.m_x;
 	}
 	
 	/**
@@ -119,15 +116,25 @@ public class Text
 			return;
 		}
 		
-		camera.screenDimToWorld( m_glyphSizeScreen, m_glyphSizeWorld ); 
-
+		m_glyphSizeScreen.set( m_font.m_whitespaceWidth, 0, 0 );
+		camera.screenDimToWorld( m_glyphSizeScreen, m_glyphSizeWorld );
+		float whitespaceWidth = m_glyphSizeWorld.m_x;
+		
 		for ( int i = 0; i < m_regions.length; ++i )
 		{
 			if ( m_regions[i] != null )
 			{
+				m_glyphSizeScreen.set( m_regions[i].width(), m_regions[i].height(), 0 );
+				camera.screenDimToWorld( m_glyphSizeScreen, m_glyphSizeWorld ); 
+				
 				batcher.drawSprite( worldX, worldY, m_glyphSizeWorld.m_x, m_glyphSizeWorld.m_y, m_regions[i] );
+				
+				worldX += m_glyphSizeWorld.m_x;
 			}
-			worldX += m_glyphSizeWorld.m_x;
+			else
+			{
+				worldX += whitespaceWidth;
+			}
 		}
 	}
 	
@@ -149,27 +156,34 @@ public class Text
 		}
 		
 		// calculate the maximum number of characters that we'll be able to write
-		int maxCharacters = m_font.getDesiredCharactersCount( screenWidth, batcher.m_graphics.getWidth() );
-		int charactersCount = m_regions.length;
-		if ( maxCharacters < charactersCount )
-		{
-			charactersCount = maxCharacters;
-		}
+		m_font.getDesiredCharactersCount( m_text, screenWidth, batcher.m_graphics.getWidth(), m_textMetrics );
+
+		// viewport dimensions
+		float viewportWidth = (float)batcher.m_graphics.getWidth();
+		float viewportHeight = (float)batcher.m_graphics.getHeight();
 		
 		// calculate the text dimensions
-		float glyphWidth = m_glyphSizeScreen.m_x / (float)batcher.m_graphics.getWidth();
-		float glyphHeight = m_glyphSizeScreen.m_y / (float)batcher.m_graphics.getHeight();
-		
-		float textHalfWidth = glyphWidth * charactersCount * 0.5f;
-		float textHalfHeight = glyphHeight * 0.5f;
+		float whitespaceWidth = m_font.m_whitespaceWidth / viewportWidth;
+		float textHeightWorld = m_textSizeScreen.m_y / viewportHeight;
 
-		for ( int i = 0; i < charactersCount; ++i )
+		for ( int i = 0; i < m_textMetrics.m_charactersCount; ++i )
 		{
 			if ( m_regions[i] != null )
 			{
-				batcher.drawUnalignedSprite( screenX + ( screenWidth * 0.5f - textHalfWidth ), screenY + ( screenHeight * 0.5f - textHalfHeight ), glyphWidth, glyphHeight, m_regions[i] );
+				float glyphViewportWidth = m_regions[i].widthInPixels() / viewportWidth;
+				float glyphViewportHeight = m_regions[i].heightInPixels() / viewportHeight;
+				
+				float left = screenX + ( screenWidth - m_textMetrics.m_actualTextWidth ) * 0.5f;
+				float top = screenY + ( screenHeight - textHeightWorld ) * 0.5f;
+				
+				batcher.drawUnalignedSprite( left, top, glyphViewportWidth, glyphViewportHeight, m_regions[i] );
+				
+				screenX += glyphViewportWidth;
 			}
-			screenX += glyphWidth;
+			else
+			{
+				screenX += whitespaceWidth;
+			}
 		}
 	}
 	
@@ -180,6 +194,6 @@ public class Text
 	 */
 	public float length()
 	{
-		return m_length;
+		return m_textSizeScreen.m_x;
 	}
 }

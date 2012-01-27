@@ -40,7 +40,7 @@ public class Camera2D
 		m_position = new Vector3( frustumWidth / 2, frustumHeight / 2, 0 );
 		m_zoom = 1.0f;
 		
-		m_frustum = new BoundingBox( 0, 0, -1, m_frustumWidth, m_frustumHeight, 1 );
+		m_frustum = new BoundingBox( 0, 0, m_frustumWidth, m_frustumHeight );
 	}
 		
 	/**
@@ -61,7 +61,7 @@ public class Camera2D
 		gl.glViewport( 0, 0, m_graphics.getWidth(), m_graphics.getHeight() );
 		gl.glMatrixMode( GL10.GL_PROJECTION );
 		gl.glLoadIdentity();
-		gl.glOrthof( m_frustum.m_minX, m_frustum.m_maxX, m_frustum.m_minY, m_frustum.m_maxY, m_frustum.m_maxZ, m_frustum.m_minZ );
+		gl.glOrthof( m_frustum.m_minX, m_frustum.m_maxX, m_frustum.m_minY, m_frustum.m_maxY, 1, -1 );
 		
 		gl.glMatrixMode( GL10.GL_MODELVIEW );
 		gl.glLoadIdentity();

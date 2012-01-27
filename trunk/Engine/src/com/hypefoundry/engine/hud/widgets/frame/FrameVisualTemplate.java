@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.visuals;
+package com.hypefoundry.engine.hud.widgets.frame;
 
 import com.hypefoundry.engine.hud.HudWidgetVisualTemplate;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.widgets;
+package com.hypefoundry.engine.hud.widgets.animation;
 
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.hud.HudWidget;

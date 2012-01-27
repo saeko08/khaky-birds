@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.widgets;
+package com.hypefoundry.engine.hud.widgets.button;
 
 
 import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.hud.CaptionedHudWidget;
+import com.hypefoundry.engine.hud.ClickableHudWidget;
 import com.hypefoundry.engine.hud.HudWidget;
-import com.hypefoundry.engine.hud.visuals.CaptionedHudWidget;
-import com.hypefoundry.engine.hud.visuals.ClickableHudWidget;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 
 /**

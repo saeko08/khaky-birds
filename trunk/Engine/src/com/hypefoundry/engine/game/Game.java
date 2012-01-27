@@ -56,4 +56,8 @@ public interface Game
 	 */
 	public Screen getStartScreen();
 	
+	/**
+	 * Closes the game application.
+	 */
+	public void closeGame();
 }

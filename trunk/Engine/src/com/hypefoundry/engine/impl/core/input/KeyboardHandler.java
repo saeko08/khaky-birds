@@ -40,6 +40,12 @@ public class KeyboardHandler implements OnKeyListener
 		view.setFocusableInTouchMode( true );
 		view.requestFocus();	
 	}
+	
+	public void clear()
+	{
+		m_keyEvents.clear();
+		m_keyEventsBuffer.clear();
+	}
 
 	@Override
 	public boolean onKey( View v, int keyCode, android.view.KeyEvent event ) 

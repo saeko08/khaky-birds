@@ -69,6 +69,13 @@ public class MultiTouchHandler implements TouchHandler
 	}
 	
 	@Override
+	public void clear()
+	{
+		m_touchEvents.clear();
+		m_touchEventsBuffer.clear();
+	}
+	
+	@Override
 	public boolean onTouch( View v, MotionEvent event ) 
 	{
 		// the events are received on the UI thread, and read on the main loop thread

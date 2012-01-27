@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.visuals;
+package com.hypefoundry.engine.hud;
 
 /**
  * A widget that can receive messages from a button visual.

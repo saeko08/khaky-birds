@@ -31,7 +31,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	private final int							MAX_SPRITES = 512;			// TODO: config
 	private final short							MAX_ENTITIES = 512;			// TODO: config
 	private final float 						VIEWPORT_WIDTH = 4.8f;		// TODO: config
-	private final float 						VIEWPORT_HEIGHT = 9.6f;		// TODO: config
+	private final float 						VIEWPORT_HEIGHT = 8.0f;		// TODO: config
 	
 	private GLGraphics 							m_graphics;
 	private List< Entity >						m_entitiesToAdd;

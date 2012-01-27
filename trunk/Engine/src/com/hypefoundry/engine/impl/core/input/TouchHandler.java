@@ -60,6 +60,11 @@ public interface TouchHandler extends OnTouchListener
 	List<TouchEvent> getTouchEvents();
 	
 	/**
+	 * Clears the touch input.
+	 */
+	void clear();
+	
+	/**
 	 * Update of the internal timers.
 	 * 
 	 * @param deltaTime

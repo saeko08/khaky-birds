@@ -1,10 +1,9 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.visuals;
+package com.hypefoundry.engine.hud.widgets.button;
 
 import com.hypefoundry.engine.hud.HudWidgetVisualTemplate;
-import com.hypefoundry.engine.hud.widgets.ButtonState;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 
 /**
@@ -35,8 +34,8 @@ public abstract class ButtonVisualTemplate implements HudWidgetVisualTemplate
 	 * @param y
 	 * @param width
 	 * @param height
-	 * @param state
+	 * @param deltaTime		time elapsed since the last call to this method
 	 * @param caption
 	 */
-	public abstract void drawButton( SpriteBatcher batcher, float x, float y, float width, float height, ButtonState state, String caption );
+	public abstract void drawButton( SpriteBatcher batcher, float x, float y, float width, float height, float deltaTime, String caption );
 }

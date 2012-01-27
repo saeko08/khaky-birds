@@ -10,7 +10,12 @@ import java.util.*;
 import com.hypefoundry.engine.core.Resource;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
-import com.hypefoundry.engine.hud.visuals.*;
+import com.hypefoundry.engine.hud.widgets.frame.*;
+import com.hypefoundry.engine.hud.widgets.button.*;
+import com.hypefoundry.engine.hud.widgets.image.*;
+import com.hypefoundry.engine.hud.widgets.animation.*;
+import com.hypefoundry.engine.hud.widgets.counter.*;
+import com.hypefoundry.engine.hud.widgets.checkbox.*;
 
 
 /**
@@ -45,10 +50,12 @@ public class Hud extends Resource
 		new TemplateDefinition( DefaultFrameVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new DefaultFrameVisualTemplate(); } } ),
 		new TemplateDefinition( CustomFrameVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new CustomFrameVisualTemplate(); } } ),
 		new TemplateDefinition( DefaultButtonVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new DefaultButtonVisualTemplate(); } } ),
-		new TemplateDefinition( CustomButtonVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new CustomButtonVisualTemplate(); } } ),
+		new TemplateDefinition( ImageButtonVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new ImageButtonVisualTemplate(); } } ),
+		new TemplateDefinition( AnimatedButtonVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new AnimatedButtonVisualTemplate(); } } ),
 		new TemplateDefinition( ImageVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new ImageVisualTemplate(); } } ),
 		new TemplateDefinition( AnimationVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new AnimationVisualTemplate(); } } ),
 		new TemplateDefinition( CounterVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new CounterVisualTemplate(); } } ),
+		new TemplateDefinition( CustomCheckboxVisualTemplate.class, new HudTemplateFactory() { @Override public HudWidgetVisualTemplate create() { return new CustomCheckboxVisualTemplate(); } } ),
 	};
 	
 	private static HudTemplateFactory findTemplateFactory( String type )

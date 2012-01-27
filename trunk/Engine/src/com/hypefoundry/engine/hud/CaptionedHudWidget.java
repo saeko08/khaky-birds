@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.visuals;
+package com.hypefoundry.engine.hud;
 
 /**
  * @author Paksas

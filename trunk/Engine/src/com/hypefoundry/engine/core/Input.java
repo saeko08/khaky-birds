@@ -106,4 +106,9 @@ public interface Input {
 	 * @return
 	 */
 	public List<TouchEvent> getTouchEvents();
+	
+	/**
+	 * Clears current input data.
+	 */
+	public void clear();
 }

@@ -149,6 +149,19 @@ public class XMLDataLoader implements DataLoader
 		}
 		return val;
 	}
+	
+	@Override
+	public int getIntValue( String id, int defaultValue )
+	{
+		if ( m_xmlElement.hasAttribute( id ) )
+		{
+			return getIntValue( id );
+		}
+		else
+		{
+			return defaultValue;
+		}
+	}
 
 	@Override
 	public float getFloatValue( String id )

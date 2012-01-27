@@ -8,7 +8,12 @@ import java.util.List;
 
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.core.ResourceManager;
-import com.hypefoundry.engine.hud.widgets.*;
+import com.hypefoundry.engine.hud.widgets.frame.FrameWidget;
+import com.hypefoundry.engine.hud.widgets.button.ButtonWidget;
+import com.hypefoundry.engine.hud.widgets.image.ImageWidget;
+import com.hypefoundry.engine.hud.widgets.animation.AnimationWidget;
+import com.hypefoundry.engine.hud.widgets.counter.CounterWidget;
+import com.hypefoundry.engine.hud.widgets.checkbox.CheckboxWidget;
 
 
 /**
@@ -45,6 +50,7 @@ public class HudComposite extends HudWidget
 		new ElementFactoryData( ImageWidget.class, new ElementFactory() { @Override public HudWidget create() { return new ImageWidget(); } } ),
 		new ElementFactoryData( AnimationWidget.class, new ElementFactory() { @Override public HudWidget create() { return new AnimationWidget(); } } ),
 		new ElementFactoryData( CounterWidget.class, new ElementFactory() { @Override public HudWidget create() { return new CounterWidget(); } } ),
+		new ElementFactoryData( CheckboxWidget.class, new ElementFactory() { @Override public HudWidget create() { return new CheckboxWidget(); } } ),
 	};
 	
 	/**

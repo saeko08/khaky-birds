@@ -138,8 +138,8 @@ public abstract class Entity
 	@SuppressWarnings("rawtypes")
 	protected Entity()
 	{
-		m_bb = new BoundingBox( 0, 0, 0, 0, 0, 0 );
-		m_worldBB = new BoundingBox( 0, 0, 0, 0, 0, 0 );
+		m_bb = new BoundingBox( 0, 0, 0, 0 );
+		m_worldBB = new BoundingBox( 0, 0, 0, 0 );
 		m_pos = new Vector3();
 		m_facing = 0.0f;
 		m_aspects = new ArrayList< Aspect >();
@@ -194,8 +194,8 @@ public abstract class Entity
 	private final void updateWorldBounds() 
 	{
 		// update the world bounding box
-		m_worldBB.set( m_bb.m_minX + m_pos.m_x, m_bb.m_minY + m_pos.m_y, m_bb.m_minZ + m_pos.m_z, 
-				m_bb.m_maxX + m_pos.m_x, m_bb.m_maxY + m_pos.m_y, m_bb.m_maxZ + m_pos.m_z );
+		m_worldBB.set( m_bb.m_minX + m_pos.m_x, m_bb.m_minY + m_pos.m_y, 
+				m_bb.m_maxX + m_pos.m_x, m_bb.m_maxY + m_pos.m_y );
 	}
 	
 	/**

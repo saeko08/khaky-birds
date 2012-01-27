@@ -31,12 +31,11 @@ final public class BoundingSphere implements BoundingShape
 	 * 
 	 * @param x
 	 * @param y
-	 * @param z
 	 * @param radius
 	 */
-	public BoundingSphere( float x, float y, float z, float radius ) 
+	public BoundingSphere( float x, float y, float radius ) 
 	{
-		m_center.set( x, y, z );
+		m_center.set( x, y, 0 );
 		m_radius = radius;
 	}
 	
@@ -55,7 +54,7 @@ final public class BoundingSphere implements BoundingShape
 	@Override
 	public void getBoundingBox( BoundingBox box )
 	{
-		box.set( m_center.m_x - m_radius, m_center.m_y - m_radius, m_center.m_z - m_radius, m_center.m_x + m_radius, m_center.m_y + m_radius, m_center.m_z + m_radius );
+		box.set( m_center.m_x - m_radius, m_center.m_y - m_radius, m_center.m_x + m_radius, m_center.m_y + m_radius );
 	}
 	
 	@Override
@@ -108,7 +107,6 @@ final public class BoundingSphere implements BoundingShape
 		// TODO: outIntersectPos
 		float closestX = m_center.m_x;
 		float closestY = m_center.m_y;
-		float closestZ = m_center.m_z;
 
 		// find the X coordinate of the closest point on the box
 		if ( m_center.m_x < box.m_minX ) 
@@ -130,18 +128,8 @@ final public class BoundingSphere implements BoundingShape
 			closestY = box.m_maxY;
 		}
 		
-		// find the Z coordinate of the closest point on the box
-		if ( m_center.m_z < box.m_minZ ) 
-		{
-			closestZ = box.m_minZ;
-		}
-		else if ( m_center.m_z > box.m_maxZ ) 
-		{
-			closestZ = box.m_maxZ;
-		}
-		
 		// calculate the distance to the point and see if it's in the sphere's radius
-		return m_center.distSq( closestX, closestY, closestZ ) < m_radius * m_radius;
+		return m_center.distSq2D( closestX, closestY ) < m_radius * m_radius;
 	}
 
 	@Override

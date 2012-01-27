@@ -10,7 +10,8 @@ import com.hypefoundry.engine.hud.ButtonListener;
 import com.hypefoundry.engine.hud.Hud;
 import com.hypefoundry.engine.hud.HudLayout;
 import com.hypefoundry.engine.hud.HudRenderer;
-import com.hypefoundry.engine.hud.widgets.CounterWidget;
+import com.hypefoundry.engine.hud.widgets.counter.CounterWidget;
+
 
 /**
  * @author Paksas

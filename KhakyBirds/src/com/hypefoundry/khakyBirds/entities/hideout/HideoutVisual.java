@@ -45,11 +45,11 @@ private Hideout				m_hideout;
 		
 		if(m_hideout.m_isDemolished == false)
 		{
-			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
+			batcher.drawSprite( pos, bs, m_pixmap );
 		}
 		else
 		{
-			batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmapDestroyed );
+			batcher.drawSprite( pos, bs, m_pixmapDestroyed );
 		}
 	}
 

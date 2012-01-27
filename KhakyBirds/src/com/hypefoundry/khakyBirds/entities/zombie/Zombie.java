@@ -41,7 +41,7 @@ public World 		m_world    				     = null;
 	 */
 	public Zombie()
 	{		
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		setPosition( 0, 0, 80 );
 		
 		// add movement capabilities

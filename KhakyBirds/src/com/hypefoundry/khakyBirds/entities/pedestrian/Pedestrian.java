@@ -68,7 +68,7 @@ public class Pedestrian extends Entity implements Crappable, Biteable
 	 */
 	public Pedestrian()
 	{		
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		setPosition( 0, 0, 80 );
 		
 		// add movement capabilities
@@ -170,5 +170,15 @@ public class Pedestrian extends Entity implements Crappable, Biteable
 	public void onSave( DataSaver saver ) 
 	{
 		saver.setIntValue( "hitWithShit", m_hitWithShit ? 1 : 0  );
+	}
+	
+	/**
+	 * Checks if the pedestrian was hit with shit.
+	 * 
+	 * @return
+	 */
+	public boolean wasHitWithShit() 
+	{
+		return m_hitWithShit;
 	}
 }

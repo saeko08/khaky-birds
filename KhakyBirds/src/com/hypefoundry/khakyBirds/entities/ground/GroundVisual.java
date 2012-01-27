@@ -44,6 +44,6 @@ public class GroundVisual extends EntityVisual
 		Vector3 pos = m_entity.getPosition();
 		BoundingBox bs = m_entity.getBoundingShape();
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pixmap );
+		batcher.drawSprite( pos, bs, m_pixmap );
 	}
 }

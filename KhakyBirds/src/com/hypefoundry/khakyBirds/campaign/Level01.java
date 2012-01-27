@@ -13,14 +13,30 @@ import com.hypefoundry.engine.world.Entity;
  * @author Paksas
  */
 public class Level01 extends Entity
-{
-	float			m_gameplayTime;
+{	
+	// movement tutorial
+	float 			m_minMovementTutorialDistance;
+	float 			m_movementTutorialTimer;
+	
+	// crapping tutorial
+	float			m_crappingTutorialTimer;
 	
 	
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{
-		m_gameplayTime = loader.getFloatValue( "gameplayTime" );
+		DataLoader node;
+			
+		if ( ( node = loader.getChild( "MovementTutorial" ) ) != null )
+		{
+			m_movementTutorialTimer = node.getFloatValue( "pokeTimer" );
+			m_minMovementTutorialDistance = node.getFloatValue( "minDist" );
+		}
+		
+		if ( ( node = loader.getChild( "CrappingTutorial" ) ) != null )
+		{
+			m_crappingTutorialTimer = loader.getFloatValue( "pokeTimer" );
+		}
 	}
 }
 

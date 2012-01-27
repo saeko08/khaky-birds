@@ -31,7 +31,7 @@ public class ElectricCables extends Entity implements CableProvider
 		float halfHeight = m_modelHeight / 2.0f;
 		
 		setPosition( halfWidth, halfHeight, 10 );
-		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, 0, halfWidth, halfHeight, 0 ) );
+		setBoundingBox( new BoundingBox( -halfWidth, -halfHeight, halfWidth, halfHeight ) );
 	}
 	
 	/**

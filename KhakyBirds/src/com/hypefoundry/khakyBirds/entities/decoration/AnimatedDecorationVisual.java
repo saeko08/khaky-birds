@@ -47,7 +47,7 @@ public class AnimatedDecorationVisual extends EntityVisual
 		BoundingBox bs = m_entity.getBoundingShape();
 		
 		TextureRegion region = m_player.getTextureRegion( deltaTime );
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), region );
+		batcher.drawSprite( pos, bs, region );
 	}
 
 }

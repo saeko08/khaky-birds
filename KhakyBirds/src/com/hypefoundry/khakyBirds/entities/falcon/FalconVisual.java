@@ -52,7 +52,7 @@ public class FalconVisual extends EntityVisual
 		
 		m_animationPlayer.select(ANIM_FLY);
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_falcon.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
+		batcher.drawSprite( pos, bs, m_falcon.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
 	}
 
 }

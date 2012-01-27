@@ -17,11 +17,11 @@ import com.hypefoundry.engine.physics.DynamicObject;
  */
 public class Falcon extends Entity implements Shootable
 {
-	public boolean   m_flyingFromLeft 			 = true;
-	public boolean   m_isChasing 			     = false;
+	public boolean  m_flyingFromLeft 			 = true;
+	public boolean  m_isChasing 			     = false;
 	public World 	m_world    				     = null;
-	private Random m_randStartSideX              = new Random();
-	private Random m_randStartPosY               = new Random();
+	private Random 	m_randStartSideX             = new Random();
+	private Random 	m_randStartPosY              = new Random();
 
 	
 	public enum State
@@ -34,7 +34,7 @@ public class Falcon extends Entity implements Shootable
 	
 	public Falcon()
 	{
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -1f, 0.2f, 0.2f, 1f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		
 				
 		m_state = State.Hunting; 

@@ -87,7 +87,7 @@ public class PerkPedestrianVisual extends EntityVisual
 		}
 		
 		// draw the pedestrian
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_perkPedestrian.getFacing(), m_animationPlayer.getTextureRegion(m_perkPedestrian, deltaTime ) );
+		batcher.drawSprite( pos, bs, m_perkPedestrian.getFacing(), m_animationPlayer.getTextureRegion(m_perkPedestrian, deltaTime ) );
 	}
 
 }

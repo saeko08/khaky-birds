@@ -16,7 +16,6 @@ public class GranadeCrap extends Entity
 {
 	public boolean   pedestrianHit           = false;
 	public boolean    m_canHit				 = false;	
-	//private Camera2D m_camera;
 	
 	public enum State
 	{
@@ -45,7 +44,7 @@ public class GranadeCrap extends Entity
 	public GranadeCrap( float x, float y )
 	{
 		setPosition( x, y, 70 );
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 15f) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		
 		// add movement capabilities
 		final float maxLinearSpeed = 5.0f;

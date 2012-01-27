@@ -91,7 +91,7 @@ public class CrapVisual extends EntityVisual
 			m_animationPlayer.select(ANIM_HIT);
 		}
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_animationPlayer.getTextureRegion( deltaTime ) );
+		batcher.drawSprite( pos, bs, m_animationPlayer.getTextureRegion( deltaTime ) );
 		
 		// draw the fx - atm this is only in special craps
 		/*if ( m_crap.m_state == Crap.State.Splat )

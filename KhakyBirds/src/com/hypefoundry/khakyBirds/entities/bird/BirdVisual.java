@@ -9,8 +9,6 @@ import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.animation.Animation;
 import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
-import com.hypefoundry.engine.renderer2D.font.Font;
-import com.hypefoundry.engine.renderer2D.font.Text;
 
 
 /**
@@ -78,7 +76,7 @@ public class BirdVisual extends EntityVisual
 			m_animationPlayer.select(ANIM_IDLE);
 		}
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_bird.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
+		batcher.drawSprite( pos, bs, m_bird.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
 	}
 
 }

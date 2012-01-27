@@ -90,7 +90,7 @@ public class DemolisheCrapVisual extends EntityVisual
 			m_animationPlayer.select(ANIM_HIT);
 		}
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_animationPlayer.getTextureRegion( deltaTime ) );
+		batcher.drawSprite( pos, bs, m_animationPlayer.getTextureRegion( deltaTime ) );
 		
 		// draw the fx
 		if ( m_crap.m_state == DemolisheCrap.State.Splat )

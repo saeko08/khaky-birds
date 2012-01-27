@@ -67,7 +67,7 @@ public class ZombieVisual extends EntityVisual
 			m_animationPlayer.select(ANIM_OBSERVE);
 		}
 		
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_zombie.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
+		batcher.drawSprite( pos, bs, m_zombie.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
 	}
 
 

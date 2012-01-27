@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='3.4' height='7.3'>
-	<Entity type="Level01" gameplayTime='60' />
+
+	<Entity type="Level01">
+		<MovementTutorial pokeTimer='30' minDist='1' />
+		<CrappingTutorial pokeTimer='60' />
+	</Entity>
 
 	<Entity type="Ground" texturePath="campaign/l01/textures/ground.xml">
 		<localBounds minX='-2.4' minY='-4.8' minZ='-0.5' maxX='2.4' maxY='4.8' maxZ='0.5' />

@@ -95,6 +95,6 @@ public class HunterVisual extends EntityVisual
 		}
 		
 		// draw the hunter
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_hunter.getFacing(), m_animationPlayer.getTextureRegion( m_hunter, deltaTime ) );	
+		batcher.drawSprite( pos, bs, m_hunter.getFacing(), m_animationPlayer.getTextureRegion( m_hunter, deltaTime ) );	
 	}
 }

@@ -70,6 +70,6 @@ public class PedestrianVisual extends EntityVisual
 	
 		
 		// draw the pedestrian
-		batcher.drawSprite( pos.m_x, pos.m_y, bs.getWidth(), bs.getHeight(), m_pedestrian.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );	
+		batcher.drawSprite( pos, bs, m_pedestrian.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );	
 	}
 }

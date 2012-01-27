@@ -46,7 +46,7 @@ public class Hideout extends Entity implements NotWalkAble, Shootable, Crappable
 	 */
 	public Hideout()
 	{
-		setBoundingBox( new BoundingBox( -0.7f, -0.7f, -15f, 0.7f, 0.7f, 15f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.7f, -0.7f, 0.7f, 0.7f ) );	// TODO: config
 		setPosition( 0, 0, 70 );
 		
 		final float maxRotationSpeed = 0.0f;

@@ -65,7 +65,7 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-			if ( m_input.getTouchDuriation( 0 ) > AIM_TIMER )
+			if ( m_input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
 			{
 				transitionTo( Shitting.class );
 			}
@@ -274,9 +274,7 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-		
-		
-			if ( m_input.getTouchDuriation( 0 ) > AIM_TIMER )
+			if ( m_input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
 			{
 				transitionTo( FlyingShitting.class );
 			}

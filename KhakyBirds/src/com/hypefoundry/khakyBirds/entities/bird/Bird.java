@@ -27,6 +27,7 @@ public class Bird extends Entity implements Shootable
 	public int					m_cableIdx  		= 0;
 	public World 				m_world    			= null;
 	private int					m_maxSpecialCraps	= 2;
+	boolean						m_canCrap			= true;
 	
 	private Vector3 			m_tmpCrapPos 		= new Vector3();
 	
@@ -63,7 +64,7 @@ public class Bird extends Entity implements Shootable
 	public Bird()
 	{
 		setPosition( 0, 0, 0 );
-		setBoundingBox( new BoundingBox( -0.2f, -0.2f, -0.1f, 0.2f, 0.2f, 0.1f ) );	// TODO: config
+		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		m_state = State.Flying; 
 		m_crapType = CrapType.NormalCrap;
 					
@@ -147,5 +148,15 @@ public class Bird extends Entity implements Shootable
 		
 		
 		
+	}
+	
+	
+	/**
+	 * Enables/disables the ability to crap.
+	 * @param enable
+	 */
+	public void enableCrapping( boolean enable ) 
+	{
+		m_canCrap = enable;
 	}
 }

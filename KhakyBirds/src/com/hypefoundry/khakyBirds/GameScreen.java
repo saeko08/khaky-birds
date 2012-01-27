@@ -219,37 +219,6 @@ public class GameScreen extends Screen
 		return m_resourceManager;
 	}
 	
-	/**
-	 * Creates a path to the specified game level.
-	 * 
-	 * @param levelIdx
-	 * @return
-	 */
-	private String getLevelPath( int levelIdx )
-	{
-		// assert the input data
-		if ( levelIdx < 1 )
-		{
-			levelIdx = 1;
-		}
-		else if ( levelIdx > 99 )
-		{
-			levelIdx = 99;
-		}
-		
-		// build the path
-		StringBuilder levelPath = new StringBuilder();
-		levelPath.append( "campaign/l" );
-		if ( levelIdx < 10 )
-		{
-			levelPath.append( "0" );
-		}
-		levelPath.append( levelIdx );
-
-		levelPath.append( "/world.xml" );
-		
-		return levelPath.toString();
-	}
 
 	// ------------------------------------------------------------------------
 	// Screen implementation
@@ -293,6 +262,62 @@ public class GameScreen extends Screen
 	public void exitToMenu() 
 	{
 		m_game.setScreen( new MenuScreen( m_game ) );
+	}
+
+	/**
+	 * Loads the specified level.
+	 * 
+	 * @param levelIdx
+	 */
+	public void loadLevel( int levelIdx ) 
+	{
+		levelIdx = validateLevelIdx( levelIdx );
+		m_game.setScreen( new GameScreen( m_game, levelIdx ) );
+	}
+	
+	/**
+	 * Creates a path to the specified game level.
+	 * 
+	 * @param levelIdx
+	 * @return
+	 */
+	private String getLevelPath( int levelIdx )
+	{
+		// assert the input data
+		levelIdx = validateLevelIdx( levelIdx );
+		
+		// build the path
+		StringBuilder levelPath = new StringBuilder();
+		levelPath.append( "campaign/l" );
+		if ( levelIdx < 10 )
+		{
+			levelPath.append( "0" );
+		}
+		levelPath.append( levelIdx );
+
+		levelPath.append( "/world.xml" );
+		
+		return levelPath.toString();
+	}
+	
+	/**
+	 * Validates and returns a corrected level index.
+	 * @param idx
+	 * @return
+	 */
+	private int validateLevelIdx( int idx )
+	{
+		// assert the input data
+		if ( idx < 1 )
+		{
+			idx = 1;
+		}
+		else if ( idx > 99 )
+		{
+			idx = 99;
+		}
+		
+		return idx;
 	}
 
 }

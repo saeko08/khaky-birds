@@ -6,6 +6,7 @@ package com.hypefoundry.khakyBirds.entities.bird;
 
 import java.util.List;
 
+import com.hypefoundry.khakyBirds.GameScreen;
 import com.hypefoundry.khakyBirds.entities.falcon.Eaten;
 import com.hypefoundry.khakyBirds.entities.hunter.Shot;
 import com.hypefoundry.khakyBirds.entities.shock.Shocked;
@@ -13,6 +14,7 @@ import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.core.Input.TouchEvent;
+import com.hypefoundry.engine.game.InputHandler;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
@@ -30,17 +32,17 @@ import com.hypefoundry.engine.renderer2D.Camera2D;
  */
 public class BirdController extends FiniteStateMachine 
 {
+	private GameScreen			m_screen;
 	private Camera2D			m_camera;
 	private Bird				m_bird;
 	private SteeringBehaviors	m_sb;
-	private Input				m_input;
 	private Vector3				m_dragStart = new Vector3( 0, 0, 0 );
 	private final float			AIM_TIMER = 0.4f;
 	
 	
 	// ----------------------------------------------------------------
 	
-	class Idle extends FSMState implements EntityEventListener
+	class Idle extends FSMState implements EntityEventListener, InputHandler
 	{
 		private boolean	m_gestureStarted = false;
 		private	Vector3 m_goToPos  = new Vector3();
@@ -52,32 +54,34 @@ public class BirdController extends FiniteStateMachine
 			m_bird.m_state = Bird.State.Idle;
 			m_gestureStarted = false;
 			
+			// attach the input handler
+			m_screen.registerInputHandler( this );
+			
 			// we're not interested in previous duration events
-			m_input.clearTouchDuration();
+			// m_input.clearTouchDuration();
 		}
 		
 		@Override
 		public void deactivate()
 		{
 			m_gestureStarted = false;
+			
+			// detach the input handler
+			m_screen.unregisterInputHandler( this );
 		}
 		
 		@Override
-		public void execute( float deltaTime )
+		public boolean handleInput( Input input, float deltaTime ) 
 		{
-			if ( m_input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
+			// check if we're holding the input longer than expected - maybe we need to start crapping
+			if ( input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
 			{
 				transitionTo( Shitting.class );
+				return false;
 			}
-			else
-			{
-				updateInput( deltaTime );
-			}
-		}
-		
-		private void updateInput( float deltaTime ) 
-		{	
-			List< TouchEvent > inputEvents = m_input.getTouchEvents();
+			
+			
+			List< TouchEvent > inputEvents = input.getTouchEvents();
 			
 			// first check if we received a double tap event - if so, discard the rest
 			int count = inputEvents.size();
@@ -89,7 +93,7 @@ public class BirdController extends FiniteStateMachine
 				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
 				{
 					transitionTo( Flying.class );
-					return;
+					return false;
 				}
 			}
 			
@@ -122,6 +126,8 @@ public class BirdController extends FiniteStateMachine
 					m_gestureStarted = false;
 				}
 			}
+			
+			return false;
 		}
 
 		/**
@@ -249,7 +255,7 @@ public class BirdController extends FiniteStateMachine
 	
 	// ----------------------------------------------------------------
 	
-	class Flying extends FSMState implements EntityEventListener
+	class Flying extends FSMState implements EntityEventListener, InputHandler
 	{
 		
 		private	Vector3 m_goToPos  		= new Vector3();
@@ -262,6 +268,9 @@ public class BirdController extends FiniteStateMachine
 		{
 			m_bird.m_state = Bird.State.Flying;
 			m_canFly = false;
+			
+			// attach the input handler
+			m_screen.registerInputHandler( this );
 		}
 		
 		@Override
@@ -269,30 +278,32 @@ public class BirdController extends FiniteStateMachine
 		{
 			m_canFly      = false;
 			m_sb.clear();
+			
+			// detach the input handler
+			m_screen.unregisterInputHandler( this );
 		}
 		
 		@Override
 		public void execute( float deltaTime )
 		{
-			if ( m_input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
-			{
-				transitionTo( FlyingShitting.class );
-			}
-			else
-			{
-				updateInput( deltaTime );
-			}
 			if( m_canFly )
 			{
 				m_sb.begin().arrive( m_goToPos, 1.5f ).faceMovementDirection();
 				m_canFly = false;
 			}
-
 		}
 		
-		private void updateInput( float deltaTime ) 
+		@Override
+		public boolean handleInput(Input input, float deltaTime) 
 		{	
-			List< TouchEvent > inputEvents = m_input.getTouchEvents();
+			// first check if it's not the high time to crap
+			if ( input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
+			{
+				transitionTo( FlyingShitting.class );
+				return false;
+			}
+			
+			List< TouchEvent > inputEvents = input.getTouchEvents();
 			int count = inputEvents.size();
 			
 			// first check if we received a double tap event - if so, discard the rest
@@ -304,7 +315,7 @@ public class BirdController extends FiniteStateMachine
 				if ( lastEvent.type == TouchEvent.TOUCH_DOUBLE_TAP )
 				{
 					tryLanding();
-					return;
+					return false;
 				}
 			}
 			
@@ -320,6 +331,8 @@ public class BirdController extends FiniteStateMachine
 					break;
 				}
 			}
+			
+			return false;
 		}
 		
 		/**
@@ -373,23 +386,28 @@ public class BirdController extends FiniteStateMachine
 	
 	// ----------------------------------------------------------------
 	
-	class Shitting extends FSMState implements EntityEventListener
+	class Shitting extends FSMState implements EntityEventListener, InputHandler
 	{
 		@Override
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Shitting;
+			
+			// attach the input handler
+			m_screen.registerInputHandler( this );
 		}
 		
 		@Override
 		public void deactivate()
 		{
+			// detach the input handler
+			m_screen.unregisterInputHandler( this );
 		}
 		
 		@Override
-		public void execute( float deltaTime )
-		{
-			List< TouchEvent > inputEvents = m_input.getTouchEvents();
+		public boolean handleInput( Input input, float deltaTime ) 
+		{	
+			List< TouchEvent > inputEvents = input.getTouchEvents();
 			int count = inputEvents.size();
 			for ( int i = 0 ; i < count; ++i )
 			{	
@@ -401,6 +419,8 @@ public class BirdController extends FiniteStateMachine
 					break;
 				}
 			}
+			
+			return false;
 		}
 		
 		@Override
@@ -414,23 +434,28 @@ public class BirdController extends FiniteStateMachine
 	}
 	
 	// ----------------------------------------------------------------
-	class FlyingShitting extends FSMState implements EntityEventListener
+	class FlyingShitting extends FSMState implements EntityEventListener, InputHandler
 	{
 		@Override
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.FlyingShitting;
+			
+			// attach the input handler
+			m_screen.registerInputHandler( this );
 		}
 		
 		@Override
 		public void deactivate()
 		{
+			// detach the input handler
+			m_screen.unregisterInputHandler( this );
 		}
 		
 		@Override
-		public void execute( float deltaTime )
-		{
-			List< TouchEvent > inputEvents = m_input.getTouchEvents();
+		public boolean handleInput( Input input, float deltaTime ) 
+		{	
+			List< TouchEvent > inputEvents = input.getTouchEvents();
 			int count = inputEvents.size();
 			for ( int i = 0 ; i < count; ++i )
 			{	
@@ -442,6 +467,8 @@ public class BirdController extends FiniteStateMachine
 					break;
 				}
 			}
+			
+			return false;
 		}
 		
 		@Override
@@ -464,11 +491,11 @@ public class BirdController extends FiniteStateMachine
 	 * @param camera		active camera
 	 * @param entity
 	 */
-	public BirdController( Input input, Camera2D camera, Entity entity ) 
+	public BirdController( GameScreen screen, Camera2D camera, Entity entity ) 
 	{
 		super( entity );
 		
-		m_input = input;
+		m_screen = screen;
 		m_camera = camera;
 		m_bird = (Bird)entity;
 		m_sb = new SteeringBehaviors( m_bird );

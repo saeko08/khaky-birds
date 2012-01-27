@@ -165,7 +165,7 @@ public class GameScreen extends Screen
 
 		// register controllers
 		m_world.attachView( m_controllersView );
-		m_controllersView.register( Bird.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new BirdController( m_game.getInput(), m_worldRenderer.getCamera(), parentEntity ); } } );
+		m_controllersView.register( Bird.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new BirdController( gameScreen, m_worldRenderer.getCamera(), parentEntity ); } } );
 		m_controllersView.register( ElectricCables.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricCablesAI( m_world, parentEntity ); } } );
 		m_controllersView.register( ElectricShock.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ElectricShockAI( parentEntity ); } } );
 		m_controllersView.register( Pedestrian.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PedestrianAI( parentEntity ); } } );
@@ -206,7 +206,7 @@ public class GameScreen extends Screen
 		// initialize the HUD renderer
 		Hud hud = m_resourceManager.getResource( Hud.class, "hud/hudDefinition.xml" );
 		m_hudRenderer = new HudRenderer( game, hud );
-		
+		registerInputHandler( m_hudRenderer );
 	}
 	
 	/**

@@ -42,6 +42,7 @@ public class MenuScreen extends Screen implements ButtonListener
 		}
 		
 		m_hudRenderer = new HudRenderer( game, hud );
+		registerInputHandler( m_hudRenderer );
 		
 		// load the menu layout
 		if ( m_hudLayout == null )

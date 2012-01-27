@@ -50,6 +50,10 @@ public abstract class PhysicalBody implements SpatialGridObject
 		m_dynamicObjectAspect = m_entity.query( DynamicObject.class );
 		m_collisionShape = collisionShape;
 		
+		// initialize the extruded collision shape - if this is a static body, this will never get updated
+		m_extrudedCollisionShape = m_collisionShape;
+		m_extrudedCollisionShape.getBoundingBox( m_runtimeWorldBounds );
+		
 		// register events
 		m_entity.registerEvent( CollisionEvent.class, new EventFactory< CollisionEvent >() { @Override public CollisionEvent createObject() { return new CollisionEvent(); } } );
 	}

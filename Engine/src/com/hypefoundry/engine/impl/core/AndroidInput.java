@@ -116,6 +116,14 @@ public class AndroidInput implements Input
 	{
 		return m_touchHandler.getTouchEvents();
 	}
+	
+	@Override 
+	public void clear()
+	{
+		m_accelHandler.clear();
+		m_keyHandler.clear();
+		m_touchHandler.clear();
+	}
 
 	/**
 	 * Updates the status of the input manager.

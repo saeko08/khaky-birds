@@ -51,4 +51,11 @@ public class AccelerometerHandler implements SensorEventListener
 	{
 		return m_accelZ;
 	}
+	
+	public void clear()
+	{
+		m_accelX = 0;
+		m_accelY = 0;
+		m_accelZ = 0;
+	}
 }

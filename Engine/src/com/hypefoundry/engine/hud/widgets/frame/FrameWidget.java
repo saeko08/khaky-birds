@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.widgets;
+package com.hypefoundry.engine.hud.widgets.frame;
 
 import com.hypefoundry.engine.hud.HudComposite;
 

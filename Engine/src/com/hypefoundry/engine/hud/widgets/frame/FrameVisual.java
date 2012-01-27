@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.visuals;
+package com.hypefoundry.engine.hud.widgets.frame;
 
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.hud.HudRenderer;
@@ -38,8 +38,9 @@ public class FrameVisual extends HudWidgetVisual
 	}
 
 	@Override
-	public void handleInput( Input input, HudRenderer renderer, float deltaTime ) 
+	public boolean handleInput( Input input, HudRenderer renderer, float deltaTime ) 
 	{
 		// nothing to do here
+		return false;
 	}
 }

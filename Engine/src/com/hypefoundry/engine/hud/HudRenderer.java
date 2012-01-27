@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.game.Game;
+import com.hypefoundry.engine.game.InputHandler;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 
@@ -18,7 +19,7 @@ import com.hypefoundry.engine.renderer2D.SpriteBatcher;
  * @author Paksas
  *
  */
-public class HudRenderer 
+public class HudRenderer implements InputHandler
 {
 	private final int					MAX_SPRITES = 512;			// TODO: config
 	
@@ -120,9 +121,6 @@ public class HudRenderer
 			return;
 		}
 		
-		// handle intput
-		handleInput( deltaTime );
-		
 		// render the layout
 		count = m_visuals.size();
 		setRenderingMatrices();
@@ -161,20 +159,19 @@ public class HudRenderer
 	// Input handling
 	// ------------------------------------------------------------------------
 		
-	/**
-	 * Handles incoming input.
-	 * 
-	 * @param input
-	 */
-	private void handleInput( float deltaTime )
+	@Override
+	public boolean handleInput( Input input, float deltaTime )
 	{
+		boolean inputHandled = false;
+		
 		int count = m_visuals.size();
 		for ( int i = 0; i < count; ++i )
 		{
 			HudWidgetVisual visual = m_visuals.get(i);
 			if ( visual != null )
 			{
-				visual.handleInput( m_input, this, deltaTime );
+				boolean wasInputHandled = visual.handleInput( m_input, this, deltaTime );
+				inputHandled |= wasInputHandled;
 				
 				if ( m_contentsInvalidated == true )
 				{
@@ -183,8 +180,10 @@ public class HudRenderer
 				}
 			}
 		}
-		
+
 		m_contentsInvalidated = false;
+		
+		return inputHandled;
 	}
 	
 	/**

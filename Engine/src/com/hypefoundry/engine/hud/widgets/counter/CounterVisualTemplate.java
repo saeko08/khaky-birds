@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.visuals;
+package com.hypefoundry.engine.hud.widgets.counter;
 
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.core.ResourceManager;
@@ -9,7 +9,10 @@ import com.hypefoundry.engine.hud.HudRenderer;
 import com.hypefoundry.engine.hud.HudWidget;
 import com.hypefoundry.engine.hud.HudWidgetVisual;
 import com.hypefoundry.engine.hud.HudWidgetVisualTemplate;
-import com.hypefoundry.engine.hud.widgets.CounterWidget;
+import com.hypefoundry.engine.hud.widgets.button.ButtonVisualTemplate;
+import com.hypefoundry.engine.hud.widgets.button.ImageButtonVisualTemplate;
+import com.hypefoundry.engine.hud.widgets.frame.DefaultFrameVisualTemplate;
+import com.hypefoundry.engine.hud.widgets.frame.FrameVisualTemplate;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.font.Font;
 import com.hypefoundry.engine.renderer2D.font.Text;
@@ -23,8 +26,8 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
 public class CounterVisualTemplate implements HudWidgetVisualTemplate 
 {
 	private FrameVisualTemplate 		m_frameTemplate 		= new DefaultFrameVisualTemplate();
-	private ButtonVisualTemplate		m_incButtonTemplate		= new CustomButtonVisualTemplate( CounterWidget.INCREASED );
-	private ButtonVisualTemplate		m_decButtonTemplate		= new CustomButtonVisualTemplate( CounterWidget.DECREASED );
+	private ButtonVisualTemplate		m_incButtonTemplate		= new ImageButtonVisualTemplate( CounterWidget.INCREASED );
+	private ButtonVisualTemplate		m_decButtonTemplate		= new ImageButtonVisualTemplate( CounterWidget.DECREASED );
 	
 	private Text						m_value 				= new Text();
 	private StringBuilder				m_valueTranslator		= new StringBuilder();
@@ -127,12 +130,15 @@ public class CounterVisualTemplate implements HudWidgetVisualTemplate
 		}
 
 		@Override
-		public void handleInput( Input input, HudRenderer renderer, float deltaTime ) 
+		public boolean handleInput( Input input, HudRenderer renderer, float deltaTime ) 
 		{
+			boolean inputHandled = false;
 			for( int i = 0; i < m_widgets.length; ++i )
 			{
-				m_widgets[i].handleInput( input, renderer, deltaTime );
+				inputHandled |= m_widgets[i].handleInput( input, renderer, deltaTime );
 			}
+			
+			return inputHandled;
 		}
 		
 	}

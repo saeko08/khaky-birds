@@ -1,14 +1,13 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.widgets;
-
+package com.hypefoundry.engine.hud.widgets.counter;
 
 import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.hud.ClickableHudWidget;
 import com.hypefoundry.engine.hud.HudWidget;
-import com.hypefoundry.engine.hud.visuals.ClickableHudWidget;
-
 import com.hypefoundry.engine.util.serialization.DataLoader;
+
 
 /**
  * A simple counter widget.

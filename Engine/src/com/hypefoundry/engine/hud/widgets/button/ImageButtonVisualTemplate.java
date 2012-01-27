@@ -1,13 +1,12 @@
 /**
  * 
  */
-package com.hypefoundry.engine.hud.visuals;
+package com.hypefoundry.engine.hud.widgets.button;
 
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.hud.HudRenderer;
 import com.hypefoundry.engine.hud.HudWidget;
 import com.hypefoundry.engine.hud.HudWidgetVisual;
-import com.hypefoundry.engine.hud.widgets.ButtonState;
 import com.hypefoundry.engine.renderer2D.RenderState;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
@@ -20,9 +19,9 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
  * 
  * @author Paksas
  */
-public class CustomButtonVisualTemplate extends ButtonVisualTemplate 
+public class ImageButtonVisualTemplate extends ButtonVisualTemplate 
 {
-	private TextureRegion[]		m_regions	= new TextureRegion[3];
+	private TextureRegion		m_textureRegion;
 	private float				m_borderSize;
 	public Text					m_caption	= new Text();
 	
@@ -30,7 +29,7 @@ public class CustomButtonVisualTemplate extends ButtonVisualTemplate
 	/**
 	 * Default constructor.
 	 */
-	public CustomButtonVisualTemplate() 
+	public ImageButtonVisualTemplate() 
 	{
 		super( 0 );
 	}
@@ -40,7 +39,7 @@ public class CustomButtonVisualTemplate extends ButtonVisualTemplate
 	 * 
 	 * @param id
 	 */
-	CustomButtonVisualTemplate( int id )
+	public ImageButtonVisualTemplate( int id )
 	{
 		super( id );
 	}
@@ -51,32 +50,18 @@ public class CustomButtonVisualTemplate extends ButtonVisualTemplate
 		RenderState rs = new RenderState();
 		rs.deserialize( resMgr, loader );
 		
-		DataLoader elemNode;
-	
-		if ( ( elemNode = loader.getChild( "Released" ) ) != null )
-		{
-			m_regions[ ButtonState.RELEASED.m_value ] = new TextureRegion( rs );
-			m_regions[ ButtonState.RELEASED.m_value ].deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "Highlighed" ) ) != null )
-		{
-			m_regions[ ButtonState.HIGHLIGHTED.m_value ] = new TextureRegion( rs );
-			m_regions[ ButtonState.HIGHLIGHTED.m_value ].deserializeCoordinates( elemNode );
-		}
-		
-		if ( ( elemNode = loader.getChild( "Pressed" ) ) != null )
-		{
-			m_regions[ ButtonState.PRESSED.m_value ] = new TextureRegion( rs );
-			m_regions[ ButtonState.PRESSED.m_value ].deserializeCoordinates( elemNode );
-		}
+		String texturePath = loader.getStringValue( "path" );
+		m_textureRegion = resMgr.getResource( TextureRegion.class, texturePath );
 			
-		m_borderSize = loader.getFloatValue( "borderSize" );
+		m_borderSize = loader.getFloatValue( "borderSize", 0.0f );
 		
 		// load the font
 		String fontPath = loader.getStringValue( "fontPath" );
-		Font font = resMgr.getResource( Font.class, fontPath );
-		m_caption.setFont( font );
+		if ( fontPath.length() > 0 )
+		{
+			Font font = resMgr.getResource( Font.class, fontPath );
+			m_caption.setFont( font );
+		}
 	}
 
 	@Override
@@ -86,11 +71,11 @@ public class CustomButtonVisualTemplate extends ButtonVisualTemplate
 	}
 
 	@Override
-	public void drawButton( SpriteBatcher batcher, float x, float y, float width, float height, ButtonState state, String caption ) 
+	public void drawButton( SpriteBatcher batcher, float x, float y, float width, float height, float deltaTime, String caption ) 
 	{
-		if ( m_regions[ state.m_value ] != null )
+		if ( m_textureRegion != null )
 		{
-			batcher.drawUnalignedSprite( x, y, width, height, m_regions[ state.m_value ] );
+			batcher.drawUnalignedSprite( x, y, width, height, m_textureRegion );
 			
 			float borderWidth = m_borderSize / (float)batcher.m_graphics.getWidth();
 			float borderHeight = m_borderSize / (float)batcher.m_graphics.getHeight();
@@ -99,7 +84,6 @@ public class CustomButtonVisualTemplate extends ButtonVisualTemplate
 			m_caption.setText( caption );
 			m_caption.drawCentered( batcher, x + borderWidth, y + borderHeight, width - borderWidth * 2.0f, height - borderHeight * 2.0f );
 		}
-
 	}
 
 }

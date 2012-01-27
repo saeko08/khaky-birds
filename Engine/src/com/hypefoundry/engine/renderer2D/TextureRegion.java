@@ -78,6 +78,42 @@ public class TextureRegion extends Resource
 		m_renderState = renderState;
 	}
 	
+	/**
+	 * Returns the width of the region (in texels). 
+	 * @return
+	 */
+	public float width()
+	{
+		return m_u2 - m_u1;
+	}
+	
+	/**
+	 * Returns the height of the region (in texels). 
+	 * @return
+	 */
+	public float height()
+	{
+		return m_v2 - m_v1;
+	}
+	
+	/**
+	 * Returns the width of the region (in pixels). 
+	 * @return
+	 */
+	public float widthInPixels()
+	{
+		return ( m_u2 - m_u1 ) * m_renderState.m_texture.getWidth();
+	}
+	
+	/**
+	 * Returns the height of the region (in pixels). 
+	 * @return
+	 */
+	public float heightInPixels()
+	{
+		return ( m_v2 - m_v1 ) * m_renderState.m_texture.getWidth();
+	}
+	
 	// ------------------------------------------------------------------------
 	// Resource implementation
 	// ------------------------------------------------------------------------

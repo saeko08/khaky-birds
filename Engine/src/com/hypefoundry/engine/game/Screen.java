@@ -2,6 +2,7 @@ package com.hypefoundry.engine.game;
 
 import java.util.*;
 
+import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.core.ResourceManager;
 
 /**
@@ -22,7 +23,7 @@ public abstract class Screen implements UpdatesManager
 	private List<Updatable>				m_updatables;
 	private List<Updatable>				m_updatablesToAdd;
 	private List<Updatable>				m_updatablesToRemove;
-	
+	private List<InputHandler>			m_inputHandlers;
 	protected boolean					m_running;
 	
 	/**
@@ -39,7 +40,7 @@ public abstract class Screen implements UpdatesManager
 		m_updatables = new ArrayList<Updatable>();
 		m_updatablesToAdd = new ArrayList<Updatable>();
 		m_updatablesToRemove = new ArrayList<Updatable>();
-		
+		m_inputHandlers = new ArrayList<InputHandler>();
 		m_running = true;
 	}
 	
@@ -72,6 +73,17 @@ public abstract class Screen implements UpdatesManager
 			m_updatables.add( m_updatablesToAdd.get(i) );
 		}
 		m_updatablesToAdd.clear();
+		
+		// handle input
+		count = m_inputHandlers.size();
+		Input input = m_game.getInput();
+		for ( int i = 0; i < count; ++i )
+		{
+			if ( m_inputHandlers.get(i).handleInput( input, deltaTime ) )
+			{
+				break;
+			}
+		}
 		
 		// update updatables
 		if ( m_running )
@@ -108,6 +120,40 @@ public abstract class Screen implements UpdatesManager
 	 */
 	public abstract void dispose();
 	
+	// ------------------------------------------------------------------------
+	// InputHandlers management
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * Registers a new input handler.
+	 * 
+	 * @param handler
+	 */
+	public void registerInputHandler( InputHandler handler )
+	{
+		// look for duplicates
+		int count = m_inputHandlers.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			if ( m_inputHandlers.get(i) == handler )
+			{
+				// this handler's already registered - bail
+				return;
+			}
+		}
+		
+		m_inputHandlers.add( handler );
+	}
+	
+	/**
+	 * Removes a registered input handler.
+	 * 
+	 * @param handler
+	 */
+	public void unregisterInputHandler( InputHandler handler )
+	{
+		m_inputHandlers.remove( handler );
+	}
 	
 	// ------------------------------------------------------------------------
 	// UpdatesManager implementation

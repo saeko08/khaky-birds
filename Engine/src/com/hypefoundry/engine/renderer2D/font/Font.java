@@ -22,10 +22,21 @@ import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
  */
 public class Font extends Resource
 {
+	public static class TextMetrics
+	{
+		public int 		m_charactersCount;
+		public float 	m_actualTextWidth;
+		
+		void reset()
+		{
+			m_charactersCount = 0;
+			m_actualTextWidth = 0;
+		}
+	}
+	
+	public 			int							m_whitespaceWidth = 15;	
 	private 		boolean						m_loaded 	= false;
 	private final 	TextureRegion[]				m_regions 	= new TextureRegion[256];
-	private			int							m_glyphWidth;	// width in pixels
-	private			int							m_glyphHeight;	// height in pixels
 	
 	private final	int[]						m_defaultCharMapping = 
 		{
@@ -57,26 +68,75 @@ public class Font extends Resource
 	}
 	
 	/**
-	 * Returns the glyph dimensions ( in the screen space )
+	 * Returns the dimensions of the specified text written using this font
 	 *  
 	 * @param outGlyphScreenDim
 	 */
-	public void getGlyphDimensions( Vector3 outGlyphScreenDim ) 
+	public void calculateTextDimensions( String text, Vector3 outScreenDim ) 
 	{
-		outGlyphScreenDim.set( m_glyphWidth, m_glyphHeight, 0 );
+		outScreenDim.m_x = 0;
+		outScreenDim.m_y = 0;
+		
+		int strLen = text.length();
+		for ( int i = 0; i < strLen; ++i )
+		{
+			char c = text.charAt( i );
+			if ( m_regions[c] != null )
+			{
+				outScreenDim.m_x += m_regions[c].widthInPixels();
+			
+				float height = m_regions[c].heightInPixels();
+				if ( outScreenDim.m_y < height )
+				{
+					outScreenDim.m_y = height;
+				}
+			}
+			else
+			{
+				outScreenDim.m_x += m_whitespaceWidth;
+			}
+		}
 	}
 	
 	/**
 	 * Returns the number of characters that will fit the specified number of pixels.
 	 * 
-	 * @param screenWidth
+	 * @param textFieldWidthWorld
 	 * @param viewportWidth
 	 * @return
 	 */
-	public int getDesiredCharactersCount( float screenWidth, float viewportWidth )
+	public void getDesiredCharactersCount( String text, float textFieldWidthWorld, float viewportWidth, TextMetrics outMetrics )
 	{
-		float viewportGlyphWidth = (float)m_glyphWidth / viewportWidth;
-		return (int)( screenWidth / viewportGlyphWidth );
+		outMetrics.reset();
+		
+		int strLen = text.length();
+		for ( int i = 0; i < strLen; ++i )
+		{
+			float newViewportWidth = outMetrics.m_actualTextWidth;
+			
+			char c = text.charAt( i );
+			TextureRegion glyph = m_regions[c];
+			if ( glyph != null )
+			{
+				float widthInPixels = glyph.widthInPixels();
+				newViewportWidth += widthInPixels / viewportWidth;
+			}
+			else
+			{
+				newViewportWidth += m_whitespaceWidth * viewportWidth;
+			}
+						
+			if ( newViewportWidth > textFieldWidthWorld )
+			{
+				// ok - that's far enough - stop here
+				break;
+			}
+			else
+			{
+				outMetrics.m_actualTextWidth = newViewportWidth;
+				outMetrics.m_charactersCount++;
+			}
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -106,45 +166,20 @@ public class Font extends Resource
 		DataLoader fontNode = XMLDataLoader.parse( stream, "Font" );
 		if ( fontNode != null )
 		{
-			// read the font description
-			m_glyphWidth = fontNode.getIntValue( "cellWidth" );
-			m_glyphHeight = fontNode.getIntValue( "cellHeight" );
-			int cellSpacing = fontNode.getIntValue( "cellSpacing" );
-			int atlasWidth = fontNode.getIntValue( "atlasWidth" );
-			int atlasHeight = fontNode.getIntValue( "atlasHeight" );
-			
-			int cellsPerRow = atlasWidth / ( m_glyphWidth + cellSpacing );
-			int cellsPerCol = atlasHeight / ( m_glyphHeight + cellSpacing );
-			
 			// create a render state
 			RenderState renderState = new RenderState();
 			renderState.deserialize( m_resMgr, fontNode );
 			
-			// load the texture regions
-			boolean allCharactersLoaded = false;
-			TextureRegion texReg;
-			for ( int y = 0; y < cellsPerCol; ++y )
+			// read the font description
+			m_whitespaceWidth = fontNode.getIntValue( "whitespaceWidth", 15 );
+			String size = fontNode.getStringValue( "size" );
+			if ( size.equals( "fixed" ) )
 			{
-				for ( int x = 0; x < cellsPerRow; ++x )
-				{
-					int addr = y * cellsPerRow + x;
-					if ( addr >= m_defaultCharMapping.length )
-					{
-						// make sure we exit from the outer loop as well
-						allCharactersLoaded = true;
-						break;
-					}
-					
-					int texRegIdx = m_defaultCharMapping[addr];
-					
-					texReg = new TextureRegion( renderState, x * ( m_glyphWidth + cellSpacing ), y * ( m_glyphHeight + cellSpacing ), m_glyphWidth, m_glyphHeight );
-					m_regions[texRegIdx] = texReg;
-				}
-				
-				if ( allCharactersLoaded )
-				{
-					break;
-				}
+				parseConstantSizeGlyph( fontNode, renderState );
+			}
+			else
+			{
+				parseUserDefinedGlyph( fontNode, renderState );
 			}
 			
 					
@@ -152,7 +187,57 @@ public class Font extends Resource
 			m_loaded = true;
 		}
 	}
+	
+	private void parseUserDefinedGlyph( DataLoader fontNode, RenderState renderState )
+	{
+		for ( DataLoader glyphNode = fontNode.getChild( "Glyph" ); glyphNode != null; glyphNode = glyphNode.getSibling() )
+		{
+			char character = glyphNode.getStringValue( "char" ).charAt(0);
+									
+			m_regions[character] = new TextureRegion( renderState );
+			m_regions[character].deserializeCoordinates( glyphNode );
+		}
+	}
 
+	private void parseConstantSizeGlyph( DataLoader fontNode, RenderState renderState )
+	{
+		int cellSpacing = fontNode.getIntValue( "cellSpacing" );
+		int atlasWidth = fontNode.getIntValue( "atlasWidth" );
+		int atlasHeight = fontNode.getIntValue( "atlasHeight" );
+		int	glyphWidth = fontNode.getIntValue( "cellWidth" );
+		int	glyphHeight = fontNode.getIntValue( "cellHeight" );
+		
+		int cellsPerRow = atlasWidth / ( glyphWidth + cellSpacing );
+		int cellsPerCol = atlasHeight / ( glyphHeight + cellSpacing );
+		
+		
+		// load the texture regions
+		boolean allCharactersLoaded = false;
+		TextureRegion texReg;
+		for ( int y = 0; y < cellsPerCol; ++y )
+		{
+			for ( int x = 0; x < cellsPerRow; ++x )
+			{
+				int addr = y * cellsPerRow + x;
+				if ( addr >= m_defaultCharMapping.length )
+				{
+					// make sure we exit from the outer loop as well
+					allCharactersLoaded = true;
+					break;
+				}
+				
+				int texRegIdx = m_defaultCharMapping[addr];
+				
+				texReg = new TextureRegion( renderState, x * ( glyphWidth + cellSpacing ), y * ( glyphHeight + cellSpacing ), glyphWidth, glyphHeight );
+				m_regions[texRegIdx] = texReg;
+			}
+			
+			if ( allCharactersLoaded )
+			{
+				break;
+			}
+		}
+	}
 
 	@Override
 	public void release() 

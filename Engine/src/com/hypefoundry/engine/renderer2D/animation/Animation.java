@@ -318,82 +318,64 @@ public class Animation extends Resource
 		
 		// parse the animation data
 		DataLoader animNode = XMLDataLoader.parse( stream, "Animation" );
-		if ( animNode != null )
+		deserialize( animNode );
+	}
+	
+	/**
+	 * Loads animation from the specified data loader.
+	 * 
+	 * @param animNode
+	 */
+	public void deserialize( DataLoader animNode )
+	{
+		if ( animNode == null )
 		{
-			m_frameDuration = animNode.getFloatValue( "frameDuration" );
-			m_looped = animNode.getBoolValue( "looped", true );
-			
-			// deserialize shared render state
-			m_renderState = new RenderState();
-			m_renderState.deserialize( m_resMgr, animNode );
-			
-			// count the number of frames the animation will have and preallocate the storages
-			int framesCount = 0;
-			for ( DataLoader frameNode = animNode.getChild( "Frame" ); frameNode != null; frameNode = frameNode.getSibling() )
-			{
-				String type = frameNode.getStringValue( "type" );
-				FrameDeserializer deserializer = getDeserializer( type );
-				if ( deserializer != null )
-				{
-					framesCount += deserializer.getFramesCount( frameNode, this );
-				}
-			}
-			expand( framesCount );
-			
-			// deserialize frames
-			for ( DataLoader frameNode = animNode.getChild( "Frame" ); frameNode != null; frameNode = frameNode.getSibling() )
-			{
-				String type = frameNode.getStringValue( "type" );
-				FrameDeserializer deserializer = getDeserializer( type );
-				if ( deserializer != null )
-				{
-					// memorize the number of frames we have right now - this will be the index
-					// of the first frame in the stream of frames created by this deseralizer,
-					// and thus the index of a frame that we want to emit the animation events
-					int eventFrameIdx = m_framesCount;
-					
-					// deserialize the frame
-					deserializer.deserialize( frameNode, this );
-					
-					// each node may have animation events - deserialize those as well
-					deserializeEvents( frameNode, eventFrameIdx );
-					
-				}
-			}
-			
-			/*
-			int framesCount = animNode.getChildrenCount( "TextureRegion" );
-			m_regions = new TextureRegion[ framesCount ];
-			m_events = new EntityEvent[framesCount][];
-			int frameIdx = 0;
-			for ( DataLoader regionNode = animNode.getChild( "TextureRegion" ); regionNode != null; regionNode = regionNode.getSibling(), ++frameIdx )
-			{
-				m_regions[frameIdx] = new TextureRegion( renderState );
-				m_regions[frameIdx].deserializeCoordinates( regionNode );
-				
-				// read the events, if any are defined
-				int eventsCount = regionNode.getChildrenCount( "Event" );
-				if ( eventsCount > 0 )
-				{
-					int eventIdx = 0;
-					m_events[frameIdx] = new EntityEvent[eventsCount];
-					for ( DataLoader eventNode = regionNode.getChild( "Event" ); eventNode != null; eventNode = eventNode.getSibling(), ++eventIdx )
-					{
-						String eventType = eventNode.getStringValue( "type" );
-						EntityEvent event = instantiateEvent( eventType );
-						if ( event != null )
-						{
-							event.deserialize( eventNode );
-							m_events[frameIdx][eventIdx] = event;
-						}
-					}
-				}
-			}
-			*/
-			
-			// calculate animation duration
-			m_animationDuration = m_frameDuration * m_framesCount;
+			return;
 		}
+		
+		m_frameDuration = animNode.getFloatValue( "frameDuration" );
+		m_looped = animNode.getBoolValue( "looped", true );
+		
+		// deserialize shared render state
+		m_renderState = new RenderState();
+		m_renderState.deserialize( m_resMgr, animNode );
+		
+		// count the number of frames the animation will have and preallocate the storages
+		int framesCount = 0;
+		for ( DataLoader frameNode = animNode.getChild( "Frame" ); frameNode != null; frameNode = frameNode.getSibling() )
+		{
+			String type = frameNode.getStringValue( "type" );
+			FrameDeserializer deserializer = getDeserializer( type );
+			if ( deserializer != null )
+			{
+				framesCount += deserializer.getFramesCount( frameNode, this );
+			}
+		}
+		expand( framesCount );
+		
+		// deserialize frames
+		for ( DataLoader frameNode = animNode.getChild( "Frame" ); frameNode != null; frameNode = frameNode.getSibling() )
+		{
+			String type = frameNode.getStringValue( "type" );
+			FrameDeserializer deserializer = getDeserializer( type );
+			if ( deserializer != null )
+			{
+				// memorize the number of frames we have right now - this will be the index
+				// of the first frame in the stream of frames created by this deseralizer,
+				// and thus the index of a frame that we want to emit the animation events
+				int eventFrameIdx = m_framesCount;
+				
+				// deserialize the frame
+				deserializer.deserialize( frameNode, this );
+				
+				// each node may have animation events - deserialize those as well
+				deserializeEvents( frameNode, eventFrameIdx );
+				
+			}
+		}
+		
+		// calculate animation duration
+		m_animationDuration = m_frameDuration * m_framesCount;
 	}
 	
 	/**

@@ -45,6 +45,14 @@ public interface DataLoader
 	int getIntValue( String id );
 	
 	/**
+	 * Reads an integer value from the node and returns a default value if the attribute is not found.
+	 * 
+	 * @param id				element id
+	 * @return
+	 */
+	int getIntValue( String id, int defaultValue );
+	
+	/**
 	 * Reads a float value from the node.
 	 * 
 	 * @param id				element id

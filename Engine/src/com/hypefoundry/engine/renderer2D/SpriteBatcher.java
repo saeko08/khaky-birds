@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.util.FloatMath;
 
 import com.hypefoundry.engine.core.GLGraphics;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 
 
@@ -38,6 +39,8 @@ public class SpriteBatcher
 	
 	private DrawItem			m_currentDrawItem = DrawItem.Lines;
 	private RenderState			m_currRenderState = new RenderState();		
+	
+	private Vector3 			tmpSpriteCenter = new Vector3();
 	
 	
 	/**
@@ -159,6 +162,103 @@ public class SpriteBatcher
 			
 			++m_numLines;
 		}
+	}
+	
+	/**
+	 * Draws a sprite with the texture defined for the batch.
+	 * 
+	 * @param pos			position of the sprite
+	 * @param bb			sprite's bounding box
+	 * @param region		texture region to draw the sprite with
+	 */
+	public void drawSprite( Vector3 pos, BoundingBox bb, TextureRegion region ) 
+	{
+		// we'll be drawing sprites now, so flush the buffer if something else was drawn before
+		switchTo( DrawItem.Sprites );
+		
+		// set the render state
+		setRenderState( region.m_renderState );
+		
+		float x1 = pos.m_x + bb.m_minX;
+		float y1 = pos.m_y + bb.m_minY;
+		float x2 = pos.m_x + bb.m_maxX;
+		float y2 = pos.m_y + bb.m_maxY;
+		
+		m_verticesBuffer[ m_bufferIndex++ ] = x1;
+		m_verticesBuffer[ m_bufferIndex++ ] = y1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
+		m_verticesBuffer[ m_bufferIndex++ ] = x2;
+		m_verticesBuffer[ m_bufferIndex++ ] = y1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
+		m_verticesBuffer[ m_bufferIndex++ ] = x2;
+		m_verticesBuffer[ m_bufferIndex++ ] = y2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
+		m_verticesBuffer[ m_bufferIndex++ ] = x1;
+		m_verticesBuffer[ m_bufferIndex++ ] = y2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
+		m_numSprites++;
+	}
+	
+	/**
+	 * Draws a rotated sprite with the texture defined for the batch.
+	 * 
+	 * @param pos			position of the sprite
+	 * @param bb			sprite's bounding box
+	 * @param angle			rotation angle in degrees
+	 * @param region		texture region to draw the sprite with
+	 */
+	public void drawSprite( Vector3 pos, BoundingBox bb, float angle, TextureRegion region ) 
+	{
+		// we'll be drawing sprites now, so flush the buffer if something else was drawn before
+		switchTo( DrawItem.Sprites );
+		
+		// set the render state
+		setRenderState( region.m_renderState );
+		
+		// add the new sprite to the batcher
+		float rad = angle * Vector3.TO_RADIANS;
+		float cos = FloatMath.cos(rad);
+		float sin = FloatMath.sin(rad);
+		
+		float x1 = bb.m_minX * cos - bb.m_minY * sin;
+		float y1 = bb.m_minX * sin + bb.m_minY * cos;
+		float x2 = bb.m_maxX * cos - bb.m_minY * sin;
+		float y2 = bb.m_maxX * sin + bb.m_minY * cos;
+		float x3 = bb.m_maxX * cos - bb.m_maxY * sin;
+		float y3 = bb.m_maxX * sin + bb.m_maxY * cos;
+		float x4 = bb.m_minX * cos - bb.m_maxY * sin;
+		float y4 = bb.m_minX * sin + bb.m_maxY * cos;
+		x1 += pos.m_x;
+		y1 += pos.m_y;
+		x2 += pos.m_x;
+		y2 += pos.m_y;
+		x3 += pos.m_x;
+		y3 += pos.m_y;
+		x4 += pos.m_x;
+		y4 += pos.m_y;
+		
+		m_verticesBuffer[ m_bufferIndex++ ] = x1;
+		m_verticesBuffer[ m_bufferIndex++ ] = y1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
+		m_verticesBuffer[ m_bufferIndex++ ] = x2;
+		m_verticesBuffer[ m_bufferIndex++ ] = y2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
+		m_verticesBuffer[ m_bufferIndex++ ] = x3;
+		m_verticesBuffer[ m_bufferIndex++ ] = y3;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
+		m_verticesBuffer[ m_bufferIndex++ ] = x4;
+		m_verticesBuffer[ m_bufferIndex++ ] = y4;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
+		
+		m_numSprites++;
 	}
 	
 	/**

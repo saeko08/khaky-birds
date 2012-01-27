@@ -39,6 +39,16 @@ public final class DynamicObject implements Aspect
 	}
 	
 	/**
+	 * Applies the specified force impulse to the body.
+	 * 
+	 * @param force
+	 */
+	public void applyForce( Vector3 force ) 
+	{
+		m_velocity.add( force );
+	}
+	
+	/**
 	 * Constrains the values to the max values.
 	 */
 	public void constrain()
@@ -110,5 +120,4 @@ public final class DynamicObject implements Aspect
 		m_velocity.save( "velocity", node );
 		node.setFloatValue( "rotation", m_rotation );	
 	}
-
 }

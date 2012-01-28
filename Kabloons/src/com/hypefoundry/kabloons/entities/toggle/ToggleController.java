@@ -45,7 +45,7 @@ public class ToggleController extends EntityController implements EntityEventLis
 	@Override
 	public void onEvent( EntityEvent event ) 
 	{
-		if ( m_canToggle )
+		if ( m_canToggle == false )
 		{
 			return;
 		}

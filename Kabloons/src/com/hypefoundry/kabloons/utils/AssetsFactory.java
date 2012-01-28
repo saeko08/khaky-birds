@@ -7,6 +7,7 @@ import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
+import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSaw;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoor;
 import com.hypefoundry.kabloons.entities.fan.Fan;
 import com.hypefoundry.kabloons.entities.toggle.Toggle;
@@ -172,12 +173,47 @@ public class AssetsFactory
 		}
 	}
 	
+	/**
+	 * Definition of a toggle.
+	 * 
+	 * @author Paksas
+	 */
+	public class BuzzSawData
+	{
+		public String			m_animPath;
+		public BoundingBox		m_localBounds;
+		
+		/**
+		 * Constructor.
+		 * 
+		 * @param loader
+		 */
+		BuzzSawData( DataLoader loader )
+		{			
+			DataLoader buzzSawNode = loader.getChild( "BuzzSaw" );
+			if ( buzzSawNode != null )
+			{
+				m_animPath = buzzSawNode.getStringValue( "anim" );
+				
+				m_localBounds = new BoundingBox();
+				m_localBounds.load( "localBounds", buzzSawNode );
+			}
+		}
+		
+		public void initialize( BuzzSaw buzzSaw ) 
+		{
+			buzzSaw.m_animPath = m_animPath;
+			buzzSaw.setBoundingBox( m_localBounds );
+		}
+	}
+
 	
 	// baloon factories
 	private BaloonFactory[]		m_baloonTypes;
 	private FanFactory[]		m_fanTypes = new FanFactory[Fan.Direction.values().length];
 	private ExitDoorData 		m_exitDoorDefinition;
 	private ToggleData 			m_toggleDefinition;
+	private BuzzSawData 		m_buzzSawDefinition;
 
 	
 	// ------------------------------------------------------------------------
@@ -219,6 +255,7 @@ public class AssetsFactory
 		// devices
 		m_exitDoorDefinition = new ExitDoorData( loader );
 		m_toggleDefinition = new ToggleData( loader );
+		m_buzzSawDefinition = new BuzzSawData( loader );
 	}
 	
 	/**
@@ -276,5 +313,15 @@ public class AssetsFactory
 	public void initializeToggle( Toggle toggle ) 
 	{
 		m_toggleDefinition.initialize( toggle );
+	}
+	
+	/**
+	 * Initializes a buzz saw instance.
+	 * 
+	 * @param toggle
+	 */
+	public void initializeBuzzSaw( BuzzSaw buzzSaw ) 
+	{
+		m_buzzSawDefinition.initialize( buzzSaw );
 	}
 }

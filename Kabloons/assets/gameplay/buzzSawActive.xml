@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='gameplay/atlas.png' alphaOp='test' >
+	<Frame type="StaticRegion" x='0' y='285' w='132' h='130' />
+	<Frame type="StaticRegion" x='133' y='285' w='132' h='130' />
+	<Frame type="StaticRegion" x='266' y='285' w='132' h='130' />
+</Animation>

@@ -35,6 +35,9 @@ import com.hypefoundry.kabloons.entities.background.BackgroundVisual;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
 import com.hypefoundry.kabloons.entities.baloon.BaloonController;
 import com.hypefoundry.kabloons.entities.baloon.BaloonVisual;
+import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSaw;
+import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSawPhysicalBody;
+import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSawVisual;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoor;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoorVisual;
 import com.hypefoundry.kabloons.entities.fan.Fan;
@@ -103,7 +106,8 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Fan.class, new EntityFactory() { @Override public Entity create() { return new Fan( m_assetsFactory ); } } );
 		m_world.registerEntity( Player.class, new EntityFactory() { @Override public Entity create() { return new Player(); } } );
 		m_world.registerEntity( Toggle.class, new EntityFactory() { @Override public Entity create() { return new Toggle( m_assetsFactory ); } } );
-				
+		m_world.registerEntity( BuzzSaw.class, new EntityFactory() { @Override public Entity create() { return new BuzzSaw( m_assetsFactory ); } } );
+		
 		// load the world
 		try 
 		{
@@ -130,6 +134,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( ExitDoor.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ExitDoorVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Fan.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FanVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Toggle.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ToggleVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( BuzzSaw.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BuzzSawVisual( m_resourceManager, parentEntity ); } } );
 		
 		// register controllers
 		m_world.attachView( m_controllersView );
@@ -144,6 +149,7 @@ public class GameScreen extends Screen
 		m_physicsView.register( Fan.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( ExitDoor.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Toggle.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( BuzzSaw.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new BuzzSawPhysicalBody( parentEntity ); } } );
 		
 		// register the updatables
 		addUpdatable( m_world );

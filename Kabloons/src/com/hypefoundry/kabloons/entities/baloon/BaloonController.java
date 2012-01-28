@@ -12,6 +12,7 @@ import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.engine.world.EventFactory;
+import com.hypefoundry.kabloons.entities.buzzSaw.Destroy;
 import com.hypefoundry.kabloons.entities.exitDoor.SavedEvent;
 
 
@@ -65,6 +66,10 @@ public class BaloonController extends FiniteStateMachine
 			if ( event instanceof SavedEvent )
 			{
 				transitionTo( Safe.class );
+			}
+			else if ( event instanceof Destroy )
+			{
+				transitionTo( Dead.class );
 			}
 			else if ( event instanceof OutOfWorldBounds )
 			{
@@ -142,6 +147,7 @@ public class BaloonController extends FiniteStateMachine
 		// register events we're interested in
 		m_baloon.registerEvent( SavedEvent.class, new EventFactory< SavedEvent >() { @Override public SavedEvent createObject() { return new SavedEvent(); } } );
 		m_baloon.registerEvent( OutOfWorldBounds.class, new EventFactory< OutOfWorldBounds >() { @Override public OutOfWorldBounds createObject() { return new OutOfWorldBounds(); } } );
+		m_baloon.registerEvent( Destroy.class, new EventFactory< Destroy >() { @Override public Destroy createObject() { return new Destroy(); } } );
 	}
 
 	@Override

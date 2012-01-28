@@ -1,1 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<World width='4.8' height='8.0'>
+
+	<Entity type="Background" path="backgrounds/meadow/meadow.xml" >
+		<localBounds minX='-2.4' minY='-4.0' minZ='-0.5' maxX='2.4' maxY='4.0' maxZ='0.5' />
+		<position x='2.4' y='4.0' z='100' />
+	</Entity>
+	
+	<Entity type="ExitDoor">
+		<position x='2.4' y='7.91' z='50' />
+ 	</Entity>
+ 	
+ 	<Entity type="Player" leftFans='1' rightFans='1' />
+ 	
+ 	<!-- Row 1 -->
+	
+	<Entity type="BuzzSaw" >
+		<position x='0.84' y='2.0' z='70' />
+	</Entity>
+			
+	<Entity type="BuzzSaw" >
+		<position x='3.9' y='2.0' z='70' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Left" >
+		<position x='3.2' y='1.0' z='60' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Right" >
+		<position x='1.4' y='2.0' z='60' />
+	</Entity>
+	
+	<!-- Row 2 -->
+	
+	<Entity type="BuzzSaw" >
+		<position x='0.84' y='4.0' z='70' />
+	</Entity>
+			
+	<Entity type="BuzzSaw" >
+		<position x='3.9' y='4.0' z='70' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Left" >
+		<position x='3.2' y='3.0' z='60' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Right" >
+		<position x='1.4' y='4.0' z='60' />
+	</Entity>
+	
+	<!-- Row 3 -->
+	
+	<Entity type="BuzzSaw" >
+		<position x='0.84' y='6.0' z='70' />
+	</Entity>
+			
+	<Entity type="BuzzSaw" >
+		<position x='3.9' y='6.0' z='70' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Left" >
+		<position x='3.2' y='5.0' z='60' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Right" >
+		<position x='1.4' y='6.0' z='60' />
+	</Entity>
+
+	
+</World>

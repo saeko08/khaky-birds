@@ -174,5 +174,19 @@ public class BoundingBoxTest extends AndroidTestCase
 		assertTrue( ray1.doesOverlap( new Vector3( 10.5f, 21, 31.5f ), null ) );
 		assertTrue( ray1.doesOverlap( new Vector3( 11, 22, 33 ), null ) );
 	}
+	
+	public void testNearestPoint()
+	{
+		BoundingBox bb = new BoundingBox( 0, 0, 100, 100 );
+	    Vector3 nearestPoint = new Vector3();
+	    
+	    bb.getNearestPoint( new Vector3( -1.0f, 0.0f, 0.0f ), nearestPoint );
+	    assertTrue( nearestPoint.m_x == 0.0f );
+	    assertTrue( nearestPoint.m_y == 0.0f );
+	    
+	    bb.getNearestPoint( new Vector3(  1.0f, 10.0f, 0.0f ), nearestPoint );
+	    assertTrue( nearestPoint.m_x == 1.0f );
+	    assertTrue( nearestPoint.m_y == 10.0f );
+	}
 }
 

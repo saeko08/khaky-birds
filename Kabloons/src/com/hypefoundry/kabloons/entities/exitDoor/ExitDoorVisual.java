@@ -12,13 +12,16 @@ import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.TextureRegion;
 import com.hypefoundry.engine.world.Entity;
 
+
 /**
  * @author Paksas
  *
  */
 public class ExitDoorVisual extends EntityVisual 
 {
-	private TextureRegion		m_pixmap;
+	private ExitDoor 			m_exitDoor;
+	private TextureRegion		m_openDoorTexture;
+	private TextureRegion		m_closedDoorTexture;
 	
 	/**
 	 * Constructor.
@@ -30,9 +33,10 @@ public class ExitDoorVisual extends EntityVisual
 	{
 		super( exitDoorEntity );
 		
-		ExitDoor exitDoor = (ExitDoor)exitDoorEntity;
+		m_exitDoor = (ExitDoor)exitDoorEntity;
 		
-		m_pixmap = resMgr.getResource( TextureRegion.class, exitDoor.m_path );
+		m_openDoorTexture = resMgr.getResource( TextureRegion.class, m_exitDoor.m_openDoorTexturePath );
+		m_closedDoorTexture = resMgr.getResource( TextureRegion.class, m_exitDoor.m_closedDoorTexturePath );
 	}
 	
 	@Override
@@ -41,7 +45,20 @@ public class ExitDoorVisual extends EntityVisual
 		Vector3 pos = m_entity.getPosition();
 		BoundingBox bs = m_entity.getBoundingShape();
 		
-		batcher.drawSprite( pos, bs, m_pixmap );
+		switch( m_exitDoor.m_state )
+		{
+			case Open:
+			{
+				batcher.drawSprite( pos, bs, m_openDoorTexture );
+				break;
+			}
+			
+			case Closed:
+			{
+				batcher.drawSprite( pos, bs, m_closedDoorTexture );
+				break;
+			}
+		}
 	}
 }
 

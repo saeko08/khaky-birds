@@ -42,8 +42,9 @@ import com.hypefoundry.kabloons.entities.fan.FanController;
 import com.hypefoundry.kabloons.entities.fan.FanVisual;
 import com.hypefoundry.kabloons.entities.player.Player;
 import com.hypefoundry.kabloons.entities.player.PlayerController;
-import com.hypefoundry.kabloons.levels.level01.Level01;
-import com.hypefoundry.kabloons.levels.level01.Level01Controller;
+import com.hypefoundry.kabloons.entities.toggle.Toggle;
+import com.hypefoundry.kabloons.entities.toggle.ToggleController;
+import com.hypefoundry.kabloons.entities.toggle.ToggleVisual;
 import com.hypefoundry.kabloons.utils.AssetsFactory;
 
 
@@ -54,6 +55,9 @@ import com.hypefoundry.kabloons.utils.AssetsFactory;
  */
 public class GameScreen extends Screen 
 {
+	private int									m_levelIdx;
+	private static int							m_levelsCount = 9;
+	
 	public World								m_world;
 	public Renderer2D							m_worldRenderer;
 	ControllersView								m_controllersView;
@@ -70,6 +74,9 @@ public class GameScreen extends Screen
 	public GameScreen( Game game, int levelIdx ) 
 	{
 		super( game );
+		
+		// memorize level idx
+		m_levelIdx = levelIdx;
 		
 		final GameScreen gameScreen = this;
 		
@@ -92,12 +99,10 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Background.class, new EntityFactory() { @Override public Entity create() { return new Background(); } } );
 		m_world.registerEntity( AnimatedBackground.class, new EntityFactory() { @Override public Entity create() { return new AnimatedBackground(); } } );
 		m_world.registerEntity( Baloon.class, new EntityFactory() { @Override public Entity create() { return new Baloon(); } } );
-		m_world.registerEntity( ExitDoor.class, new EntityFactory() { @Override public Entity create() { return new ExitDoor(); } } );
+		m_world.registerEntity( ExitDoor.class, new EntityFactory() { @Override public Entity create() { return new ExitDoor( m_assetsFactory ); } } );
 		m_world.registerEntity( Fan.class, new EntityFactory() { @Override public Entity create() { return new Fan( m_assetsFactory ); } } );
 		m_world.registerEntity( Player.class, new EntityFactory() { @Override public Entity create() { return new Player(); } } );
-		
-		// register campaign levels
-		m_world.registerEntity( Level01.class, new EntityFactory() { @Override public Entity create() { return new Level01(); } } );
+		m_world.registerEntity( Toggle.class, new EntityFactory() { @Override public Entity create() { return new Toggle( m_assetsFactory ); } } );
 				
 		// load the world
 		try 
@@ -124,20 +129,21 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Baloon.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BaloonVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( ExitDoor.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ExitDoorVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Fan.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FanVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Toggle.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ToggleVisual( m_resourceManager, parentEntity ); } } );
 		
 		// register controllers
 		m_world.attachView( m_controllersView );
 		m_controllersView.register( Baloon.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new BaloonController( parentEntity ); } } );
 		m_controllersView.register( Fan.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new FanController( parentEntity ); } } );
 		m_controllersView.register( Player.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PlayerController( gameScreen, parentEntity ); } } );
-		
-		m_controllersView.register( Level01.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new Level01Controller( gameScreen, m_assetsFactory, parentEntity ); } } );
+		m_controllersView.register( Toggle.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ToggleController( parentEntity ); } } );
 		
 		// register physics
 		m_world.attachView( m_physicsView );
 		m_physicsView.register( Baloon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Fan.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( ExitDoor.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( Toggle.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		
 		// register the updatables
 		addUpdatable( m_world );
@@ -259,27 +265,29 @@ public class GameScreen extends Screen
 		{
 			idx = 1;
 		}
-		else if ( idx > 99 )
+		else if ( idx > m_levelsCount )
 		{
-			idx = 99;
+			idx = m_levelsCount;
 		}
 		
 		return idx;
 	}
 
-	/**
-	 * The user failed to complete the level.
-	 */
-	public void gameFailed() 
+	public void loadNextLevel() 
 	{
-		exitToMenu();
+		if ( m_levelIdx < m_levelsCount - 1 )
+		{
+			loadLevel( m_levelIdx + 1 );
+		}
+		else
+		{
+			// there are no more levels - exit to the main menu
+			exitToMenu();
+		}
 	}
 
-	/**
-	 * The user completed the level.
-	 */
-	public void gameSucceeded() 
+	public void reloadLevel() 
 	{
-		exitToMenu();
+		loadLevel( m_levelIdx );
 	}
 }

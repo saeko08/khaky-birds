@@ -12,12 +12,22 @@
 	
 	<Fan direction="Left" fanOnAnim="gameplay/leftFanOn.xml" fanOffAnim="gameplay/leftFanOff.xml">
 		<localBounds minX='-2.0' minY='-0.975' maxX='0.17' maxY='0.975' />
-		<BlowForce x='-0.1' y='0' z='0' />
+		<BlowForce x='-0.3' y='0' z='0' />
 	</Fan>
 	
 	<Fan direction="Right" fanOnAnim="gameplay/rightFanOn.xml" fanOffAnim="gameplay/rightFanOff.xml">
 		<localBounds minX='-0.17' minY='-0.975' maxX='2.0' maxY='0.975' />
-		<BlowForce x='0.1' y='0' z='0' />
+		<BlowForce x='0.3' y='0' z='0' />
 	</Fan>
+	
+	<!--  Devices  -->
+	
+	<ExitDoor openTexture="gameplay/openTrapDoor.xml" closedTexture="gameplay/closedTrapDoor.xml">
+		<localBounds minX='-0.64' minY='-0.09' maxX='0.64' maxY='0.09' />
+	</ExitDoor>
+	
+	<Toggle onTexture="gameplay/toggleOn.xml" offTexture="gameplay/toggleOff.xml">
+		<localBounds minX='-0.175' minY='-0.245' maxX='0.175' maxY='0.245' />
+	</Toggle>
 	
 </Definitions>

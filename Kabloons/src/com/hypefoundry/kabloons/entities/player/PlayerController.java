@@ -19,6 +19,7 @@ import com.hypefoundry.engine.renderer2D.Camera2D;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.kabloons.GameScreen;
+import com.hypefoundry.kabloons.entities.baloon.Baloon;
 import com.hypefoundry.kabloons.entities.fan.Fan;
 import com.hypefoundry.kabloons.utils.AssetsFactory;
 
@@ -27,7 +28,7 @@ import com.hypefoundry.kabloons.utils.AssetsFactory;
  * @author Paksas
  *
  */
-public class PlayerController extends FiniteStateMachine implements ButtonListener
+public class PlayerController extends FiniteStateMachine
 {
 	private Player				m_player;
 	private GameScreen 			m_screen;
@@ -37,32 +38,68 @@ public class PlayerController extends FiniteStateMachine implements ButtonListen
 	
 	private Fan.Direction 		m_fanBlowDirection = Fan.Direction.None;
 	
-	private HudLayout			m_hudLayout;
-	
-	
 	// ------------------------------------------------------------------------
 	// States
 	// ------------------------------------------------------------------------
 	
 	/**
-	 * Place fans in this mode.
+	 * Main gameplay mode.
 	 * 
 	 * @author Paksas
 	 */
-	class FansPlacement extends FSMState implements InputHandler
+	class Gameplay extends FSMState implements InputHandler, ButtonListener
 	{
-		private Vector3		m_touchPos = new Vector3();
+		// baloon related data
+		private Vector3				m_baloonReleasePos = new Vector3( 2.4f, -0.2f, 0.0f );
+		private Baloon				m_baloon;
+		
+		private Vector3				m_touchPos = new Vector3();
+		private HudLayout			m_hudLayout;
 		
 		@Override
 		public void activate()
 		{
+			// create a hud
+			if ( m_hudLayout == null )
+			{
+				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHud.xml" );
+				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
+				m_hudLayout.attachButtonListener( this );
+				
+				updateFanCounters();
+			}
+			
 			m_screen.registerInputHandler( this );
 		}
 		
 		@Override
 		public void deactivate()
 		{
+			m_hudLayout.detachButtonListener( this );
+			m_hudLayout.detachRenderer( m_screen.m_hudRenderer ); 
 			m_screen.unregisterInputHandler( this );
+		}
+		
+		@Override
+		public void execute( float deltaTime )
+		{
+			if ( m_baloon == null )
+			{
+				// baloon hasn't been released yet
+				return;
+			}
+			
+			// monitor baloon's state
+			if ( m_baloon.isAlive() == false )
+			{
+				// baloon was destroyed
+				transitionTo( Failure.class );
+			}
+			else if ( m_baloon.isSafe() == true )
+			{
+				// baloon reached safety
+				transitionTo( Success.class );
+			}
 		}
 		
 		@Override
@@ -102,6 +139,119 @@ public class PlayerController extends FiniteStateMachine implements ButtonListen
 			
 			return false;
 		}
+		
+		@Override
+		public void onButtonPressed( String buttonId ) 
+		{
+			if ( buttonId.equals( "LeftFan" ) )
+			{	
+				// disable the other button
+				CheckboxWidget rightFanCheckbox = m_hudLayout.getWidget( CheckboxWidget.class, "RightFan" );
+				rightFanCheckbox.setChecked( false );
+				
+				// set the respective fan direction
+				m_fanBlowDirection = Fan.Direction.Left;
+			}
+			else if ( buttonId.equals( "RightFan" ) )
+			{
+				// disable the other button
+				CheckboxWidget leftFanCheckbox = m_hudLayout.getWidget( CheckboxWidget.class, "LeftFan" );
+				leftFanCheckbox.setChecked( false );
+				
+				// set the respective fan direction
+				m_fanBlowDirection = Fan.Direction.Right;
+			}
+			else if (buttonId.equals( "ReleaseBaloon" ) )
+			{
+				// release a single baloon
+				m_baloon = m_assetsFactory.createRandomBaloon( m_baloonReleasePos );
+				m_screen.m_world.addEntity( m_baloon );
+			}
+		}
+		
+		/**
+		 * A helper method that updates the fan counters on the hud
+		 */
+		private void updateFanCounters()
+		{
+			ImageWidget rightFansCounter = m_hudLayout.getWidget( ImageWidget.class, "RightFansCounter" );
+			rightFansCounter.m_caption = Integer.toString( m_player.m_fansLeft[ Fan.Direction.Right.m_idx ] );
+					
+			ImageWidget leftFansCounter = m_hudLayout.getWidget( ImageWidget.class, "LeftFansCounter" );
+			leftFansCounter.m_caption = Integer.toString( m_player.m_fansLeft[ Fan.Direction.Left.m_idx ] );
+		}
+	}
+	
+	/**
+	 * Player completed the level successfully.
+	 * 
+	 * @author Paksas
+	 */
+	class Success extends FSMState implements ButtonListener
+	{
+		// baloon related data
+		private HudLayout			m_hudLayout;
+		
+		@Override
+		public void activate()
+		{
+			// create a hud
+			if ( m_hudLayout == null )
+			{
+				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/winnerHud.xml" );
+				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
+				m_hudLayout.attachButtonListener( this );
+			}
+		}
+
+		@Override
+		public void onButtonPressed( String buttonId ) 
+		{
+			if ( buttonId.equals( "ExitToMenu" ) )
+			{	
+				m_screen.exitToMenu();
+			}
+			else if ( buttonId.equals( "NextLevel" ) )
+			{
+				m_screen.loadNextLevel();
+			}
+		}	
+	}
+	
+	/**
+	 * Player failed to complete the level.
+	 * 
+	 * @author Paksas
+	 */
+	class Failure extends FSMState implements ButtonListener
+	{
+		// baloon related data
+		private HudLayout			m_hudLayout;
+		
+		@Override
+		public void activate()
+		{
+			// create a hud
+			if ( m_hudLayout == null )
+			{
+				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/looserHud.xml" );
+				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
+				m_hudLayout.attachButtonListener( this );
+			}
+		}
+
+		@Override
+		public void onButtonPressed( String buttonId ) 
+		{
+			if ( buttonId.equals( "ExitToMenu" ) )
+			{	
+				m_screen.exitToMenu();
+			}
+			else if ( buttonId.equals( "RetryLevel" ) )
+			{
+				m_screen.reloadLevel();
+			}
+		}	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -123,54 +273,11 @@ public class PlayerController extends FiniteStateMachine implements ButtonListen
 		m_camera = screen.m_worldRenderer.getCamera();
 		m_assetsFactory = screen.m_assetsFactory;
 		
-		// create a hud
-		if ( m_hudLayout == null )
-		{
-			m_hudLayout = screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHud.xml" );
-			m_hudLayout.attachRenderer( screen.m_hudRenderer ); 
-			m_hudLayout.attachButtonListener( this );
 			
-			updateFanCounters();
-		}
-		
 		// register states
-		register( new FansPlacement() );
-		begin( FansPlacement.class );
+		register( new Gameplay() );
+		register( new Success() );
+		register( new Failure() );
+		begin( Gameplay.class );
 	}
-
-	@Override
-	public void onButtonPressed( String buttonId ) 
-	{
-		if ( buttonId.equals( "LeftFan" ) )
-		{	
-			// disable the other button
-			CheckboxWidget rightFanCheckbox = m_hudLayout.getWidget( CheckboxWidget.class, "RightFan" );
-			rightFanCheckbox.setChecked( false );
-			
-			// set the respective fan direction
-			m_fanBlowDirection = Fan.Direction.Left;
-		}
-		else if ( buttonId.equals( "RightFan" ) )
-		{
-			// disable the other button
-			CheckboxWidget leftFanCheckbox = m_hudLayout.getWidget( CheckboxWidget.class, "LeftFan" );
-			leftFanCheckbox.setChecked( false );
-			
-			// set the respective fan direction
-			m_fanBlowDirection = Fan.Direction.Right;
-		}
-	}
-	
-	/**
-	 * A helper method that updates the fan counters on the hud
-	 */
-	private void updateFanCounters()
-	{
-		ImageWidget rightFansCounter = m_hudLayout.getWidget( ImageWidget.class, "RightFansCounter" );
-		rightFansCounter.m_caption = Integer.toString( m_player.m_fansLeft[ Fan.Direction.Right.m_idx ] );
-				
-		ImageWidget leftFansCounter = m_hudLayout.getWidget( ImageWidget.class, "LeftFansCounter" );
-		leftFansCounter.m_caption = Integer.toString( m_player.m_fansLeft[ Fan.Direction.Left.m_idx ] );
-	}
-
 }

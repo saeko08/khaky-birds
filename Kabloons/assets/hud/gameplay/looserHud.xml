@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout>
+	<Widget type="FrameWidget" visualClass="LooserFrame" width='0.423' height='0.164'>
+		<pos x='0.289' y='0.418' z='0' />
+				
+		<Widget type="ButtonWidget" visualClass="ExitToMenu" id="ExitToMenu" width='0.36' height='0.244' >
+			<pos x='0.059' y='0.63' z='0' />
+		</Widget>
+			
+		<Widget type="ButtonWidget" visualClass="RetryLevel" id="RetryLevel" width='0.36' height='0.244' >
+			<pos x='0.552' y='0.63' z='0' />
+		</Widget>
+			
+	</Widget>
+</Layout>
+

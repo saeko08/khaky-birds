@@ -7,9 +7,13 @@
 	</Entity>
 	
 	<Entity type="ExitDoor" >
-		<position x='1.0' y='7.91' z='50' />
+		<position x='3.2' y='7.91' z='50' />
 	</Entity>
-	 
-	<Entity type="Player" leftFans='1' rightFans='0' />
+	
+	<Entity type="Fan" direction="Left">
+		<position x='4.6' y='6.8' z='60' />
+	</Entity>
+		 
+	<Entity type="Player" leftFans='0' rightFans='1' />
 		
 </World>

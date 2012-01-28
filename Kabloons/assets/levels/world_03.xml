@@ -6,10 +6,14 @@
 		<position x='2.4' y='4.0' z='100' />
 	</Entity>
 	
-	<Entity type="ExitDoor" >
-		<position x='1.0' y='7.91' z='50' />
+	<Entity type="ExitDoor" tag="ExitDoor" state="Closed" >
+		<position x='2.4' y='7.91' z='50' />
 	</Entity>
-	 
-	<Entity type="Player" leftFans='1' rightFans='0' />
+	
+	<Entity type="Toggle" entityTag="ExitDoor" >
+		<position x='0.5' y='4.0' z='70' />
+	</Entity>
+		 
+	<Entity type="Player" leftFans='1' rightFans='1' />
 		
 </World>

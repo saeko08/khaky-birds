@@ -259,6 +259,44 @@ final public class BoundingBox implements BoundingShape
 		return m_minX <= x && m_maxX >= x && m_minY <= y && m_maxY >= y;
 	}
 	
+	/**
+	 * Returns a position on the bounding box closest to the specified query position,
+	 * along with distance to it
+	 * 
+	 * @param queryPos
+	 * @param nearestPos
+	 */
+	final public void getNearestPoint( final Vector3 queryPos, Vector3 nearestPos )
+	{
+		if ( queryPos.m_x < m_minX )
+		{
+			nearestPos.m_x = m_minX;
+		}
+		else if ( queryPos.m_x > m_maxX )
+		{
+			nearestPos.m_x = m_maxX;
+		}
+		else
+		{
+			nearestPos.m_x = queryPos.m_x;
+		}
+		
+		if ( queryPos.m_y < m_minY )
+		{
+			nearestPos.m_y = m_minY;
+		}
+		else if ( queryPos.m_y > m_maxY )
+		{
+			nearestPos.m_y = m_maxY;
+		}
+		else
+		{
+			nearestPos.m_y = queryPos.m_y;
+		}
+		
+		nearestPos.m_z = 0.0f;
+	}
+	
 	// ------------------------------------------------------------------------
 	// Serialization support
 	// ------------------------------------------------------------------------

@@ -27,6 +27,9 @@ public class World implements Updatable
 	private List< WorldView >			m_views;
 	private List< EntityFactoryData >	m_entityFactories;
 	
+	private Vector3 					m_entityQueryTargetPos		= new Vector3();
+	
+	
 	class EntityFactoryData
 	{
 		Class< ? extends Entity >		m_type;
@@ -277,7 +280,7 @@ public class World implements Updatable
 		return null;
 	}
 	
-
+	
 	/**
 	 * Looks for the nearest entity of the specified type.
 	 * 
@@ -295,18 +298,16 @@ public class World implements Updatable
 			return null;
 		}
 		
-		float distanceSq		= 0;
 		float closestDistSq 	= range*range;
 		int closestEntIdx 		= -1;
-		Vector3 targetPos		= null;
 
 		for( int i = 0; i < count; ++i )
 		{
 			Entity entity = m_entities.get(i);
 			if ( entityType.isInstance( entity ) )
 			{
-				targetPos = entity.getPosition();
-				distanceSq = sourcePos.distSq2D( targetPos );
+				entity.getWorldBounds().getNearestPoint( sourcePos, m_entityQueryTargetPos );
+				float distanceSq = sourcePos.distSq2D( m_entityQueryTargetPos );
 				if ( distanceSq <= closestDistSq )
 				{
 					closestDistSq = distanceSq;
@@ -347,17 +348,15 @@ public class World implements Updatable
 			return;
 		}
 		
-		float distanceSq		= 0;
 		float radiusSq 			= range*range;
-		Vector3 targetPos		= null;
 
 		for( int i = 0; i < count; ++i )
 		{
 			Entity entity = m_entities.get(i);
 			if ( entityType.isInstance( entity ) )
 			{
-				targetPos = entity.getPosition();
-				distanceSq = sourcePos.distSq2D( targetPos );
+				entity.getWorldBounds().getNearestPoint( sourcePos, m_entityQueryTargetPos );
+				float distanceSq = sourcePos.distSq2D( m_entityQueryTargetPos );
 				if ( distanceSq <= radiusSq )
 				{
 					outEntities.add( (T)entity );

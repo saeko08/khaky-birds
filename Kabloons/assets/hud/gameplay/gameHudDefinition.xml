@@ -14,7 +14,15 @@
 		<Checked x='58' y='0' w='28' h='41' />
 	</Template>
 	
-	<Template type="ImageButtonVisualTemplate" class="ReleaseBaloonTemplate" path="hud/gameplay/throwBaloonIcon.xml" />
+	<Template type="CustomCheckboxVisualTemplate" class="RemoveFanTemplate" atlasName='hud/gameplay/gameHudAtlas.png' alphaOp='test' >
+		<Unchecked x='145' y='0' w='28' h='41' />
+		<Checked x='174' y='0' w='28' h='41' />
+	</Template>
+	
+	<Template type="CustomCheckboxVisualTemplate" class="ReleaseBaloonTemplate" atlasName='hud/gameplay/gameHudAtlas.png' alphaOp='test' >
+		<Unchecked x='116' y='0' w='28' h='41' />
+		<Checked x='203' y='0' w='28' h='41' />
+	</Template>
 	
 	<Template type="ImageVisualTemplate" class="FansCounter" fontPath='hud/gameplay/font.xml' border='0' />
 	

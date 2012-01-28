@@ -22,13 +22,6 @@
 		<position x='3.9' y='2.0' z='70' />
 	</Entity>
 	
-	<Entity type="Fan" direction="Left" >
-		<position x='3.2' y='1.0' z='60' />
-	</Entity>
-	
-	<Entity type="Fan" direction="Right" >
-		<position x='1.4' y='2.0' z='60' />
-	</Entity>
 	
 	<!-- Row 2 -->
 	
@@ -40,13 +33,6 @@
 		<position x='3.9' y='4.0' z='70' />
 	</Entity>
 	
-	<Entity type="Fan" direction="Left" >
-		<position x='3.2' y='3.0' z='60' />
-	</Entity>
-	
-	<Entity type="Fan" direction="Right" >
-		<position x='1.4' y='4.0' z='60' />
-	</Entity>
 	
 	<!-- Row 3 -->
 	
@@ -58,13 +44,23 @@
 		<position x='3.9' y='6.0' z='70' />
 	</Entity>
 	
+
+	<!--  Fans  -->
+	
+	<Entity type="Fan" direction="Left" >
+		<position x='3.2' y='1.0' z='60' />
+	</Entity>
+	
+	<Entity type="Fan" direction="Right" >
+		<position x='1.4' y='3.0' z='60' />
+	</Entity>
+
 	<Entity type="Fan" direction="Left" >
 		<position x='3.2' y='5.0' z='60' />
 	</Entity>
 	
 	<Entity type="Fan" direction="Right" >
-		<position x='1.4' y='6.0' z='60' />
+		<position x='1.4' y='7.0' z='60' />
 	</Entity>
-
 	
 </World>

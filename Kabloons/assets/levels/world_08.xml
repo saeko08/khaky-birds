@@ -1,5 +1,3 @@
-
-
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='4.8' height='8.0'>
 
@@ -12,7 +10,7 @@
 		<position x='3.6' y='7.91' z='50' />
  	</Entity>
  	
- 	<Entity type="Player" leftFans='4' rightFans='4' />
+ 	<Entity type="Player" leftFans='2' rightFans='2' />
  	
  	<!--  Buzzsaws  -->
 	

@@ -35,11 +35,12 @@ public class Fan extends Entity
 		Off
 	}
 		
-	AssetsFactory		m_assetsFactory;
-	Vector3				m_blowForce;
-	String 				m_onAnim;
-	String 				m_offAnim;
-	State				m_state;
+	AssetsFactory				m_assetsFactory;
+	Vector3						m_blowForce;
+	String 						m_onAnim;
+	String 						m_offAnim;
+	State						m_state;
+	public boolean 				m_wasCreatedByUser;
 	
 	/**
 	 * Manual placement constructor.
@@ -48,6 +49,7 @@ public class Fan extends Entity
 	 */
 	public Fan( Vector3 pos )
 	{
+		m_wasCreatedByUser = true;
 		m_assetsFactory = null;
 		setPosition( pos );
 		
@@ -65,6 +67,7 @@ public class Fan extends Entity
 	 */
 	public Fan( AssetsFactory assetsFactory )
 	{
+		m_wasCreatedByUser = false;
 		m_assetsFactory = assetsFactory;
 		m_state = State.On;
 	}
@@ -95,5 +98,22 @@ public class Fan extends Entity
 		
 		// adjust fan's Z position
 		getPosition().m_z = 60;
+	}
+
+	/**
+	 * Returns id of the direction in which the fan blows.
+	 * 
+	 * @return
+	 */
+	public Direction getBlowDirection() 
+	{
+		if ( m_blowForce.m_x < 0 )
+		{
+			return Direction.Left;
+		}
+		else
+		{
+			return Direction.Right;
+		}
 	}
 }

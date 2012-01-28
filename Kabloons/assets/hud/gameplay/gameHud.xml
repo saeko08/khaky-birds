@@ -7,19 +7,23 @@
 			<pos x='0.1' y='0.04' z='0' />
 		</Widget>
 		
-		<Widget type="ImageWidget" visualClass="FansCounter" id="LeftFansCounter" width='0.23' height='0.92' >
+		<Widget type="ImageWidget" visualClass="FansCounter" id="LeftFansCounter" width='0.13' height='0.92' >
 			<pos x='0.16' y='0.04' z='0' />
 		</Widget>
 		
 		<Widget type="CheckboxWidget" visualClass="RightFanButtonTemplate" id="RightFan" width='0.058' height='0.92' >
-			<pos x='0.4' y='0.04' z='0' />
+			<pos x='0.3' y='0.04' z='0' />
 		</Widget>
 		
-		<Widget type="ImageWidget" visualClass="FansCounter" id="RightFansCounter" width='0.23' height='0.92' >
-			<pos x='0.46' y='0.04' z='0' />
+		<Widget type="ImageWidget" visualClass="FansCounter" id="RightFansCounter" width='0.13' height='0.92' >
+			<pos x='0.36' y='0.04' z='0' />
 		</Widget>
 		
-		<Widget type="ButtonWidget" visualClass="ReleaseBaloonTemplate" id="ReleaseBaloon" width='0.058' height='0.92' >
+		<Widget type="CheckboxWidget" visualClass="RemoveFanTemplate" id="RemoveFan" width='0.058' height='0.92' >
+			<pos x='0.5' y='0.04' z='0' />
+		</Widget>
+		
+		<Widget type="CheckboxWidget" visualClass="ReleaseBaloonTemplate" id="ReleaseBaloon" width='0.058' height='0.92' >
 			<pos x='0.7' y='0.04' z='0' />
 		</Widget>
 				

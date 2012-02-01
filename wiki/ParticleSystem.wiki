@@ -111,6 +111,18 @@ As for the data specific to particular emitter implementations:
    * `pos` - offset position relative to the particle system's position  from which the particles should be emitted
    * `velocity` - velocity ( speed & direction ) with which the particles should be emitted
 
+# `LineParticleEmitter`
+{{{
+<Emitter type="LineParticleEmitter" >
+	<lineStart x='0' y='-1' z='0' />
+	<lineEnd x='0' y='1' z='0' />
+	<velocity x='1' y='0' z='0' />
+</Emitter>
+}}}
+   * `lineStart` - offset position relative to the particle system's position where the emission line begins
+   * `lineEnd` - offset position relative to the particle system's position where the emission line ends
+   * `velocity` - velocity ( speed & direction ) with which the particles should be emitted
+
 ===Particle types===
 
 The particle types the engine supports are:

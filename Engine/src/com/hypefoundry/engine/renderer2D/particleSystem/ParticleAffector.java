@@ -17,7 +17,7 @@ public interface ParticleAffector
 	 * Moves the particles around.
 	 * 
 	 * @param deltaTime
-	 * @param particles			particles to animate
+	 * @param particle					particle to animate
 	 */
 	void update( float deltaTime, Particle particle );
 	

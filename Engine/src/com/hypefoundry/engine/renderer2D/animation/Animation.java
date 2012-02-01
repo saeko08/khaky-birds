@@ -173,6 +173,16 @@ public class Animation extends Resource
 	}
 	
 	/**
+	 * Tells if the animation is looped or not.
+	 * 
+	 * @return
+	 */
+	public boolean isLooped()
+	{
+		return m_looped;
+	}
+	
+	/**
 	 * Returns an index of the animation frame for the specified time.
 	 * 
 	 * @param animationTime

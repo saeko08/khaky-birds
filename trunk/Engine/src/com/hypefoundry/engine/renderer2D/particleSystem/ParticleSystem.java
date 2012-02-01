@@ -75,6 +75,7 @@ public class ParticleSystem extends Resource
 	static private EmittersFactoryData[]			m_emittersFactories = {
 			new EmittersFactoryData( RadialParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new RadialParticleEmitter(); } } ),
 			new EmittersFactoryData( DirectionalParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new DirectionalParticleEmitter(); } } ),
+			new EmittersFactoryData( LineParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new LineParticleEmitter(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
@@ -82,6 +83,7 @@ public class ParticleSystem extends Resource
 	// ------------------------------------------------------------------------
 	static private AffectorsFactoryData[]			m_affectorsFactories = {
 			new AffectorsFactoryData( LinearMovementAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new LinearMovementAffector(); } } ),
+			new AffectorsFactoryData( BlowMovementAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new BlowMovementAffector(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------

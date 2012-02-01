@@ -91,7 +91,6 @@ public class ParticlesTest extends AndroidTestCase
 	
 	public void testParticleMovement()
 	{
-
 		ParticleSystem ps = new ParticleSystem();
 		ps.addEmitter( new DirectionalParticleEmitter( new Vector3(), new Vector3( 1, 0, 0 ) )							
 							.setAmountEmittedEachTick( 1 )

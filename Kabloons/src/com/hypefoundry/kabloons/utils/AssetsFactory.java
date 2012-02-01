@@ -6,6 +6,7 @@ package com.hypefoundry.kabloons.utils;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.util.serialization.DataLoader;
+import com.hypefoundry.kabloons.entities.background.AnimatedBackground;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
 import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSaw;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoor;
@@ -66,8 +67,8 @@ public class AssetsFactory
 	 */
 	private class FanFactory
 	{
-		String			m_fanOnAnim;
-		String			m_fanOffAnim;
+		String			m_fanAnim;
+		String			m_windFx;
 		BoundingBox		m_localBounds;
 		Vector3			m_blowForce;
 		
@@ -82,8 +83,8 @@ public class AssetsFactory
 			m_localBounds = new BoundingBox();
 			m_localBounds.load( "localBounds", loader );
 			
-			m_fanOnAnim = loader.getStringValue( "fanOnAnim" );
-			m_fanOffAnim = loader.getStringValue( "fanOffAnim" );
+			m_fanAnim = loader.getStringValue( "anim" );
+			m_windFx = loader.getStringValue( "windFx" );
 			
 			m_blowForce = blowForce;
 		}
@@ -95,7 +96,7 @@ public class AssetsFactory
 		 */
 		void initialize( Fan fan )
 		{
-			fan.initialize( m_localBounds, m_fanOnAnim, m_fanOffAnim, m_blowForce );
+			fan.initialize( m_localBounds, m_fanAnim, m_windFx, m_blowForce );
 		}
 	}
 	
@@ -206,6 +207,40 @@ public class AssetsFactory
 			buzzSaw.setBoundingBox( m_localBounds );
 		}
 	}
+	
+	/**
+	 * Definition of a toggle.
+	 * 
+	 * @author Paksas
+	 */
+	public class PuffData
+	{
+		public String			m_animPath;
+		public BoundingBox		m_localBounds;
+		
+		/**
+		 * Constructor.
+		 * 
+		 * @param loader
+		 */
+		PuffData( DataLoader loader )
+		{			
+			DataLoader buzzSawNode = loader.getChild( "Puff" );
+			if ( buzzSawNode != null )
+			{
+				m_animPath = buzzSawNode.getStringValue( "anim" );
+				
+				m_localBounds = new BoundingBox();
+				m_localBounds.load( "localBounds", buzzSawNode );
+			}
+		}
+		
+		public void initialize( AnimatedBackground entity ) 
+		{
+			entity.m_path = m_animPath;
+			entity.setBoundingBox( m_localBounds );
+		}
+	}
 
 	
 	// baloon factories
@@ -214,7 +249,7 @@ public class AssetsFactory
 	private ExitDoorData 		m_exitDoorDefinition;
 	private ToggleData 			m_toggleDefinition;
 	private BuzzSawData 		m_buzzSawDefinition;
-
+	private PuffData			m_puffData;
 	
 	// ------------------------------------------------------------------------
 	// API
@@ -256,6 +291,7 @@ public class AssetsFactory
 		m_exitDoorDefinition = new ExitDoorData( loader );
 		m_toggleDefinition = new ToggleData( loader );
 		m_buzzSawDefinition = new BuzzSawData( loader );
+		m_puffData = new PuffData( loader );
 	}
 	
 	/**
@@ -323,5 +359,17 @@ public class AssetsFactory
 	public void initializeBuzzSaw( BuzzSaw buzzSaw ) 
 	{
 		m_buzzSawDefinition.initialize( buzzSaw );
+	}
+
+	/**
+	 * Initializes a puff effect that appears when we add or remove a fan.
+	 * 
+	 * @param effect
+	 * @param position
+	 */
+	public void initializePuff( AnimatedBackground effect, Vector3 position ) 
+	{
+		m_puffData.initialize( effect );
+		effect.setPosition( position.m_x, position.m_y, 30.0f );
 	}
 }

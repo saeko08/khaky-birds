@@ -129,7 +129,7 @@ public class GameScreen extends Screen
 		// register visuals
 		m_world.attachView( m_worldRenderer );
 		m_worldRenderer.register( Background.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BackgroundVisual( m_resourceManager, parentEntity ); } } );
-		m_worldRenderer.register( AnimatedBackground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new AnimatedBackgroundVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( AnimatedBackground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new AnimatedBackgroundVisual( m_world, m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Baloon.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BaloonVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( ExitDoor.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ExitDoorVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Fan.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FanVisual( m_resourceManager, parentEntity ); } } );

@@ -11,6 +11,8 @@ import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.animation.Animation;
 import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystem;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystemPlayer;
 import com.hypefoundry.engine.world.Entity;
 
 
@@ -21,11 +23,10 @@ import com.hypefoundry.engine.world.Entity;
 public class FanVisual extends EntityVisual 
 {
 
-	private Fan					m_fan;
-	private	AnimationPlayer		m_animPlayer;
-	
-	private int					m_onAnimIdx;
-	private int					m_offAnimIdx;
+	private Fan						m_fan;
+	private	AnimationPlayer			m_animPlayer;
+	private ParticleSystemPlayer	m_windPlayer;
+	private float					m_rotationSpeed = 0.3f;
 	
 	/**
 	 * Constructor.
@@ -39,37 +40,36 @@ public class FanVisual extends EntityVisual
 		
 		m_fan = (Fan)fanEntity;
 		
+		// load and setup an animation
 		m_animPlayer = new AnimationPlayer();
+		Animation onAnim = resMgr.getResource( Animation.class, m_fan.m_anim );
+		m_animPlayer.addAnimation( onAnim );
 		
-		Animation onAnim = resMgr.getResource( Animation.class, m_fan.m_onAnim );
-		m_onAnimIdx = m_animPlayer.addAnimation( onAnim );
-		
-		Animation offAnim = resMgr.getResource( Animation.class, m_fan.m_offAnim );
-		m_offAnimIdx = m_animPlayer.addAnimation( offAnim );
+		// load and setup the wind effect
+		ParticleSystem windParticleSystem = resMgr.getResource( ParticleSystem.class, m_fan.m_windFx );
+		m_windPlayer = new ParticleSystemPlayer( windParticleSystem, true);
 	}
 
 	@Override
 	public void draw( SpriteBatcher batcher, Camera2D camera, float deltaTime ) 
 	{
-		switch( m_fan.m_state )
-		{
-			case On:
-			{
-				m_animPlayer.select( m_onAnimIdx );
-				break;
-			}
-			
-			case Off:
-			{
-				m_animPlayer.select( m_offAnimIdx );
-				break;
-			}
-		}
-		
 		Vector3 pos = m_entity.getPosition();
 		BoundingBox bs = m_entity.getBoundingShape();
 		
-		batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime ) );
+		// play the animation
+		if ( m_rotationSpeed < 1.0f )
+		{
+			// appear to be starting the fan just after it's been created
+			m_rotationSpeed += deltaTime * 0.1f;
+		}
+		else
+		{
+			m_rotationSpeed = 1.0f;
+		}
+		batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime * m_rotationSpeed ) );
+		
+		// play the wind effect
+		m_windPlayer.draw( pos.m_x, pos.m_y, batcher, deltaTime * m_rotationSpeed );
 	}
 
 }

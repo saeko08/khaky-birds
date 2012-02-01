@@ -19,6 +19,7 @@ import com.hypefoundry.engine.renderer2D.Camera2D;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.kabloons.GameScreen;
+import com.hypefoundry.kabloons.entities.background.AnimatedBackground;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
 import com.hypefoundry.kabloons.entities.fan.Fan;
 import com.hypefoundry.kabloons.utils.AssetsFactory;
@@ -234,6 +235,9 @@ public class PlayerController extends FiniteStateMachine
 					m_assetsFactory.initializeFan( fan, direction );
 					m_world.addEntity( fan );
 					
+					// play proper effects
+					playFanEditionEffect( fan );
+					
 					// update the hud
 					updateFanCounters();
 					
@@ -267,6 +271,9 @@ public class PlayerController extends FiniteStateMachine
 					{
 						m_player.m_fansLeft[clickedFan.getBlowDirection().m_idx]++;
 						m_world.removeEntity( clickedFan );
+						
+						// play proper effects
+						playFanEditionEffect( clickedFan );
 					}
 					
 					// update the hud
@@ -332,6 +339,17 @@ public class PlayerController extends FiniteStateMachine
 			m_radioGroup.addCheckbox( m_hudLayout.getWidget( CheckboxWidget.class, "RemoveFan" ) );
 			
 			m_hudLayout.attachButtonListener( m_radioGroup );
+		}
+		
+		/**
+		 * Plays the effects associated with a fan appearing or disappearing from the screen
+		 */
+		private void playFanEditionEffect( Fan fan )
+		{
+			// spawn the puff effect
+			AnimatedBackground puffEffect = new AnimatedBackground();
+			m_assetsFactory.initializePuff( puffEffect, fan.getPosition() );
+			m_world.addEntity( puffEffect );
 		}
 	}
 	

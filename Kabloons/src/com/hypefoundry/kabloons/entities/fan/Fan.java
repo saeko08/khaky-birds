@@ -28,18 +28,11 @@ public class Fan extends Entity
 			m_idx = idx;
 		}
 	}
-	
-	public enum State
-	{
-		On,
-		Off
-	}
 		
 	AssetsFactory				m_assetsFactory;
 	Vector3						m_blowForce;
-	String 						m_onAnim;
-	String 						m_offAnim;
-	State						m_state;
+	String 						m_anim;
+	String 						m_windFx;
 	public boolean 				m_wasCreatedByUser;
 	
 	/**
@@ -56,8 +49,6 @@ public class Fan extends Entity
 		// adjust fan's Z position
 		getPosition().m_z = 60;
 		
-		// set fan's initial state
-		m_state = State.On;
 	}
 	
 	/**
@@ -69,23 +60,22 @@ public class Fan extends Entity
 	{
 		m_wasCreatedByUser = false;
 		m_assetsFactory = assetsFactory;
-		m_state = State.On;
 	}
 
 	/**
 	 * Initializes the fan.
 	 * 
 	 * @param localBounds
-	 * @param onAnim
-	 * @param offAnim
+	 * @param anim
+	 * @param windFx
 	 * @param blowForce
 	 */
-	public void initialize( BoundingBox localBounds, String onAnim, String offAnim, Vector3 blowForce ) 
+	public void initialize( BoundingBox localBounds, String anim, String windFx, Vector3 blowForce ) 
 	{
 		setBoundingBox( localBounds );
 		
-		m_onAnim = onAnim;
-		m_offAnim = offAnim;
+		m_anim = anim;
+		m_windFx = windFx;
 		
 		m_blowForce = blowForce;
 	}

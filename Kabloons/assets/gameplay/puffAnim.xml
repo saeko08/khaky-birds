@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.05' atlasName='gameplay/atlas.png' alphaOp='test' looped="false">
+	<Frame type="StaticRegion" x='438' y='612' w='99' h='91' />
+	<Frame type="StaticRegion" x='538' y='612' w='99' h='91' />
+	<Frame type="StaticRegion" x='638' y='612' w='99' h='91' />
+	<Frame type="StaticRegion" x='738' y='612' w='99' h='91' />
+	<Frame type="StaticRegion" x='838' y='612' w='99' h='91' />
+	<Frame type="StaticRegion" x='438' y='704' w='99' h='91' />
+	<Frame type="StaticRegion" x='538' y='704' w='99' h='91' />
+	<Frame type="StaticRegion" x='638' y='704' w='99' h='91' />
+	<Frame type="StaticRegion" x='738' y='704' w='99' h='91' />
+</Animation>

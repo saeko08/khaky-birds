@@ -14,9 +14,9 @@ import com.hypefoundry.engine.world.Entity;
  */
 public class AnimatedBackground extends Entity 
 {
-	String		m_path;
+	public String		m_path;
 	
-	
+
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{

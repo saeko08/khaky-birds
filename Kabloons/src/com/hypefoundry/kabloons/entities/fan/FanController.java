@@ -31,12 +31,6 @@ public class FanController extends FiniteStateMachine
 	 */
 	class Active extends FSMState implements EntityEventListener
 	{			
-		@Override
-		public void activate()
-		{
-			// update fan's state
-			m_fan.m_state = Fan.State.On;
-		}
 		
 		@Override
 		public void onEvent( EntityEvent event ) 
@@ -52,20 +46,6 @@ public class FanController extends FiniteStateMachine
 		}
 	}
 	
-	/**
-	 * Fan is switched off.
-	 * @author Paksas
-	 *
-	 */
-	class Inactive extends FSMState
-	{			
-		@Override
-		public void activate()
-		{
-			// update fan's state
-			m_fan.m_state = Fan.State.Off;
-		}
-	}
 	
 	// ------------------------------------------------------------------------
 	// Methods
@@ -84,7 +64,6 @@ public class FanController extends FiniteStateMachine
 		
 		// register states
 		register( new Active() );
-		register( new Inactive() );
 		begin( Active.class );
 	}
 

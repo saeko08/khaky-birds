@@ -100,7 +100,6 @@ As for the data specific to particular emitter implementations:
 }}}
    * `speed` - how fast should the particles travel initially
    * `pos` - offset position relative to the particle system's position from which the particles should be emitted
-
   # `DirectionalParticleEmitter`
 {{{
 <Emitter type="DirectionalParticleEmitter" >
@@ -110,8 +109,7 @@ As for the data specific to particular emitter implementations:
 }}}
    * `pos` - offset position relative to the particle system's position  from which the particles should be emitted
    * `velocity` - velocity ( speed & direction ) with which the particles should be emitted
-
-# `LineParticleEmitter`
+  # `LineParticleEmitter`
 {{{
 <Emitter type="LineParticleEmitter" >
 	<lineStart x='0' y='-1' z='0' />
@@ -133,7 +131,6 @@ The particle types the engine supports are:
 </Emitter>
 }}}
     * `animPath` - specifies the location of an animation definition asset
-
   # `TexturedParticle`
 {{{
 <Emitter particleType="TexturedParticle" texturePath="textures/myTexture.xml" >

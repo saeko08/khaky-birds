@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParticleSystem >
+	<Emitter type="LineParticleEmitter" frequency='0.1' amountEmittedEachTick='1' totalAmount='20' timeToLive='2' width='0.02' height='0.025' particleType="TexturedParticle" texturePath="gameplay/wind/windParticle.xml" >
+		<lineStart x='0' y='0.975' z='0' />
+		<lineEnd x='0' y='-0.975' z='0' />
+		<velocity x='1' y='0' z='0' />
+	</Emitter>
+	<Affector type="BlowMovementAffector" range='1.0' force='0.5' >
+		<origin x='-0.5' y='0' z='0' />
+		<blowAxis x='1' y='0' z='0' />
+	</Affector>
+</ParticleSystem>

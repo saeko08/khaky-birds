@@ -42,6 +42,7 @@ import com.hypefoundry.kabloons.entities.exitDoor.ExitDoor;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoorVisual;
 import com.hypefoundry.kabloons.entities.fan.Fan;
 import com.hypefoundry.kabloons.entities.fan.FanController;
+import com.hypefoundry.kabloons.entities.fan.FanPhysicalBody;
 import com.hypefoundry.kabloons.entities.fan.FanVisual;
 import com.hypefoundry.kabloons.entities.player.Player;
 import com.hypefoundry.kabloons.entities.player.PlayerController;
@@ -146,7 +147,7 @@ public class GameScreen extends Screen
 		// register physics
 		m_world.attachView( m_physicsView );
 		m_physicsView.register( Baloon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
-		m_physicsView.register( Fan.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( Fan.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new FanPhysicalBody( parentEntity ); } } );
 		m_physicsView.register( ExitDoor.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( Toggle.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( BuzzSaw.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new BuzzSawPhysicalBody( parentEntity ); } } );

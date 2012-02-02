@@ -70,6 +70,7 @@ public class AssetsFactory
 		String			m_fanAnim;
 		String			m_windFx;
 		BoundingBox		m_localBounds;
+		BoundingBox		m_windFieldLocalBounds;
 		Vector3			m_blowForce;
 		
 		/**
@@ -82,6 +83,9 @@ public class AssetsFactory
 		{
 			m_localBounds = new BoundingBox();
 			m_localBounds.load( "localBounds", loader );
+			
+			m_windFieldLocalBounds = new BoundingBox();
+			m_windFieldLocalBounds.load( "windFieldBounds", loader );
 			
 			m_fanAnim = loader.getStringValue( "anim" );
 			m_windFx = loader.getStringValue( "windFx" );
@@ -96,7 +100,7 @@ public class AssetsFactory
 		 */
 		void initialize( Fan fan )
 		{
-			fan.initialize( m_localBounds, m_fanAnim, m_windFx, m_blowForce );
+			fan.initialize( m_localBounds, m_windFieldLocalBounds, m_fanAnim, m_windFx, m_blowForce );
 		}
 	}
 	

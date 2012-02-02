@@ -4,6 +4,7 @@
 package com.hypefoundry.kabloons.entities.fan;
 
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
@@ -31,6 +32,7 @@ public class Fan extends Entity
 		
 	AssetsFactory				m_assetsFactory;
 	Vector3						m_blowForce;
+	BoundingBox					m_windFieldBoundsWorldSpace = new BoundingBox();
 	String 						m_anim;
 	String 						m_windFx;
 	public boolean 				m_wasCreatedByUser;
@@ -66,11 +68,12 @@ public class Fan extends Entity
 	 * Initializes the fan.
 	 * 
 	 * @param localBounds
+	 * @param windFieldBoundsLocalSpace
 	 * @param anim
 	 * @param windFx
 	 * @param blowForce
 	 */
-	public void initialize( BoundingBox localBounds, String anim, String windFx, Vector3 blowForce ) 
+	public void initialize( BoundingBox localBounds, BoundingBox windFieldBoundsLocalSpace, String anim, String windFx, Vector3 blowForce ) 
 	{
 		setBoundingBox( localBounds );
 		
@@ -78,6 +81,9 @@ public class Fan extends Entity
 		m_windFx = windFx;
 		
 		m_blowForce = blowForce;
+		
+		m_windFieldBoundsWorldSpace.set( windFieldBoundsLocalSpace );
+		m_windFieldBoundsWorldSpace.translate( getPosition() );
 	}
 
 	@Override
@@ -105,5 +111,15 @@ public class Fan extends Entity
 		{
 			return Direction.Right;
 		}
+	}
+
+	/**
+	 * Returns a bounding box that embraces the wind field ( in world space coordinates ).
+	 *  
+	 * @return
+	 */
+	public BoundingShape getWindBounds() 
+	{
+		return m_windFieldBoundsWorldSpace;
 	}
 }

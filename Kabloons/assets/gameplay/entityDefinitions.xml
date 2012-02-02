@@ -10,13 +10,15 @@
 	
 	<!-- Fans -->
 	
-	<Fan direction="Left" anim="gameplay/leftFanOn.xml" windFx="gameplay/wind/windFx.xml" >
+	<Fan direction="Left" anim="gameplay/leftFanOn.xml" windFx="gameplay/wind/leftWindFx.xml" >
 		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
+		<windFieldBounds minX='-2.0' minY='-0.975' maxX='0.17' maxY='0.975' />
 		<BlowForce x='-0.3' y='0' z='0' />
 	</Fan>
 	
-	<Fan direction="Right" anim="gameplay/rightFanOn.xml" windFx="gameplay/wind/windFx.xml" >
+	<Fan direction="Right" anim="gameplay/rightFanOn.xml" windFx="gameplay/wind/rightWindFx.xml" >
 		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
+		<windFieldBounds minX='-0.17' minY='-0.975' maxX='2.0' maxY='0.975' />
 		<BlowForce x='0.3' y='0' z='0' />
 	</Fan>
 	

@@ -195,6 +195,19 @@ final public class BoundingBox implements BoundingShape
 		return outExtrudedShape;
 	}
 	
+	/**
+	 * Translates the bounding box by the specified offset 
+	 * 
+	 * @param offset
+	 */
+	public void translate( Vector3 offset ) 
+	{
+		m_minX += offset.m_x;
+		m_minY += offset.m_y;
+		m_maxX += offset.m_x;
+		m_maxY += offset.m_y;
+	}
+	
 	// ------------------------------------------------------------------------
 	// Overlap tests
 	// ------------------------------------------------------------------------

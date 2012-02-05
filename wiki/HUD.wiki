@@ -104,11 +104,22 @@ The definition is an extended version of the `DefaultFrameVisualTemplate`, and i
 	</Frame>
 		
 	<IncreaseButton fontPath="font.xml" borderSize='5' path="hud/increaseButton.xml" />
-		<DecreaseButton fontPath="font.xml" borderSize='5' path="hud/decreaseButton.xml" />
+	<DecreaseButton fontPath="font.xml" borderSize='5' path="hud/decreaseButton.xml" />
 </Template>
 }}}
 
 It requires to specify the looks of a frame and the buttons. The visual types of these widgets are hardcoded at the time, so you're bound to use a `DefaultFrameVisualTemplate` and two `ImageButtonVisualTemplate` ( at least for now ) - but how you define them, that's up to you.
+
+  * `CustomCheckboxVisualTemplate` - a template for defining the looks of checkboxes. Its definition is very similar to that of an image-based button, the difference is that you need to define two such button looks here - one for the 'checked', and the other for the 'unchecked' state:
+
+{{{
+<Template type="CustomCheckboxVisualTemplate" class="SoundCheckbox" alphaOp='test' atlasName='hud/menu/mainMenuAtlas.png' >
+		<Checked x='799' y='233' w='97' h='95' />
+		<Unchecked x='898' y='233' w='97' h='95' />
+	</Template>
+}}}
+
+Here instead of specifying a texture asset, you can specify the atlass, texture mode and the coordinates directly in the template definition ( *NOTE* let's see which one is more convenientu - using external assets, or specifying that info directly in the template definition )
 
   * `ImageVisualTemplate` - a template for displaying images
 
@@ -221,6 +232,16 @@ public void detachButtonListener( ButtonListener listener );
 }}}
 
 `caption` attribute describes a text that should be displayed on the button. The text will be trimmed to fit into the button.
+
+  * `CheckboxWidget` - a checkbox
+
+{{{
+<Widget type="CheckboxWidget" visualClass="SoundCheckbox" id="Toggle Sound" width='0.202' height='0.119' >
+	<pos x='0.554' y='0.606' z='0' />
+</Widget>
+}}}
+
+A registered button listener will also be invoked whenever the checkbox is hit an changes its state ( *see* `ButtonWidget` descripiton on attaching a button listener )
 
 
   * `ImageWidget` - displays images.

@@ -11,6 +11,7 @@ import com.hypefoundry.khakyBirds.campaign.Level01Controller;
 import com.hypefoundry.khakyBirds.entities.bird.Bird;
 import com.hypefoundry.khakyBirds.entities.bird.BirdController;
 import com.hypefoundry.khakyBirds.entities.bird.BirdVisual;
+import com.hypefoundry.khakyBirds.entities.bird.Crapping;
 import com.hypefoundry.khakyBirds.entities.cables.ElectricCables;
 import com.hypefoundry.khakyBirds.entities.cables.ElectricCablesAI;
 import com.hypefoundry.khakyBirds.entities.cables.ElectricCablesVisual;
@@ -126,6 +127,7 @@ public class GameScreen extends Screen
 		
 		// register animation events
 		Animation.registerAnimEvent( Fire.class, new AnimEventFactory() { @Override public EntityEvent create() { return new Fire(); } } );
+		Animation.registerAnimEvent( Crapping.class, new AnimEventFactory() { @Override public EntityEvent create() { return new Crapping(); } } );
 		
 		// load the world
 		try 
@@ -204,7 +206,7 @@ public class GameScreen extends Screen
 		m_world.addEntity( new GameCamera() );
 		
 		// initialize the HUD renderer
-		Hud hud = m_resourceManager.getResource( Hud.class, "hud/hudDefinition.xml" );
+		Hud hud = m_resourceManager.getResource( Hud.class, "hud/gameplay/gameHudDefinition.xml" );
 		m_hudRenderer = new HudRenderer( game, hud );
 		registerInputHandler( m_hudRenderer );
 	}

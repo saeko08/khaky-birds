@@ -69,14 +69,28 @@ public class BirdVisual extends EntityVisual
 		}
 		else if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.Jumping)
 		{
-			m_animationPlayer.select(ANIM_FLY);
+			if (m_bird.m_canCrap == false)
+			{
+				m_animationPlayer.select(ANIM_FLY_SHIT);
+			}
+			else
+			{
+				m_animationPlayer.select(ANIM_FLY);
+			}
 		}
 		else
 		{
-			m_animationPlayer.select(ANIM_IDLE);
+			if (m_bird.m_canCrap == false)
+			{
+				m_animationPlayer.select(ANIM_SHIT);
+			}
+			else
+			{
+				m_animationPlayer.select(ANIM_IDLE);
+			}
 		}
 		
-		batcher.drawSprite( pos, bs, m_bird.getFacing(), m_animationPlayer.getTextureRegion( deltaTime ) );
+		batcher.drawSprite( pos, bs, m_bird.getFacing(), m_animationPlayer.getTextureRegion(m_bird, deltaTime) );
 	}
 
 }

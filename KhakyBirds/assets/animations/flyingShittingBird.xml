@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Animation frameDuration='0.5' atlasName='atlas.png' alphaOp='test'>
 	<Frame type="StaticRegion" x='833' y='83' w='56' h='38'/>
-	<Frame type="StaticRegion" x='833' y='124' w='56' h='38'/>
+	<Frame type="StaticRegion" x='833' y='124' w='56' h='38'>
+		<Event type="Crapping"/>
+	</Frame>
 </Animation>

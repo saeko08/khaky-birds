@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout>
+	<Widget type="FrameWidget" visualClass="MyFrame" width='1' height='0.056'>
+		<pos x='0' y='0.944' z='0' />
+		
+		<Widget type="ButtonWidget" visualClass="CrapButton" id="Crap" width='0.1' height='0.6' >
+			<pos x='0.02' y='0.3' z='0' />
+		</Widget>
+		
+	</Widget>
+</Layout>

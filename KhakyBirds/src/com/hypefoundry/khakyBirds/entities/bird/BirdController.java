@@ -15,6 +15,8 @@ import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.core.Input.TouchEvent;
 import com.hypefoundry.engine.game.InputHandler;
+import com.hypefoundry.engine.hud.ButtonListener;
+import com.hypefoundry.engine.hud.HudLayout;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
@@ -22,6 +24,7 @@ import com.hypefoundry.engine.world.EventFactory;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
 import com.hypefoundry.engine.renderer2D.Camera2D;
+import com.hypefoundry.engine.renderer2D.animation.AnimEvent;
 
 
 /**
@@ -42,17 +45,25 @@ public class BirdController extends FiniteStateMachine
 	
 	// ----------------------------------------------------------------
 	
-	class Idle extends FSMState implements EntityEventListener, InputHandler
+	class Idle extends FSMState implements EntityEventListener, InputHandler, ButtonListener
 	{
 		private boolean	m_gestureStarted = false;
 		private	Vector3 m_goToPos  = new Vector3();
 		private	Vector3 m_gestureDir  = new Vector3();
+		private HudLayout			m_hudLayout;
 		
 		@Override
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Idle;
 			m_gestureStarted = false;
+			
+			if ( m_hudLayout == null )
+			{
+				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHud.xml" );
+				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
+				m_hudLayout.attachButtonListener( this );
+			}
 			
 			// attach the input handler
 			m_screen.registerInputHandler( this );
@@ -66,19 +77,25 @@ public class BirdController extends FiniteStateMachine
 		{
 			m_gestureStarted = false;
 			
+		
+			m_hudLayout.detachButtonListener( this );
+			m_hudLayout.detachRenderer( m_screen.m_hudRenderer ); 
+			m_hudLayout = null;
+			
 			// detach the input handler
 			m_screen.unregisterInputHandler( this );
+
 		}
 		
 		@Override
 		public boolean handleInput( Input input, float deltaTime ) 
 		{
-			// check if we're holding the input longer than expected - maybe we need to start crapping
-			if ( input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
+			// check if we're holding the input longer than expected - maybe we need to start crapping - temporary removed for prototaping purposes
+			/*if ( input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
 			{
 				transitionTo( Shitting.class );
 				return false;
-			}
+			}*/
 			
 			
 			List< TouchEvent > inputEvents = input.getTouchEvents();
@@ -169,6 +186,25 @@ public class BirdController extends FiniteStateMachine
 			{
 				die();
 			}
+			else if (event instanceof AnimEvent )
+			{
+				AnimEvent animEvent = (AnimEvent)event;
+				if ( animEvent.m_event instanceof Crapping )
+				{
+					m_bird.enableCrapping(true);
+				}
+			}
+		}
+
+		@Override
+		public void onButtonPressed(String buttonId) 
+		{
+			if ( buttonId.equals( "Crap" ) && m_bird.m_canCrap )
+			{
+				m_bird.enableCrapping(false);
+				m_bird.makeShit();
+				
+			}
 		}
 	}
 	// ----------------------------------------------------------------
@@ -255,19 +291,27 @@ public class BirdController extends FiniteStateMachine
 	
 	// ----------------------------------------------------------------
 	
-	class Flying extends FSMState implements EntityEventListener, InputHandler
+	class Flying extends FSMState implements EntityEventListener, InputHandler, ButtonListener
 	{
 		
 		private	Vector3 m_goToPos  		= new Vector3();
 		private	Vector3 m_tmpScreenPos	= new Vector3();
 		private	Vector3 m_tmpWorldPos  	= new Vector3();
 		private boolean m_canFly      	= false;
+		private HudLayout			m_hudLayout;
 
 		@Override
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Flying;
 			m_canFly = false;
+			
+			if ( m_hudLayout == null )
+			{
+				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHud.xml" );
+				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
+				m_hudLayout.attachButtonListener( this );
+			}
 			
 			// attach the input handler
 			m_screen.registerInputHandler( this );
@@ -278,6 +322,10 @@ public class BirdController extends FiniteStateMachine
 		{
 			m_canFly      = false;
 			m_sb.clear();
+			
+			m_hudLayout.detachButtonListener( this );
+			m_hudLayout.detachRenderer( m_screen.m_hudRenderer ); 
+			m_hudLayout = null;
 			
 			// detach the input handler
 			m_screen.unregisterInputHandler( this );
@@ -296,12 +344,12 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public boolean handleInput(Input input, float deltaTime) 
 		{	
-			// first check if it's not the high time to crap
-			if ( input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
+			// first check if it's not the high time to crap - temporary removing for prototyping purposes
+			/*if ( input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
 			{
 				transitionTo( FlyingShitting.class );
 				return false;
-			}
+			}*/
 			
 			List< TouchEvent > inputEvents = input.getTouchEvents();
 			int count = inputEvents.size();
@@ -369,6 +417,14 @@ public class BirdController extends FiniteStateMachine
 			{
 				die();
 			}
+			else if (event instanceof AnimEvent )
+			{
+				AnimEvent animEvent = (AnimEvent)event;
+				if ( animEvent.m_event instanceof Crapping )
+				{
+					m_bird.enableCrapping(true);
+				}
+			}
 		}
 
 		public void tryLanding()
@@ -382,29 +438,43 @@ public class BirdController extends FiniteStateMachine
 			int cableIdx = m_bird.m_cables.getNearestCableIdx( m_bird.getPosition() );			
 			transitionTo( Landing.class ).setLandingPosition( cableIdx );
 		}
+		
+		@Override
+		public void onButtonPressed(String buttonId) 
+		{
+			if ( buttonId.equals( "Crap" ) && m_bird.m_canCrap )
+			{
+				m_bird.enableCrapping(false);
+				m_bird.makeShit();
+				
+			}
+		}
 	}
 	
 	// ----------------------------------------------------------------
 	
-	class Shitting extends FSMState implements EntityEventListener, InputHandler
+	class Shitting extends FSMState implements EntityEventListener
 	{
 		@Override
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.Shitting;
 			
+			m_bird.makeShit();
+			
 			// attach the input handler
-			m_screen.registerInputHandler( this );
+			//m_screen.registerInputHandler( this );
 		}
 		
 		@Override
 		public void deactivate()
 		{
 			// detach the input handler
-			m_screen.unregisterInputHandler( this );
+			//m_screen.unregisterInputHandler( this );
 		}
 		
-		@Override
+		// commented out for prototyping purposes
+		/*@Override
 		public boolean handleInput( Input input, float deltaTime ) 
 		{	
 			List< TouchEvent > inputEvents = input.getTouchEvents();
@@ -421,12 +491,20 @@ public class BirdController extends FiniteStateMachine
 			}
 			
 			return false;
-		}
+		}*/
 		
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if (event instanceof Shocked || event instanceof Shot )
+			if (event instanceof AnimEvent )
+			{
+				AnimEvent animEvent = (AnimEvent)event;
+				if ( animEvent.m_event instanceof Crapping )
+				{
+					transitionTo( Idle.class );
+				}
+			}
+			else if (event instanceof Shocked || event instanceof Shot )
 			{
 				die();
 			}
@@ -434,24 +512,27 @@ public class BirdController extends FiniteStateMachine
 	}
 	
 	// ----------------------------------------------------------------
-	class FlyingShitting extends FSMState implements EntityEventListener, InputHandler
+	class FlyingShitting extends FSMState implements EntityEventListener
 	{
 		@Override
 		public void activate()
 		{
 			m_bird.m_state = Bird.State.FlyingShitting;
 			
+			m_bird.makeShit();
 			// attach the input handler
-			m_screen.registerInputHandler( this );
+			//m_screen.registerInputHandler( this );
 		}
 		
 		@Override
 		public void deactivate()
 		{
 			// detach the input handler
-			m_screen.unregisterInputHandler( this );
+			//m_screen.unregisterInputHandler( this );
 		}
 		
+		// commented out for prototyping purposes
+		/*@Override
 		@Override
 		public boolean handleInput( Input input, float deltaTime ) 
 		{	
@@ -469,12 +550,20 @@ public class BirdController extends FiniteStateMachine
 			}
 			
 			return false;
-		}
+		}*/
 		
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
-			if ( event instanceof Eaten || event instanceof Shot )
+			if (event instanceof AnimEvent )
+			{
+				AnimEvent animEvent = (AnimEvent)event;
+				if ( animEvent.m_event instanceof Crapping )
+				{
+					transitionTo( Flying.class );
+				}
+			}
+			else if ( event instanceof Eaten || event instanceof Shot )
 			{
 				die();
 			}
@@ -514,6 +603,7 @@ public class BirdController extends FiniteStateMachine
 		m_bird.registerEvent( Eaten.class, new EventFactory< Eaten >() { @Override public Eaten createObject() { return new Eaten (); } } );
 		m_bird.registerEvent( Shocked.class, new EventFactory< Shocked >() { @Override public Shocked createObject() { return new Shocked (); } } );
 		m_bird.registerEvent( Shot.class, new EventFactory< Shot >() { @Override public Shot createObject() { return new Shot (); } } );
+		m_bird.registerEvent( AnimEvent.class, new EventFactory< AnimEvent >() { @Override public AnimEvent createObject() { return new AnimEvent (); } } );
 	
 	}
 	

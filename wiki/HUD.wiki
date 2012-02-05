@@ -63,52 +63,22 @@ The definition is an extended version of the `DefaultFrameVisualTemplate`, and i
 
 {{{
 <Template type="DefaultButtonVisualTemplate" class="MyButton" fontPath="font.xml" elemSize='5' alphaOp='test' atlasName='hud/hudAtlas.png'>
-	<Released>
-		<TopLeftCorner x='15' y='0' w='5' h='5'/>
-		<TopEdge x='20' y='0' w='5' h='5'/>
-		<TopRightCorner x='25' y='0' w='5' h='5'/>
-		<LeftEdge x='15' y='5' w='5' h='5'/>
-		<Center x='20' y='5' w='5' h='5'/>
-		<RightEdge x='25' y='5' w='5' h='5'/>
-		<BottomLeftCorner x='15' y='10' w='5' h='5'/>
-		<BottomEdge x='20' y='10' w='5' h='5'/>
-		<BottomRightCorner x='25' y='10' w='5' h='5'/>
-	</Released>
-		
-	<Highlighed>
-		<TopLeftCorner x='0' y='15' w='5' h='5'/>
-		<TopEdge x='5' y='15' w='5' h='5'/>
-		<TopRightCorner x='10' y='15' w='5' h='5'/>
-		<LeftEdge x='0' y='20' w='5' h='5'/>
-		<Center x='5' y='20' w='5' h='5'/>
-		<RightEdge x='10' y='20' w='5' h='5'/>
-		<BottomLeftCorner x='0' y='25' w='5' h='5'/>
-		<BottomEdge x='5' y='25' w='5' h='5'/>
-		<BottomRightCorner x='10' y='25' w='5' h='5'/>
-	</Highlighed>
-		
-	<Pressed>
-		<TopLeftCorner x='15' y='15' w='5' h='5'/>
-		<TopEdge x='20' y='15' w='5' h='5'/>
-		<TopRightCorner x='25' y='15' w='5' h='5'/>
-		<LeftEdge x='15' y='20' w='5' h='5'/>
-		<Center x='20' y='20' w='5' h='5'/>
-		<RightEdge x='25' y='20' w='5' h='5'/>
-		<BottomLeftCorner x='15' y='25' w='5' h='5'/>
-		<BottomEdge x='20' y='25' w='5' h='5'/>
-		<BottomRightCorner x='25' y='20' w='5' h='5'/>
-	</Pressed>
+	<TopLeftCorner x='15' y='0' w='5' h='5'/>
+	<TopEdge x='20' y='0' w='5' h='5'/>
+	<TopRightCorner x='25' y='0' w='5' h='5'/>
+	<LeftEdge x='15' y='5' w='5' h='5'/>
+	<Center x='20' y='5' w='5' h='5'/>
+	<RightEdge x='25' y='5' w='5' h='5'/>
+	<BottomLeftCorner x='15' y='10' w='5' h='5'/>
+	<BottomEdge x='20' y='10' w='5' h='5'/>
+	<BottomRightCorner x='25' y='10' w='5' h='5'/>
 </Template>
 }}}
 
-  * `CustomButtonVisualTemplate` - customized version of the `DefaultButtonVisualTemplate`, one that uses 3 prepared bitmaps instead of frame elements.
+  * `ImageButtonVisualTemplate` - customized version of the `DefaultButtonVisualTemplate`, one that uses a prepared bitmap instead of frame elements. `path` attribute contains the path to a texture asset.
 
 {{{
-<Template type="CustomButtonVisualTemplate" class="PrettyButton" fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
-	<Released x='30' y='0' w='218' h='50'/>
-	<Highlighed x='30' y='50' w='218' h='50'/>
-	<Pressed x='30' y='100' w='218' h='50'/>
-</Template>
+<Template type="ImageButtonVisualTemplate" class="PrettyButton" fontPath="font.xml" borderSize='5' path="hud/menu/gameSelectionButton.xml" />
 }}}
 
   * `AnimatedButtonVisualTemplate` - customized version of the `DefaultButtonVisualTemplate`, one that uses an animation to display the button.
@@ -133,21 +103,12 @@ The definition is an extended version of the `DefaultFrameVisualTemplate`, and i
 		<BottomRightCorner x='10' y='10' w='5' h='5'/>
 	</Frame>
 		
-	<IncreaseButton fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
-		<Released x='0' y='30' w='5' h='10'/>
-		<Highlighed x='0' y='30' w='5' h='10'/>
-		<Pressed x='10' y='30' w='5' h='10'/>
-	</IncreaseButton>
-		
-	<DecreaseButton fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' >
-		<Released x='5' y='30' w='5' h='10'/>
-		<Highlighed x='5' y='30' w='5' h='10'/>
-		<Pressed x='15' y='30' w='5' h='10'/>
-	</DecreaseButton>
+	<IncreaseButton fontPath="font.xml" borderSize='5' path="hud/increaseButton.xml" />
+		<DecreaseButton fontPath="font.xml" borderSize='5' path="hud/decreaseButton.xml" />
 </Template>
 }}}
 
-It requires to specify the looks of a frame and the buttons. The visual types of these widgets are hardcoded at the time, so you're bound to use a `DefaultFrameVisualTemplate` and two `CustomButtonVisualTemplate` ( at least for now ) - but how you define them, that's up to you.
+It requires to specify the looks of a frame and the buttons. The visual types of these widgets are hardcoded at the time, so you're bound to use a `DefaultFrameVisualTemplate` and two `ImageButtonVisualTemplate` ( at least for now ) - but how you define them, that's up to you.
 
   * `ImageVisualTemplate` - a template for displaying images
 

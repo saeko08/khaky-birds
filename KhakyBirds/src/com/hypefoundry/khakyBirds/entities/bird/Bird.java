@@ -28,18 +28,18 @@ public class Bird extends Entity implements Shootable
 	public World 				m_world    			= null;
 	private int					m_maxSpecialCraps	= 2;
 	boolean						m_canCrap			= true;
+	boolean						m_paused			= true;
 	
 	private Vector3 			m_tmpCrapPos 		= new Vector3();
 	
 	
 	public enum State
 	{
+		Paused,
 		Idle,
 		Jumping,
-		Shitting,
 		Flying,
 		Landing,
-		FlyingShitting
 	}
 	
 	public State				m_state;
@@ -158,5 +158,10 @@ public class Bird extends Entity implements Shootable
 	public void enableCrapping( boolean enable ) 
 	{
 		m_canCrap = enable;
+	}
+	
+	public void pause( boolean enable ) 
+	{
+		m_paused = enable;
 	}
 }

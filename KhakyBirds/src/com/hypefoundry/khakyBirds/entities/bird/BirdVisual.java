@@ -59,15 +59,7 @@ public class BirdVisual extends EntityVisual
 		Vector3 pos = m_bird.getPosition();
 		BoundingBox bs = m_bird.getBoundingShape();
 		
-		if( m_bird.m_state == Bird.State.Shitting )
-		{
-			m_animationPlayer.select(ANIM_SHIT);
-		}
-		else if( m_bird.m_state == Bird.State.FlyingShitting )
-		{
-			m_animationPlayer.select(ANIM_FLY_SHIT);
-		}
-		else if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.Jumping)
+		if ( m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.Jumping)
 		{
 			if (m_bird.m_canCrap == false)
 			{

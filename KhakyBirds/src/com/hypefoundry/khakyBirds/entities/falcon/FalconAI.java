@@ -102,7 +102,7 @@ public class FalconAI extends FiniteStateMachine
 			{
 				m_falconPos.set(m_falcon.getPosition());
 				m_birdPos.set(m_bird.getPosition());
-				if(m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Jumping || m_bird.m_state == Bird.State.Landing || m_bird.m_state == Bird.State.FlyingShitting)
+				if(m_bird.m_state == Bird.State.Flying || m_bird.m_state == Bird.State.Jumping || m_bird.m_state == Bird.State.Landing)
 				{
 					m_falconPos.set(m_falcon.getPosition());
 					m_birdPos.set(m_bird.getPosition());
@@ -178,7 +178,7 @@ public class FalconAI extends FiniteStateMachine
 		@Override
 		public void execute( float deltaTime )
 		{
-			if (m_bird.m_state == Bird.State.Idle || m_bird.m_state == Bird.State.Shitting)
+			if (m_bird.m_state == Bird.State.Idle)
 			{
 				transitionTo( Hunting.class );
 			}

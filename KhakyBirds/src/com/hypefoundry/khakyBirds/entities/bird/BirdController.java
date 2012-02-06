@@ -41,6 +41,7 @@ public class BirdController extends FiniteStateMachine
 	private SteeringBehaviors	m_sb;
 	private Vector3				m_dragStart = new Vector3( 0, 0, 0 );
 	private final float			AIM_TIMER = 0.4f;
+	private boolean				m_isPaused;
 	
 	
 	// ----------------------------------------------------------------
@@ -60,7 +61,7 @@ public class BirdController extends FiniteStateMachine
 			
 			if ( m_hudLayout == null )
 			{
-				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHud.xml" );
+				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHudcrap.xml" );
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
 				m_hudLayout.attachButtonListener( this );
 			}
@@ -68,8 +69,6 @@ public class BirdController extends FiniteStateMachine
 			// attach the input handler
 			m_screen.registerInputHandler( this );
 			
-			// we're not interested in previous duration events
-			// m_input.clearTouchDuration();
 		}
 		
 		@Override
@@ -90,13 +89,6 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public boolean handleInput( Input input, float deltaTime ) 
 		{
-			// check if we're holding the input longer than expected - maybe we need to start crapping - temporary removed for prototaping purposes
-			/*if ( input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
-			{
-				transitionTo( Shitting.class );
-				return false;
-			}*/
-			
 			
 			List< TouchEvent > inputEvents = input.getTouchEvents();
 			
@@ -308,7 +300,7 @@ public class BirdController extends FiniteStateMachine
 			
 			if ( m_hudLayout == null )
 			{
-				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHud.xml" );
+				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHudcrap.xml" );
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
 				m_hudLayout.attachButtonListener( this );
 			}
@@ -344,13 +336,6 @@ public class BirdController extends FiniteStateMachine
 		@Override
 		public boolean handleInput(Input input, float deltaTime) 
 		{	
-			// first check if it's not the high time to crap - temporary removing for prototyping purposes
-			/*if ( input.getTouchDuriation( 0 ) > AIM_TIMER && m_bird.m_canCrap )
-			{
-				transitionTo( FlyingShitting.class );
-				return false;
-			}*/
-			
 			List< TouchEvent > inputEvents = input.getTouchEvents();
 			int count = inputEvents.size();
 			
@@ -452,126 +437,45 @@ public class BirdController extends FiniteStateMachine
 	}
 	
 	// ----------------------------------------------------------------
-	
-	class Shitting extends FSMState implements EntityEventListener
+	class Paused extends FSMState 
 	{
+		
+	
 		@Override
 		public void activate()
 		{
-			m_bird.m_state = Bird.State.Shitting;
-			
-			m_bird.makeShit();
-			
-			// attach the input handler
-			//m_screen.registerInputHandler( this );
+			m_isPaused = true;
 		}
 		
 		@Override
 		public void deactivate()
 		{
-			// detach the input handler
-			//m_screen.unregisterInputHandler( this );
+			m_isPaused = false;
 		}
 		
-		// commented out for prototyping purposes
-		/*@Override
-		public boolean handleInput( Input input, float deltaTime ) 
-		{	
-			List< TouchEvent > inputEvents = input.getTouchEvents();
-			int count = inputEvents.size();
-			for ( int i = 0 ; i < count; ++i )
-			{	
-				TouchEvent lastEvent = inputEvents.get(i);	
-				if ( lastEvent.type == TouchEvent.TOUCH_UP)
-				{
-					m_bird.makeShit();
-					transitionTo( Idle.class );
-					break;
-				}
-			}
-			
-			return false;
-		}*/
-		
 		@Override
-		public void onEvent( EntityEvent event ) 
+		public void execute( float deltaTime )
 		{
-			if (event instanceof AnimEvent )
+			if( m_bird.m_paused == false )
 			{
-				AnimEvent animEvent = (AnimEvent)event;
-				if ( animEvent.m_event instanceof Crapping )
+				if (m_bird.m_state == Bird.State.Idle)
 				{
 					transitionTo( Idle.class );
 				}
-			}
-			else if (event instanceof Shocked || event instanceof Shot )
-			{
-				die();
-			}
-		}
-	}
-	
-	// ----------------------------------------------------------------
-	class FlyingShitting extends FSMState implements EntityEventListener
-	{
-		@Override
-		public void activate()
-		{
-			m_bird.m_state = Bird.State.FlyingShitting;
-			
-			m_bird.makeShit();
-			// attach the input handler
-			//m_screen.registerInputHandler( this );
-		}
-		
-		@Override
-		public void deactivate()
-		{
-			// detach the input handler
-			//m_screen.unregisterInputHandler( this );
-		}
-		
-		// commented out for prototyping purposes
-		/*@Override
-		@Override
-		public boolean handleInput( Input input, float deltaTime ) 
-		{	
-			List< TouchEvent > inputEvents = input.getTouchEvents();
-			int count = inputEvents.size();
-			for ( int i = 0 ; i < count; ++i )
-			{	
-				TouchEvent lastEvent = inputEvents.get(i);	
-				if ( lastEvent.type == TouchEvent.TOUCH_DOWN)
+				
+				else if (m_bird.m_state == Bird.State.Flying)
 				{
-					m_bird.makeShit();
 					transitionTo( Flying.class );
-					break;
 				}
-			}
-			
-			return false;
-		}*/
-		
-		@Override
-		public void onEvent( EntityEvent event ) 
-		{
-			if (event instanceof AnimEvent )
-			{
-				AnimEvent animEvent = (AnimEvent)event;
-				if ( animEvent.m_event instanceof Crapping )
+				else 
 				{
 					transitionTo( Flying.class );
 				}
 			}
-			else if ( event instanceof Eaten || event instanceof Shot )
-			{
-				die();
-			}
 		}
+		
+		
 	}
-	
-	// ----------------------------------------------------------------
-
 	
 	/**
 	 * Constructor.
@@ -593,11 +497,10 @@ public class BirdController extends FiniteStateMachine
 		register( new Idle() );
 		register( new Jumping() );
 		register( new Flying() );
-		register( new Shitting() );
-		register( new FlyingShitting() );
 		register( new Landing() );
+		register( new Paused() );
 		
-		begin( Flying.class ).tryLanding();
+		begin( Paused.class );
 		
 		// define events the entity responds to
 		m_bird.registerEvent( Eaten.class, new EventFactory< Eaten >() { @Override public Eaten createObject() { return new Eaten (); } } );
@@ -611,6 +514,14 @@ public class BirdController extends FiniteStateMachine
 	public void onUpdate( float deltaTime )
 	{
 		m_sb.update( deltaTime );
+		
+		if (m_bird.m_paused == true)
+		{
+			if (m_isPaused == false)
+			{
+				transitionTo( Paused.class );
+			}
+		}
 	}
 	
 	void die()

@@ -146,9 +146,12 @@ public class PlayerController extends FiniteStateMachine
 		public void deactivate()
 		{
 			m_radioGroup = null;
+			
 			m_hudLayout.detachButtonListener( m_radioGroup );
 			m_hudLayout.detachButtonListener( this );
 			m_hudLayout.detachRenderer( m_screen.m_hudRenderer ); 
+			m_hudLayout = null;
+			
 			m_screen.unregisterInputHandler( this );
 		}
 		

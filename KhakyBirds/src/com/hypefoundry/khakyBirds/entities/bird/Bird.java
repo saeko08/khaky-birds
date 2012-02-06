@@ -28,7 +28,7 @@ public class Bird extends Entity implements Shootable
 	public World 				m_world    			= null;
 	private int					m_maxSpecialCraps	= 2;
 	boolean						m_canCrap			= true;
-	boolean						m_paused			= true;
+	boolean						m_paused			= false;
 	
 	private Vector3 			m_tmpCrapPos 		= new Vector3();
 	

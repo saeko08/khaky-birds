@@ -21,7 +21,7 @@ public class Level01Controller extends FiniteStateMachine
 {
 	private Level01				m_level;
 	private GameScreen 			m_screen;
-	
+	private	Bird 				m_bird;
 	
 	// ------------------------------------------------------------------------
 	// States
@@ -30,10 +30,12 @@ public class Level01Controller extends FiniteStateMachine
 	{
 		private HudLayout 			m_layout;
 		
-		
 		@Override
 		public void activate()
 		{
+			
+			m_bird = (Bird) m_screen.m_world.findEntity( Bird.class );
+			m_bird.pause(true);
 			// pause the game
 			m_screen.pause( true );
 			
@@ -72,10 +74,12 @@ public class Level01Controller extends FiniteStateMachine
 	{
 		private HudLayout 			m_layout;
 		
-		
 		@Override
 		public void activate()
 		{
+			
+			m_bird = (Bird) m_screen.m_world.findEntity( Bird.class );
+			m_bird.pause(true);
 			// pause the game
 			m_screen.pause( true );
 			
@@ -112,7 +116,6 @@ public class Level01Controller extends FiniteStateMachine
 	class MovementTutorialGameplay extends FSMState
 	{
 		private Vector3			m_initialBirdPos = new Vector3();
-		private	Bird 			m_bird;
 		private float			m_movementTutorialTimer = 0;
 		
 		@Override
@@ -161,7 +164,6 @@ public class Level01Controller extends FiniteStateMachine
 	class CrappingTutorialCutscene extends FSMState implements ButtonListener
 	{
 		private HudLayout 			m_layout;
-		private	Bird 				m_bird;
 		
 		@Override
 		public void activate()
@@ -206,7 +208,6 @@ public class Level01Controller extends FiniteStateMachine
 	{
 		private	Pedestrian		m_boy;
 		private float			m_crappingTutorialTimer = 0;
-		private	Bird 			m_bird;
 		
 		
 		@Override
@@ -243,10 +244,12 @@ public class Level01Controller extends FiniteStateMachine
 	{
 		private HudLayout 			m_layout;
 		
-		
 		@Override
 		public void activate()
 		{
+			
+			m_bird = (Bird) m_screen.m_world.findEntity( Bird.class );
+			m_bird.pause(false);
 			// pause the game
 			m_screen.pause( true );
 			

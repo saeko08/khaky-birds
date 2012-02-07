@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HUD>
 	<Template type="ImageButtonVisualTemplate" class="CrapButton" fontPath="font.xml" borderSize='5' path="hud/gameplay/crapButton.xml" />
+	<Template type="ImageButtonVisualTemplate" class="SpecialCrapButton" fontPath="font.xml" borderSize='5' path="hud/gameplay/specialCrapButton.xml" />
 	<Template type="ImageVisualTemplate" class="MyImage" />
 	<Template type="AnimationVisualTemplate" class="MyAnimation" />	
 	

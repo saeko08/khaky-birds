@@ -7,7 +7,7 @@
 			<pos x='0.03' y='0.12' z='0' />
 		</Widget>
 		
-		<Widget type="ButtonWidget" visualClass="CrapButton" id="CrapSpecial" width='0.35' height='0.8' >
+		<Widget type="ButtonWidget" visualClass="SpecialCrapButton" id="CrapSpecial" width='0.35' height='0.8' >
 			<pos x='0.5' y='0.12' z='0' />
 		</Widget>
 		

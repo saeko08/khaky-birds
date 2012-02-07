@@ -47,7 +47,6 @@ public class Bird extends Entity implements Shootable
 //////////////////////////////////////////////////////////////////////////////////////////////////////	
 	public enum CrapType
 	{
-		NormalCrap,
 		SpecialGranadeCrap,
 		SpecialDemolishCrap
 	};
@@ -55,7 +54,7 @@ public class Bird extends Entity implements Shootable
 	public CrapType			m_crapType;
 	private Random 			m_randCrapType  			= new Random();
 	private int				m_specialCrapTypeAmount		= 2;
-	private int				m_currentSpecialCrapAmount	= 0;
+	public int				m_currentSpecialCrapAmount	= 0;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////	
 	
 	/**
@@ -66,7 +65,6 @@ public class Bird extends Entity implements Shootable
 		setPosition( 0, 0, 0 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		m_state = State.Flying; 
-		m_crapType = CrapType.NormalCrap;
 					
 		// add movement capabilities
 		final float maxLinearSpeed = 3.0f;
@@ -97,18 +95,21 @@ public class Bird extends Entity implements Shootable
 		
 		m_tmpCrapPos.set(Vector3.EX).rotateZ( getFacing() ).scale(-0.3f).add( birdPos );		
 		
-		if (m_currentSpecialCrapAmount == 0)
-		{
-			m_crapType = CrapType.NormalCrap;
-		}
+		m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
+	}
+	
+	/**
+	 * Bird makes a crap.
+	 */
+	public void makeSpecialShit() 
+	{
+		Vector3 birdPos = getPosition();
+		
+		m_tmpCrapPos.set(Vector3.EX).rotateZ( getFacing() ).scale(-0.3f).add( birdPos );		
+		
 		
 		switch( m_crapType )
 		{
-			case NormalCrap:
-			{
-				m_world.addEntity( new Crap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
-				break;
-			}
 			case SpecialGranadeCrap:
 			{
 				m_world.addEntity( new GranadeCrap( m_tmpCrapPos.m_x, m_tmpCrapPos.m_y ) );
@@ -135,7 +136,6 @@ public class Bird extends Entity implements Shootable
 		
 		m_crapTypeNumber = m_randCrapType.nextInt(m_specialCrapTypeAmount);
 		
-		m_currentSpecialCrapAmount = m_maxSpecialCraps;
 		
 		if (m_crapTypeNumber == 0)
 		{
@@ -146,7 +146,8 @@ public class Bird extends Entity implements Shootable
 			m_crapType = CrapType.SpecialGranadeCrap;
 		}
 		
-		
+		//restoring maximum amount of special craps
+		m_currentSpecialCrapAmount = m_maxSpecialCraps;
 		
 	}
 	

@@ -433,7 +433,18 @@ public class BirdController extends FiniteStateMachine
 				m_bird.makeShit();
 				
 			}
+			if ( buttonId.equals( "CrapSpecial" ) && m_bird.m_canCrap )
+			{
+				if(m_bird.m_currentSpecialCrapAmount > 0)
+				{
+					m_bird.enableCrapping(false);
+					m_bird.makeSpecialShit();
+				}
+				
+			}
 		}
+		
+		
 	}
 	
 	// ----------------------------------------------------------------

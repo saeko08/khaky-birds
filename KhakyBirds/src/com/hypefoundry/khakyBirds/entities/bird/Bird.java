@@ -26,7 +26,7 @@ public class Bird extends Entity implements Shootable
 	public CableProvider		m_cables			= null;
 	public int					m_cableIdx  		= 0;
 	public World 				m_world    			= null;
-	private int					m_maxSpecialCraps	= 2;
+	public int					m_maxSpecialCraps	= 2;
 	boolean						m_canCrap			= true;
 	boolean						m_paused			= false;
 	

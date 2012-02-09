@@ -578,6 +578,7 @@ public class PerkPedestrianAI extends FiniteStateMachine implements WorldView
 			if (m_bird != null)
 			{
 				m_bird.setSpecialCrap();
+				m_bird.sendEvent( OnGetPerk.class );
 			}
 		}
 		

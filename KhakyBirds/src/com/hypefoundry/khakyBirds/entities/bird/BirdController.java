@@ -9,6 +9,7 @@ import java.util.List;
 import com.hypefoundry.khakyBirds.GameScreen;
 import com.hypefoundry.khakyBirds.entities.falcon.Eaten;
 import com.hypefoundry.khakyBirds.entities.hunter.Shot;
+import com.hypefoundry.khakyBirds.entities.perkPedestrian.OnGetPerk;
 import com.hypefoundry.khakyBirds.entities.shock.Shocked;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
@@ -17,6 +18,8 @@ import com.hypefoundry.engine.core.Input.TouchEvent;
 import com.hypefoundry.engine.game.InputHandler;
 import com.hypefoundry.engine.hud.ButtonListener;
 import com.hypefoundry.engine.hud.HudLayout;
+import com.hypefoundry.engine.hud.widgets.button.ButtonWidget;
+import com.hypefoundry.engine.hud.widgets.counter.CounterWidget;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
@@ -42,6 +45,7 @@ public class BirdController extends FiniteStateMachine
 	private Vector3				m_dragStart = new Vector3( 0, 0, 0 );
 	private final float			AIM_TIMER = 0.4f;
 	private boolean				m_isPaused;
+	private ButtonWidget		m_counter;
 	
 	
 	// ----------------------------------------------------------------
@@ -52,6 +56,7 @@ public class BirdController extends FiniteStateMachine
 		private	Vector3 m_goToPos  = new Vector3();
 		private	Vector3 m_gestureDir  = new Vector3();
 		private HudLayout			m_hudLayout;
+	
 		
 		@Override
 		public void activate()
@@ -64,6 +69,10 @@ public class BirdController extends FiniteStateMachine
 				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHudcrap.xml" );
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
 				m_hudLayout.attachButtonListener( this );
+				
+				m_counter = m_hudLayout.getWidget( ButtonWidget.class, "CrapSpecial" );
+				String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
+				m_counter.m_caption = specialCrapNumber;
 			}
 			
 			// attach the input handler
@@ -171,6 +180,7 @@ public class BirdController extends FiniteStateMachine
 			return true;
 		}
 		
+		
 		@Override
 		public void onEvent( EntityEvent event ) 
 		{
@@ -186,6 +196,11 @@ public class BirdController extends FiniteStateMachine
 					m_bird.enableCrapping(true);
 				}
 			}
+			else if (event instanceof OnGetPerk)
+			{
+				String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
+				m_counter.m_caption = specialCrapNumber;
+			}
 		}
 
 		@Override
@@ -195,6 +210,18 @@ public class BirdController extends FiniteStateMachine
 			{
 				m_bird.enableCrapping(false);
 				m_bird.makeShit();
+				
+			}
+			if ( buttonId.equals( "CrapSpecial" ) && m_bird.m_canCrap )
+			{
+				if(m_bird.m_currentSpecialCrapAmount > 0)
+				{
+					m_bird.enableCrapping(false);
+					m_bird.makeSpecialShit();
+					
+					String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
+					m_counter.m_caption = specialCrapNumber;
+				}
 				
 			}
 		}
@@ -303,6 +330,10 @@ public class BirdController extends FiniteStateMachine
 				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHudcrap.xml" );
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
 				m_hudLayout.attachButtonListener( this );
+				
+				m_counter = m_hudLayout.getWidget( ButtonWidget.class, "CrapSpecial" );
+				String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
+				m_counter.m_caption = specialCrapNumber;
 			}
 			
 			// attach the input handler
@@ -410,6 +441,11 @@ public class BirdController extends FiniteStateMachine
 					m_bird.enableCrapping(true);
 				}
 			}
+			else if (event instanceof OnGetPerk)
+			{
+				String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
+				m_counter.m_caption = specialCrapNumber;
+			}
 		}
 
 		public void tryLanding()
@@ -439,6 +475,9 @@ public class BirdController extends FiniteStateMachine
 				{
 					m_bird.enableCrapping(false);
 					m_bird.makeSpecialShit();
+					
+					String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
+					m_counter.m_caption = specialCrapNumber;
 				}
 				
 			}
@@ -518,6 +557,7 @@ public class BirdController extends FiniteStateMachine
 		m_bird.registerEvent( Shocked.class, new EventFactory< Shocked >() { @Override public Shocked createObject() { return new Shocked (); } } );
 		m_bird.registerEvent( Shot.class, new EventFactory< Shot >() { @Override public Shot createObject() { return new Shot (); } } );
 		m_bird.registerEvent( AnimEvent.class, new EventFactory< AnimEvent >() { @Override public AnimEvent createObject() { return new AnimEvent (); } } );
+		m_bird.registerEvent( OnGetPerk.class, new EventFactory< OnGetPerk >() { @Override public OnGetPerk createObject() { return new OnGetPerk (); } } );
 	
 	}
 	

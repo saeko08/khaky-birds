@@ -20,6 +20,7 @@ import com.hypefoundry.engine.hud.ButtonListener;
 import com.hypefoundry.engine.hud.HudLayout;
 import com.hypefoundry.engine.hud.widgets.button.ButtonWidget;
 import com.hypefoundry.engine.hud.widgets.counter.CounterWidget;
+import com.hypefoundry.engine.hud.widgets.image.ImageWidget;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
@@ -46,6 +47,7 @@ public class BirdController extends FiniteStateMachine
 	private final float			AIM_TIMER = 0.4f;
 	private boolean				m_isPaused;
 	private ButtonWidget		m_counter;
+	private ImageWidget			m_specialCrapWidget;
 	
 	
 	// ----------------------------------------------------------------
@@ -70,9 +72,13 @@ public class BirdController extends FiniteStateMachine
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
 				m_hudLayout.attachButtonListener( this );
 				
-				m_counter = m_hudLayout.getWidget( ButtonWidget.class, "CrapSpecial" );
+				m_specialCrapWidget = m_hudLayout.getWidget( ImageWidget.class, "CrapSpecialIcon" );
+				m_counter = m_hudLayout.getWidget( ButtonWidget.class, "CrapSpecialCaunter" );
+				
 				String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
 				m_counter.m_caption = specialCrapNumber;
+				m_specialCrapWidget.m_region = m_bird.m_currentSpecialCrapIcon;
+				
 			}
 			
 			// attach the input handler
@@ -200,6 +206,9 @@ public class BirdController extends FiniteStateMachine
 			{
 				String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
 				m_counter.m_caption = specialCrapNumber;
+				
+				m_bird.setSpecialCrapIcon();
+				m_specialCrapWidget.m_region = m_bird.m_currentSpecialCrapIcon;
 			}
 		}
 
@@ -221,6 +230,15 @@ public class BirdController extends FiniteStateMachine
 					
 					String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
 					m_counter.m_caption = specialCrapNumber;
+					
+					if(m_bird.m_currentSpecialCrapAmount == 0)
+					{
+						m_bird.m_crapType = Bird.CrapType.EmptyCrap;
+						
+						m_bird.setSpecialCrapIcon();
+						
+						m_specialCrapWidget.m_region = m_bird.m_currentSpecialCrapIcon;
+					}
 				}
 				
 			}
@@ -331,9 +349,13 @@ public class BirdController extends FiniteStateMachine
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
 				m_hudLayout.attachButtonListener( this );
 				
-				m_counter = m_hudLayout.getWidget( ButtonWidget.class, "CrapSpecial" );
+				m_specialCrapWidget = m_hudLayout.getWidget( ImageWidget.class, "CrapSpecialIcon" );
+				m_counter = m_hudLayout.getWidget( ButtonWidget.class, "CrapSpecialCaunter" );
+				
 				String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
 				m_counter.m_caption = specialCrapNumber;
+				
+				m_specialCrapWidget.m_region = m_bird.m_currentSpecialCrapIcon;
 			}
 			
 			// attach the input handler
@@ -445,6 +467,11 @@ public class BirdController extends FiniteStateMachine
 			{
 				String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
 				m_counter.m_caption = specialCrapNumber;
+				
+				m_bird.setSpecialCrapIcon();
+				m_specialCrapWidget.m_region = m_bird.m_currentSpecialCrapIcon;
+				
+				
 			}
 		}
 
@@ -479,7 +506,13 @@ public class BirdController extends FiniteStateMachine
 					String specialCrapNumber = Integer.toString(m_bird.m_currentSpecialCrapAmount);
 					m_counter.m_caption = specialCrapNumber;
 				}
-				
+				if(m_bird.m_currentSpecialCrapAmount == 0)
+				{
+					m_bird.m_crapType = Bird.CrapType.EmptyCrap;
+					
+					m_bird.setSpecialCrapIcon();
+					m_specialCrapWidget.m_region = m_bird.m_currentSpecialCrapIcon;
+				}
 			}
 		}
 		

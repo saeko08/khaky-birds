@@ -8,9 +8,11 @@ import com.hypefoundry.khakyBirds.entities.crap.GranadeCrap;
 import com.hypefoundry.khakyBirds.entities.hunter.Shootable;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
+import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.physics.DynamicObject;
+import com.hypefoundry.engine.renderer2D.TextureRegion;
 
 
 /**
@@ -23,14 +25,16 @@ import com.hypefoundry.engine.physics.DynamicObject;
  */
 public class Bird extends Entity implements Shootable
 {
-	public CableProvider		m_cables			= null;
-	public int					m_cableIdx  		= 0;
-	public World 				m_world    			= null;
-	public int					m_maxSpecialCraps	= 2;
-	boolean						m_canCrap			= true;
-	boolean						m_paused			= false;
+	public CableProvider		m_cables				= null;
+	public int					m_cableIdx  			= 0;
+	public World 				m_world    				= null;
+	public int					m_maxSpecialCraps		= 2;
+	boolean						m_canCrap				= true;
+	boolean						m_paused				= false;
+	public TextureRegion		m_currentSpecialCrapIcon;
 	
-	private Vector3 			m_tmpCrapPos 		= new Vector3();
+	private Vector3 			m_tmpCrapPos 			= new Vector3();
+	private ResourceManager 	m_resMgr;
 	
 	
 	public enum State
@@ -47,11 +51,12 @@ public class Bird extends Entity implements Shootable
 //////////////////////////////////////////////////////////////////////////////////////////////////////	
 	public enum CrapType
 	{
+		EmptyCrap,
 		SpecialGranadeCrap,
 		SpecialDemolishCrap
 	};
 	
-	public CrapType			m_crapType;
+	public CrapType			m_crapType					= CrapType.EmptyCrap;
 	private Random 			m_randCrapType  			= new Random();
 	private int				m_specialCrapTypeAmount		= 2;
 	public int				m_currentSpecialCrapAmount	= 0;
@@ -60,11 +65,13 @@ public class Bird extends Entity implements Shootable
 	/**
 	 * Constructor.
 	 */
-	public Bird()
+	public Bird(ResourceManager resMgr)
 	{
 		setPosition( 0, 0, 0 );
 		setBoundingBox( new BoundingBox( -0.2f, -0.2f, 0.2f, 0.2f ) );	// TODO: config
 		m_state = State.Flying; 
+		
+		m_resMgr = resMgr;
 					
 		// add movement capabilities
 		final float maxLinearSpeed = 3.0f;
@@ -148,6 +155,28 @@ public class Bird extends Entity implements Shootable
 		
 		//restoring maximum amount of special craps
 		m_currentSpecialCrapAmount = m_maxSpecialCraps;
+		
+	}
+	
+	public void setSpecialCrapIcon()
+	{
+		
+		
+		if (m_crapType == CrapType.SpecialDemolishCrap)
+		{
+			
+			m_currentSpecialCrapIcon = m_resMgr.getResource( TextureRegion.class, "hud/gameplay/dynamiteCrapIcon.xml" );
+		}
+		else if (m_crapType == CrapType.SpecialGranadeCrap)
+		{
+			
+			m_currentSpecialCrapIcon = m_resMgr.getResource( TextureRegion.class, "hud/gameplay/bombCrapIcon.xml" );
+		}
+		else if (m_crapType == CrapType.EmptyCrap)
+		{
+			
+			m_currentSpecialCrapIcon = m_resMgr.getResource( TextureRegion.class, "hud/gameplay/emptyCrapIcon.xml" );
+		}
 		
 	}
 	

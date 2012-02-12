@@ -105,7 +105,7 @@ public class GameScreen extends Screen
 		m_world = new World();
 		
 		// serialization support
-		m_world.registerEntity( Bird.class, new EntityFactory() { @Override public Entity create() { return new Bird(); } } );
+		m_world.registerEntity( Bird.class, new EntityFactory() { @Override public Entity create() { return new Bird(m_resourceManager); } } );
 		m_world.registerEntity( ElectricCables.class, new EntityFactory() { @Override public Entity create() { return new ElectricCables(); } } );
 		m_world.registerEntity( ElectricShock.class, new EntityFactory() { @Override public Entity create() { return new ElectricShock(); } } );
 		m_world.registerEntity( Ground.class, new EntityFactory() { @Override public Entity create() { return new Ground(); } } );

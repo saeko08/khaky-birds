@@ -39,8 +39,8 @@
 			<BottomRightCorner x='10' y='10' w='5' h='5'/>
 		</Frame>
 		
-		<IncreaseButton fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' path="hud/increaseButton.xml" />
-		<DecreaseButton fontPath="font.xml" borderSize='5' alphaOp='test' atlasName='hud/hudAtlas.png' path="hud/decreaseButton.xml" />
+		<IncreaseButton fontPath="font.xml" borderSize='5' path="hud/increaseButton.xml" />
+		<DecreaseButton fontPath="font.xml" borderSize='5' path="hud/decreaseButton.xml" />
 	</Template>
 	
 	<Template type="ImageVisualTemplate" class="MyImage" />

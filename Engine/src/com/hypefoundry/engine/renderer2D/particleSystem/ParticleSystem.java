@@ -84,6 +84,7 @@ public class ParticleSystem extends Resource
 	static private AffectorsFactoryData[]			m_affectorsFactories = {
 			new AffectorsFactoryData( LinearMovementAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new LinearMovementAffector(); } } ),
 			new AffectorsFactoryData( BlowMovementAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new BlowMovementAffector(); } } ),
+			new AffectorsFactoryData( RotationAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new RotationAffector(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
@@ -92,6 +93,7 @@ public class ParticleSystem extends Resource
 	static private ParticlesFactoryData[]			m_particlesFactories = {
 		new ParticlesFactoryData( AnimatedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new AnimatedParticleFactory(); } } ),
 		new ParticlesFactoryData( TexturedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new TexturedParticleFactory(); } } ),
+		new ParticlesFactoryData( RandomlyTexturedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new RandomlyTexturedParticleFactory(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------

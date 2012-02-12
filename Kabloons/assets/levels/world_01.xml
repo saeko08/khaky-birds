@@ -1,15 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='4.8' height='8.0'>
 
-	<Entity type="Background" path="backgrounds/meadow/meadow.xml" >
-		<localBounds minX='-2.4' minY='-4.0' minZ='-0.5' maxX='2.4' maxY='4.0' maxZ='0.5' />
+	<Entity type="Background" path="backgrounds/park_alleyway/background.xml" >
+		<localBounds minX='-2.4' minY='-4.0' maxX='2.4' maxY='4.0' />
 		<position x='2.4' y='4.0' z='100' />
 	</Entity>
+	
+	<!-- background anims -->
+	
+	<Entity type="AnimatedBackground" path="backgrounds/park_alleyway/star.xml" randomStart="true" >
+		<localBounds minX='-0.05' minY='-0.045' maxX='0.05' maxY='0.045'/>
+		<position x='0.5' y='7.2' z='99' />
+	</Entity>
+	
+	<Entity type="AnimatedBackground" path="backgrounds/park_alleyway/star.xml" randomStart="true" >
+		<localBounds minX='-0.05' minY='-0.045' maxX='0.05' maxY='0.045'/>
+		<position x='1.8' y='6.8' z='99' />
+	</Entity>
+	
+	<Entity type="AnimatedBackground" path="backgrounds/park_alleyway/star.xml" randomStart="true" >
+		<localBounds minX='-0.05' minY='-0.045' maxX='0.05' maxY='0.045'/>
+		<position x='2.7' y='7.5' z='99' />
+	</Entity>
+	
+	<Entity type="AnimatedBackground" path="backgrounds/park_alleyway/star.xml" randomStart="true" >
+		<localBounds minX='-0.05' minY='-0.045' maxX='0.05' maxY='0.045'/>
+		<position x='3.3' y='6.5' z='99' />
+	</Entity>
+	
+	<!--  gameplay -->
 	
 	<Entity type="ExitDoor" >
 		<position x='1.0' y='7.91' z='50' />
 	</Entity>
+	
+	<Entity type="Fan" windFx="backgrounds/park_alleyway/leftWindFx.xml">
+		<position x='4.6' y='3.0' z='60' />
+		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
+		<windFieldBounds minX='-4.4' minY='-0.975' maxX='0.0' maxY='0.975' />
+		<BlowForce x='-0.4' y='0' z='0' />
+	</Entity>
+	
+	<Entity type="Fan" windFx="backgrounds/park_alleyway/rightWindFx.xml">
+		<position x='0.2' y='6.0' z='60' />
+		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
+		<windFieldBounds minX='0.0' minY='-0.975' maxX='4.4' maxY='0.975' />
+		<BlowForce x='0.4' y='0' z='0' />
+	</Entity>
 	 
-	<Entity type="Player" leftFans='1' rightFans='0' />
+	<Entity type="Player" leftFans='1' rightFans='1' />
 		
 </World>

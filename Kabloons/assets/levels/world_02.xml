@@ -10,7 +10,7 @@
 		<position x='3.2' y='7.91' z='50' />
 	</Entity>
 	
-	<Entity type="Fan" direction="Left">
+	<Entity type="Fan" direction="Left" >
 		<position x='4.6' y='6.8' z='60' />
 	</Entity>
 		 

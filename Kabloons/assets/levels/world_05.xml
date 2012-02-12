@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='4.8' height='8.0'>
 
-	<Entity type="Background" path="backgrounds/meadow/meadow.xml" >
+	<Entity type="Background" path="backgrounds/factory_interior_2/background.xml" >
 		<localBounds minX='-2.4' minY='-4.0' minZ='-0.5' maxX='2.4' maxY='4.0' maxZ='0.5' />
 		<position x='2.4' y='4.0' z='100' />
 	</Entity>

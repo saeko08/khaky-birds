@@ -15,11 +15,12 @@ import com.hypefoundry.engine.world.Entity;
 public class AnimatedBackground extends Entity 
 {
 	public String		m_path;
-	
+	boolean				m_randomStart = false;
 
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{
 		m_path = loader.getStringValue( "path" );
+		m_randomStart = loader.getStringValue( "randomStart" ).equals( "true" );
 	}
 }

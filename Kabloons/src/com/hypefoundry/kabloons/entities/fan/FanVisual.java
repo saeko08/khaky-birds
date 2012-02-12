@@ -41,9 +41,12 @@ public class FanVisual extends EntityVisual
 		m_fan = (Fan)fanEntity;
 		
 		// load and setup an animation
-		m_animPlayer = new AnimationPlayer();
-		Animation onAnim = resMgr.getResource( Animation.class, m_fan.m_anim );
-		m_animPlayer.addAnimation( onAnim );
+		if ( m_fan.m_anim.length() > 0 )
+		{
+			m_animPlayer = new AnimationPlayer();
+			Animation onAnim = resMgr.getResource( Animation.class, m_fan.m_anim );
+			m_animPlayer.addAnimation( onAnim );
+		}
 		
 		// load and setup the wind effect
 		ParticleSystem windParticleSystem = resMgr.getResource( ParticleSystem.class, m_fan.m_windFx );
@@ -56,17 +59,20 @@ public class FanVisual extends EntityVisual
 		Vector3 pos = m_entity.getPosition();
 		BoundingBox bs = m_entity.getBoundingShape();
 		
-		// play the animation
-		if ( m_rotationSpeed < 1.0f )
+		if ( m_animPlayer != null )
 		{
-			// appear to be starting the fan just after it's been created
-			m_rotationSpeed += deltaTime * 0.1f;
+			// play the animation
+			if ( m_rotationSpeed < 1.0f )
+			{
+				// appear to be starting the fan just after it's been created
+				m_rotationSpeed += deltaTime * 0.1f;
+			}
+			else
+			{
+				m_rotationSpeed = 1.0f;
+			}
+			batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime * m_rotationSpeed ) );
 		}
-		else
-		{
-			m_rotationSpeed = 1.0f;
-		}
-		batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime * m_rotationSpeed ) );
 		
 		// play the wind effect
 		m_windPlayer.draw( pos.m_x, pos.m_y, batcher, deltaTime * m_rotationSpeed );

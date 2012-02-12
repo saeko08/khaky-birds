@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.2' atlasName='backgrounds/park_alleyway/atlas.png' alphaOp='none' >
+	<Frame type="StaticRegion" x='595' y='1' w='10' h='9' />
+	<Frame type="StaticRegion" x='606' y='1' w='10' h='9' />
+	<Frame type="StaticRegion" x='617' y='1' w='10' h='9' />
+	<Frame type="StaticRegion" x='628' y='1' w='10' h='9' />
+	<Frame type="StaticRegion" x='639' y='1' w='10' h='9' />
+	<Frame type="StaticRegion" x='650' y='1' w='10' h='9' />
+	<Frame type="StaticRegion" x='661' y='1' w='10' h='9' />
+</Animation>

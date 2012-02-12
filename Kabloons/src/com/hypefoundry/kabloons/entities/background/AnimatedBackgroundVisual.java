@@ -26,6 +26,7 @@ public class AnimatedBackgroundVisual extends EntityVisual
 	private boolean					m_lifeTimerEnabled;
 	private World					m_world;
 	private boolean					m_initialUpdate = true;
+	private float					m_playbackSpeed = 1.0f;
 	
 	/**
 	 * Constructor.
@@ -55,6 +56,15 @@ public class AnimatedBackgroundVisual extends EntityVisual
 		
 		int animIdx = m_player.addAnimation( animation );
 		m_player.select( animIdx );
+		
+		if ( decoration.m_randomStart )
+		{
+			// randomize the start time
+			float time = (float)Math.random() * animation.getDuration();
+			m_player.setTime( time );
+			
+			m_playbackSpeed = 0.75f + (float)Math.random() * 0.5f;
+		}
 	}
 
 	@Override
@@ -63,6 +73,7 @@ public class AnimatedBackgroundVisual extends EntityVisual
 		Vector3 pos = m_entity.getPosition();
 		BoundingBox bs = m_entity.getBoundingShape();
 
+		deltaTime *= m_playbackSpeed;
 		TextureRegion region = m_player.getTextureRegion( deltaTime );
 		batcher.drawSprite( pos, bs, region );
 		

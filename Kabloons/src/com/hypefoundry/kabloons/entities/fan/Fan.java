@@ -8,7 +8,6 @@ import com.hypefoundry.engine.math.BoundingShape;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
-import com.hypefoundry.kabloons.utils.AssetsFactory;
 
 /**
  * @author Paksas
@@ -30,7 +29,6 @@ public class Fan extends Entity
 		}
 	}
 		
-	AssetsFactory				m_assetsFactory;
 	Vector3						m_blowForce;
 	BoundingBox					m_windFieldBoundsWorldSpace = new BoundingBox();
 	String 						m_anim;
@@ -45,7 +43,6 @@ public class Fan extends Entity
 	public Fan( Vector3 pos )
 	{
 		m_wasCreatedByUser = true;
-		m_assetsFactory = null;
 		setPosition( pos );
 		
 		// adjust fan's Z position
@@ -58,10 +55,9 @@ public class Fan extends Entity
 	 * 
 	 * @param assetsFactory
 	 */
-	public Fan( AssetsFactory assetsFactory )
+	public Fan()
 	{
 		m_wasCreatedByUser = false;
-		m_assetsFactory = assetsFactory;
 	}
 
 	/**
@@ -89,8 +85,17 @@ public class Fan extends Entity
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{
-		Direction direction = AssetsFactory.loadFanDirection( loader );
-		m_assetsFactory.initializeFan( this, direction );
+		BoundingBox windFieldBoundsLocalSpace = new BoundingBox();
+		windFieldBoundsLocalSpace.load( "windFieldBounds", loader );
+		
+		m_windFieldBoundsWorldSpace.set( windFieldBoundsLocalSpace );
+		m_windFieldBoundsWorldSpace.translate( getPosition() );
+		
+		m_anim = loader.getStringValue( "anim" );
+		m_windFx = loader.getStringValue( "windFx" );
+		
+		m_blowForce = new Vector3();
+		m_blowForce.load( "BlowForce", loader );
 		
 		// adjust fan's Z position
 		getPosition().m_z = 60;

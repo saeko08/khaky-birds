@@ -38,9 +38,7 @@ public class SpriteBatcher
 	private int					m_numLines;
 	
 	private DrawItem			m_currentDrawItem = DrawItem.Lines;
-	private RenderState			m_currRenderState = new RenderState();		
-	
-	private Vector3 			tmpSpriteCenter = new Vector3();
+	private RenderState			m_currRenderState = new RenderState();
 	
 	
 	/**
@@ -115,6 +113,9 @@ public class SpriteBatcher
 		}
 		
 		m_bufferIndex = 0;
+		
+		// clear the render state
+		m_currRenderState.clear();
 	}
 	
 	/**

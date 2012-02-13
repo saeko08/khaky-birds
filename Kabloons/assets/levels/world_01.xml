@@ -28,6 +28,11 @@
 		<position x='3.3' y='6.5' z='99' />
 	</Entity>
 	
+	<Entity type="AnimatedBackground" path="backgrounds/park_alleyway/sirenLights.xml" >
+		<localBounds minX='-2.4' minY='-1.835' maxX='2.4' maxY='1.835'/>
+		<position x='2.4' y='2.3' z='99' />
+	</Entity>
+	
 	<!--  gameplay -->
 	
 	<Entity type="ExitDoor" >

@@ -134,7 +134,7 @@ public class PlayerController extends FiniteStateMachine
 				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHud.xml" );
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
 				m_hudLayout.attachButtonListener( this );
-				
+						
 				updateFanCounters();
 				setupRadioGroup();
 			}

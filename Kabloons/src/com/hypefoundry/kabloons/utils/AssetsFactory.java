@@ -28,7 +28,9 @@ public class AssetsFactory
 	 */
 	private class BaloonFactory
 	{
-		String			m_floatingAnim;
+		String			m_floatingUpAnim;
+		String			m_floatingLeftAnim;
+		String			m_floatingRightAnim;
 		BoundingBox		m_localBounds;
 		
 		/**
@@ -41,7 +43,9 @@ public class AssetsFactory
 			m_localBounds = new BoundingBox();
 			m_localBounds.load( "localBounds", loader );
 			
-			m_floatingAnim = loader.getStringValue( "floatingAnim" );
+			m_floatingUpAnim = loader.getStringValue( "floatingUpAnim" );
+			m_floatingLeftAnim = loader.getStringValue( "floatingLeftAnim" );
+			m_floatingRightAnim = loader.getStringValue( "floatingRightAnim" );
 		}
 		
 		/**
@@ -54,7 +58,7 @@ public class AssetsFactory
 		Baloon create( Vector3 pos )
 		{
 			Baloon baloon = new Baloon();
-			baloon.initialize( m_localBounds, pos, m_floatingAnim );
+			baloon.initialize( m_localBounds, pos, m_floatingUpAnim, m_floatingLeftAnim, m_floatingRightAnim );
 			return baloon;
 		}
 	}

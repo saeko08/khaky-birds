@@ -21,7 +21,9 @@ public class Baloon extends Entity
 		Safe
 	};
 	
-	String 		m_floatingAnim;
+	String 		m_floatingUpAnim;
+	String 		m_floatingLeftAnim;
+	String 		m_floatingRightAnim;
 	State		m_state;
 	
 	/**
@@ -29,14 +31,18 @@ public class Baloon extends Entity
 	 * 
 	 * @param localBounds
 	 * @param pos
-	 * @param floatingAnim
+	 * @param floatingUpAnim
+	 * @param floatingLeftAnim
+	 * @param floatingRightAnim
 	 */
-	public void initialize( BoundingBox localBounds, Vector3 pos, String floatingAnim )
+	public void initialize( BoundingBox localBounds, Vector3 pos, String floatingUpAnim, String floatingLeftAnim, String floatingRightAnim )
 	{
 		setBoundingBox( localBounds );
 		setPosition( pos );
 		
-		m_floatingAnim = floatingAnim;
+		m_floatingUpAnim = floatingUpAnim;
+		m_floatingLeftAnim = floatingLeftAnim;
+		m_floatingRightAnim = floatingRightAnim;
 		
 		m_state = State.Flying;
 		

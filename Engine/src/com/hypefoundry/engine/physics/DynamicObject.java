@@ -23,6 +23,12 @@ public final class DynamicObject implements Aspect
 	// state members
 	public final Vector3 			m_velocity = new Vector3( 0, 0, 0 );
 	public float					m_rotation;
+	
+	// Data from the previous frame of simulation. Since the current velocity is aggregated
+	// every frame and needs to be cleaned before the next frame, we can't really use it to
+	// check the body's velocity.
+	// That's why these useful stats members were introduces, to let that happen
+	private final Vector3 			m_currentVelocity = new Vector3( 0, 0, 0 );
 
 	// runtime members
 	private final Vector3			m_currTranslation = new Vector3( 0, 0, 0 );
@@ -36,6 +42,11 @@ public final class DynamicObject implements Aspect
 	{
 		m_linearSpeed = linearSpeed;
 		m_rotationSpeed = rotationSpeed;
+	}
+	
+	public final Vector3 getCurrentVelocity()
+	{
+		return m_currentVelocity;
 	}
 	
 	/**
@@ -92,6 +103,9 @@ public final class DynamicObject implements Aspect
 		m_currTranslation.scale( deltaTime );
 		entity.translate( m_currTranslation );
 		entity.rotate( m_rotation * deltaTime );
+		
+		// copy the velocity
+		m_currentVelocity.set( m_velocity );
 		
 		// slow down
 		m_velocity.set( 0, 0, 0 );

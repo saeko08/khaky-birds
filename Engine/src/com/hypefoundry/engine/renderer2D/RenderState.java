@@ -38,17 +38,17 @@ public class RenderState
 			return false;
 		}
 		
-		if ( m_alphaOperation.equals( rhs.m_alphaOperation ) )
+		if ( !m_alphaOperation.equals( rhs.m_alphaOperation ) )
 		{
 			return false;
 		}
 		
-		if ( m_srcAlphaFunc.equals( rhs.m_srcAlphaFunc ) )
+		if ( !m_srcAlphaFunc.equals( rhs.m_srcAlphaFunc ) )
 		{
 			return false;
 		}
 		
-		if ( m_destAlphaFunc.equals( rhs.m_destAlphaFunc ) )
+		if ( !m_destAlphaFunc.equals( rhs.m_destAlphaFunc ) )
 		{
 			return false;
 		}
@@ -59,6 +59,15 @@ public class RenderState
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Clears the render state.
+	 */
+	public void clear()
+	{
+		m_texture = null;
+		m_alphaOperation = AlphaOp.AO_None;
 	}
 	
 	/**
@@ -103,14 +112,15 @@ public class RenderState
 		else if ( alphaOp.equalsIgnoreCase( "blend" ) )
 		{
 			m_alphaOperation = AlphaOp.AO_Blend;
+		
+			// read alpha functions
+			String srcAlphaFunc = loader.getStringValue( "srcAlphaFunc" );
+			String destAlphaFunc = loader.getStringValue( "destAlphaFunc" );
+			
+			m_srcAlphaFunc = AlphaFunc.valueOf( srcAlphaFunc );
+			m_destAlphaFunc = AlphaFunc.valueOf( destAlphaFunc );
 		}
-		
-		// read alpha functions
-		String srcAlphaFunc = loader.getStringValue( "srcAlphaFunc" );
-		String destAlphaFunc = loader.getStringValue( "destAlphaFunc" );
-		m_srcAlphaFunc = AlphaFunc.fromString( srcAlphaFunc );
-		m_destAlphaFunc = AlphaFunc.fromString( destAlphaFunc );
-		
+			
 		// read line width
 		m_lineWidth = loader.getFloatValue( "lineWidth" );
 	}

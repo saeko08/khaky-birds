@@ -25,7 +25,7 @@
 	<!--  Devices  -->
 	
 	<ExitDoor openTexture="gameplay/exitPortal/open.xml" closedTexture="gameplay/exitPortal/closed.xml">
-		<localBounds minX='-0.71' minY='-0.435' maxX='0.71' maxY='0.435' />
+		<localBounds minX='-1.44' minY='-0.5' maxX='1.44' maxY='0.5' />
 	</ExitDoor>
 	
 	<Toggle onTexture="gameplay/toggleOn.xml" offTexture="gameplay/toggleOff.xml">

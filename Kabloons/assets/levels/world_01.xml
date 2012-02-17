@@ -17,11 +17,7 @@
 		<localBounds minX='-0.05' minY='-0.045' maxX='0.05' maxY='0.045'/>
 		<position x='1.8' y='6.8' z='99' />
 	</Entity>
-	
-	<Entity type="AnimatedBackground" path="backgrounds/park_alleyway/star.xml" randomStart="true" >
-		<localBounds minX='-0.05' minY='-0.045' maxX='0.05' maxY='0.045'/>
-		<position x='2.7' y='7.5' z='99' />
-	</Entity>
+
 	
 	<Entity type="AnimatedBackground" path="backgrounds/park_alleyway/star.xml" randomStart="true" >
 		<localBounds minX='-0.05' minY='-0.045' maxX='0.05' maxY='0.045'/>
@@ -36,7 +32,7 @@
 	<!--  gameplay -->
 	
 	<Entity type="ExitDoor" >
-		<position x='1.79' y='7.495' z='50' />
+		<position x='1.84' y='7.5' z='70' />
 	</Entity>
 	
 	<Entity type="Fan" windFx="backgrounds/park_alleyway/leftWindFx.xml">

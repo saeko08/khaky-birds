@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Animation frameDuration='0.1' atlasName='gameplay/atlas.png' alphaOp='test' >
-	<Frame type="StaticRegion" x='1'   y='240' w='142' h='87' />
-	<Frame type="StaticRegion" x='144' y='240' w='142' h='87' />
-	<Frame type="StaticRegion" x='288' y='240' w='142' h='87' />
-	<Frame type="StaticRegion" x='431' y='240' w='142' h='87' />
-	<Frame type="StaticRegion" x='575' y='240' w='142' h='87' />
-	<Frame type="StaticRegion" x='718' y='240' w='142' h='87' />
-	<Frame type="StaticRegion" x='1'   y='328' w='142' h='87' />
-	<Frame type="StaticRegion" x='144' y='328' w='142' h='87' />
-	<Frame type="StaticRegion" x='288' y='328' w='142' h='87' />
-	<Frame type="StaticRegion" x='431' y='328' w='142' h='87' />
-	<Frame type="StaticRegion" x='575' y='328' w='142' h='87' />
-	<Frame type="StaticRegion" x='718' y='328' w='142' h='87' />
+	<Frame type="StaticRegion" x='0'   y='632' w='288' h='100' />
+	<Frame type="StaticRegion" x='289' y='632' w='288' h='100' />
+	<Frame type="StaticRegion" x='578' y='632' w='288' h='100' />
+	<Frame type="StaticRegion" x='0'   y='733' w='288' h='100' />
+	<Frame type="StaticRegion" x='289' y='733' w='288' h='100' />
+	<Frame type="StaticRegion" x='578' y='733' w='288' h='100' />
+	<Frame type="StaticRegion" x='0'   y='834' w='288' h='100' />
+	<Frame type="StaticRegion" x='289' y='834' w='288' h='100' />
+	<Frame type="StaticRegion" x='578' y='834' w='288' h='100' />
 </Animation>

@@ -26,6 +26,8 @@ public class BaloonVisual extends EntityVisual
 	private int					m_floatUpAnim;
 	private int					m_floatLeftAnim;
 	private int					m_floatRightAnim;
+	private int					m_inVortexAnim;
+	private int					m_deathAnim;
 	
 	private DynamicObject		m_dynObj;
 	
@@ -41,14 +43,20 @@ public class BaloonVisual extends EntityVisual
 		super( baloonEntity );
 		
 		m_baloon = (Baloon)baloonEntity;
-		
+				
 		m_animPlayer = new AnimationPlayer();
+
 		Animation floatingUpAnim = resMgr.getResource( Animation.class, m_baloon.m_floatingUpAnim );
 		Animation floatingLeftAnim = resMgr.getResource( Animation.class, m_baloon.m_floatingLeftAnim );
 		Animation floatingRightAnim = resMgr.getResource( Animation.class, m_baloon.m_floatingRightAnim );
+		Animation inVortexAnim = resMgr.getResource( Animation.class, m_baloon.m_inVortexAnim );
+		Animation deathAnim = resMgr.getResource( Animation.class, m_baloon.m_deathAnim );
+
 		m_floatUpAnim = m_animPlayer.addAnimation( floatingUpAnim );
 		m_floatRightAnim = m_animPlayer.addAnimation( floatingRightAnim );
-		m_floatLeftAnim =  m_animPlayer.addAnimation( floatingLeftAnim );
+		m_floatLeftAnim = m_animPlayer.addAnimation( floatingLeftAnim );
+		m_inVortexAnim = m_animPlayer.addAnimation( inVortexAnim );
+		m_deathAnim = m_animPlayer.addAnimation( deathAnim );
 		
 		m_dynObj = m_baloon.query( DynamicObject.class );	
 	}
@@ -56,28 +64,44 @@ public class BaloonVisual extends EntityVisual
 	@Override
 	public void draw( SpriteBatcher batcher, Camera2D camera, float deltaTime ) 
 	{
-		if( m_baloon.m_state == Baloon.State.Flying )
+		Vector3 pos = m_entity.getPosition();
+		BoundingBox bs = m_entity.getBoundingShape();
+		
+		switch ( m_baloon.m_state )
 		{
-			Vector3 pos = m_entity.getPosition();
-			BoundingBox bs = m_entity.getBoundingShape();
+			case Flying:
+			{			
+				// select an animation appropriate to the current velocity
+				final Vector3 bodyVel = m_dynObj.getCurrentVelocity();
+				if ( bodyVel.m_x < -0.01f )
+				{
+					m_animPlayer.select( m_floatLeftAnim );
+				}
+				else if ( bodyVel.m_x > 0.01f )
+				{
+					m_animPlayer.select( m_floatRightAnim );
+				}
+				else
+				{
+					m_animPlayer.select( m_floatUpAnim );
+				}
+				break;
+			}
 			
-			// select an animation appropriate to the current velocity
-			final Vector3 bodyVel = m_dynObj.getCurrentVelocity();
-			if ( bodyVel.m_x < -0.01f )
+			case Safe:
 			{
-				m_animPlayer.select( m_floatLeftAnim );
-			}
-			else if ( bodyVel.m_x > 0.01f )
-			{
-				m_animPlayer.select( m_floatRightAnim );
-			}
-			else
-			{
-				m_animPlayer.select( m_floatUpAnim );
+				m_animPlayer.select( m_inVortexAnim );
+				break;
 			}
 			
-			batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime ) );
+			case Dead:
+			{
+				m_animPlayer.select( m_deathAnim );
+				break;
+			}
 		}
+		
+		batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime ) );
 	}
 
 }

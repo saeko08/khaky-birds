@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='gameplay/atlas2.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' looped='false'>
+	<Frame type="FramesChain" x='0' y='240' skip='6' vSpacing='1' hSpacing='1' numPerRow='15' numFrames='20' w='65' h='119' />
+</Animation>

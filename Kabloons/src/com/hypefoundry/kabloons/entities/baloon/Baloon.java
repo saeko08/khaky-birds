@@ -24,6 +24,8 @@ public class Baloon extends Entity
 	String 		m_floatingUpAnim;
 	String 		m_floatingLeftAnim;
 	String 		m_floatingRightAnim;
+	String		m_inVortexAnim;
+	String		m_deathAnim;
 	State		m_state;
 	
 	/**
@@ -34,8 +36,10 @@ public class Baloon extends Entity
 	 * @param floatingUpAnim
 	 * @param floatingLeftAnim
 	 * @param floatingRightAnim
+	 * @param inVortexAnim
+	 * @param deathAnim
 	 */
-	public void initialize( BoundingBox localBounds, Vector3 pos, String floatingUpAnim, String floatingLeftAnim, String floatingRightAnim )
+	public void initialize( BoundingBox localBounds, Vector3 pos, String floatingUpAnim, String floatingLeftAnim, String floatingRightAnim, String inVortexAnim, String deathAnim )
 	{
 		setBoundingBox( localBounds );
 		setPosition( pos );
@@ -43,6 +47,8 @@ public class Baloon extends Entity
 		m_floatingUpAnim = floatingUpAnim;
 		m_floatingLeftAnim = floatingLeftAnim;
 		m_floatingRightAnim = floatingRightAnim;
+		m_inVortexAnim = inVortexAnim;
+		m_deathAnim = deathAnim;
 		
 		m_state = State.Flying;
 		

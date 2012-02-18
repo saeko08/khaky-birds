@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='4.8' height='8.0'>
+	<ResourcesCache>
+		<Resource type="Texture" path="gameplay/atlas.png"/>
+		<Resource type="Texture" path="gameplay/atlas2.png"/>
+		<Resource type="Texture" path="backgrounds/park_alleyway/atlas.png"/> 
+	</ResourcesCache>
 
 	<Entity type="Background" path="backgrounds/park_alleyway/background.xml" >
 		<localBounds minX='-2.4' minY='-4.0' maxX='2.4' maxY='4.0' />

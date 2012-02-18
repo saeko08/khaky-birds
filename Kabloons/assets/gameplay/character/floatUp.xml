@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Animation frameDuration='0.05' atlasName='gameplay/atlas.png' alphaOp='blend' srcAlphaFunc='AF_Src_Color' destAlphaFunc='AF_One_Minus_Src_Color' >
-	<Frame type="StaticRegion" x='0' y='0' w='65' h='119' />
-	<Frame type="StaticRegion" x='66' y='0' w='65' h='119' />
-	<Frame type="StaticRegion" x='132' y='0' w='65' h='119' />
-	<Frame type="StaticRegion" x='198' y='0' w='65' h='119' />
-	<Frame type="StaticRegion" x='264' y='0' w='65' h='119' />
-	<Frame type="StaticRegion" x='330' y='0' w='65' h='119' />
-	<Frame type="StaticRegion" x='396' y='0' w='65' h='119' />
+<Animation frameDuration='0.1' atlasName='gameplay/atlas2.png' alphaOp='blend' srcAlphaFunc='AF_Src_Color' destAlphaFunc='AF_One_Minus_Src_Color' >
+	<Frame type="FramesChain" x='0' y='0' skip='0' vSpacing='1' hSpacing='1' numPerRow='15' numFrames='7' w='65' h='119' />
 </Animation>

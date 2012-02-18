@@ -6,6 +6,7 @@ package com.hypefoundry.kabloons.entities.baloon;
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.physics.DynamicObject;
 import com.hypefoundry.engine.physics.events.OutOfWorldBounds;
 import com.hypefoundry.engine.physics.locomotion.SteeringBehaviors;
 import com.hypefoundry.engine.world.Entity;
@@ -49,6 +50,7 @@ public class BaloonController extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{
+			m_sb.clear();
 		}
 		
 		@Override
@@ -94,6 +96,9 @@ public class BaloonController extends FiniteStateMachine
 		{
 			// update baloon's state
 			m_baloon.m_state = Baloon.State.Dead;
+			
+			// disable baloon's movement
+			m_baloon.query( DynamicObject.class ).m_linearSpeed = 0.0f;
 		}
 		
 		@Override
@@ -119,6 +124,9 @@ public class BaloonController extends FiniteStateMachine
 		{
 			// update baloon's state
 			m_baloon.m_state = Baloon.State.Safe;
+			
+			// disable baloon's movement
+			m_baloon.query( DynamicObject.class ).m_linearSpeed = 0.0f;
 		}
 	}
 	

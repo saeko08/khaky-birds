@@ -3,7 +3,11 @@
 
 	<!--  Baloons  -->
 	
-	<Baloon floatingUpAnim="gameplay/character/floatUp.xml" floatingLeftAnim="gameplay/character/floatLeft.xml" floatingRightAnim="gameplay/character/floatRight.xml" >
+	<Baloon floatingUpAnim="gameplay/character/floatUp.xml" 
+			floatingLeftAnim="gameplay/character/floatLeft.xml" 
+			floatingRightAnim="gameplay/character/floatRight.xml" 
+			inVortexAnim="gameplay/character/characterReachedVortex.xml" 
+			deathAnim="gameplay/character/death.xml">
 		<localBounds minX='-0.325' minY='-0.6' maxX='0.325' maxY='0.6' />
 	</Baloon>
 	

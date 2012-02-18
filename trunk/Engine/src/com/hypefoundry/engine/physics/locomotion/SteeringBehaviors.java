@@ -350,8 +350,6 @@ public class SteeringBehaviors implements Updatable
 				beh.update( movable, deltaTime );
 			}
 		}
-	
-		movable.constrain();
 	}
 	
 	// ------------------------------------------------------------------------

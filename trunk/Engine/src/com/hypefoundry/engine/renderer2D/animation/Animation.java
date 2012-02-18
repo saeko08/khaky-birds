@@ -40,9 +40,11 @@ public class Animation extends Resource
 		}
 	}
 	
+	// Here's where you register new type of animation frames
 	private static FrameDeserializersFactoryData[]		m_frameDeserializers = {
 			new FrameDeserializersFactoryData( StaticRegion.class, new StaticRegion() ),
-			new FrameDeserializersFactoryData( LinearInterpolation.class, new LinearInterpolation() )
+			new FrameDeserializersFactoryData( LinearInterpolation.class, new LinearInterpolation() ),
+			new FrameDeserializersFactoryData( FramesChain.class, new FramesChain() ),
 	};
 	
 	private static FrameDeserializer getDeserializer( String type )

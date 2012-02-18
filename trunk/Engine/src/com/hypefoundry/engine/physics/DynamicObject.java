@@ -60,20 +60,6 @@ public final class DynamicObject implements Aspect
 	}
 	
 	/**
-	 * Constrains the values to the max values.
-	 */
-	public void constrain()
-	{
-		m_velocity.clamp( m_linearSpeed );
-		
-		float rotMag = Math.abs( m_rotation );
-		if ( rotMag > m_rotationSpeed )
-		{
-			m_rotation = ( m_rotation > 0 ) ? rotMag : -rotMag;
-		}
-	}
-	
-	/**
 	 * Calculates the maximum rotation the body can perform this frame.
 	 * 
 	 * @param rotationAngle
@@ -99,6 +85,9 @@ public final class DynamicObject implements Aspect
 	 */
 	public void simulate( float deltaTime, Entity entity ) 
 	{
+		// first make sure the velocities stay in the desired limits
+		constrain();
+		
 		m_currTranslation.set( m_velocity );
 		m_currTranslation.scale( deltaTime );
 		entity.translate( m_currTranslation );
@@ -110,6 +99,20 @@ public final class DynamicObject implements Aspect
 		// slow down
 		m_velocity.set( 0, 0, 0 );
 		m_rotation = 0;
+	}
+	
+	/**
+	 * Constrains the values to the max values.
+	 */
+	private void constrain()
+	{
+		m_velocity.clamp( m_linearSpeed );
+		
+		float rotMag = Math.abs( m_rotation );
+		if ( rotMag > m_rotationSpeed )
+		{
+			m_rotation = ( m_rotation > 0 ) ? rotMag : -rotMag;
+		}
 	}
 
 	@Override

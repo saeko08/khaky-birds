@@ -75,6 +75,9 @@ public class AnimationPlayer
 		
 		// reset the memorized frame index in which the last event was emitted
 		m_lastEventFrameIdx = -1;
+		
+		// reset the animation timer
+		m_animationTime = 0.0f;
 	}
 	
 	/**

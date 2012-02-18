@@ -116,7 +116,7 @@ public class GameScreen extends Screen
 		try 
 		{
 			InputStream worldFileStream = game.getFileIO().readAsset( "khaky_birds_prototype/test_world.xml" );
-			m_world.load( XMLDataLoader.parse( worldFileStream, "World" ) );
+			m_world.load( XMLDataLoader.parse( worldFileStream, "World" ), m_resourceManager );
 		} 
 		catch ( IOException e ) 
 		{

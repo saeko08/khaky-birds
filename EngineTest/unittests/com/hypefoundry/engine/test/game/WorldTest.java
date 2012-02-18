@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
+import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.DataSaver;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
@@ -121,7 +122,8 @@ public class WorldTest extends AndroidTestCase
 		world.registerEntity( Apple.class, new EntityFactory() { @Override public Entity create() { return new Apple(); } } );
 		world.registerEntity( Orange.class, new EntityFactory() { @Override public Entity create() { return new Orange(); } } );
 		
-		world.load( XMLDataLoader.parse( new ByteArrayInputStream( worldDefinition.getBytes("UTF-8") ), "World" ) );
+		ResourceManager resMgr = null;
+		world.load( XMLDataLoader.parse( new ByteArrayInputStream( worldDefinition.getBytes("UTF-8") ), "World" ), resMgr );
 		
 		assertEquals( 200.0f, world.getWidth() );
 		assertEquals( 300.0f, world.getHeight() );
@@ -164,7 +166,8 @@ public class WorldTest extends AndroidTestCase
 			world.registerEntity( Apple.class, new EntityFactory() { @Override public Entity create() { return new Apple(); } } );
 			world.registerEntity( Orange.class, new EntityFactory() { @Override public Entity create() { return new Orange(); } } );
 			
-			world.load( XMLDataLoader.parse( new ByteArrayInputStream( receivedResult.getBytes("UTF-8") ), "World" ) );
+			ResourceManager resMgr = null;
+			world.load( XMLDataLoader.parse( new ByteArrayInputStream( receivedResult.getBytes("UTF-8") ), "World" ), resMgr );
 			
 			assertEquals( 200.0f, world.getWidth() );
 			assertEquals( 300.0f, world.getHeight() );

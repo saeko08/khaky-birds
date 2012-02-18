@@ -528,3 +528,21 @@ and the XML section that creates an entity with the 'sweetness' parameter define
 
 
 Check out the dedicated references on the [WorldFileLoaderReference Data Loader] and [WorldFileSaverReference Data Saver] for more information.
+
+==Loading large resources==
+
+A level will typically employ many large texture atlases, sounds, music clips etc.
+
+Some of this stuff will be requested for the first time some time after the level starts, and will need to be loaded then - that may cause some stutter when such a resource is loaded.
+
+To prevent that from happening, you can specify a list of 'large' assets that need to be loaded when the level is being loaded and initialized.
+
+You specify them in a special XML node in a `World` XML file:
+
+{{{
+<ResourcesCache>
+	<Resource type="Texture" path="gameplay/atlas.png"/>
+	<Resource type="Texture" path="gameplay/atlas2.png"/>
+	<Resource type="Texture" path="backgrounds/park_alleyway/atlas.png"/> 
+</ResourcesCache>
+}}}

@@ -134,7 +134,7 @@ public class GameScreen extends Screen
 		{
 			String levelPath = getLevelPath( levelIdx );
 			InputStream worldFileStream = game.getFileIO().readAsset( levelPath );
-			m_world.load( XMLDataLoader.parse( worldFileStream, "World" ) );
+			m_world.load( XMLDataLoader.parse( worldFileStream, "World" ), m_resourceManager );
 		} 
 		catch ( IOException e ) 
 		{

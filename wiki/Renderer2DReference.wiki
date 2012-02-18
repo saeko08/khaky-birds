@@ -39,16 +39,16 @@ It specifies a texture that's contained in atlas `khaky_birds_prototype/atlas.pn
     * `test` - perform a simple alpha test
     * `blend` - dop the alpha blending. When this param is specified, you should also specify the `srcAlphaFunc` and `destAlphaFunc` attributes
   # `srcAlphaFunc`, `destAlphaFunc` - alpha blending functions for the source and destination textures
-    * `zero` - don't use the texture
-    * `one` - use texture color and alpha
-    * `srcAlpha` - use source texture alpha
-    * `destAlpha` - use destination texture alpha
-    * `srcColor` - use source texture color
-    * `destColor` - use destination texture color
-    * `oneMinusSrcAlpha` - use invertex source texture alpha
-    * `oneMinusDestAlpha` - use invertex destination texture alpha
-    * `oneMinusSrcColor` - use invertex source texture color
-    * `oneMinusDestColor` - use invertex destination texture color
+    * `AF_Zero` - don't use the texture
+    * `AF_One` - use texture color and alpha
+    * `AF_Src_Alpha` - use source texture alpha
+    * `AF_Dest_Alpha` - use destination texture alpha
+    * `AF_Src_Color` - use source texture color
+    * `AF_Dest_Color` - use destination texture color
+    * `AF_One_Minus_Src_Alpha` - use invertex source texture alpha
+    * `AF_One_Minus_Dest_Alpha` - use invertex destination texture alpha
+    * `AF_One_Minus_Src_Color` - use invertex source texture color
+    * `AF_One_Minus_Dest_Color` - use invertex destination texture color
 
 == Animation ==
 An animation is a resource. You can create them manually, or by using a definition stored in an XML file.
@@ -71,8 +71,32 @@ The file must contain a single `<Animation>` tag with an attribute `frameDuratio
 
 You can also specify whether the animation should be played in a looped mode or not by adding a *looped* attribute to the `Animation` node.
 
-That tag has children - `<TextureRegion>` tags, each of which describes a region in a texture where an animation frame is located.
+That tag has children - `<Frame>` tags, each of which describes a region in a texture where an animation frame is located.
 The order of the tags specifies the order in which the key frames will be played.
+
+There are various types of frames:
+
+ * `StaticRegion` - corresponds to a single 'texture' frame. With it you just define a static region in an atlas that will be used as an animation frame:
+
+{{{
+<Frame type="StaticRegion" x='396' y='120' w='65' h='119' />
+}}}
+
+ * `LinearInterpolation` - this type of frame lets you define two static regions in an atlas, and make the animation create a number of frames that move you from one region to another. You specify the start frame in a 'From' child node that contains regular texture region coordinates, and the end frame in a 'To' child node. There's one thing left you need to specify - how long should it take (in seconds) for the animation to move from the source region to the target one. You can specify that time in 'duration' parameter
+
+{{{
+<Frame type="LinearInterpolation" duration='0.1'>
+   <From x='0' y='0' w='50' h='50'/>
+   <To x='100' y='0' w='50' h='50'/>
+</Frame>
+}}}
+
+ * `FramesChain` - You will often place multiple animations frames next to each other in a single atlas. You could describe that sequence using multiple `StaticRegion` frames, however the longer an XML file, the longer it takes to load it. That's where this frame type comes in  handy. It assumes each animation frame has the same size ( you need to specify  using `w` and `h` attributes ) and that particular frames lie adjacent to each other, organized in multiple rows. You need to specify the number of frames in each row ( `numPerRow` attribute ) as well as how many frames are there in total ( `numFrames` attribute ). The last pair of attributes specifies the top left coordinate of the first frame ( `x`, `y` attributes ) as well as the horizontal and vertical spacing between subsequent frames (`vSpacing`, `hSpacing` attributes)
+
+{{{
+<Frame type="FramesChain" x='0' y='0' vSpacing='1' hSpacing='1' 
+       numPerRow='10' numFrames='20' w='65' h='119' />
+}}}
 
 ==Animation events==
 
@@ -80,9 +104,9 @@ Each `TextureRegion` tag can contain a number of `<Event>` tags. Those allow you
 
 You can define an event like so:
 {{{
-<TextureRegion x='761' y='235' w='31' h='31'>
+<Frame type='StaticRegion' x='761' y='235' w='31' h='31'>
 	<Event type="Fire"/>
-</TextureRegion>
+</Frame>
 }}}
 
 This particular frame of animation will emit an `EntityEvent` of type `Fire`.

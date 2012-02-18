@@ -45,6 +45,7 @@
         * [WorldReference#Main_XML_tags Main XML tags]
         * [WorldReference#Generic_entity_tags Generic entity tags]
         * [WorldReference#Custom_entity_tags Custom entity tags]
+      * [WorldReference#Loading_large_resources Loading large resources]
     * [Renderer2DReference Renderer 2D]
       * [Renderer2DReference#Sprites Sprites]
       * [Renderer2DReference#Atlas Atlas]

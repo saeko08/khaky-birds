@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 
 import com.hypefoundry.engine.core.GLGraphics;
-import com.hypefoundry.engine.game.Game;
 
 /**
  * A texture resource.

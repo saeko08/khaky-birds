@@ -2,6 +2,9 @@ package com.hypefoundry.engine.world;
 
 import java.util.*;
 
+import com.hypefoundry.engine.core.Resource;
+import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.core.Texture;
 import com.hypefoundry.engine.game.Updatable;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.util.serialization.DataLoader;
@@ -18,17 +21,10 @@ import android.util.Log;
  *
  */
 public class World implements Updatable
-{
-	private float						m_width;
-	private float						m_height;
-	private List< Entity >				m_entities;
-	private List< Entity >				m_entitiesToAdd;
-	private List< Entity >				m_entitiesToRemove;
-	private List< WorldView >			m_views;
-	private List< EntityFactoryData >	m_entityFactories;
-	
-	private Vector3 					m_entityQueryTargetPos		= new Vector3();
-	
+{	
+	// ------------------------------------------------------------------------
+	//	Entity factory data
+	// ------------------------------------------------------------------------
 	
 	class EntityFactoryData
 	{
@@ -41,6 +37,48 @@ public class World implements Updatable
 			m_factory = factory;
 		}
 	}
+	
+	// ------------------------------------------------------------------------
+	//	Resource factory definition and data
+	// ------------------------------------------------------------------------
+	
+	class ResourceFactory
+	{
+		Class< ? extends Resource >		m_type;
+		
+		ResourceFactory( Class< ? extends Resource > type )
+		{
+			m_type = type;
+		}
+		
+		Resource load( ResourceManager resMgr, String path )
+		{
+			return resMgr.getResource( m_type, path );
+		}
+	}
+	
+	// define cachable resources here
+	private ResourceFactory[] 		m_resourceFactories = {
+			new ResourceFactory( Texture.class ),
+		};
+	
+	// ------------------------------------------------------------------------
+	// Members
+	// ------------------------------------------------------------------------
+	
+	private float						m_width;
+	private float						m_height;
+	private List< Entity >				m_entities;
+	private List< Entity >				m_entitiesToAdd;
+	private List< Entity >				m_entitiesToRemove;
+	private List< WorldView >			m_views;
+	private List< EntityFactoryData >	m_entityFactories;
+	
+	private Vector3 					m_entityQueryTargetPos		= new Vector3();
+	
+	// ------------------------------------------------------------------------
+	// API
+	// ------------------------------------------------------------------------
 	
 	/**
 	 * Constructor.
@@ -374,8 +412,9 @@ public class World implements Updatable
 	 * CAUTION: it doesn't remove the previous world's contents!!!
 	 * 
 	 * @param loader		loader that persists the world
+	 * @param resMgr		resource manager to which all precached resources will be loaded
 	 */
-	public void load( DataLoader loader )
+	public void load( DataLoader loader, ResourceManager resMgr )
 	{
 		if ( loader == null )
 		{
@@ -386,6 +425,21 @@ public class World implements Updatable
 		{
 			m_width = loader.getFloatValue( "width" );
 			m_height = loader.getFloatValue( "height" );
+			
+			// precache large assets - such as atlases or sounds, so that they
+			// don't need to be loaded at runtime and stall the application
+			DataLoader resourcesCache = loader.getChild( "ResourcesCache" );
+			if ( resourcesCache != null )
+			{
+				for( DataLoader child = resourcesCache.getChild( "Resource" ); child != null; child = child.getSibling() )
+				{
+					String resourceType = child.getStringValue( "type" );
+					ResourceFactory factory = findResourceFactory( resourceType );
+					
+					String assetPath = child.getStringValue( "path" );
+					factory.load( resMgr, assetPath );
+				}
+			}
 			
 			// parse the entities
 			for( DataLoader child = loader.getChild( "Entity" ); child != null; child = child.getSibling() )
@@ -484,6 +538,27 @@ public class World implements Updatable
 			if ( data.m_type.getSimpleName().equals( entityType ) )
 			{
 				return data.m_factory;
+			}
+		}
+		
+		// factory definition not found
+		return null;
+	}
+	
+	/**
+	 * Looks for a factory that can instantiate resources of the specified type.
+	 * 
+	 * @param resourceType
+	 * @return
+	 */
+	private ResourceFactory findResourceFactory( String resourceType )
+	{
+		for ( int i = 0; i < m_resourceFactories.length; ++i )
+		{
+			ResourceFactory factory = m_resourceFactories[i];
+			if ( factory.m_type.getSimpleName().equals( resourceType ) )
+			{
+				return factory;
 			}
 		}
 		

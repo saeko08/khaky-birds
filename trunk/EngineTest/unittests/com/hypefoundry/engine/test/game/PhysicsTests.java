@@ -208,6 +208,6 @@ public class PhysicsTests extends AndroidTestCase
 	
 		// verify that the objects stopped
 		assertTrue( e2.getPosition().dist( 3, 3, 0 ) < 1e-3 );
-		assertTrue( e1.getPosition().dist( 2.75f, 2.75f, 0 ) < 1e-3 ); // not too acurate, but it's ok for now
+		assertTrue( e1.getPosition().dist( 1.707f, 1.707f, 0 ) < 1e-3 ); // not too acurate, but it's ok for now
 	}
 }

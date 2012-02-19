@@ -180,7 +180,10 @@ public abstract class ParticleEmitter
 		// create the particles
 		String particleType				= loader.getStringValue( "particleType" );
 		m_factory						= ParticleSystem.findParticleFactory( particleType );
-		m_factory.load( loader, resMgr );
+		if ( m_factory != null )
+		{
+			m_factory.load( loader, resMgr );
+		}
 
 		
 		// load the implementation specific data

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.05' atlasName='backgrounds/meadow/meadow.png' alphaOp='blend' srcAlphaFunc='AF_Src_Color' destAlphaFunc='AF_One_Minus_Src_Color' >
+	<Frame type="LinearInterpolation" duration='1.0'>
+		<From x='481' y='347' w='113' h='10'/>
+   		<To   x='594' y='347' w='113' h='10'/>
+	</Frame>
+</Animation>

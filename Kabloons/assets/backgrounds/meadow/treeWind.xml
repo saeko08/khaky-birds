@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParticleSystem >	
+	<Emitter type="LineParticleEmitter" frequency='0.23' amountEmittedEachTick='1' totalAmount='5' timeToLive='1' width='0.18' height='0.2' particleType="RandomlyTexturedParticle" >
+ 		<Textures atlasName='backgrounds/meadow/meadow.png' alphaOp='test' >
+ 			<Texture x='802' y='107' w='18' h='20' />
+ 			<Texture x='821' y='107' w='18' h='20' />
+ 			<Texture x='840' y='107' w='18' h='20' />
+ 		</Textures> 
+		<lineStart x='0' y='0.975' z='0' />
+		<lineEnd x='0' y='-0.975' z='0' />
+		<velocity x='6' y='0' z='0' />
+	</Emitter>
+	
+	<Affector type="BlowMovementAffector" range='2.0' force='0.5' >
+		<origin x='-0.5' y='0' z='0' />
+		<blowAxis x='1' y='0' z='0' />
+	</Affector>
+	
+	<Affector type="RotationAffector" angularSpeed='4.0'/>
+</ParticleSystem>

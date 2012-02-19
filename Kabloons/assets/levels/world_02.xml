@@ -3,7 +3,7 @@
 	<ResourcesCache>
 		<Resource type="Texture" path="gameplay/atlas.png"/>
 		<Resource type="Texture" path="gameplay/atlas2.png"/>
-		<Resource type="Texture" path="backgrounds/park_alleyway/atlas.png"/> 
+		<Resource type="Texture" path="backgrounds/meadow/meadow.png"/> 
 	</ResourcesCache>
 	
 	<Entity type="Background" path="backgrounds/meadow/meadow.xml" >
@@ -13,14 +13,19 @@
 	
 	<!-- background anims -->
 	
-	<Entity type="AnimatedBackground" path="backgrounds/meadow/sun.xml" randomStart="true" >
+	<Entity type="AnimatedBackground" path="backgrounds/meadow/sun.xml" >
 		<localBounds minX='-0.53' minY='-0.195' maxX='0.53' maxY='0.195'/>
 		<position x='0.94' y='2.305' z='99' />
 	</Entity>
 	
-	<Entity type="AnimatedBackground" path="backgrounds/meadow/crows.xml" randomStart="true" >
+	<Entity type="AnimatedBackground" path="backgrounds/meadow/crows.xml" >
 		<localBounds minX='-0.385' minY='-0.26' maxX='0.385' maxY='0.26'/>
 		<position x='3.375' y='3.05' z='99' />
+	</Entity>
+	
+	<Entity type="AnimatedBackground" path="backgrounds/meadow/dandelions.xml" >
+		<localBounds minX='-0.605' minY='-0.68' maxX='0.605' maxY='0.68'/>
+		<position x='4.195' y='0.69' z='40' />
 	</Entity>
 	
 	<!--  gameplay -->
@@ -29,7 +34,27 @@
 		<position x='1.84' y='7.5' z='70' />
 	</Entity>
 	
-		 
-	<Entity type="Player" leftFans='0' rightFans='1' />
+	<Entity type="Fan" windFx="backgrounds/meadow/groundWind.xml">
+		<position x='4.6' y='1.5' z='60' />
+		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
+		<windFieldBounds minX='-4.4' minY='-0.975' maxX='0.0' maxY='0.975' />
+		<BlowForce x='-0.4' y='0' z='0' />
+	</Entity>
+
+	<Entity type="Fan" windFx="backgrounds/meadow/treeWind.xml">
+		<position x='0.2' y='3.6' z='60' />
+		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
+		<windFieldBounds minX='0.0' minY='-0.8' maxX='4.4' maxY='0.8' />
+		<BlowForce x='0.3' y='0' z='0' />
+	</Entity>
+	 
+	<Entity type="Fan" windFx="backgrounds/meadow/indianSummerWind.xml">
+		<position x='-1.1' y='5.2' z='60' />
+		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
+		<windFieldBounds minX='0.0' minY='-0.8' maxX='5.4' maxY='0.8' />
+		<BlowForce x='0.3' y='0' z='0' />
+	</Entity>
+		  
+	<Entity type="Player" leftFans='1' rightFans='1' />
 		
 </World>

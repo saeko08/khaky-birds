@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='backgrounds/meadow/meadow.png' alphaOp='none' >
+	<Frame type="FramesChain" x='481' y='358' vSpacing='1' hSpacing='1' numPerRow='4' numFrames='8' w='121' h='136' />
+</Animation>

@@ -119,8 +119,7 @@ public class AssetsFactory
 	 */
 	public class ExitDoorData
 	{
-		public String		m_openDoorTexturePath;
-		public String		m_closedDoorTexturePath;
+		public String		m_openAnim;
 		public BoundingBox	m_localBounds;
 		
 		/**
@@ -133,8 +132,7 @@ public class AssetsFactory
 			DataLoader exitDoorNode = loader.getChild( "ExitDoor" );
 			if ( exitDoorNode != null )
 			{
-				m_openDoorTexturePath = exitDoorNode.getStringValue( "openTexture" );
-				m_closedDoorTexturePath = exitDoorNode.getStringValue( "closedTexture" );
+				m_openAnim = exitDoorNode.getStringValue( "openAnim" );
 				
 				m_localBounds = new BoundingBox();
 				m_localBounds.load( "localBounds", exitDoorNode );
@@ -143,8 +141,7 @@ public class AssetsFactory
 		
 		public void initialize( ExitDoor door )
 		{
-			door.m_openDoorTexturePath = m_openDoorTexturePath;
-			door.m_closedDoorTexturePath = m_closedDoorTexturePath;
+			door.m_openAnim = m_openAnim;
 			door.setBoundingBox( m_localBounds );
 		}
 	}

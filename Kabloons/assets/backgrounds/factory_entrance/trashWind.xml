@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParticleSystem >	
+	<Emitter type="LineParticleEmitter" frequency='0.11' amountEmittedEachTick='1' totalAmount='10' timeToLive='1.3' width='0.22' height='0.2' particleType="RandomlyTexturedParticle" >
+ 		<Textures atlasName='backgrounds/factory_entrance/atlas.png' alphaOp='test' >
+ 			<Texture x='481' y='1' w='22' h='20' />
+ 			<Texture x='504' y='1' w='22' h='20' />
+ 			<Texture x='527' y='1' w='22' h='20' />
+ 			<Texture x='550' y='1' w='22' h='20' />
+ 		</Textures> 
+		<lineStart x='0' y='0.975' z='0' />
+		<lineEnd x='0' y='-0.975' z='0' />
+		<velocity x='5' y='0' z='0' />
+	</Emitter>
+	
+	<Affector type="BlowMovementAffector" range='2.0' force='0.5' >
+		<origin x='-0.5' y='0' z='0' />
+		<blowAxis x='1' y='0' z='0' />
+	</Affector>
+	
+	<Affector type="RotationAffector" angularSpeed='4.0'/>
+</ParticleSystem>

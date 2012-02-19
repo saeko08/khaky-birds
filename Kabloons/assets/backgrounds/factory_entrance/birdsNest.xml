@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.5' atlasName='backgrounds/factory_entrance/atlas.png' alphaOp='none' >
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='513' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='513' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='545' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='545' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='545' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='513' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='513' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+	<Frame type="StaticRegion" x='481' y='62' w='31' h='26' />
+</Animation>

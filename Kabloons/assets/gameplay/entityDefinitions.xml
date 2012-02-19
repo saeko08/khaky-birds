@@ -28,7 +28,7 @@
 	
 	<!--  Devices  -->
 	
-	<ExitDoor openTexture="gameplay/exitPortal/open.xml" closedTexture="gameplay/exitPortal/closed.xml">
+	<ExitDoor openAnim="gameplay/exitPortal/portalAnim.xml" >
 		<localBounds minX='-1.44' minY='-0.5' maxX='1.44' maxY='0.5' />
 	</ExitDoor>
 	

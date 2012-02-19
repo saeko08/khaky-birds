@@ -24,8 +24,7 @@ public class ExitDoor extends Entity implements EntityEventListener, Toggled
 		Closed
 	}
 	
-	public String		m_openDoorTexturePath;
-	public String		m_closedDoorTexturePath;
+	public String		m_openAnim;
 	String 				m_tag;
 	State				m_state;
 	

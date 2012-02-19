@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='backgrounds/factory_entrance/atlas.png' alphaOp='none' >
+	<Frame type="FramesChain" x='577' y='62' vSpacing='1' hSpacing='1' numPerRow='8' numFrames='11' w='51' h='26' />
+</Animation>

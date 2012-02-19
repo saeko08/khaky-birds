@@ -27,6 +27,10 @@ public class AnimatedParticle extends Particle
 		m_player = new AnimationPlayer();
 		int animIdx = m_player.addAnimation( animation );
 		m_player.select( animIdx );
+		
+		// randomize the start time
+		float startTime = (float)Math.random() * animation.getDuration();
+		m_player.setTime( startTime );
 	}
 	
 	@Override

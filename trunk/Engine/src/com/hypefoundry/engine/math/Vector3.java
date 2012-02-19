@@ -328,7 +328,7 @@ public final class Vector3
 	/**
 	 * Rotates the vector around the Z axis.
 	 * 
-	 * @param angle
+	 * @param angle ( in degrees )
 	 * @return	this vector
 	 */
 	public Vector3 rotateZ( float angle ) 

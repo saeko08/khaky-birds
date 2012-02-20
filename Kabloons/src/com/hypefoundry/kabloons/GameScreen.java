@@ -106,7 +106,7 @@ public class GameScreen extends Screen
 		m_world.registerEntity( ExitDoor.class, new EntityFactory() { @Override public Entity create() { return new ExitDoor( m_assetsFactory ); } } );
 		m_world.registerEntity( Fan.class, new EntityFactory() { @Override public Entity create() { return new Fan(); } } );
 		m_world.registerEntity( Player.class, new EntityFactory() { @Override public Entity create() { return new Player(); } } );
-		m_world.registerEntity( Toggle.class, new EntityFactory() { @Override public Entity create() { return new Toggle( m_assetsFactory ); } } );
+		m_world.registerEntity( Toggle.class, new EntityFactory() { @Override public Entity create() { return new Toggle(); } } );
 		m_world.registerEntity( BuzzSaw.class, new EntityFactory() { @Override public Entity create() { return new BuzzSaw( m_assetsFactory ); } } );
 		
 		// load the world

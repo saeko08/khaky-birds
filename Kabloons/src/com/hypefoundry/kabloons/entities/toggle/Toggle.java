@@ -7,7 +7,6 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityOperation;
 import com.hypefoundry.engine.world.World;
-import com.hypefoundry.kabloons.utils.AssetsFactory;
 
 /**
  * @author Paksas
@@ -17,27 +16,17 @@ public class Toggle extends Entity
 {
 	String				m_controlledEntityTag;
 	Toggled 			m_controlledEntity;
-	public String 		m_onTexturePath;
-	public String 		m_offTexturePath;
+	String 				m_onAnimPath;
+	String 				m_offAnimPath;
 	
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param assetsFactory
-	 */
-	public Toggle( AssetsFactory assetsFactory )
-	{
-		assetsFactory.initializeToggle( this );		
-	}
 	
 	@Override
 	public void onLoad( DataLoader loader )
 	{
 		m_controlledEntityTag = loader.getStringValue( "entityTag" );
-		
-		// adjust position
-		getPosition().m_z = 70.0f;
+			
+		m_onAnimPath = loader.getStringValue( "onAnim" );
+		m_offAnimPath = loader.getStringValue( "offAnim" );
 	}
 	
 	@Override

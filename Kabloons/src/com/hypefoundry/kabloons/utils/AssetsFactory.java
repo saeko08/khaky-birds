@@ -11,7 +11,6 @@ import com.hypefoundry.kabloons.entities.baloon.Baloon;
 import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSaw;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoor;
 import com.hypefoundry.kabloons.entities.fan.Fan;
-import com.hypefoundry.kabloons.entities.toggle.Toggle;
 
 
 /**
@@ -147,44 +146,7 @@ public class AssetsFactory
 	}
 	
 	/**
-	 * Definition of a toggle.
-	 * 
-	 * @author Paksas
-	 */
-	public class ToggleData
-	{
-		public String			m_onTexturePath;
-		public String			m_offTexturePath;
-		public BoundingBox		m_localBounds;
-		
-		/**
-		 * Constructor.
-		 * 
-		 * @param loader
-		 */
-		ToggleData( DataLoader loader )
-		{			
-			DataLoader toggleNode = loader.getChild( "Toggle" );
-			if ( toggleNode != null )
-			{
-				m_onTexturePath = toggleNode.getStringValue( "onTexture" );
-				m_offTexturePath = toggleNode.getStringValue( "offTexture" );
-				
-				m_localBounds = new BoundingBox();
-				m_localBounds.load( "localBounds", toggleNode );
-			}
-		}
-		
-		public void initialize( Toggle toggle ) 
-		{
-			toggle.m_onTexturePath = m_onTexturePath;
-			toggle.m_offTexturePath = m_offTexturePath;
-			toggle.setBoundingBox( m_localBounds );
-		}
-	}
-	
-	/**
-	 * Definition of a toggle.
+	 * Definition of a buzz saw.
 	 * 
 	 * @author Paksas
 	 */
@@ -256,7 +218,6 @@ public class AssetsFactory
 	private BaloonFactory[]		m_baloonTypes;
 	private FanFactory[]		m_fanTypes = new FanFactory[Fan.Direction.values().length];
 	private ExitDoorData 		m_exitDoorDefinition;
-	private ToggleData 			m_toggleDefinition;
 	private BuzzSawData 		m_buzzSawDefinition;
 	private PuffData			m_puffData;
 	
@@ -298,7 +259,6 @@ public class AssetsFactory
 		
 		// devices
 		m_exitDoorDefinition = new ExitDoorData( loader );
-		m_toggleDefinition = new ToggleData( loader );
 		m_buzzSawDefinition = new BuzzSawData( loader );
 		m_puffData = new PuffData( loader );
 	}
@@ -348,16 +308,6 @@ public class AssetsFactory
 	public void initializeDoor( ExitDoor exitDoor ) 
 	{
 		m_exitDoorDefinition.initialize( exitDoor );
-	}
-	
-	/**
-	 * Initializes a toggle instance.
-	 * 
-	 * @param toggle
-	 */
-	public void initializeToggle( Toggle toggle ) 
-	{
-		m_toggleDefinition.initialize( toggle );
 	}
 	
 	/**

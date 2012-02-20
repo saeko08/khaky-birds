@@ -31,7 +31,7 @@
 	<!--  gameplay -->
 	
 	<Entity type="ExitDoor" tag="ExitDoor" state="Closed" >
-		<position x='2.4' y='7.91' z='50' />
+		<position x='1.84' y='7.43' z='50' />
 	</Entity>
 	
 	<Entity type="Fan" windFx="backgrounds/factory_entrance/trashWind.xml">
@@ -41,12 +41,11 @@
 		<BlowForce x='0.4' y='0' z='0' />
 	</Entity>
 	
-	<!-- 
-	<Entity type="Toggle" entityTag="ExitDoor" >
-		<position x='0.5' y='4.0' z='70' />
+	<Entity type="Toggle" offAnim="backgrounds/factory_entrance/toggleOff.xml" onAnim="backgrounds/factory_entrance/toggleOn.xml" entityTag="ExitDoor" >
+		<localBounds minX='-0.1' minY='-0.165' maxX='0.1' maxY='0.165' />
+		<position x='4.13' y='3.545' z='70' />
 	</Entity>
-	 -->
 		 
-	<Entity type="Player" leftFans='1' rightFans='1' />
+	<Entity type="Player" leftFans='1' rightFans='0' />
 		
 </World>

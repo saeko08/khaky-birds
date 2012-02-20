@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.3' atlasName='backgrounds/factory_entrance/atlas.png' alphaOp='none' >
+	<Frame type="StaticRegion" x='521' y='89' w='19' h='32' />
+	<Frame type="StaticRegion" x='541' y='89' w='19' h='32' />
+</Animation>

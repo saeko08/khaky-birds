@@ -9,7 +9,8 @@ import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.Camera2D;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
-import com.hypefoundry.engine.renderer2D.TextureRegion;
+import com.hypefoundry.engine.renderer2D.animation.Animation;
+import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
 import com.hypefoundry.engine.world.Entity;
 
 /**
@@ -20,8 +21,10 @@ public class ToggleVisual extends EntityVisual
 {
 
 	private Toggle	 			m_toggle;
-	private TextureRegion		m_onTexture;
-	private TextureRegion		m_offTexture;
+	
+	private AnimationPlayer		m_player;
+	private int					m_onAnim;
+	private int					m_offAnim;
 	
 	/**
 	 * Constructor.
@@ -35,23 +38,28 @@ public class ToggleVisual extends EntityVisual
 		
 		m_toggle = (Toggle)toggleEntity;
 		
-		m_onTexture = resMgr.getResource( TextureRegion.class, m_toggle.m_onTexturePath );
-		m_offTexture = resMgr.getResource( TextureRegion.class, m_toggle.m_offTexturePath );
+		Animation onAnim = resMgr.getResource( Animation.class, m_toggle.m_onAnimPath );
+		Animation offAnim = resMgr.getResource( Animation.class, m_toggle.m_offAnimPath );
+		
+		m_player = new AnimationPlayer();
+		m_onAnim = m_player.addAnimation( onAnim );
+		m_offAnim = m_player.addAnimation( offAnim );
 	}
 	
 	@Override
 	public void draw( SpriteBatcher batcher, Camera2D camera, float deltaTime ) 
-	{
-		Vector3 pos = m_entity.getPosition();
-		BoundingBox bs = m_entity.getBoundingShape();
-		
+	{		
 		if ( m_toggle.m_controlledEntity.isSwitchedOn() )
 		{
-			batcher.drawSprite( pos, bs, m_onTexture );
+			m_player.select( m_onAnim );
 		}
 		else
 		{
-			batcher.drawSprite( pos, bs, m_offTexture );
+			m_player.select( m_offAnim );
 		}
+	
+		Vector3 pos = m_entity.getPosition();
+		BoundingBox bs = m_entity.getBoundingShape();
+		batcher.drawSprite( pos, bs, m_player.getTextureRegion( deltaTime ) );
 	}
 }

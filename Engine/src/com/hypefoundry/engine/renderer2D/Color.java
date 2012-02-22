@@ -3,6 +3,8 @@
  */
 package com.hypefoundry.engine.renderer2D;
 
+import com.hypefoundry.engine.util.serialization.DataLoader;
+
 /**
  * Color representation.
  * 
@@ -89,5 +91,18 @@ public final class Color
 		}
 		
 		return this;
+	}
+	
+	/**
+	 * Loads the color settings from the specified node. The values are assumed to be specified in [0..255] range.
+	 * 
+	 * @param loader
+	 */
+	public void deserialize( DataLoader loader )
+	{
+		m_vals[Red] = (float)( loader.getIntValue( "r", 0 ) ) / 255.0f;
+		m_vals[Green] = (float)( loader.getIntValue( "g", 0 ) ) / 255.0f;
+		m_vals[Blue] = (float)( loader.getIntValue( "b", 0 ) ) / 255.0f;
+		m_vals[Alpha] = (float)( loader.getIntValue( "a", 255 ) ) / 255.0f;
 	}
 }

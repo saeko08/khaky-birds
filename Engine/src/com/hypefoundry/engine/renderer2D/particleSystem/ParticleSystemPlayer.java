@@ -16,6 +16,7 @@ public class ParticleSystemPlayer
 {
 	private ParticleSystem		m_particleSystem;
 	private Particle[]			m_particles;
+	private float[]				m_particleTimeMultipliers;
 	private int[]				m_emitterIndices;
 	private Vector3				m_tmpVelocity	= new Vector3();
 	private boolean				m_looped;
@@ -33,6 +34,7 @@ public class ParticleSystemPlayer
 		
 		// allocate space for particles
 		m_particles = new Particle[ m_particleSystem.m_maxParticles ];
+		m_particleTimeMultipliers = new float[ m_particleSystem.m_maxParticles ];
 		m_emitterIndices = new int[ m_particleSystem.m_emitters.length + 1 ];
 		
 		// initialize the particles
@@ -88,40 +90,40 @@ public class ParticleSystemPlayer
 	 */
 	public void simulate( float deltaTime ) 
 	{
-		// update the affectors
 		Particle particle = null;
 		for ( int j = 0; j < m_particles.length; ++j )
 		{
+			float particleDeltaTime = m_particleTimeMultipliers[j] * deltaTime;
+	
 			particle = m_particles[j];
 			if ( particle != null && particle.m_timeToLive > 0 )
 			{
+				// update the affectors
 				for ( int i = 0; i < m_particleSystem.m_affectors.length; ++i )
 				{
-					m_particleSystem.m_affectors[i].update( deltaTime, particle );
+					m_particleSystem.m_affectors[i].update( particleDeltaTime, particle );
 				}
+
+				// move the particles around and update their lifetime timer			
+				particle.m_timeToLive -= particleDeltaTime;
+				m_tmpVelocity.set( particle.m_velocity ).scale( particleDeltaTime );
+				particle.m_position.add( m_tmpVelocity );
 			}
 		}
 		
-		// move the particles around and update their lifetime timer
+		// reset the time multiplier for the particles
 		for ( int i = 0; i < m_particles.length; ++i )
 		{
-			particle = m_particles[i];
-			
-			if ( particle != null && particle.m_timeToLive > 0 )
-			{
-				particle.m_timeToLive -= deltaTime;
-				m_tmpVelocity.set( particle.m_velocity ).scale( deltaTime );
-				particle.m_position.add( m_tmpVelocity );
-			}
+			m_particleTimeMultipliers[i] = 1.0f;
 		}
 				
 		// update the emitters
 		int startIdx, endIdx;
 		for ( int i = 0; i < m_particleSystem.m_emitters.length; ++i )
-		{
+		{		
 			startIdx = m_emitterIndices[i];
 			endIdx = m_emitterIndices[i + 1];
-			m_particleSystem.m_emitters[i].update( deltaTime, m_particles, startIdx, endIdx );
+			m_particleSystem.m_emitters[i].update( deltaTime, m_particles, m_particleTimeMultipliers, startIdx, endIdx );
 			
 			if ( m_looped == false )
 			{

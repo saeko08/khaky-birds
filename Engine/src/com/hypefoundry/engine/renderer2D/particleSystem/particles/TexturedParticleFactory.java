@@ -8,7 +8,6 @@ import com.hypefoundry.engine.renderer2D.TextureRegion;
 import com.hypefoundry.engine.renderer2D.particleSystem.Particle;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticlesFactory;
 import com.hypefoundry.engine.util.serialization.DataLoader;
-import com.hypefoundry.engine.world.Entity;
 
 /**
  * A factory for creating particles with static textures.

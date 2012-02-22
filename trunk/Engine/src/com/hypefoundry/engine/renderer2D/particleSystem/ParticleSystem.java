@@ -85,6 +85,7 @@ public class ParticleSystem extends Resource
 			new AffectorsFactoryData( LinearMovementAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new LinearMovementAffector(); } } ),
 			new AffectorsFactoryData( BlowMovementAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new BlowMovementAffector(); } } ),
 			new AffectorsFactoryData( RotationAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new RotationAffector(); } } ),
+			new AffectorsFactoryData( AccelerationAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new AccelerationAffector(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------

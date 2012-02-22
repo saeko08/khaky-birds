@@ -127,10 +127,11 @@ public abstract class ParticleEmitter
 	 * 
 	 * @param deltaTime
 	 * @param particles
+	 * @param timeMultipliers
 	 * @param firstParticleIdx
 	 * @param lastParticleIdx
 	 */
-	void update( float deltaTime, Particle[] particles, int firstParticleIdx, int lastParticleIdx )
+	void update( float deltaTime, Particle[] particles, float[] timeMultipliers, int firstParticleIdx, int lastParticleIdx )
 	{			
 		int toBeReborn = 0;
 		m_timeElapsed += deltaTime;
@@ -139,6 +140,8 @@ public abstract class ParticleEmitter
 			toBeReborn += m_numEmittedEachTick;
 			m_timeElapsed -= m_emissionFrequency;
 		}
+		
+		float totalToBeReborn = toBeReborn;
 		
 		// change the remaining life time of the particles
 		for ( int i = firstParticleIdx; i < lastParticleIdx; ++i )
@@ -149,6 +152,10 @@ public abstract class ParticleEmitter
 				--toBeReborn;
 				
 				initialize( i, particles[i] );
+				
+				// some time has passed - so simulate the particle for a little while to create an illusion
+				// that they were emitted in a continuous manner, and not at discrete time steps
+				timeMultipliers[i] = ( totalToBeReborn - toBeReborn ) / totalToBeReborn;
 			}
 		}
 	}

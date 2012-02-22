@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParticleSystem >
+	<!-- 
+ 	<Emitter type="DirectionalParticleEmitter" frequency='0.01' amountEmittedEachTick='1' totalAmount='100' timeToLive='1.0' width='0.02' height='0.02' particleType="RandomlyTexturedParticle" force='3' dispersionAngle='30'>
+ 		<Textures atlasName='backgrounds/factory_interior_1/atlas.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_Dest_Color' >
+ 			<Texture x='53' y='810' w='2' h='2' />
+ 			<Texture x='53' y='808' w='2' h='2' />
+ 			<Texture x='53' y='804' w='2' h='2' />
+ 			<Texture x='53' y='802' w='2' h='2' />
+ 			<Texture x='57' y='810' w='2' h='2' />
+ 			<Texture x='57' y='808' w='2' h='2' />
+ 			<Texture x='57' y='804' w='2' h='2' />
+ 			<Texture x='57' y='802' w='2' h='2' />
+ 			<Texture x='61' y='810' w='2' h='2' />
+ 			<Texture x='61' y='808' w='2' h='2' />
+ 			<Texture x='61' y='804' w='2' h='2' />
+ 			<Texture x='61' y='802' w='2' h='2' />
+ 		</Textures> 
+		<position x='0.375' y='0.4' z='0' />
+		<direction x='0.561' y='-0.83' z='0' />
+	</Emitter>
+	-->
+	
+	<Emitter type="DirectionalParticleEmitter" frequency='0.01' amountEmittedEachTick='1' totalAmount='100' timeToLive='1.0' force='3' dispersionAngle='30' particleType="TracerParticle" particleWidth='0.02' >
+ 		<ParticleColors>
+ 			<Color r='255' g='235' b='135'/>
+ 			<Color r='255' g='178' b='112' />
+ 			<Color r='255' g='142' b='132' />
+ 		</ParticleColors> 
+		<position x='0.375' y='0.4' z='0' />
+		<direction x='0.561' y='-0.83' z='0' />
+	</Emitter>
+	
+	<Affector type="AccelerationAffector" >
+		<acceleration x='0' y='-3' z='0' />
+	</Affector>
+</ParticleSystem>

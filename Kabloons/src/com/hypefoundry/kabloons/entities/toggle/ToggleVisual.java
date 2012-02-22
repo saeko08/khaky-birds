@@ -49,7 +49,7 @@ public class ToggleVisual extends EntityVisual
 	@Override
 	public void draw( SpriteBatcher batcher, Camera2D camera, float deltaTime ) 
 	{		
-		if ( m_toggle.m_controlledEntity.isSwitchedOn() )
+		if ( m_toggle.m_controlledEntity != null && m_toggle.m_controlledEntity.isSwitchedOn() )
 		{
 			m_player.select( m_onAnim );
 		}

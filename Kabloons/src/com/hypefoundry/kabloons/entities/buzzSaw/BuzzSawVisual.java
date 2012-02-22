@@ -11,6 +11,8 @@ import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 import com.hypefoundry.engine.renderer2D.animation.Animation;
 import com.hypefoundry.engine.renderer2D.animation.AnimationPlayer;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystem;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystemPlayer;
 import com.hypefoundry.engine.world.Entity;
 
 /**
@@ -20,7 +22,8 @@ import com.hypefoundry.engine.world.Entity;
 public class BuzzSawVisual extends EntityVisual 
 {
 	private BuzzSaw					m_buzzSaw;
-	private AnimationPlayer			m_player;
+	private AnimationPlayer			m_animPlayer;
+	private ParticleSystemPlayer	m_fxPlayer;
 	
 	/**
 	 * Constructor.
@@ -34,9 +37,17 @@ public class BuzzSawVisual extends EntityVisual
 		
 		m_buzzSaw = (BuzzSaw)buzzSawEntity;
 		
-		m_player = new AnimationPlayer();
+		// animation
+		m_animPlayer = new AnimationPlayer();
 		Animation buzzSawAnim = resMgr.getResource( Animation.class, m_buzzSaw.m_animPath );
-		m_player.addAnimation( buzzSawAnim );
+		m_animPlayer.addAnimation( buzzSawAnim );
+		
+		// effect
+		if ( m_buzzSaw.m_fxPath.length() > 0 )
+		{
+			ParticleSystem fx = resMgr.getResource( ParticleSystem.class, m_buzzSaw.m_fxPath );
+			m_fxPlayer = new ParticleSystemPlayer( fx, true );
+		}
 	}
 
 	@Override
@@ -49,13 +60,19 @@ public class BuzzSawVisual extends EntityVisual
 		{
 			case Running:
 			{
-				batcher.drawSprite( pos, bs, m_player.getTextureRegion( deltaTime ) );
+				batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime ) );
+				
+				if ( m_fxPlayer != null )
+				{
+					m_fxPlayer.draw( pos.m_x, pos.m_y, batcher, deltaTime );
+				}
+				
 				break;
 			}
 			
 			case SwitchedOff:
 			{
-				batcher.drawSprite( pos, bs, m_player.getTextureRegion( 0.0f ) );
+				batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( 0.0f ) );
 				break;
 			}
 		}

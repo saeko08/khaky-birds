@@ -9,7 +9,6 @@ import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
 import com.hypefoundry.engine.world.EntityEventListener;
 import com.hypefoundry.kabloons.entities.toggle.Toggled;
-import com.hypefoundry.kabloons.utils.AssetsFactory;
 
 /**
  * @author Paksas
@@ -24,6 +23,7 @@ public class BuzzSaw extends Entity implements EntityEventListener, Toggled
 	}
 	
 	public String			m_animPath;
+	public String			m_fxPath;
 	String					m_tag;
 	State					m_state;
 	
@@ -32,10 +32,8 @@ public class BuzzSaw extends Entity implements EntityEventListener, Toggled
 	 * 
 	 * @param assetsFactory
 	 */
-	public BuzzSaw( AssetsFactory assetsFactory )
-	{
-		assetsFactory.initializeBuzzSaw( this );
-		
+	public BuzzSaw()
+	{		
 		m_state = State.Running;
 		
 		// attach an event listener
@@ -46,6 +44,8 @@ public class BuzzSaw extends Entity implements EntityEventListener, Toggled
 	public void onLoad( DataLoader loader )
 	{
 		m_tag = loader.getStringValue( "tag" );
+		m_animPath = loader.getStringValue( "animPath" );
+		m_fxPath = loader.getStringValue( "fx" );
 	}
 	
 	@Override

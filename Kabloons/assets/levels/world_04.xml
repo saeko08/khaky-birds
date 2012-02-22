@@ -1,19 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='4.8' height='8.0'>
+	<ResourcesCache>
+		<Resource type="Texture" path="gameplay/atlas.png"/>
+		<Resource type="Texture" path="gameplay/atlas2.png"/>
+		<Resource type="Texture" path="backgrounds/factory_interior_1/atlas.png"/> 
+	</ResourcesCache>
 
-	<Entity type="Background" path="backgrounds/factory_interior_1/background.xml" >
+	<Entity type="AnimatedBackground" path="backgrounds/factory_interior_1/background.xml" >
 		<localBounds minX='-2.4' minY='-4.0' minZ='-0.5' maxX='2.4' maxY='4.0' maxZ='0.5' />
 		<position x='2.4' y='4.0' z='100' />
 	</Entity>
 	
-	<Entity type="ExitDoor" >
+	<!-- background anims -->
+	
+	<!--  gameplay -->
+	
+	<Entity type="ExitDoor" tag="ExitDoor" state="Closed" >
 		<position x='2.4' y='7.91' z='50' />
 	</Entity>
 	
-	<Entity type="BuzzSaw">
-		<position x='2.4' y='4.0' z='70' />
+	
+	<!--  buzzsaws  -->
+	
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw1.xml" fx="backgrounds/factory_interior_1/saw1Fx.xml" tag="Saw1" >
+		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+		<position x='1.015' y='7.02' z='65' />
 	</Entity>
-		 
+	
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw2.xml" tag="Saw2" >
+		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+		<position x='2.715' y='6.39' z='65' />
+	</Entity>
+	
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw3.xml" tag="Saw3" >
+		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+		<position x='4.455' y='4.6' z='65' />
+	</Entity>
+	
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw4.xml" tag="Saw4" >
+		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+		<position x='2.295' y='3.64' z='65' />
+	</Entity>
+	
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw5.xml" tag="Saw5" >
+		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+		<position x='0.405' y='4.34' z='65' />
+	</Entity>
+
+	
+	<!--  toggles  -->
+	
+	<Entity type="Toggle" offAnim="backgrounds/factory_interior_1/sawToggleOff.xml" onAnim="backgrounds/factory_interior_1/sawToggleOn.xml" entityTag="Saw5" >
+		<localBounds minX='-0.06' minY='-0.06' maxX='0.06' maxY='0.06' />
+		<position x='0.57' y='3.16' z='70' />
+	</Entity>
+	
+	<Entity type="Toggle" offAnim="backgrounds/factory_interior_1/sawToggleOff.xml" onAnim="backgrounds/factory_interior_1/sawToggleOn.xml" entityTag="Saw1" >
+		<localBounds minX='-0.06' minY='-0.06' maxX='0.06' maxY='0.06' />
+		<position x='4.09' y='3.25' z='70' />
+	</Entity>
+	
+	<Entity type="Toggle" offAnim="backgrounds/factory_interior_1/exitToggleOff.xml" onAnim="backgrounds/factory_interior_1/exitToggleOn.xml" entityTag="ExitDoor" >
+		<localBounds minX='-0.105' minY='-0.105' maxX='0.105' maxY='0.105' />
+		<position x='1.625' y='6.225' z='70' />
+	</Entity>
+		
+		
+		
 	<Entity type="Player" leftFans='1' rightFans='1' />
 		
 </World>

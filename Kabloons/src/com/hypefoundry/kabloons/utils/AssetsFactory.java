@@ -145,39 +145,6 @@ public class AssetsFactory
 		}
 	}
 	
-	/**
-	 * Definition of a buzz saw.
-	 * 
-	 * @author Paksas
-	 */
-	public class BuzzSawData
-	{
-		public String			m_animPath;
-		public BoundingBox		m_localBounds;
-		
-		/**
-		 * Constructor.
-		 * 
-		 * @param loader
-		 */
-		BuzzSawData( DataLoader loader )
-		{			
-			DataLoader buzzSawNode = loader.getChild( "BuzzSaw" );
-			if ( buzzSawNode != null )
-			{
-				m_animPath = buzzSawNode.getStringValue( "anim" );
-				
-				m_localBounds = new BoundingBox();
-				m_localBounds.load( "localBounds", buzzSawNode );
-			}
-		}
-		
-		public void initialize( BuzzSaw buzzSaw ) 
-		{
-			buzzSaw.m_animPath = m_animPath;
-			buzzSaw.setBoundingBox( m_localBounds );
-		}
-	}
 	
 	/**
 	 * Definition of a toggle.
@@ -218,7 +185,6 @@ public class AssetsFactory
 	private BaloonFactory[]		m_baloonTypes;
 	private FanFactory[]		m_fanTypes = new FanFactory[Fan.Direction.values().length];
 	private ExitDoorData 		m_exitDoorDefinition;
-	private BuzzSawData 		m_buzzSawDefinition;
 	private PuffData			m_puffData;
 	
 	// ------------------------------------------------------------------------
@@ -259,7 +225,6 @@ public class AssetsFactory
 		
 		// devices
 		m_exitDoorDefinition = new ExitDoorData( loader );
-		m_buzzSawDefinition = new BuzzSawData( loader );
 		m_puffData = new PuffData( loader );
 	}
 	
@@ -308,16 +273,6 @@ public class AssetsFactory
 	public void initializeDoor( ExitDoor exitDoor ) 
 	{
 		m_exitDoorDefinition.initialize( exitDoor );
-	}
-	
-	/**
-	 * Initializes a buzz saw instance.
-	 * 
-	 * @param toggle
-	 */
-	public void initializeBuzzSaw( BuzzSaw buzzSaw ) 
-	{
-		m_buzzSawDefinition.initialize( buzzSaw );
 	}
 
 	/**

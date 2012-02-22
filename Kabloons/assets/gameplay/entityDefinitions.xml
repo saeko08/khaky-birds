@@ -32,10 +32,6 @@
 		<localBounds minX='-1.44' minY='-0.5' maxX='1.44' maxY='0.5' />
 	</ExitDoor>
 	
-	<BuzzSaw anim="gameplay/buzzSawActive.xml" >
-		<localBounds minX='-0.66' minY='-0.65' maxX='0.66' maxY='0.65' />
-	</BuzzSaw>
-	
 	<Puff anim="gameplay/puffAnim.xml" >
 		<localBounds minX='-0.495' minY='-0.455' maxX='0.495' maxY='0.455' />
 	</Puff>

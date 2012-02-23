@@ -27,22 +27,22 @@
 		<position x='1.015' y='7.02' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw2.xml" tag="Saw2" >
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw2.xml" fx="backgrounds/factory_interior_1/saw2Fx.xml" tag="Saw2" >
 		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
 		<position x='2.715' y='6.39' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw3.xml" tag="Saw3" >
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw3.xml" fx="backgrounds/factory_interior_1/saw3Fx.xml" tag="Saw3" >
 		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
 		<position x='4.455' y='4.6' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw4.xml" tag="Saw4" >
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw4.xml" fx="backgrounds/factory_interior_1/saw4Fx.xml" tag="Saw4" >
 		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
 		<position x='2.295' y='3.64' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw5.xml" tag="Saw5" >
+	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw5.xml" fx="backgrounds/factory_interior_1/saw5Fx.xml" tag="Saw5" >
 		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
 		<position x='0.405' y='4.34' z='65' />
 	</Entity>

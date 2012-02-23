@@ -153,6 +153,9 @@ public abstract class ParticleEmitter
 				
 				initialize( i, particles[i] );
 				
+				// inform the particle that it was reinitialized
+				particles[i].onInitialized();
+				
 				// some time has passed - so simulate the particle for a little while to create an illusion
 				// that they were emitted in a continuous manner, and not at discrete time steps
 				timeMultipliers[i] = ( totalToBeReborn - toBeReborn ) / totalToBeReborn;

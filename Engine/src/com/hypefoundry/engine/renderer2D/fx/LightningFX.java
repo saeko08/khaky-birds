@@ -21,7 +21,8 @@ public class LightningFX
 	private float				m_width;
 	
 	private Spline				m_particles;
-	private Spline				m_worldSpaceParticles;
+	private Spline				m_bgWorldSpaceParticles;
+	private Spline				m_fgWorldSpaceParticles;
 	private Vector3				m_tmpPos = new Vector3();
 	
 	private Color				m_bgColor;
@@ -43,6 +44,12 @@ public class LightningFX
 	{
 		m_spline = spline;
 		
+		// set the render states
+		m_bgColor = new Color( color ).brighter( 0.5f );
+		m_fgColor = color;
+		m_bgRenderState.setLineWidth( 7.0f );
+		m_fgRenderState.setLineWidth( 2.0f );
+		
 		// make sure the parameters are correct
 		if ( particlesCount <= 0 )
 		{
@@ -61,7 +68,8 @@ public class LightningFX
 		
 		// calculate the base placement of the particles
 		m_particles = new Spline();
-		m_worldSpaceParticles = new Spline();
+		m_bgWorldSpaceParticles = new Spline();
+		m_fgWorldSpaceParticles = new Spline();
 		float scatterDist = length / particlesCount;
 		float x, y;
 		x = 0;
@@ -76,17 +84,12 @@ public class LightningFX
 				y = (float)( Math.random() - 0.5 ) * m_width;
 			}
 
-			m_particles.addPoint( new Vector3( x, y, 0 ) );
+			m_particles.addPoint( new Vector3( x, y, 0 ), null );
 			x += scatterDist;
 			
-			m_worldSpaceParticles.addPoint( new Vector3() );
+			m_bgWorldSpaceParticles.addPoint( new Vector3(), m_bgColor );
+			m_fgWorldSpaceParticles.addPoint( new Vector3(), m_fgColor );
 		}
-		
-		// set the render states
-		m_bgColor = new Color( color ).brighter( 0.5f );
-		m_fgColor = color;
-		m_bgRenderState.setLineWidth( 7.0f );
-		m_fgRenderState.setLineWidth( 2.0f );
 	}
 	
 	/**
@@ -111,13 +114,15 @@ public class LightningFX
 			m_tmpPos.set( m_particles.m_points[i] );
 			m_tmpPos.m_x += offset;
 			
-			m_spline.transform( m_tmpPos, m_worldSpaceParticles.m_points[i] );
+			m_spline.transform( m_tmpPos, m_bgWorldSpaceParticles.m_points[i] );
+			m_spline.transform( m_tmpPos, m_fgWorldSpaceParticles.m_points[i] );
 		}
 		// refresh the spline
-		m_worldSpaceParticles.refresh();
+		m_bgWorldSpaceParticles.refresh();
+		m_fgWorldSpaceParticles.refresh();
 		
 		// draw
-		batcher.drawSpline( m_worldSpaceParticles, m_bgColor, m_bgRenderState );
-		batcher.drawSpline( m_worldSpaceParticles, m_fgColor, m_fgRenderState );
+		batcher.drawSpline( 0, 0, m_bgWorldSpaceParticles, m_bgRenderState );
+		batcher.drawSpline( 0, 0, m_fgWorldSpaceParticles, m_fgRenderState );
 	}
 }

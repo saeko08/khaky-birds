@@ -52,8 +52,7 @@ public class DirectionalParticleEmitter extends ParticleEmitter
 		
 		// randomize the velocity within the half angle
 		float randDispersionAngle = (float)( Math.random() - 0.5 ) * m_dispersionAngle;
-		particle.m_velocity.rotateZ( randDispersionAngle );
-		
+		particle.m_velocity.rotateZ( randDispersionAngle );	
 	}
 
 	@Override

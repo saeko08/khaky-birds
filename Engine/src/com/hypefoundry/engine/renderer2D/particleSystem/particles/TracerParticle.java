@@ -17,36 +17,54 @@ import com.hypefoundry.engine.renderer2D.particleSystem.Particle;
  */
 public class TracerParticle extends Particle 
 {
-	private Color				m_color;
 	private RenderState			m_renderState = new RenderState();
 	private Spline				m_spline = new Spline();
+	private boolean				m_fade;
+	private float				m_fadeSpeed;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @param color
 	 * @param lineWidth
+	 * @param fade			makes the particle fade away is its lifetime ends
 	 */
-	TracerParticle( Color color, float lineWidth )
+	TracerParticle( Color color, float lineWidth, boolean fade )
 	{
-		m_color = color;
+		m_fade = fade;
+		
 		m_renderState.setLineWidth( lineWidth );
-		m_renderState.enableAlphaBlending( AlphaFunc.AF_Src_Alpha, AlphaFunc.AF_Dest_Color );
+		m_renderState.enableAlphaBlending( AlphaFunc.AF_Src_Alpha, AlphaFunc.AF_One_Minus_Src_Alpha );
 		
 		// initialize the spline
-		m_spline.addPoint( new Vector3() );
-		m_spline.addPoint( new Vector3() );
+		m_spline.addPoint( new Vector3(), new Color( color ) ).m_colors[0].m_vals[ Color.Alpha ] = 0.0f;
+		m_spline.addPoint( new Vector3(), new Color( color ) ).m_colors[1].m_vals[ Color.Alpha ] = 1.0f;
+	}
+	
+	@Override
+	public void onInitialized() 
+	{
+		// initialize the fade speed
+		m_fadeSpeed = ( m_fade && ( m_timeToLive > 0.0f ) ) ? ( 1.0f / m_timeToLive ) : 0.0f;
+		
+		// reset the position and color
+		m_spline.m_points[0].set( m_position );
+		m_spline.m_points[1].set( m_position );
+		m_spline.m_colors[1].m_vals[Color.Alpha] = 1.0f;
 	}
 	
 	@Override
 	protected void draw( float x, float y, SpriteBatcher batcher, float deltaTime )
-	{
+	{		
 		if ( m_timeToLive > 0 )
 		{
 			// update the spline
-			// TODO m_spline.m_points[0].
+			m_spline.m_points[0].set( m_spline.m_points[1] );
+			m_spline.m_points[1].set( m_position );
+			m_spline.m_colors[1].m_vals[Color.Alpha] -= m_fadeSpeed * deltaTime;
+			m_spline.refresh();
 			
-			batcher.drawSpline( m_spline, m_color, m_renderState );
+			batcher.drawSpline( x, y, m_spline, m_renderState );
 		}
 	}
 }

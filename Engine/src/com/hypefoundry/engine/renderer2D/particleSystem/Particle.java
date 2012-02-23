@@ -24,6 +24,11 @@ public class Particle
 	public Vector3			m_velocity = new Vector3();
 	
 	/**
+	 * Informs a particle that it's jst been initialized. 
+	 */
+	public void onInitialized() {}
+	
+	/**
 	 * Draws the particle.
 	 * 
 	 * @param x				position in the world

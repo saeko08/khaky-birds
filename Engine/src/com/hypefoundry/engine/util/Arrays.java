@@ -3,6 +3,7 @@ package com.hypefoundry.engine.util;
 import java.util.Comparator;
 
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticleAffector;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticleEmitter;
 
@@ -136,6 +137,33 @@ public final class Arrays
 		else
 		{
 			newArray = new Vector3[ array.length + 1 ];
+			for ( int i = 0; i < array.length; ++i )
+			{
+				newArray[i] = array[i];
+			}
+			newArray[array.length] = obj;
+		}
+		
+		return newArray;
+	}
+	
+	/**
+	 * Appends a color to an array, resizing it.
+	 * 
+	 * @param array
+	 * @return resized array
+	 */
+	public static Color[] append( Color[] array, Color obj )
+	{
+		Color[] newArray = null;
+		if ( array == null )
+		{
+			newArray = new Color[1];
+			newArray[0] = obj;
+		}
+		else
+		{
+			newArray = new Color[ array.length + 1 ];
 			for ( int i = 0; i < array.length; ++i )
 			{
 				newArray[i] = array[i];

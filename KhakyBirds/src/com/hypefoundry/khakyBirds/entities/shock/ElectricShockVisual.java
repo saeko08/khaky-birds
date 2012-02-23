@@ -41,7 +41,7 @@ public class ElectricShockVisual extends EntityVisual
 	@Override
 	public void draw( SpriteBatcher batcher, Camera2D camera, float deltaTime ) 
 	{        
-		m_fx.draw( batcher, m_electricShock.m_offset );
+		m_fx.draw( batcher, m_electricShock.m_offset, deltaTime );
 	}
 
 }

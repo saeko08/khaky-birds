@@ -17,6 +17,7 @@ import com.hypefoundry.engine.util.Arrays;
 public final class Spline 
 {
 	public Vector3[]			m_points = null;
+	public Color[]				m_colors = null;
 	public Vector3[]			m_directions = null;
 	public float[]				m_lengths = null;
 	
@@ -33,12 +34,27 @@ public final class Spline
 	 */
 	public Spline addPoint( Vector3 point )
 	{
+		addPoint( point, null );
+		
+		return this;
+	}
+	
+	/**
+	 * Adds a new point to the spline.
+	 * 
+	 * @param 	point
+	 * @param   color
+	 * @return	self instance allowing to chain those method calls
+	 */
+	public Spline addPoint( Vector3 point, Color color )
+	{
 		if ( point == null )
 		{
 			return this;
 		}
 		
 		m_points = Arrays.append( m_points, point );
+		m_colors = Arrays.append( m_colors, color );
 			
 		if ( m_points.length >= 2 )
 		{

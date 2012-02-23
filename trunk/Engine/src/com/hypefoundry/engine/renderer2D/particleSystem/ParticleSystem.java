@@ -95,6 +95,7 @@ public class ParticleSystem extends Resource
 		new ParticlesFactoryData( AnimatedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new AnimatedParticleFactory(); } } ),
 		new ParticlesFactoryData( TexturedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new TexturedParticleFactory(); } } ),
 		new ParticlesFactoryData( RandomlyTexturedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new RandomlyTexturedParticleFactory(); } } ),
+		new ParticlesFactoryData( TracerParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new TracerParticleFactory(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------

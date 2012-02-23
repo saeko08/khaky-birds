@@ -121,11 +121,12 @@ public class SpriteBatcher
 	/**
 	 * Draws a spline.
 	 * 
+	 * @param x			drawing offset
+	 * @param y			drawing offset
 	 * @param spline
-	 * @param color
 	 * @param rs		render state
 	 */
-	public void drawSpline( Spline spline, Color color, RenderState rs )
+	public void drawSpline( float x, float y, Spline spline, RenderState rs )
 	{		
 		// check if the spline has any segments defined
 		int count = spline.m_points.length - 1;
@@ -144,18 +145,20 @@ public class SpriteBatcher
 		for ( int i = 0; i < count; ++i )
 		{
 			// line start point
-			Vector3 pt = spline.m_points[ i ];
-			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_x;
-			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_y;
+			Vector3 pt = spline.m_points[i];
+			Color color = spline.m_colors[i];
+			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_x + x;
+			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_y + y;
 			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Red ];
 			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Green ];
 			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Blue ];
 			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Alpha ];
 			
 			// line end point
-			pt = spline.m_points[ i + 1 ];
-			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_x;
-			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_y;
+			pt = spline.m_points[i + 1];
+			color = spline.m_colors[i + 1];
+			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_x + x;
+			m_verticesBuffer[ m_bufferIndex++ ] = pt.m_y + y;
 			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Red ];
 			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Green ];
 			m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Blue ];

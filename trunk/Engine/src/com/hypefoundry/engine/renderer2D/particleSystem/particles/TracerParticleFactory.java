@@ -18,13 +18,14 @@ public class TracerParticleFactory implements ParticlesFactory
 {
 	private Color[]		m_colors;
 	private float		m_linesWidth;
+	private boolean		m_fade;
 	
 	
 	@Override
 	public Particle create() 
 	{
 		int colorIdx = (int)( Math.random() * m_colors.length );
-		return new TracerParticle( m_colors[colorIdx], m_linesWidth );
+		return new TracerParticle( m_colors[colorIdx], m_linesWidth, m_fade );
 	}
 
 	@Override
@@ -47,6 +48,7 @@ public class TracerParticleFactory implements ParticlesFactory
 		}
 		
 		m_linesWidth = loader.getFloatValue( "particleWidth" );
+		m_fade = loader.getStringValue( "fade" ).equalsIgnoreCase( "true" );
 	}
 
 }

@@ -64,17 +64,26 @@ public class BuzzSawVisual extends EntityVisual
 				
 				if ( m_fxPlayer != null )
 				{
-					m_fxPlayer.draw( pos.m_x, pos.m_y, batcher, deltaTime );
+					m_fxPlayer.enableEmitters( true );
 				}
-				
 				break;
 			}
 			
 			case SwitchedOff:
 			{
 				batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( 0.0f ) );
+				
+				if ( m_fxPlayer != null )
+				{
+					m_fxPlayer.enableEmitters( false );
+				}
 				break;
 			}
+		}
+		
+		if ( m_fxPlayer != null )
+		{
+			m_fxPlayer.draw( pos.m_x, pos.m_y, batcher, deltaTime );
 		}
 
 	}

@@ -67,6 +67,6 @@
 		
 		
 		
-	<Entity type="Player" leftFans='1' rightFans='1' />
+	<Entity type="Player" leftFans='2' rightFans='1' />
 		
 </World>

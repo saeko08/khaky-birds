@@ -103,7 +103,7 @@ public class ExitDoorVisual extends EntityVisual
 			// draw the effects for the closed door
 			for ( int i = 0; i < m_closedDoorLightnings.length; ++i )
 			{
-				m_closedDoorLightnings[i].draw( batcher, 0 );
+				m_closedDoorLightnings[i].draw( batcher, 0, deltaTime );
 			}
 		}
 	

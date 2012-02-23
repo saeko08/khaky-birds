@@ -34,11 +34,11 @@ class LinesDrawingScreen extends Screen
 		
 	SpriteBatcher		m_batcher;
 	Spline[]			m_spline = { 
-			new Spline().addPoint( new Vector3( 0.0f, 0.0f, 50 ) ).addPoint( new Vector3( 1.0f, 1.0f, 50 ) ),
-			new Spline().addPoint( new Vector3( 0.8f, 0.0f, 10 ) ).addPoint( new Vector3( 0.8f, 9.6f, 10 ) ),
-			new Spline().addPoint( new Vector3( 1.89f, 0.0f, 10 ) ).addPoint( new Vector3( 1.89f, 9.6f, 10 ) ),
-			new Spline().addPoint( new Vector3( 3.0f, 0.0f, 10 ) ).addPoint( new Vector3( 3.0f, 9.6f, 10 ) ),
-			new Spline().addPoint( new Vector3( 4.0f, 0.0f, 10 ) ).addPoint( new Vector3( 4.0f, 9.6f, 10 ) ),
+			new Spline().addPoint( new Vector3( 0.0f, 0.0f, 50 ), Color.RED ).addPoint( new Vector3( 1.0f, 1.0f, 50 ), Color.RED ),
+			new Spline().addPoint( new Vector3( 0.8f, 0.0f, 10 ), Color.RED ).addPoint( new Vector3( 0.8f, 9.6f, 10 ), Color.RED ),
+			new Spline().addPoint( new Vector3( 1.89f, 0.0f, 10 ), Color.RED ).addPoint( new Vector3( 1.89f, 9.6f, 10 ), Color.RED ),
+			new Spline().addPoint( new Vector3( 3.0f, 0.0f, 10 ), Color.RED ).addPoint( new Vector3( 3.0f, 9.6f, 10 ), Color.RED ),
+			new Spline().addPoint( new Vector3( 4.0f, 0.0f, 10 ), Color.RED ).addPoint( new Vector3( 4.0f, 9.6f, 10 ), Color.RED ),
 	};
 	RenderState			m_renderState = new RenderState();
 	FPSCounter			m_fpsCounter = new FPSCounter();
@@ -74,7 +74,7 @@ class LinesDrawingScreen extends Screen
 		
 		for ( int i = 0; i < m_spline.length; ++i )
 		{
-			m_batcher.drawSpline( m_spline[i], Color.RED, m_renderState );
+			m_batcher.drawSpline( 0, 0, m_spline[i], m_renderState );
 		}
 		
 		m_batcher.flush();

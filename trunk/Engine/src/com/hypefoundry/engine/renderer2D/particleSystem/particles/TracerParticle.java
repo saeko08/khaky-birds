@@ -21,6 +21,7 @@ public class TracerParticle extends Particle
 	private Spline				m_spline = new Spline();
 	private boolean				m_fade;
 	private float				m_fadeSpeed;
+	private Vector3				m_tmpDir = new Vector3();
 	
 	/**
 	 * Constructor.
@@ -58,8 +59,13 @@ public class TracerParticle extends Particle
 	{		
 		if ( m_timeToLive > 0 )
 		{
+			m_tmpDir.set( m_position ).sub( m_spline.m_points[0] );
+			float lastLen = m_tmpDir.mag2D();
+			float newLen = m_velocity.mag2D() * 0.1f;
+			m_tmpDir.set( m_position ).sub( m_spline.m_points[1] ).normalize2D().scale( lastLen < newLen ? lastLen : newLen );
+			
 			// update the spline
-			m_spline.m_points[0].set( m_spline.m_points[1] );
+			m_spline.m_points[0].set( m_position ).sub( m_tmpDir );
 			m_spline.m_points[1].set( m_position );
 			m_spline.m_colors[1].m_vals[Color.Alpha] -= m_fadeSpeed * deltaTime;
 			m_spline.refresh();

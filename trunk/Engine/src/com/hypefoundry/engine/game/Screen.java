@@ -57,6 +57,11 @@ public abstract class Screen implements UpdatesManager
 			// update speed clamp
 			deltaTime = 0.1f;
 		}
+		else if ( deltaTime < 0.016f )
+		{
+			deltaTime = 0.016f;
+		}
+		
 		
 		// remove updatables
 		int count = m_updatablesToRemove.size();

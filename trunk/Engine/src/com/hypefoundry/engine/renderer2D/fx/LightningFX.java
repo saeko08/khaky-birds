@@ -30,6 +30,15 @@ public class LightningFX
 	private RenderState			m_bgRenderState = new RenderState();
 	private RenderState			m_fgRenderState = new RenderState();
 	
+	private float				m_slideSpeed = 0.06f;
+	private float				m_timeToNextSlide = 0.0f;
+	
+	private float				m_pointRandomizationSpeed = 0.18f;
+	private float				m_timeToNextPoint = 0.0f;
+	private float				m_prevPointY = 0.0f;
+	private float				m_nextPointY = 0.0f;
+	private float				m_trendY = 0.0f;
+	
 	
 	/**
 	 * Constructor.
@@ -96,33 +105,59 @@ public class LightningFX
 	 * Draws the spline on the screen.
 	 * 
 	 * @param batcher
+	 * @param offset
+	 * @param deltaTime
 	 */
-	public void draw( SpriteBatcher batcher, float offset )
+	public void draw( SpriteBatcher batcher, float offset, float deltaTime )
 	{
+		// when the time comes, generate the next curve point
+		{
+			m_timeToNextPoint -= deltaTime;
+			if ( m_timeToNextPoint <= 0.0f )
+			{
+				m_prevPointY = m_nextPointY;
+				m_nextPointY = (float)( Math.random() - 0.5 ) * m_width;
+				m_trendY = m_nextPointY - m_prevPointY;
+				m_timeToNextPoint = m_pointRandomizationSpeed;
+			}
+		}
+				
 		// update the initial positions
-		for ( int i = 2; i < m_particles.m_points.length - 1; ++i )
+		m_timeToNextSlide -= deltaTime;
+		if ( m_timeToNextSlide <= 0.0f )
 		{
-			m_particles.m_points[i - 1].m_y = m_particles.m_points[i].m_y; 
-		}
-		m_particles.m_points[m_particles.m_points.length - 2].m_y = (float)( Math.random() - 0.5 ) * m_width;
-		// refresh the spline
-		m_particles.refresh();
-		
-		// create a world-space copy
-		for ( int i = 0; i < m_particles.m_points.length; ++i )
-		{
-			m_tmpPos.set( m_particles.m_points[i] );
-			m_tmpPos.m_x += offset;
+			for ( int i = 2; i < m_particles.m_points.length - 1; ++i )
+			{
+				m_particles.m_points[i - 1].m_y = m_particles.m_points[i].m_y; 
+			}
 			
-			m_spline.transform( m_tmpPos, m_bgWorldSpaceParticles.m_points[i] );
-			m_spline.transform( m_tmpPos, m_fgWorldSpaceParticles.m_points[i] );
+			// generate the next point
+			m_particles.m_points[m_particles.m_points.length - 2].m_y = m_prevPointY + m_trendY * ( ( m_pointRandomizationSpeed - m_timeToNextPoint ) / m_pointRandomizationSpeed );
+			
+			// refresh the spline
+			m_particles.refresh();
+			
+			m_timeToNextSlide = m_slideSpeed;
 		}
-		// refresh the spline
-		m_bgWorldSpaceParticles.refresh();
-		m_fgWorldSpaceParticles.refresh();
+	
 		
-		// draw
-		batcher.drawSpline( 0, 0, m_bgWorldSpaceParticles, m_bgRenderState );
-		batcher.drawSpline( 0, 0, m_fgWorldSpaceParticles, m_fgRenderState );
+		// create a world-space copy and draw them on the screen
+		{
+			for ( int i = 0; i < m_particles.m_points.length; ++i )
+			{
+				m_tmpPos.set( m_particles.m_points[i] );
+				m_tmpPos.m_x += offset;
+				
+				m_spline.transform( m_tmpPos, m_bgWorldSpaceParticles.m_points[i] );
+				m_spline.transform( m_tmpPos, m_fgWorldSpaceParticles.m_points[i] );
+			}
+			// refresh the spline
+			m_bgWorldSpaceParticles.refresh();
+			m_fgWorldSpaceParticles.refresh();
+			
+			// draw
+			batcher.drawSpline( 0, 0, m_bgWorldSpaceParticles, m_bgRenderState );
+			batcher.drawSpline( 0, 0, m_fgWorldSpaceParticles, m_fgRenderState );
+		}
 	}
 }

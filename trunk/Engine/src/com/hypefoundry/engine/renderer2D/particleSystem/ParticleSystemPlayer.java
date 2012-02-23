@@ -20,6 +20,7 @@ public class ParticleSystemPlayer
 	private int[]				m_emitterIndices;
 	private Vector3				m_tmpVelocity	= new Vector3();
 	private boolean				m_looped;
+	private boolean				m_emittersActive = true;
 	
 	/**
 	 * Constructor.
@@ -84,6 +85,16 @@ public class ParticleSystemPlayer
 	}
 	
 	/**
+	 * Enables/disables particle emitters at runtime.
+	 * 
+	 * @param enable
+	 */
+	public void enableEmitters( boolean enable )
+	{
+		m_emittersActive = enable;
+	}
+	
+	/**
 	 * Simulates the particle system.
 	 * 
 	 * @param deltaTime
@@ -118,27 +129,30 @@ public class ParticleSystemPlayer
 		}
 				
 		// update the emitters
-		int startIdx, endIdx;
-		for ( int i = 0; i < m_particleSystem.m_emitters.length; ++i )
-		{		
-			startIdx = m_emitterIndices[i];
-			endIdx = m_emitterIndices[i + 1];
-			m_particleSystem.m_emitters[i].update( deltaTime, m_particles, m_particleTimeMultipliers, startIdx, endIdx );
-			
-			if ( m_looped == false )
-			{
-				// see how many of those were already initialized, and reduce the indices accordingly
-				int numInitialized = 0;
-				for ( int j = startIdx; j < endIdx; ++j )
-				{
-					particle = m_particles[j];
-					if ( particle != null && particle.m_timeToLive > 0 )
-					{
-						++numInitialized; 
-					}
-				}
+		if ( m_emittersActive )
+		{
+			int startIdx, endIdx;
+			for ( int i = 0; i < m_particleSystem.m_emitters.length; ++i )
+			{		
+				startIdx = m_emitterIndices[i];
+				endIdx = m_emitterIndices[i + 1];
+				m_particleSystem.m_emitters[i].update( deltaTime, m_particles, m_particleTimeMultipliers, startIdx, endIdx );
 				
-				m_emitterIndices[i] += numInitialized;
+				if ( m_looped == false )
+				{
+					// see how many of those were already initialized, and reduce the indices accordingly
+					int numInitialized = 0;
+					for ( int j = startIdx; j < endIdx; ++j )
+					{
+						particle = m_particles[j];
+						if ( particle != null && particle.m_timeToLive > 0 )
+						{
+							++numInitialized; 
+						}
+					}
+					
+					m_emitterIndices[i] += numInitialized;
+				}
 			}
 		}
 	}

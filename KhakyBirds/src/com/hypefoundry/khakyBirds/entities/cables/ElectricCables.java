@@ -2,6 +2,7 @@ package com.hypefoundry.khakyBirds.entities.cables;
 
 
 import com.hypefoundry.khakyBirds.entities.bird.CableProvider;
+import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.renderer2D.Spline;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
@@ -51,8 +52,8 @@ public class ElectricCables extends Entity implements CableProvider
 		
 		// create a new cable at the specified position
 		Spline newWire = new Spline();
-		newWire.addPoint( new Vector3( x, 0.0f, 10 ) );
-		newWire.addPoint( new Vector3( x, m_modelHeight, 10 ) );
+		newWire.addPoint( new Vector3( x, 0.0f, 10 ), Color.BLUE );
+		newWire.addPoint( new Vector3( x, m_modelHeight, 10 ), Color.BLUE );
 		
 		// and append it to the array
 		wires[ m_wires.length - 1 ] = newWire;

@@ -3,7 +3,6 @@ package com.hypefoundry.khakyBirds.entities.cables;
 import com.hypefoundry.engine.core.ResourceManager;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.renderer2D.Camera2D;
-import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.renderer2D.EntityVisual;
 import com.hypefoundry.engine.renderer2D.RenderState;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
@@ -39,7 +38,7 @@ public class ElectricCablesVisual extends EntityVisual
 	{
 		for ( int i = 0; i < m_cables.m_wires.length; ++i )
 		{
-			batcher.drawSpline( m_cables.m_wires[i], Color.BLUE, m_rs );
+			batcher.drawSpline( 0, 0, m_cables.m_wires[i], m_rs );
 		}
 	}
 }

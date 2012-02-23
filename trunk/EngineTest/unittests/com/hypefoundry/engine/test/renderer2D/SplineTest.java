@@ -1,7 +1,6 @@
 package com.hypefoundry.engine.test.renderer2D;
 
 import com.hypefoundry.engine.math.Vector3;
-import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.renderer2D.Spline;
 
 import android.test.AndroidTestCase;
@@ -13,8 +12,8 @@ public class SplineTest extends AndroidTestCase
 	public void testDistanceToPoint()
 	{
 		Spline spline = new Spline();
-		spline.addPoint( new Vector3( 0, 0, 0 ) );
-		spline.addPoint( new Vector3( 10, 0, 0 ) );
+		spline.addPoint( new Vector3( 0, 0, 0 ), null );
+		spline.addPoint( new Vector3( 10, 0, 0 ), null );
 		
 		Vector3 tmpPt = new Vector3();
 		assertEquals( 5.0f, spline.getNearestPosition( new Vector3( 5, 5, 0 ), tmpPt ) );
@@ -26,8 +25,8 @@ public class SplineTest extends AndroidTestCase
 	public void testNearestPoint()
 	{
 		Spline spline = new Spline();
-		spline.addPoint( new Vector3( 1.89f, 0, 10 ) );
-		spline.addPoint( new Vector3( 1.89f, 9.6f, 10 ) );
+		spline.addPoint( new Vector3( 1.89f, 0, 10 ), null );
+		spline.addPoint( new Vector3( 1.89f, 9.6f, 10 ), null );
 		
 		Vector3 nearestPoint = new Vector3();
 		spline.getNearestPosition( new Vector3( 1.88f, 4.2f, 10 ), nearestPoint );
@@ -37,8 +36,8 @@ public class SplineTest extends AndroidTestCase
 	public void testRefreshing()
 	{
 		Spline spline = new Spline();
-		spline.addPoint( new Vector3( 0, 0, 10 ) );
-		spline.addPoint( new Vector3( 0, 10, 10 ) );
+		spline.addPoint( new Vector3( 0, 0, 10 ), null );
+		spline.addPoint( new Vector3( 0, 10, 10 ), null );
 		
 		// check the initial values
 		assertEquals( 10.0f, spline.m_lengths[0] );
@@ -56,9 +55,9 @@ public class SplineTest extends AndroidTestCase
 	public void testTransformations()
 	{
 		Spline spline = new Spline();
-		spline.addPoint( new Vector3( 0, 5, 10 ) );
-		spline.addPoint( new Vector3( 0, 10, 10 ) );
-		spline.addPoint( new Vector3( 5, 10, 10 ) );
+		spline.addPoint( new Vector3( 0, 5, 10 ), null );
+		spline.addPoint( new Vector3( 0, 10, 10 ), null );
+		spline.addPoint( new Vector3( 5, 10, 10 ), null );
 		
 		Vector3 transformedPt = new Vector3();
 		

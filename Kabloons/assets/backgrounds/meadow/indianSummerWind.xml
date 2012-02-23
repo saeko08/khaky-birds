@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ParticleSystem >	
-	<Emitter type="LineParticleEmitter" frequency='0.25' amountEmittedEachTick='1' totalAmount='5' timeToLive='1.3' width='1.13' height='0.1' particleType="AnimatedParticle" animPath="backgrounds/meadow/indianSummerParticle.xml" > 
+	<Emitter type="LineParticleEmitter" frequency='1.0' amountEmittedEachTick='1' totalAmount='5' timeToLive='3.4' width='1.13' height='0.1' particleType="AnimatedParticle" animPath="backgrounds/meadow/indianSummerParticle.xml" > 
 		<lineStart x='0' y='0.975' z='0' />
 		<lineEnd x='0' y='-0.975' z='0' />
-		<velocity x='6' y='0' z='0' />
+		<velocity x='2' y='0' z='0' />
 	</Emitter>
 	
-	<Affector type="BlowMovementAffector" range='2.0' force='0.5' >
+	<Affector type="BlowMovementAffector" range='2.0' force='0.2' >
 		<origin x='-0.5' y='0' z='0' />
 		<blowAxis x='1' y='0' z='0' />
 	</Affector>

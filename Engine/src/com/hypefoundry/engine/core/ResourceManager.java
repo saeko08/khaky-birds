@@ -104,7 +104,14 @@ public class ResourceManager
 			if ( m_isActive )
 			{
 				// load the resource, if the resources manager is active
-				newResource.load();
+				try
+				{
+					newResource.load();
+				}
+				catch( Exception ex )
+				{
+					// invalid data for the resource 
+				}
 			}
 			
 			m_resources.add( newResource );
@@ -122,7 +129,15 @@ public class ResourceManager
 		for ( int i = 0; i < count; ++i )
 		{
 			Resource res = m_resources.get( i );
-			res.load();
+			
+			try
+			{
+				res.load();
+			}
+			catch( Exception ex )
+			{
+				// the resource references invalid data
+			}
 		}
 		
 	}

@@ -18,8 +18,6 @@ public abstract class ParticleEmitter
 	private float 				m_emissionFrequency;
 	private float				m_timeToLive;
 	private int					m_numEmittedEachTick;
-	private float				m_particleWidth;
-	private float				m_particleHeight;
 	
 	private float				m_timeElapsed;
 	private ParticlesFactory 	m_factory;
@@ -33,8 +31,7 @@ public abstract class ParticleEmitter
 		m_emissionFrequency = 0;
 		m_timeToLive = 0;
 		m_numEmittedEachTick = 0;
-		m_particleWidth = 0;
-		m_particleHeight = 0;
+
 		m_timeElapsed = 0;
 		m_factory = null;
 	}
@@ -52,21 +49,7 @@ public abstract class ParticleEmitter
 		m_factory = factory;
 		return this;
 	}
-	
-	/**
-	 * Sets particle size.
-	 * 
-	 * @param width
-	 * @param height
-	 * @return
-	 */
-	public ParticleEmitter setParticleSize( float width, float height )
-	{
-		m_particleWidth = width;
-		m_particleHeight = height;
-		return this;
-	}
-	
+
 	/**
 	 * Sets how long each particle should live.
 	 * 
@@ -115,8 +98,6 @@ public abstract class ParticleEmitter
 		for ( int i = 0; i < m_particlesCount; ++i )
 		{
 			particles[i + startIdx] = m_factory.create();
-			particles[i + startIdx].m_width = m_particleWidth;
-			particles[i + startIdx].m_height = m_particleHeight;
 		}
 		
 		return m_particlesCount;
@@ -148,7 +129,7 @@ public abstract class ParticleEmitter
 		{
 			if ( particles[i].m_timeToLive <= 0 && toBeReborn > 0 )
 			{
-				particles[i].m_timeToLive = m_timeToLive;
+				particles[i].setTimeToLive( m_timeToLive );
 				--toBeReborn;
 				
 				initialize( i, particles[i] );
@@ -182,8 +163,6 @@ public abstract class ParticleEmitter
 		// load the basic parameters
 		m_emissionFrequency 			= loader.getFloatValue( "frequency" );
 		m_timeToLive 					= loader.getFloatValue( "timeToLive" );
-		m_particleWidth					= loader.getFloatValue( "width" );
-		m_particleHeight				= loader.getFloatValue( "height" );
 		m_numEmittedEachTick			= loader.getIntValue( "amountEmittedEachTick" );
 		m_particlesCount				= loader.getIntValue( "totalAmount" );
 		

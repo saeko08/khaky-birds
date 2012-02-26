@@ -19,12 +19,14 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
 public class AnimatedParticleFactory implements ParticlesFactory 
 {
 	private Animation		m_animation = null;
+	private float			m_width;
+	private float 			m_height;
 	
 
 	@Override
 	public Particle create()
 	{
-		return new AnimatedParticle( m_animation );
+		return new AnimatedParticle( m_animation, m_width, m_height );
 	}
 	
 	@Override
@@ -38,5 +40,8 @@ public class AnimatedParticleFactory implements ParticlesFactory
 		
 		String animPath = loader.getStringValue( "animPath" );
 		m_animation = resMgr.getResource( Animation.class, animPath );
+		
+		m_width					= loader.getFloatValue( "width" );
+		m_height				= loader.getFloatValue( "height" );
 	}
 }

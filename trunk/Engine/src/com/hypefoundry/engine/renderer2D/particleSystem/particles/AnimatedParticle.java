@@ -16,14 +16,21 @@ import com.hypefoundry.engine.renderer2D.particleSystem.Particle;
 public class AnimatedParticle extends Particle 
 {
 	private AnimationPlayer		m_player;
+	private float				m_width;
+	private float				m_height;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @param animation
+	 * @param width
+	 * @param height
 	 */
-	public AnimatedParticle( Animation animation )
+	public AnimatedParticle( Animation animation, float width, float height )
 	{
+		m_width = width;
+		m_height = height;
+		
 		m_player = new AnimationPlayer();
 		int animIdx = m_player.addAnimation( animation );
 		m_player.select( animIdx );
@@ -38,7 +45,7 @@ public class AnimatedParticle extends Particle
 	{
 		if ( m_timeToLive > 0 && m_player != null )
 		{
-			batcher.drawSprite( m_position.m_x + x, m_position.m_y + y, m_width, m_height, m_orientation, m_player.getTextureRegion( deltaTime ) );
+			batcher.drawSprite( m_position.m_x + x, m_position.m_y + y, m_width * m_scale, m_height * m_scale, m_orientation, m_player.getTextureRegion( deltaTime ) );
 		}
 	}
 }

@@ -17,7 +17,8 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
 public class RandomlyTexturedParticleFactory implements ParticlesFactory 
 {
 	private TextureRegion	m_textureRegions[] = null;
-	
+	private int				m_creationsLeftTillReshuffle = 0;
+	private int				m_nextIdx = 0;
 	
 	@Override
 	public Particle create() 
@@ -27,8 +28,16 @@ public class RandomlyTexturedParticleFactory implements ParticlesFactory
 			return null;
 		}
 		
-		int regionIdx = (int)(Math.random() * m_textureRegions.length);
-		return new RandomlyTexturedParticle( m_textureRegions[regionIdx] );
+		if ( m_creationsLeftTillReshuffle <= 0 )
+		{
+			m_creationsLeftTillReshuffle = m_textureRegions.length;
+			m_nextIdx = (int)(Math.random() * m_textureRegions.length);
+		}
+		
+		RandomlyTexturedParticle particle = new RandomlyTexturedParticle( m_textureRegions[m_nextIdx] );
+		m_nextIdx = ( m_nextIdx + 1 ) % m_textureRegions.length;
+		
+		return particle;
 	}
 
 

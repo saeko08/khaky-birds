@@ -18,12 +18,13 @@ public class TexturedParticleFactory implements ParticlesFactory
 {
 
 	private TextureRegion	m_textureRegion = null;
-	
+	private float			m_width;
+	private float 			m_height;
 
 	@Override
 	public Particle create() 
 	{
-		return new TexturedParticle( m_textureRegion );
+		return new TexturedParticle( m_textureRegion, m_width, m_height );
 	}
 	
 	@Override
@@ -37,5 +38,8 @@ public class TexturedParticleFactory implements ParticlesFactory
 		
 		String texturePath = loader.getStringValue( "texturePath" );
 		m_textureRegion = resMgr.getResource( TextureRegion.class, texturePath );
+		
+		m_width					= loader.getFloatValue( "width" );
+		m_height				= loader.getFloatValue( "height" );
 	}
 }

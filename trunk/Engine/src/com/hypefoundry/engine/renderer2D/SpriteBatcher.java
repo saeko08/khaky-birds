@@ -224,18 +224,27 @@ public class SpriteBatcher
 		setRenderState( region.m_renderState );
 		
 		// add the new sprite to the batcher
-		float rad = angle * Vector3.TO_RADIANS;
-		float cos = FloatMath.cos(rad);
-		float sin = FloatMath.sin(rad);
+		double rad = angle * Vector3.TO_RADIANS;
+		double cos = Math.cos(rad);
+		double sin = Math.sin(rad);
 		
-		float x1 = bb.m_minX * cos - bb.m_minY * sin;
-		float y1 = bb.m_minX * sin + bb.m_minY * cos;
-		float x2 = bb.m_maxX * cos - bb.m_minY * sin;
-		float y2 = bb.m_maxX * sin + bb.m_minY * cos;
-		float x3 = bb.m_maxX * cos - bb.m_maxY * sin;
-		float y3 = bb.m_maxX * sin + bb.m_maxY * cos;
-		float x4 = bb.m_minX * cos - bb.m_maxY * sin;
-		float y4 = bb.m_minX * sin + bb.m_maxY * cos;
+		double sMinX = bb.m_minX * sin;
+		double cMinX = bb.m_minX * cos;
+		double sMaxX = bb.m_maxX * sin;
+		double cMaxX = bb.m_maxX * cos;
+		double sMinY = bb.m_minY * sin;
+		double cMinY = bb.m_minY * cos;
+		double sMaxY = bb.m_maxY * sin;
+		double cMaxY = bb.m_maxY * cos;
+		
+		double x1 = cMinX - sMinY;
+		double y1 = sMinX + cMinY;
+		double x2 = cMaxX - sMinY;
+		double y2 = sMaxX + cMinY;
+		double x3 = cMaxX - sMaxY;
+		double y3 = sMaxX + cMaxY;
+		double x4 = cMinX - sMaxY;
+		double y4 = sMinX + cMaxY;
 		x1 += pos.m_x;
 		y1 += pos.m_y;
 		x2 += pos.m_x;
@@ -245,20 +254,20 @@ public class SpriteBatcher
 		x4 += pos.m_x;
 		y4 += pos.m_y;
 		
-		m_verticesBuffer[ m_bufferIndex++ ] = x1;
-		m_verticesBuffer[ m_bufferIndex++ ] = y1;
+		m_verticesBuffer[ m_bufferIndex++ ] = (float)x1;
+		m_verticesBuffer[ m_bufferIndex++ ] = (float)y1;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
-		m_verticesBuffer[ m_bufferIndex++ ] = x2;
-		m_verticesBuffer[ m_bufferIndex++ ] = y2;
+		m_verticesBuffer[ m_bufferIndex++ ] = (float)x2;
+		m_verticesBuffer[ m_bufferIndex++ ] = (float)y2;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
-		m_verticesBuffer[ m_bufferIndex++ ] = x3;
-		m_verticesBuffer[ m_bufferIndex++ ] = y3;
+		m_verticesBuffer[ m_bufferIndex++ ] = (float)x3;
+		m_verticesBuffer[ m_bufferIndex++ ] = (float)y3;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
-		m_verticesBuffer[ m_bufferIndex++ ] = x4;
-		m_verticesBuffer[ m_bufferIndex++ ] = y4;
+		m_verticesBuffer[ m_bufferIndex++ ] = (float)x4;
+		m_verticesBuffer[ m_bufferIndex++ ] = (float)y4;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
 		

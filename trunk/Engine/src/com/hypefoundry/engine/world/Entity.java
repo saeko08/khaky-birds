@@ -532,8 +532,16 @@ public abstract class Entity
 		}
 		
 		// load common entity parameters
+		boolean topLeftCoordinatesMode = loader.getStringValue( "coordinatesMode" ).equalsIgnoreCase( "TopLeft" );
+		
 		m_bb.load( "localBounds", loader );
 		m_pos.load( "position", loader );
+		if ( topLeftCoordinatesMode )
+		{
+			m_pos.m_x += m_bb.getWidth() * 0.5f;
+			m_pos.m_y -= m_bb.getHeight() * 0.5f;
+		}
+		
 		m_facing = loader.getFloatValue( "facing" );
 		
 		updateWorldBounds();

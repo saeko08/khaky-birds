@@ -43,6 +43,11 @@ public class AnimationPlayer
 	 */
 	public int addAnimation( Animation animation )
 	{
+		if ( animation == null )
+		{
+			return -1;
+		}
+		
 		int idx = m_animations.size();
 		
 		// add it even if it's a duplicate
@@ -57,7 +62,7 @@ public class AnimationPlayer
 	 */
 	public void select( int idx )
 	{
-		if ( m_activeAnimationIdx == idx )
+		if ( idx < 0 ||  m_activeAnimationIdx == idx )
 		{
 			// the animation doesn't really change
 			return;

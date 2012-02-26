@@ -157,7 +157,7 @@ The particle types the engine supports are:
 </Emitter>
 }}}
     You need to specify the texture regions you want the emiter to choose from. 
-    *CAUTION*: I went for an embedded texture region definition here, as opposed to the referenced texture resource used by `TexturedParticle` - seems more convenient. If it turns out to be, change the `TexturedParticle` to work in the same way.
+    _CAUTION_: I went for an embedded texture region definition here, as opposed to the referenced texture resource used by `TexturedParticle` - seems more convenient. If it turns out to be, change the `TexturedParticle` to work in the same way.
 
   4. `TracerParticle` - for emitting procedurally drawn 'spark'-like particles.
 

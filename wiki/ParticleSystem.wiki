@@ -200,3 +200,11 @@ The supported affectors:
 {{{
 <Affector type="RotationAffector" angularSpeed='6.0'/>
 }}}
+
+  # `AccelerationAffector` - accelerates particles. A perfect solution for creating effect that include external forces, such as *gravity*
+
+{{{
+<Affector type="AccelerationAffector" >
+	<acceleration x='0' y='-3' z='0' />
+</Affector>
+}}}

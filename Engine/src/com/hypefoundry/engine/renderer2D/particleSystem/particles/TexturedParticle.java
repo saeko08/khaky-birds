@@ -17,15 +17,21 @@ import com.hypefoundry.engine.renderer2D.particleSystem.Particle;
 public class TexturedParticle extends Particle 
 {
 	private TextureRegion	m_textureRegion = null;
-
+	private float			m_width;
+	private float			m_height;
+	
 	/**
 	 * Constructor.
 	 * 
 	 * @param region
+	 * @param width
+	 * @param height
 	 */
-	public TexturedParticle( TextureRegion region )
+	public TexturedParticle( TextureRegion region, float width, float height )
 	{
 		m_textureRegion = region;
+		m_width = width;
+		m_height = height;
 	}
 	
 	@Override
@@ -33,7 +39,7 @@ public class TexturedParticle extends Particle
 	{
 		if ( m_timeToLive > 0 )
 		{
-			batcher.drawSprite( m_position.m_x + x, m_position.m_y + y, m_width, m_height, m_orientation, m_textureRegion );
+			batcher.drawSprite( m_position.m_x + x, m_position.m_y + y, m_width * m_scale, m_height * m_scale, m_orientation, m_textureRegion );
 		}
 	}
 }

@@ -76,6 +76,7 @@ public class ParticleSystem extends Resource
 			new EmittersFactoryData( RadialParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new RadialParticleEmitter(); } } ),
 			new EmittersFactoryData( DirectionalParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new DirectionalParticleEmitter(); } } ),
 			new EmittersFactoryData( LineParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new LineParticleEmitter(); } } ),
+			new EmittersFactoryData( CircularParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new CircularParticleEmitter(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
@@ -86,6 +87,7 @@ public class ParticleSystem extends Resource
 			new AffectorsFactoryData( BlowMovementAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new BlowMovementAffector(); } } ),
 			new AffectorsFactoryData( RotationAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new RotationAffector(); } } ),
 			new AffectorsFactoryData( AccelerationAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new AccelerationAffector(); } } ),
+			new AffectorsFactoryData( ScaleAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new ScaleAffector(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------

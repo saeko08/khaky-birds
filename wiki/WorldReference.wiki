@@ -472,7 +472,9 @@ It's simple:
 
   * *facing* - an attribute that specifies the angle which the entity 's facing
   * *localBounds* - describes a bounding box around the entity ( in local space )
-  * *position* - entity's position ( in world space )
+  * *position* - entity's position ( in world space ) considered the middle point of the specified bounding box.
+
+Sometimes you want to *specify the initial position* of the entity with respect to its *top-left corner* instead of the center of its bounding box. If you want to do that, just add an attribute `coordinatesMode='TopLeft'`
 
 ===Custom entity tags===
 The tags above described something every entity has. But your game features custom entities, each of which has a unique set of parameters.

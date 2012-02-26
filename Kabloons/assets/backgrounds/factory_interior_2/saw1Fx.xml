@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParticleSystem >
+	<Emitter type="DirectionalParticleEmitter" frequency='0.02' amountEmittedEachTick='1' totalAmount='40' timeToLive='1.6' force='3.5' dispersionAngle='30' particleType="TracerParticle" particleWidth='2.0' fade="true">
+ 		<ParticleColors>
+ 			<Color r='255' g='235' b='135'/>
+ 			<Color r='255' g='178' b='112' />
+ 			<Color r='255' g='142' b='132' />
+ 		</ParticleColors> 
+		<position x='0.36' y='0.34' z='0' />
+		<direction x='0.71' y='-0.76' z='0' />
+	</Emitter>
+	
+	<Affector type="AccelerationAffector" >
+		<acceleration x='0' y='-3' z='0' />
+	</Affector>
+</ParticleSystem>

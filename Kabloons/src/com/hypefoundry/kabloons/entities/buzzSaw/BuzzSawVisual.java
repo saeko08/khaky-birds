@@ -38,9 +38,12 @@ public class BuzzSawVisual extends EntityVisual
 		m_buzzSaw = (BuzzSaw)buzzSawEntity;
 		
 		// animation
-		m_animPlayer = new AnimationPlayer();
-		Animation buzzSawAnim = resMgr.getResource( Animation.class, m_buzzSaw.m_animPath );
-		m_animPlayer.addAnimation( buzzSawAnim );
+		if ( m_buzzSaw.m_animPath.length() > 0 )
+		{
+			m_animPlayer = new AnimationPlayer();
+			Animation buzzSawAnim = resMgr.getResource( Animation.class, m_buzzSaw.m_animPath );
+			m_animPlayer.addAnimation( buzzSawAnim );
+		}
 		
 		// effect
 		if ( m_buzzSaw.m_fxPath.length() > 0 )
@@ -60,7 +63,10 @@ public class BuzzSawVisual extends EntityVisual
 		{
 			case Running:
 			{
-				batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime ) );
+				if ( m_animPlayer != null )
+				{
+					batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( deltaTime ) );
+				}
 				
 				if ( m_fxPlayer != null )
 				{
@@ -71,7 +77,10 @@ public class BuzzSawVisual extends EntityVisual
 			
 			case SwitchedOff:
 			{
-				batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( 0.0f ) );
+				if ( m_animPlayer != null )
+				{
+					batcher.drawSprite( pos, bs, m_animPlayer.getTextureRegion( 0.0f ) );
+				}
 				
 				if ( m_fxPlayer != null )
 				{

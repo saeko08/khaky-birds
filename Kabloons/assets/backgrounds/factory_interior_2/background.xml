@@ -1,2 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<TextureRegion atlasName='backgrounds/factory_interior_2/atlas.png' x='0' y='0' w='480' h='800' alphaOp='none'/>
+<Animation frameDuration='0.1' atlasName='backgrounds/factory_interior_2/atlas.png' alphaOp='none' >
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	
+	<Frame type="StaticRegion" x='481' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='481' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='481' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	
+	<Frame type="StaticRegion" x='481' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='481' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='481' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='481' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='481' y='0' w='480' h='800' />
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+</Animation>

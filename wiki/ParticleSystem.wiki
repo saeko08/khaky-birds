@@ -92,6 +92,7 @@ So let's go through them one by one:
     * `AnimatedParticle` - use an animation
  
 As for the data specific to particular emitter implementations:
+
   # `RadialParticleEmitter`
 {{{
 <Emitter type="RadialParticleEmitter" speed='1' >
@@ -100,15 +101,19 @@ As for the data specific to particular emitter implementations:
 }}}
    * `speed` - how fast should the particles travel initially
    * `pos` - offset position relative to the particle system's position from which the particles should be emitted
+
   # `DirectionalParticleEmitter`
 {{{
-<Emitter type="DirectionalParticleEmitter" >
+<Emitter type="DirectionalParticleEmitter" force='3.5' dispersionAngle='30' >
 	<pos x='0' y='0' z='0' />
-	<velocity x='1' y='0' z='0' />
+	<direction x='1' y='0' z='0' />
 </Emitter>
 }}}
    * `pos` - offset position relative to the particle system's position  from which the particles should be emitted
-   * `velocity` - velocity ( speed & direction ) with which the particles should be emitted
+   * `direction` - direction with which the particles should be emitted
+   * `force` - mltiplied by the direction gives you the particle velocity
+   * `dispersionAngle` - defines an angle in which the particles will be emitted. Specify 0 if you want all particles to be emitted in the same direction, or >0 if you want to create a fountain-like effects
+
   # `LineParticleEmitter`
 {{{
 <Emitter type="LineParticleEmitter" >
@@ -153,6 +158,21 @@ The particle types the engine supports are:
 }}}
     You need to specify the texture regions you want the emiter to choose from. 
     *CAUTION*: I went for an embedded texture region definition here, as opposed to the referenced texture resource used by `TexturedParticle` - seems more convenient. If it turns out to be, change the `TexturedParticle` to work in the same way.
+
+  # `TracerParticle` - for emitting procedurally drawn 'spark'-like particles.
+
+{{{
+<Emitter particleType="TracerParticle" particleWidth='2.0' fade="true" >
+	<ParticleColors >
+		<Color r='255' g='235' b='135'/>
+		<Color r='255' g='178' b='112' />
+		<Color r='255' g='142' b='132' />
+	</ParticleColors> 
+</Emitter>
+}}}
+ 
+   * `particleWidth` - width ( in pixels ) of a particle line
+   * `fade` - should the particle color fade as its lifetime expires?
 
 ===Affectors definition===
 

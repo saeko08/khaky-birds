@@ -221,7 +221,7 @@ public class GameScreen extends Screen
 	 */
 	public void exitToMenu() 
 	{
-		m_game.setScreen( new MainMenu( m_game ) );
+		m_game.setScreen( new MainMenu( m_game, MainMenu.MenuScreen.MS_Main ) );
 	}
 
 	/**

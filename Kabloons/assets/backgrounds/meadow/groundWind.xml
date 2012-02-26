@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ParticleSystem >
- 	<Emitter type="LineParticleEmitter" frequency='0.5' amountEmittedEachTick='1' totalAmount='10' timeToLive='1.5' width='0.18' height='0.2' particleType="RandomlyTexturedParticle" >
+ 	<Emitter type="LineParticleEmitter" frequency='0.5' amountEmittedEachTick='1' totalAmount='10' timeToLive='1.5' particleType="RandomlyTexturedParticle" >
  		<Textures atlasName='backgrounds/meadow/meadow.png' alphaOp='blend' srcAlphaFunc='AF_Src_Color' destAlphaFunc='AF_One_Minus_Src_Alpha' >
  			<Texture x='859' y='107' w='18' h='20' />
  			<Texture x='878' y='107' w='18' h='20' />

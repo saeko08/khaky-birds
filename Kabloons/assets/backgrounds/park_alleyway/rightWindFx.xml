@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ParticleSystem >	
-	<Emitter type="LineParticleEmitter" frequency='0.23' amountEmittedEachTick='1' totalAmount='10' timeToLive='2' width='0.17' height='0.18' particleType="RandomlyTexturedParticle" >
+	<Emitter type="LineParticleEmitter" frequency='0.23' amountEmittedEachTick='1' totalAmount='10' timeToLive='2' particleType="RandomlyTexturedParticle" >
  		<Textures atlasName='backgrounds/park_alleyway/atlas.png' alphaOp='test' >
  			<Texture x='538' y='1' w='17' h='18' />
  			<Texture x='557' y='1' w='17' h='18' />

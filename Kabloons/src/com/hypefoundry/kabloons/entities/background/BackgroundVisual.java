@@ -20,6 +20,7 @@ import com.hypefoundry.engine.world.Entity;
 public class BackgroundVisual extends EntityVisual 
 {
 	private TextureRegion		m_pixmap;
+	private Background 			m_background;
 	
 	/**
 	 * Constructor.
@@ -31,9 +32,8 @@ public class BackgroundVisual extends EntityVisual
 	{
 		super( backgroundEntity );
 		
-		Background background = (Background)backgroundEntity;
-		
-		m_pixmap = resMgr.getResource( TextureRegion.class, background.m_path );
+		m_background = (Background)backgroundEntity;
+		m_pixmap = resMgr.getResource( TextureRegion.class, m_background.m_path );
 	}
 	
 	@Override
@@ -42,7 +42,16 @@ public class BackgroundVisual extends EntityVisual
 		Vector3 pos = m_entity.getPosition();
 		BoundingBox bs = m_entity.getBoundingShape();
 		
-		batcher.drawSprite( pos, bs, m_pixmap );
+		if ( m_background.m_rotationSpeed <= 0.0f )
+		{
+			batcher.drawSprite( pos, bs, m_pixmap );
+		}
+		else
+		{
+			float facing = m_background.getFacing();
+			facing += m_background.m_rotationSpeed * deltaTime;
+			m_background.setFacing( facing );
+			batcher.drawSprite( pos, bs, facing, m_pixmap );
+		}
 	}
-
 }

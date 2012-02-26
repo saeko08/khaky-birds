@@ -10,7 +10,7 @@ public class Kabloons extends GLGame
 	@Override
 	public Screen getStartScreen()
 	{
-		return new MainMenu( this );
+		return new MainMenu( this, MainMenu.MenuScreen.MS_Main );
 	}
 }
 

@@ -93,7 +93,7 @@ So let's go through them one by one:
  
 As for the data specific to particular emitter implementations:
 
-  # `RadialParticleEmitter`
+  1. `RadialParticleEmitter`
 {{{
 <Emitter type="RadialParticleEmitter" speed='1' >
 	<pos x='0' y='0' z='0' />
@@ -101,7 +101,8 @@ As for the data specific to particular emitter implementations:
 }}}
    * `speed` - how fast should the particles travel initially
    * `pos` - offset position relative to the particle system's position from which the particles should be emitted
-  # `DirectionalParticleEmitter`
+
+  2. `DirectionalParticleEmitter`
 {{{
 <Emitter type="DirectionalParticleEmitter" force='3.5' dispersionAngle='30' >
 	<pos x='0' y='0' z='0' />
@@ -112,7 +113,8 @@ As for the data specific to particular emitter implementations:
    * `direction` - direction with which the particles should be emitted
    * `force` - mltiplied by the direction gives you the particle velocity
    * `dispersionAngle` - defines an angle in which the particles will be emitted. Specify 0 if you want all particles to be emitted in the same direction, or >0 if you want to create a fountain-like effects
-  # `LineParticleEmitter`
+
+  3. `LineParticleEmitter`
 {{{
 <Emitter type="LineParticleEmitter" >
 	<lineStart x='0' y='-1' z='0' />
@@ -127,20 +129,23 @@ As for the data specific to particular emitter implementations:
 ===Particle types===
 
 The particle types the engine supports are:
-  # `AnimatedParticle`
+
+  1. `AnimatedParticle`
 {{{
 <Emitter particleType="AnimatedParticle" animPath="animations/myAnimation.xml" >
 </Emitter>
 }}}
     * `animPath` - specifies the location of an animation definition asset
-  # `TexturedParticle`
+
+  2. `TexturedParticle`
 {{{
 <Emitter particleType="TexturedParticle" texturePath="textures/myTexture.xml" >
 </Emitter>
 }}}
 
     * `texturePath` - specifies the location of a texture definition asset
-  # `RandomlyTexturedParticle` - sometimes you want the emitter to use random textures for the particles.
+
+  3. `RandomlyTexturedParticle` - sometimes you want the emitter to use random textures for the particles.
 
 {{{
 <Emitter particleType="RandomlyTexturedParticle" >
@@ -153,7 +158,8 @@ The particle types the engine supports are:
 }}}
     You need to specify the texture regions you want the emiter to choose from. 
     *CAUTION*: I went for an embedded texture region definition here, as opposed to the referenced texture resource used by `TexturedParticle` - seems more convenient. If it turns out to be, change the `TexturedParticle` to work in the same way.
-  # `TracerParticle` - for emitting procedurally drawn 'spark'-like particles.
+
+  4. `TracerParticle` - for emitting procedurally drawn 'spark'-like particles.
 
 {{{
 <Emitter particleType="TracerParticle" particleWidth='2.0' fade="true" >
@@ -172,14 +178,15 @@ The particle types the engine supports are:
 
 The supported affectors:
 
-  # `LinearMovementAffector` - changes the speed of particles by _blowing_ them in the specified direction
+  1. `LinearMovementAffector` - changes the speed of particles by _blowing_ them in the specified direction
 
 {{{
 <Affector type="LinearMovementAffector">
 	<velocity x='1' y='0' z='0'/>
 </Affector>
 }}}
-  # `BlowMovementAffector` - changes the speed of particles by _blowing_ them away from the blow axis. You need to specify the `range` from the specified axis in which the affector will work, the blowing `force`, the `origin` in praticle system space and the orientation of the `blowAxis`
+
+  2. `BlowMovementAffector` - changes the speed of particles by _blowing_ them away from the blow axis. You need to specify the `range` from the specified axis in which the affector will work, the blowing `force`, the `origin` in praticle system space and the orientation of the `blowAxis`
 
 {{{
 <Affector type="BlowMovementAffector" range='2.0' force='0.5' >
@@ -187,12 +194,14 @@ The supported affectors:
 	<blowAxis x='1' y='0' z='0' />
 </Affector>
 }}}
-  # `RotationAffector` - rotates the particles around their mass center with the specified angular speed.
+
+  3. `RotationAffector` - rotates the particles around their mass center with the specified angular speed.
 
 {{{
 <Affector type="RotationAffector" angularSpeed='6.0'/>
 }}}
-  # `AccelerationAffector` - accelerates particles. A perfect solution for creating effect that include external forces, such as *gravity*
+
+ 4. `AccelerationAffector` - accelerates particles. A perfect solution for creating effect that include external forces, such as *gravity*
 
 {{{
 <Affector type="AccelerationAffector" >

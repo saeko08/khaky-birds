@@ -73,7 +73,7 @@ At the generic level, an emitter requires you to specify a number of parameters 
 A default emitter definition would look like so:
 
 {{{
-<Emitter type="SomeEmitterType" frequency='0.1' timeToLive='7' amountEmittedEachTick='3' totalAmount='3' width='0.5' height='0.5' particleType="TexturedParticle" texturePath="khaky_birds_prototype/textures/crapHitParticle.xml" emitterSpecificParam='0'>
+<Emitter type="SomeEmitterType" frequency='0.1' timeToLive='7' amountEmittedEachTick='3' totalAmount='3' particleType="TexturedParticle" texturePath="khaky_birds_prototype/textures/crapHitParticle.xml" emitterSpecificParam='0'>
 </Emitter>
 }}}
 
@@ -132,14 +132,14 @@ The particle types the engine supports are:
 
   1. `AnimatedParticle`
 {{{
-<Emitter particleType="AnimatedParticle" animPath="animations/myAnimation.xml" >
+<Emitter particleType="AnimatedParticle" animPath="animations/myAnimation.xml" width='0.5' height='0.5' >
 </Emitter>
 }}}
     * `animPath` - specifies the location of an animation definition asset
 
   2. `TexturedParticle`
 {{{
-<Emitter particleType="TexturedParticle" texturePath="textures/myTexture.xml" >
+<Emitter particleType="TexturedParticle" texturePath="textures/myTexture.xml" width='0.5' height='0.5' >
 </Emitter>
 }}}
 

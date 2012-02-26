@@ -101,7 +101,6 @@ As for the data specific to particular emitter implementations:
 }}}
    * `speed` - how fast should the particles travel initially
    * `pos` - offset position relative to the particle system's position from which the particles should be emitted
-
   # `DirectionalParticleEmitter`
 {{{
 <Emitter type="DirectionalParticleEmitter" force='3.5' dispersionAngle='30' >
@@ -113,7 +112,6 @@ As for the data specific to particular emitter implementations:
    * `direction` - direction with which the particles should be emitted
    * `force` - mltiplied by the direction gives you the particle velocity
    * `dispersionAngle` - defines an angle in which the particles will be emitted. Specify 0 if you want all particles to be emitted in the same direction, or >0 if you want to create a fountain-like effects
-
   # `LineParticleEmitter`
 {{{
 <Emitter type="LineParticleEmitter" >
@@ -129,14 +127,12 @@ As for the data specific to particular emitter implementations:
 ===Particle types===
 
 The particle types the engine supports are:
-
   # `AnimatedParticle`
 {{{
 <Emitter particleType="AnimatedParticle" animPath="animations/myAnimation.xml" >
 </Emitter>
 }}}
     * `animPath` - specifies the location of an animation definition asset
-
   # `TexturedParticle`
 {{{
 <Emitter particleType="TexturedParticle" texturePath="textures/myTexture.xml" >
@@ -144,7 +140,6 @@ The particle types the engine supports are:
 }}}
 
     * `texturePath` - specifies the location of a texture definition asset
-
   # `RandomlyTexturedParticle` - sometimes you want the emitter to use random textures for the particles.
 
 {{{
@@ -158,7 +153,6 @@ The particle types the engine supports are:
 }}}
     You need to specify the texture regions you want the emiter to choose from. 
     *CAUTION*: I went for an embedded texture region definition here, as opposed to the referenced texture resource used by `TexturedParticle` - seems more convenient. If it turns out to be, change the `TexturedParticle` to work in the same way.
-
   # `TracerParticle` - for emitting procedurally drawn 'spark'-like particles.
 
 {{{
@@ -185,7 +179,6 @@ The supported affectors:
 	<velocity x='1' y='0' z='0'/>
 </Affector>
 }}}
-
   # `BlowMovementAffector` - changes the speed of particles by _blowing_ them away from the blow axis. You need to specify the `range` from the specified axis in which the affector will work, the blowing `force`, the `origin` in praticle system space and the orientation of the `blowAxis`
 
 {{{
@@ -194,13 +187,11 @@ The supported affectors:
 	<blowAxis x='1' y='0' z='0' />
 </Affector>
 }}}
-
   # `RotationAffector` - rotates the particles around their mass center with the specified angular speed.
 
 {{{
 <Affector type="RotationAffector" angularSpeed='6.0'/>
 }}}
-
   # `AccelerationAffector` - accelerates particles. A perfect solution for creating effect that include external forces, such as *gravity*
 
 {{{

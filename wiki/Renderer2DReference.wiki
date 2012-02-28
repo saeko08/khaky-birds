@@ -49,6 +49,10 @@ It specifies a texture that's contained in atlas `khaky_birds_prototype/atlas.pn
     * `AF_One_Minus_Dest_Alpha` - use invertex destination texture alpha
     * `AF_One_Minus_Src_Color` - use invertex source texture color
     * `AF_One_Minus_Dest_Color` - use invertex destination texture color
+  # `stencilOp` - stencil buffer operation
+    * `SO_None` - don't use stencil buffer
+    * `SO_Write_Or` - draw to the stencil buffer, masking the bits that weren't set yet, and leaving the ones already set untouched event if current operation didn't set them
+    * `SO_Test` - test against the stencil buffer contents and draw to the back buffer only where the stencil buffer bits are set.
 
 == Animation ==
 An animation is a resource. You can create them manually, or by using a definition stored in an XML file.

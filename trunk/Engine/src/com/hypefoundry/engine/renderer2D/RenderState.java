@@ -19,11 +19,13 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
  */
 public class RenderState 
 {	
-	private AlphaOp			m_alphaOperation = AlphaOp.AO_None;
-	private AlphaFunc		m_srcAlphaFunc = AlphaFunc.AF_One;
-	private AlphaFunc		m_destAlphaFunc = AlphaFunc.AF_Zero;
-	private float			m_lineWidth = 1.0f;
-	public Texture			m_texture = null;
+	private AlphaOp			m_alphaOperation 	= AlphaOp.AO_None;
+	private AlphaFunc		m_srcAlphaFunc 		= AlphaFunc.AF_One;
+	private AlphaFunc		m_destAlphaFunc 	= AlphaFunc.AF_Zero;
+	private float			m_lineWidth 		= 1.0f;
+	public Texture			m_texture 			= null;
+	private StencilOp		m_stencilOp 		= StencilOp.SO_None;
+	
 	
 	/**
 	 * Compares two render states.
@@ -53,6 +55,11 @@ public class RenderState
 			return false;
 		}
 		
+		if ( m_stencilOp != rhs.m_stencilOp )
+		{
+			return false;
+		}
+		
 		if ( m_lineWidth != rhs.m_lineWidth )
 		{
 			return false;
@@ -68,6 +75,7 @@ public class RenderState
 	{
 		m_texture = null;
 		m_alphaOperation = AlphaOp.AO_None;
+		m_stencilOp = StencilOp.SO_None;
 	}
 	
 	/**
@@ -81,6 +89,7 @@ public class RenderState
 		m_alphaOperation = rhs.m_alphaOperation;
 		m_srcAlphaFunc = rhs.m_srcAlphaFunc;
 		m_destAlphaFunc = rhs.m_destAlphaFunc;
+		m_stencilOp = rhs.m_stencilOp;
 		m_lineWidth = rhs.m_lineWidth;
 	}
 	
@@ -119,6 +128,17 @@ public class RenderState
 			
 			m_srcAlphaFunc = AlphaFunc.valueOf( srcAlphaFunc );
 			m_destAlphaFunc = AlphaFunc.valueOf( destAlphaFunc );
+		}
+		
+		// should we test this again the stencil buffer
+		String stencilOpStr = loader.getStringValue("stencilOp");
+		if ( stencilOpStr.length() > 0 )
+		{
+			m_stencilOp = StencilOp.valueOf( stencilOpStr );
+		}
+		else
+		{
+			m_stencilOp = StencilOp.SO_None;
 		}
 			
 		// read line width
@@ -175,6 +195,36 @@ public class RenderState
 				break;
 			}
 		}
+		
+		// set the stencil operation
+		switch( m_stencilOp )
+		{
+			case SO_None:
+			{
+				gl.glDisable( GL10.GL_STENCIL_TEST );
+				gl.glColorMask( true, true, true, true );
+				break;
+			}
+			
+			case SO_Write_Or:
+			{
+				gl.glEnable( GL10.GL_STENCIL_TEST );
+				gl.glColorMask( false, false, false, false );
+				gl.glStencilFunc( GL10.GL_ALWAYS, 1, 1 );
+				gl.glStencilOp( GL10.GL_KEEP, GL10.GL_KEEP, GL10.GL_REPLACE );
+				break;
+			}
+			
+			case SO_Test:
+			{
+				gl.glEnable( GL10.GL_STENCIL_TEST );
+				gl.glColorMask( true, true, true, true );
+				gl.glStencilFunc( GL10.GL_EQUAL, 1, 1 );
+				gl.glStencilOp( GL10.GL_KEEP, GL10.GL_KEEP, GL10.GL_KEEP );
+				break;
+			}
+		}
+
 	}
 	
 	/**

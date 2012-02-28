@@ -121,9 +121,13 @@ public class HudRenderer implements InputHandler
 			return;
 		}
 		
+		// clear temp render buffers and set the camera matrices
+		GL10 gl = m_graphics.getGL();
+		gl.glClear( GL10.GL_STENCIL_BUFFER_BIT );
+		setRenderingMatrices();
+		
 		// render the layout
 		count = m_visuals.size();
-		setRenderingMatrices();
 		for ( int i = 0; i < count; ++i )
 		{
 			HudWidgetVisual visual = m_visuals.get(i);

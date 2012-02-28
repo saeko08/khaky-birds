@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<World width='4.8' height='8.0'>
+	<ResourcesCache>
+		<Resource type="Texture" path="hud/menu/mainScreen/atlas.png"/>
+		<Resource type="Texture" path="hud/menu/mainScreen/atlas2.png"/>
+	</ResourcesCache>
+
+	<Entity type="Background" path="hud/menu/mainScreen/background.xml" rotationSpeed='32.0'>
+		<localBounds minX='-4.7' minY='-4.7' maxX='4.7' maxY='4.7' />
+		<position x='2.4' y='4.0' z='100' />
+	</Entity>
+	
+	<Entity type="FXBackground" path="hud/menu/mainScreen/whirlpool.xml">
+		<localBounds minX='-4.7' minY='-4.7' maxX='4.7' maxY='4.7' />
+		<position x='2.4' y='4.0' z='90' />
+	</Entity>
+	
+	<!-- title -->
+	<Entity type="Background" path="hud/menu/mainScreen/titleStencil.xml" coordinatesMode="TopLeft" >
+		<localBounds minX='-2.4' minY='-0.61' maxX='2.4' maxY='0.61' />
+		<position x='0' y='7.7' z='80' />
+	</Entity>
+	
+	<Entity type="AnimatedBackground" path="hud/menu/mainScreen/titleClouds.xml" coordinatesMode="TopLeft" >
+		<localBounds minX='-2.4' minY='-0.61' maxX='2.4' maxY='0.61' />
+		<position x='0' y='7.7' z='79' />
+	</Entity>
+	
+	<Entity type="Background" path="hud/menu/mainScreen/titleFramingLetters.xml" coordinatesMode="TopLeft" >
+		<localBounds minX='-2.4' minY='-0.61' maxX='2.4' maxY='0.61' />
+		<position x='0' y='7.7' z='78' />
+	</Entity>
+
+</World>

@@ -114,10 +114,10 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		
 		// set the render state
 		GL10 gl = m_graphics.getGL();
-		gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
+		gl.glClear( GL10.GL_COLOR_BUFFER_BIT | GL10.GL_STENCIL_BUFFER_BIT );
 		m_camera.setViewportAndMatrices();
 
-		gl.glDisable( GL10.GL_DEPTH_TEST );
+		gl.glDisable( GL10.GL_DEPTH_TEST );		// clear the buffers
 		
 		// draw the visuals, sorting them first in their Z order		
 		int count = m_visualsGrid.getPotentialColliders( m_camera.getFrustum(), m_queryResult );

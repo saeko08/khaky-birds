@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Animation frameDuration='0.1' looped='true' atlasName='hud/menu/mainScreen/atlas2.png' alphaOp='none' stencilOp='SO_Test'>
-	<Frame type="LinearInterpolation" duration='10.0'>
-	   <From x='0' y='123' w='480' h='122'/>
-	   <To x='1023' y='123' w='480' h='122'/>
-	</Frame>
-</Animation>

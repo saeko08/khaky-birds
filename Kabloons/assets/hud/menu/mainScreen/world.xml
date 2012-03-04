@@ -5,30 +5,36 @@
 		<Resource type="Texture" path="hud/menu/mainScreen/atlas2.png"/>
 	</ResourcesCache>
 
-	<Entity type="Background" path="hud/menu/mainScreen/background.xml" rotationSpeed='32.0'>
-		<localBounds minX='-4.7' minY='-4.7' maxX='4.7' maxY='4.7' />
+	<Entity type="Background" path="hud/menu/mainScreen/background.xml">
+		<localBounds minX='-2.4' minY='-4.0' maxX='2.4' maxY='4.0' />
 		<position x='2.4' y='4.0' z='100' />
-	</Entity>
-	
-	<Entity type="FXBackground" path="hud/menu/mainScreen/whirlpool.xml">
-		<localBounds minX='-4.7' minY='-4.7' maxX='4.7' maxY='4.7' />
-		<position x='2.4' y='4.0' z='90' />
 	</Entity>
 	
 	<!-- title -->
 	<Entity type="Background" path="hud/menu/mainScreen/titleStencil.xml" coordinatesMode="TopLeft" >
-		<localBounds minX='-2.4' minY='-0.61' maxX='2.4' maxY='0.61' />
-		<position x='0' y='7.7' z='80' />
+		<localBounds minX='-2.095' minY='-1.655' maxX='2.095' maxY='1.655' />
+		<position x='0.23' y='7.56' z='80' />
 	</Entity>
 	
-	<Entity type="AnimatedBackground" path="hud/menu/mainScreen/titleClouds.xml" coordinatesMode="TopLeft" >
-		<localBounds minX='-2.4' minY='-0.61' maxX='2.4' maxY='0.61' />
-		<position x='0' y='7.7' z='79' />
+	<Entity type="AnimatedBackground" path="hud/menu/mainScreen/face.xml" coordinatesMode="TopLeft" >
+		<localBounds minX='-2.095' minY='-1.655' maxX='2.095' maxY='1.655' />
+		<position x='0.23' y='7.56' z='79' />
 	</Entity>
-	
+		
 	<Entity type="Background" path="hud/menu/mainScreen/titleFramingLetters.xml" coordinatesMode="TopLeft" >
-		<localBounds minX='-2.4' minY='-0.61' maxX='2.4' maxY='0.61' />
-		<position x='0' y='7.7' z='78' />
+		<localBounds minX='-2.095' minY='-1.655' maxX='2.095' maxY='1.655' />
+		<position x='0.23' y='7.56' z='78' />
+	</Entity>
+	
+	<!--  menu options  -->
+	<Entity type="MenuManager" />
+	
+	<Entity type="MenuItem" path="hud/menu/mainScreen/startGameOption.xml" menuOption="StartGame" >
+		<localBounds minX='-0.77' minY='-0.395' maxX='0.77' maxY='0.395' />
+	</Entity>
+	
+	<Entity type="MenuItem" path="hud/menu/mainScreen/exitGameOption.xml" menuOption="Exit" >
+		<localBounds minX='-0.33' minY='-0.49' maxX='0.33' maxY='0.49' />
 	</Entity>
 
 </World>

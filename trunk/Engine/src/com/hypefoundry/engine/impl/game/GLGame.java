@@ -118,17 +118,6 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			{
 				m_state = GLGameState.Paused;
 			}
-			
-			// wait for the renderer to close down
-			while( true ) 
-			{
-				try 
-				{
-					m_stateChanged.wait();
-					break;
-				} 
-				catch( InterruptedException e ) {}
-			}
 		}
 		
 		m_wakeLock.release();
@@ -146,45 +135,57 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		{
 			state = m_state;
 		}
-			
-		if ( state == GLGameState.Running )
+		
+		if ( m_screen == null )
 		{
-			// update and draw the screen, if the game's running, providing it with a proper time delta
-			float deltaTime = ( System.nanoTime() - m_startTime ) / 1000000000.0f;
-			m_startTime = System.nanoTime();
-			m_input.update( deltaTime );
-			m_screen.update( deltaTime );
-			m_screen.present( deltaTime );
+			return;
 		}
-			
-		if( state == GLGameState.Paused ) 
+		
+		switch( state )
 		{
-			// pause the screen - this can take a while and since
-			// it runs on a separate thread, we need to wait until
-			// it's finished before we can move on and then notify
-			// other locked threads that (i.e. the one that's running
-			// the onPause method ), that it's safe to proceed
-			m_screen.pause();
-			synchronized( m_stateChanged ) 
+			case Running:
 			{
-				m_state = GLGameState.Idle;
-				m_stateChanged.notifyAll();
+				// update and draw the screen, if the game's running, providing it with a proper time delta
+				float deltaTime = ( System.nanoTime() - m_startTime ) / 1000000000.0f;
+				m_startTime = System.nanoTime();
+				m_input.update( deltaTime );
+				m_screen.update( deltaTime );
+				m_screen.present( deltaTime );
+				break;
 			}
-		}
 			
-		if( state == GLGameState.Finished ) 
-		{
-			// stop and release the screen - also wait for that activity
-			// to end before moving on and then notify
-			// other locked threads that (i.e. the one that's running
-			// the onPause method ), that it's safe to proceed
-			m_screen.pause();
-			m_screen.dispose();
-				
-			synchronized( m_stateChanged ) 
+			case Paused:
 			{
-				m_state = GLGameState.Idle;
-				m_stateChanged.notifyAll();
+				// pause the screen - this can take a while and since
+				// it runs on a separate thread, we need to wait until
+				// it's finished before we can move on and then notify
+				// other locked threads that (i.e. the one that's running
+				// the onPause method ), that it's safe to proceed
+				m_screen.pause();
+				synchronized( m_stateChanged ) 
+				{
+					m_state = GLGameState.Idle;
+					m_stateChanged.notifyAll();
+				}
+				break;
+			}
+			
+			case Finished:
+			{
+				// stop and release the screen - also wait for that activity
+				// to end before moving on and then notify
+				// other locked threads that (i.e. the one that's running
+				// the onPause method ), that it's safe to proceed
+				m_screen.pause();
+				m_screen.dispose();
+					
+				synchronized( m_stateChanged ) 
+				{
+					m_state = GLGameState.Idle;
+					m_stateChanged.notifyAll();
+				}
+				
+				break;
 			}
 		}
 	}
@@ -202,7 +203,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		
 		synchronized( m_stateChanged ) 
 		{
-			if( m_state == GLGameState.Initialized )
+			if( m_state == GLGameState.Initialized || m_screen == null )
 			{
 				// initialize the screen
 				m_screen = getStartScreen();
@@ -210,7 +211,10 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			
 			// switch to the running state
 			m_state = GLGameState.Running;
-			m_screen.resume();
+			if ( m_screen != null )
+			{
+				m_screen.resume();
+			}
 			m_startTime = System.nanoTime();
 		}
 	}
@@ -249,15 +253,21 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		}
 		
 		// close the current screen
-		m_screen.pause();
-		m_screen.dispose();
+		if ( m_screen != null )
+		{
+			m_screen.pause();
+			m_screen.dispose();
+		}
 		
 		// clear the input
 		m_input.clear();
 		
 		// start up the new screen
-		screen.resume();
-		screen.update(0);
+		if ( screen != null )
+		{
+			screen.resume();
+			screen.update(0);
+		}
 		
 		// memorize the new screen's instance
 		m_screen = screen;

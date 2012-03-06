@@ -4,11 +4,15 @@
 package com.hypefoundry.engine.test.renderer2D;
 
 import com.hypefoundry.engine.core.ResourceManager;
+import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.renderer2D.particleSystem.Particle;
+import com.hypefoundry.engine.renderer2D.particleSystem.ParticleEmitter;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystem;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticleSystemPlayer;
 import com.hypefoundry.engine.renderer2D.particleSystem.ParticlesFactory;
+import com.hypefoundry.engine.renderer2D.particleSystem.affectors.ClearSkyAffector;
 import com.hypefoundry.engine.renderer2D.particleSystem.affectors.LinearMovementAffector;
 import com.hypefoundry.engine.renderer2D.particleSystem.emitters.DirectionalParticleEmitter;
 import com.hypefoundry.engine.renderer2D.particleSystem.emitters.RadialParticleEmitter;
@@ -103,11 +107,11 @@ public class ParticlesTest extends AndroidTestCase
 		
 		player.simulate( 0.2f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
 		
 		player.simulate( 0.1f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.2f, 0, 0 ) ) < 1e-3 );
 	}
 	
 	public void testParticleAffector()
@@ -125,11 +129,11 @@ public class ParticlesTest extends AndroidTestCase
 		
 		player.simulate( 0.2f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
 		
 		player.simulate( 0.1f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.3f, 0, 0 ) ) < 1e-3 );
 	}
 	
 	public void testParticleRebirth()
@@ -147,22 +151,22 @@ public class ParticlesTest extends AndroidTestCase
 		
 		player.simulate( 0.2f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
 		
 		// it's moving
 		player.simulate( 0.1f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.3f, 0, 0 ) ) < 1e-3 );
 		
 		// ... and moving
 		player.simulate( 0.8f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 7.3f, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 8.3f, 0, 0 ) ) < 1e-3 );
 				
 		// ... and after a second - it's brought back to its initial position
-		player.simulate( 0.1f );
+		player.simulate( 0.2f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
 	}
 	
 	public void testUnloopedPlayback()
@@ -180,20 +184,177 @@ public class ParticlesTest extends AndroidTestCase
 		
 		player.simulate( 0.2f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
 		
 		// it's moving
 		player.simulate( 0.1f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 0.1f, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 0.3f, 0, 0 ) ) < 1e-3 );
 		
 		// ... and moving
 		player.simulate( 0.8f );
 		assertEquals( 1, player.getActiveParticles( particles ) );
-		assertTrue( particles[0].m_position.dist( new Vector3( 7.3f, 0, 0 ) ) < 1e-3 );
+		assertTrue( particles[0].m_position.dist( new Vector3( 8.3f, 0, 0 ) ) < 1e-3 );
 				
 		// ... but it's not being restored
-		player.simulate( 0.1f );
+		player.simulate( 0.2f );
 		assertEquals( 0, player.getActiveParticles( particles ) );
+	}
+	
+
+	class FixedPositionMockParticleEmitter extends ParticleEmitter
+	{
+		private Vector3 		m_emissionPos;
+		
+		FixedPositionMockParticleEmitter( Vector3 emissionPos )
+		{
+			m_emissionPos = emissionPos;
+			
+			setAmountEmittedEachTick( 1 );
+			setEmissionFrequency( 0.1f );
+			setParticlesCount( 1, new ParticlesFactoryStub() );
+			setTimeToLive( 100000000 );
+		}
+		
+		@Override
+		protected void initialize(int particleIdx, Particle particle) 
+		{
+			particle.m_position = m_emissionPos;
+		}
+
+		@Override
+		protected void onLoad(DataLoader loader) {}
+		
+	};
+	
+	public void testClearSkyAffector()
+	{	
+		// setup the system
+		Vector3 particlePos = new Vector3( 1.5f, 0, 0 );
+		ParticleSystem ps = new ParticleSystem();
+		ps.addEmitter( new FixedPositionMockParticleEmitter( particlePos ) );
+		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0, 0, 1, 1 ), 0.5f ) );
+		
+		// start the simulation - first emit the particles
+		Particle[] particles = new Particle[ps.m_maxParticles];
+		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, false );
+		
+		player.simulate( 0.2f );
+		assertEquals( 1, player.getActiveParticles( particles ) );
+		
+		// initially the particle is emitted outside the  clear sky area, so it's alpha should be set to 1
+		// Test various cases of that
+		{
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] >= 1.0f );
+			
+			particlePos.set( -0.5f, 0, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] >= 1.0f );
+			
+			particlePos.set( 0, 1.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] >= 1.0f );
+			
+			particlePos.set( 0, -0.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] >= 1.0f );
+		}
+		
+		// Now test what happends if the particle is on the border of the area - it should
+		// maintain an alpha value equal to 1
+		{
+			particlePos.set( 0, 0.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] >= 1.0f );
+			
+			particlePos.set( 1.0f, 0.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] >= 1.0f );
+			
+			particlePos.set( 0.5f, 0, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] >= 1.0f );
+			
+			particlePos.set( 0.5f, 1.0f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] >= 1.0f );
+		}
+		
+		// Test what happends if the particle enters the area, but is half way inside the border value
+		{
+			particlePos.set( 0.125f, 0.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( Math.abs( particles[0].m_color.m_vals[ Color.Alpha ] - 0.5f ) < 1e-3 );
+			
+			// we need to reset the alpha value, 'cause this affector only modulates the existing alpha value.
+			// We'll be doing so from now on
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+			
+			particlePos.set( 0.875f, 0.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( Math.abs( particles[0].m_color.m_vals[ Color.Alpha ] - 0.5f ) < 1e-3 );
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+			
+			particlePos.set( 0.875f, 0.01f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( Math.abs( particles[0].m_color.m_vals[ Color.Alpha ] - 0.96f ) < 1e-3 );
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+		}		
+	}
+	
+	public void testMultipleClearSkyAffector()
+	{	
+		// setup the system
+		Vector3 particlePos = new Vector3( 2.0f, 0, 0 );
+		ParticleSystem ps = new ParticleSystem();
+		ps.addEmitter( new FixedPositionMockParticleEmitter( particlePos ) );
+		
+		// two overlapping clear sky affectors
+		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0, 0, 1, 1 ), 0.5f ) );
+		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0.5f, 0, 1.5f, 1 ), 0.5f ) );
+		
+		// start the simulation - first emit the particles
+		Particle[] particles = new Particle[ps.m_maxParticles];
+		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, false );
+		
+		player.simulate( 0.2f );
+		assertEquals( 1, player.getActiveParticles( particles ) );
+		
+		// Particle outside both areas
+		{
+			assertTrue( Math.abs( particles[0].m_color.m_vals[ Color.Alpha ] - 1.0f ) < 1e-3 );
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+			
+			particlePos.set( -0.5f, 0, 0 );
+			player.simulate( 0.1f );
+			assertTrue( Math.abs( particles[0].m_color.m_vals[ Color.Alpha ] - 1.0f ) < 1e-3 );
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+			
+			particlePos.set( 0, 1.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( Math.abs( particles[0].m_color.m_vals[ Color.Alpha ] - 1.0f ) < 1e-3 );
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+			
+			particlePos.set( 0, -0.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( Math.abs( particles[0].m_color.m_vals[ Color.Alpha ] - 1.0f ) < 1e-3 );
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+		}
+		
+		// Particle outside the first area, but inside the second one
+		{
+			particlePos.set( 1.2f, 0.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] <= 0.0f );
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+		}
+		
+		// Particle outside the second area, but inside the first one
+		{
+			particlePos.set( 0.3f, 0.5f, 0 );
+			player.simulate( 0.1f );
+			assertTrue( particles[0].m_color.m_vals[ Color.Alpha ] <= 0.0f );
+			particles[0].m_color.m_vals[ Color.Alpha ] = 1.0f;
+		}
 	}
 }

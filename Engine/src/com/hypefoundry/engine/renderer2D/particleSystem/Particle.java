@@ -4,6 +4,7 @@
 package com.hypefoundry.engine.renderer2D.particleSystem;
 
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 
 /**
@@ -19,6 +20,8 @@ public class Particle
 	private float 			m_initialTimeToLive = 0;
 	protected float			m_timeToLive = 0;
 	public float			m_scale = 1.0f;
+	
+	public Color			m_color = new Color( 1, 1, 1, 1 );
 	
 	// movement parameters
 	public Vector3			m_velocity = new Vector3();

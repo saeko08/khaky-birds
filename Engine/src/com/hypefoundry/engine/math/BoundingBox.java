@@ -310,6 +310,45 @@ final public class BoundingBox implements BoundingShape
 		nearestPos.m_z = 0.0f;
 	}
 	
+	/**
+	 * A counterpart to 'getNearestPoint' method - whilst that one treats the box as
+	 * a solid shape, which means that if we query a position internal to the box's area,
+	 * we'll get the same position, this method treats the outside of the box a solid area
+	 * and returns the nearest positions only if we query it from inside of the box.
+	 * 
+	 * It makes sense to call this method ONLY if the queried point has been tested and
+	 * indeed overlaps the box, otherwise it will return unpredicted results.
+	 * 
+	 * @param queryPos
+	 * @param nearestPos
+	 */
+	final public void getNearestPointFromInside( final Vector3 queryPos, Vector3 nearestPos )
+	{
+		float distToMinX = queryPos.m_x - m_minX;
+		float distToMaxX = m_maxX - queryPos.m_x;
+		if ( distToMinX < distToMaxX )
+		{
+			nearestPos.m_x = m_minX;
+		}
+		else
+		{
+			nearestPos.m_x = m_maxX;
+		}
+		
+		float distToMinY = queryPos.m_y - m_minY;
+		float distToMaxY = m_maxY - queryPos.m_y;
+		if ( distToMinY < distToMaxY )
+		{
+			nearestPos.m_y = m_minY;
+		}
+		else
+		{
+			nearestPos.m_y = m_maxY;
+		}
+		
+		nearestPos.m_z = 0.0f;
+	}
+	
 	// ------------------------------------------------------------------------
 	// Serialization support
 	// ------------------------------------------------------------------------

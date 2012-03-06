@@ -23,7 +23,8 @@ public class SpriteBatcher
 	private enum DrawItem
 	{
 		Lines,
-		Sprites
+		Sprites,
+		ColoredSprites
 	};
 			
 	public GLGraphics			m_graphics;
@@ -31,9 +32,11 @@ public class SpriteBatcher
 	private final float[] 		m_verticesBuffer;
 	private int 				m_bufferIndex;
 	
+	private final Geometry		m_coloredGeometry;
 	private final Geometry 		m_geometry;
 	private final Geometry 		m_lines;
 	
+	private int 				m_numColoredSprites;
 	private int 				m_numSprites;
 	private int					m_numLines;
 	
@@ -58,10 +61,12 @@ public class SpriteBatcher
 		m_gl = graphics.getGL();
 		
 		m_verticesBuffer = new float[ maxSprites * 4 * 4 ];
+		m_coloredGeometry = new Geometry( graphics, maxSprites * 4, maxSprites*6, true, true );
 		m_geometry = new Geometry( graphics, maxSprites * 4, maxSprites*6, false, true );
 		m_lines = new Geometry( graphics, maxSprites * 2, 0, true, false );
 		
 		m_bufferIndex = 0;
+		m_numColoredSprites = 0;
 		m_numSprites = 0;
 		m_numLines = 0;
 		
@@ -78,6 +83,7 @@ public class SpriteBatcher
 			indices[i + 4] = (short)(j + 3);
 			indices[i + 5] = (short)(j + 0);
 		}
+		m_coloredGeometry.setIndices( indices, 0, indices.length );
 		m_geometry.setIndices( indices, 0, indices.length );
 	}
 	
@@ -85,11 +91,26 @@ public class SpriteBatcher
 	 * Flushes the batch.
 	 */
 	public void flush()
-	{
+	{	
+		// draw what's in the sprites buffer
+		if ( m_numColoredSprites > 0 )
+		{
+			assert( m_numSprites == 0 ); // those are mutually exclusive
+			assert( m_numLines == 0 ); // those are mutually exclusive
+			
+			m_coloredGeometry.setVertices( m_verticesBuffer, 0, m_bufferIndex );
+			m_coloredGeometry.bind();
+			m_coloredGeometry.draw( GL10.GL_TRIANGLES, 0, m_numColoredSprites * 6 );
+			m_coloredGeometry.unbind();
+			
+			m_numColoredSprites = 0;
+		}
+		
 		// draw what's in the sprites buffer
 		if ( m_numSprites > 0 )
 		{
 			assert( m_numLines == 0 ); // those are mutually exclusive
+			assert( m_numColoredSprites == 0 ); // those are mutually exclusive
 			
 			m_geometry.setVertices( m_verticesBuffer, 0, m_bufferIndex );
 			m_geometry.bind();
@@ -103,6 +124,7 @@ public class SpriteBatcher
 		if ( m_numLines > 0 )
 		{
 			assert( m_numSprites == 0 ); // those are mutually exclusive
+			assert( m_numColoredSprites == 0 ); // those are mutually exclusive
 			
 			m_lines.setVertices( m_verticesBuffer, 0, m_bufferIndex );
 			m_lines.bind();
@@ -379,6 +401,88 @@ public class SpriteBatcher
 		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
 		
 		m_numSprites++;
+	}
+	
+	/**
+	 * Draws a rotated sprite with the texture defined for the batch.
+	 * 
+	 * @param x				sprite center X coordinate
+	 * @param y				sprite center Y coordinate
+	 * @param width			desired sprite width
+	 * @param height		desired sprite height
+	 * @param angle			rotation angle in degrees
+	 * @param region		texture region to draw the sprite with
+	 * @param color			color the texture should be tinted with
+	 */
+	public void drawSprite( float x, float y, float width, float height, float angle, TextureRegion region, Color color ) 
+	{
+		// we'll be drawing sprites now, so flush the buffer if something else was drawn before
+		switchTo( DrawItem.ColoredSprites );
+		
+		// set the render state
+		setRenderState( region.m_renderState );
+		
+		// add the new sprite to the batcher
+		float halfWidth = width / 2;
+		float halfHeight = height / 2;
+		float rad = angle * Vector3.TO_RADIANS;
+		float cos = FloatMath.cos(rad);
+		float sin = FloatMath.sin(rad);
+		
+		float x1 = -halfWidth * cos - (-halfHeight) * sin;
+		float y1 = -halfWidth * sin + (-halfHeight) * cos;
+		float x2 = halfWidth * cos - (-halfHeight) * sin;
+		float y2 = halfWidth * sin + (-halfHeight) * cos;
+		float x3 = halfWidth * cos - halfHeight * sin;
+		float y3 = halfWidth * sin + halfHeight * cos;
+		float x4 = -halfWidth * cos - halfHeight * sin;
+		float y4 = -halfWidth * sin + halfHeight * cos;
+		x1 += x;
+		y1 += y;
+		x2 += x;
+		y2 += y;
+		x3 += x;
+		y3 += y;
+		x4 += x;
+		y4 += y;
+		
+		m_verticesBuffer[ m_bufferIndex++ ] = x1;
+		m_verticesBuffer[ m_bufferIndex++ ] = y1;
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Red ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Green ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Blue ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Alpha ];
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
+		
+		m_verticesBuffer[ m_bufferIndex++ ] = x2;
+		m_verticesBuffer[ m_bufferIndex++ ] = y2;
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Red ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Green ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Blue ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Alpha ];
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v2;
+		
+		m_verticesBuffer[ m_bufferIndex++ ] = x3;
+		m_verticesBuffer[ m_bufferIndex++ ] = y3;
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Red ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Green ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Blue ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Alpha ];
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u2;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
+		
+		m_verticesBuffer[ m_bufferIndex++ ] = x4;
+		m_verticesBuffer[ m_bufferIndex++ ] = y4;
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Red ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Green ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Blue ];
+		m_verticesBuffer[ m_bufferIndex++ ] = color.m_vals[ Color.Alpha ];
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_u1;
+		m_verticesBuffer[ m_bufferIndex++ ] = region.m_v1;
+		
+		m_numColoredSprites++;
 	}
 	
 	/**

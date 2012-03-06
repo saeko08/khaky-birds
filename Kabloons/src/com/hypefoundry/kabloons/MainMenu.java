@@ -14,11 +14,6 @@ import com.hypefoundry.engine.controllers.EntityControllerFactory;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
-import com.hypefoundry.engine.hud.ButtonListener;
-import com.hypefoundry.engine.hud.Hud;
-import com.hypefoundry.engine.hud.HudLayout;
-import com.hypefoundry.engine.hud.HudRenderer;
-import com.hypefoundry.engine.hud.widgets.checkbox.CheckboxWidget;
 import com.hypefoundry.engine.physics.PhysicalBody;
 import com.hypefoundry.engine.physics.PhysicalBodyFactory;
 import com.hypefoundry.engine.physics.PhysicsView;
@@ -36,6 +31,12 @@ import com.hypefoundry.kabloons.entities.background.Background;
 import com.hypefoundry.kabloons.entities.background.BackgroundVisual;
 import com.hypefoundry.kabloons.entities.background.FXBackground;
 import com.hypefoundry.kabloons.entities.background.FXBackgroundVisual;
+import com.hypefoundry.kabloons.entities.levelsSelector.FogOfWar;
+import com.hypefoundry.kabloons.entities.levelsSelector.FogOfWarVisual;
+import com.hypefoundry.kabloons.entities.levelsSelector.LevelItem;
+import com.hypefoundry.kabloons.entities.levelsSelector.LevelItemVisual;
+import com.hypefoundry.kabloons.entities.levelsSelector.LevelSelectionManager;
+import com.hypefoundry.kabloons.entities.levelsSelector.LevelSelectionManagerController;
 import com.hypefoundry.kabloons.entities.menu.MenuItem;
 import com.hypefoundry.kabloons.entities.menu.MenuItemController;
 import com.hypefoundry.kabloons.entities.menu.MenuItemVisual;
@@ -94,6 +95,9 @@ public class MainMenu extends Screen
 		m_world.registerEntity( FXBackground.class, new EntityFactory() { @Override public Entity create() { return new FXBackground(); } } );
 		m_world.registerEntity( MenuManager.class, new EntityFactory() { @Override public Entity create() { return new MenuManager(); } } );
 		m_world.registerEntity( MenuItem.class, new EntityFactory() { @Override public Entity create() { return new MenuItem( menuScreen ); } } );
+		m_world.registerEntity( LevelSelectionManager.class, new EntityFactory() { @Override public Entity create() { return new LevelSelectionManager( m_game.getFileIO() ); } } );
+		m_world.registerEntity( LevelItem.class, new EntityFactory() { @Override public Entity create() { return new LevelItem( menuScreen ); } } );
+		m_world.registerEntity( FogOfWar.class, new EntityFactory() { @Override public Entity create() { return new FogOfWar( m_resourceManager ); } } );
 		
 		// load the world
 		try 
@@ -118,11 +122,14 @@ public class MainMenu extends Screen
 		m_worldRenderer.register( AnimatedBackground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new AnimatedBackgroundVisual( m_world, m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( FXBackground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FXBackgroundVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( MenuItem.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new MenuItemVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( LevelItem.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new LevelItemVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( FogOfWar.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FogOfWarVisual( parentEntity ); } } );
 
 		// register controllers
 		m_world.attachView( m_controllersView );
 		m_controllersView.register( MenuManager.class, new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new MenuManagerController( parentEntity, m_world, menuScreen, m_worldRenderer.getCamera() ); } } );
 		m_controllersView.register( MenuItem.class, new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new MenuItemController( parentEntity ); } } );
+		m_controllersView.register( LevelSelectionManager.class, new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new LevelSelectionManagerController( parentEntity, m_world, menuScreen, m_worldRenderer.getCamera() ); } } );
 		
 		// register physics
 		m_world.attachView( m_physicsView );
@@ -171,27 +178,21 @@ public class MainMenu extends Screen
 	{
 		if ( menuOption.equals( "StartGame" ) )
 		{
-			//m_game.setScreen( new LevelSelectionScreen( m_game ) );
+			m_game.setScreen( new MainMenu( m_game, MenuScreen.MS_Level_Selection ) );
 		}
 		else if ( menuOption.equals( "Exit" ) )
 		{
 			m_game.closeGame();
 		}
-		
-		/*else
-		{
-			// check if it's an integer number - if so, then the user selected a level to play
-			try
-			{
-				
-				int levelIdx = Integer.parseInt( id );
-				m_game.setScreen( new GameScreen( m_game, levelIdx ) );
-			}
-			catch( NumberFormatException ex )
-			{
-				System.out.print( ex.toString() );
-			}
-		}*/
-		
+	}
+	
+	/**
+	 * Loads the specified game level.
+	 * 
+	 * @param levelIdx
+	 */
+	public void loadLevel( int levelIdx )
+	{
+		m_game.setScreen( new GameScreen( m_game, levelIdx ) );
 	}
 }

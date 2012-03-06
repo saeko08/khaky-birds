@@ -50,6 +50,7 @@ import com.hypefoundry.kabloons.entities.toggle.Toggle;
 import com.hypefoundry.kabloons.entities.toggle.ToggleController;
 import com.hypefoundry.kabloons.entities.toggle.ToggleVisual;
 import com.hypefoundry.kabloons.utils.AssetsFactory;
+import com.hypefoundry.kabloons.utils.UnlockedLevelsStorage;
 
 
 
@@ -281,7 +282,7 @@ public class GameScreen extends Screen
 	}
 
 	public void loadNextLevel() 
-	{
+	{		
 		if ( m_levelIdx < m_levelsCount - 1 )
 		{
 			loadLevel( m_levelIdx + 1 );
@@ -296,5 +297,20 @@ public class GameScreen extends Screen
 	public void reloadLevel() 
 	{
 		loadLevel( m_levelIdx );
+	}
+	
+	/**
+	 * Unlocks the next level.
+	 */
+	public void unlockNextLevel()
+	{
+		if ( m_levelIdx < m_levelsCount - 1 )
+		{
+			int nextLevelIdx = m_levelIdx + 1;
+			
+			// first - unlock the next level
+			UnlockedLevelsStorage levelsStorage = new UnlockedLevelsStorage( m_game.getFileIO() );
+			levelsStorage.unlockLevel( nextLevelIdx );
+		}
 	}
 }

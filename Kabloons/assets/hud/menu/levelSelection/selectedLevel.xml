@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='hud/menu/levelSelection/atlas.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' >
+
+	<Frame type="FramesChain" x='224' y='801' vSpacing='1' hSpacing='1' numPerRow='6' numFrames='6' w='27' h='28' />
+	
+	<Frame type="LinearInterpolation" duration='1.5'>
+	   <From x='196' y='801' w='27' h='28'/>
+	   <To x='196' y='801' w='27' h='28'/>
+	</Frame>
+	
+</Animation>

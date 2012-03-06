@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<World width='4.8' height='8.0'>
+	<ResourcesCache>
+		<Resource type="Texture" path="hud/menu/levelSelection/atlas.png"/>
+	</ResourcesCache>
+
+	<Entity type="Background" path="hud/menu/levelSelection/background.xml">
+		<localBounds minX='-2.4' minY='-4.0' maxX='2.4' maxY='4.0' />
+		<position x='2.4' y='4.0' z='100' />
+	</Entity>
+	
+	<!-- level pins -->
+
+	<Entity type="LevelItem" levelIdx='1' coordinatesMode="TopLeft" >
+		<localBounds minX='-0.135' minY='-0.14' maxX='0.135' maxY='0.14' />
+		<position x='0.78' y='0.91' z='90' />
+		<ClearSkyExtension width='2.0' height='1.55' /> 
+		<ClearSkyArea minX='0' minY='0.04' maxX='2.18' maxY='1.88' />
+	</Entity>
+
+	<Entity type="LevelItem" levelIdx='2' coordinatesMode="TopLeft" >
+		<localBounds minX='-0.135' minY='-0.14' maxX='0.135' maxY='0.14' />
+		<position x='3.7' y='0.96' z='90' />
+		<ClearSkyExtension width='2.0' height='1.55' /> 
+		<ClearSkyArea minX='2.32' minY='0.04' maxX='4.65' maxY='1.88' />
+	</Entity>
+	
+	<Entity type="LevelItem" levelIdx='3' coordinatesMode="TopLeft" >
+		<localBounds minX='-0.135' minY='-0.14' maxX='0.135' maxY='0.14' />
+		<position x='4.21' y='2.35' z='90' />
+		<ClearSkyExtension width='2.0' height='1.55' />
+		<ClearSkyArea minX='2.79' minY='1.91' maxX='4.76' maxY='2.53' />
+	</Entity>
+	
+	<Entity type="LevelItem" levelIdx='4' coordinatesMode="TopLeft" >
+		<localBounds minX='-0.135' minY='-0.14' maxX='0.135' maxY='0.14' />
+		<position x='4.11' y='2.97' z='90' />
+		<ClearSkyExtension width='2.0' height='1.55' />
+		<ClearSkyArea minX='3.74' minY='2.57' maxX='4.77' maxY='3.38' />
+	</Entity>
+	
+	<Entity type="LevelItem" levelIdx='5' coordinatesMode="TopLeft" >
+		<localBounds minX='-0.135' minY='-0.14' maxX='0.135' maxY='0.14' />
+		<position x='3.16' y='3.09' z='90' />
+		<ClearSkyExtension width='2.0' height='1.55' />
+		<ClearSkyArea minX='2.36' minY='2.57' maxX='3.58' maxY='3.41' />
+	</Entity>
+	
+	<Entity type="LevelItem" levelIdx='6' coordinatesMode="TopLeft" active='false' >
+		<localBounds minX='-0.135' minY='-0.14' maxX='0.135' maxY='0.14' />
+		<position x='1.4' y='3.15' z='90' />
+		<ClearSkyExtension width='2.0' height='1.55' />
+		<ClearSkyArea minX='1.04' minY='1.97' maxX='2.28' maxY='3.26' />
+	</Entity>
+	 
+	<!-- fog of war -->
+	<Entity type="FogOfWar" path="hud/menu/levelSelection/fogOfWar.xml" >
+		<localBounds minX='0' minY='0' maxX='4.8' maxY='8.0' />
+		<position x='0' y='0' z='80' />
+	</Entity>
+	
+	<!-- levels manager -->
+	<Entity type="LevelSelectionManager" />
+	
+</World>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Animation frameDuration='0.4' atlasName='backgrounds/park_alleyway/atlas.png' alphaOp='none' >
-	<Frame type="StaticRegion" x='481' y='20' w='480' h='367' />
-	<Frame type="StaticRegion" x='0' y='386' w='480' h='367' />
+	<Frame type="StaticRegion" x='481' y='20' w='480' h='366' />
+	<Frame type="StaticRegion" x='0' y='386' w='480' h='366' />
 </Animation>

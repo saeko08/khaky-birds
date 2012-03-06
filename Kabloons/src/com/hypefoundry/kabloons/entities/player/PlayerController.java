@@ -376,6 +376,9 @@ public class PlayerController extends FiniteStateMachine
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
 				m_hudLayout.attachButtonListener( this );
 			}
+			
+			// unlock the next level
+			m_screen.unlockNextLevel();
 		}
 
 		@Override

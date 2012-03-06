@@ -13,7 +13,8 @@ import com.hypefoundry.kabloons.entities.fan.Fan;
  */
 public class Player extends Entity 
 {
-	int[]		m_fansLeft = new int[Fan.Direction.values().length];
+	int[]						m_fansLeft 					= new int[Fan.Direction.values().length];
+	
 	
 	@Override
 	public void onLoad( DataLoader loader ) 

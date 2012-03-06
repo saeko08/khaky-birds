@@ -19,10 +19,6 @@
 			<pos x='0.36' y='0.04' z='0' />
 		</Widget>
 		
-		<Widget type="CheckboxWidget" visualClass="RemoveFanTemplate" id="RemoveFan" width='0.058' height='0.92' >
-			<pos x='0.5' y='0.04' z='0' />
-		</Widget>
-		
 		<Widget type="CheckboxWidget" visualClass="ReleaseBaloonTemplate" id="ReleaseBaloon" width='0.058' height='0.92' >
 			<pos x='0.7' y='0.04' z='0' />
 		</Widget>

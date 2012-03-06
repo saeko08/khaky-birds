@@ -3,12 +3,12 @@
  */
 package com.hypefoundry.kabloons.utils;
 
+import com.hypefoundry.engine.gestures.GesturesRecognition;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.kabloons.entities.background.AnimatedBackground;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
-import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSaw;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoor;
 import com.hypefoundry.kabloons.entities.fan.Fan;
 
@@ -27,12 +27,12 @@ public class AssetsFactory
 	 */
 	private class BaloonFactory
 	{
-		String			m_floatingUpAnim;
-		String			m_floatingLeftAnim;
-		String			m_floatingRightAnim;
-		String			m_inVortexAnim;
-		String			m_deathAnim;
-		BoundingBox		m_localBounds;
+		String						m_floatingUpAnim;
+		String						m_floatingLeftAnim;
+		String						m_floatingRightAnim;
+		String						m_inVortexAnim;
+		String						m_deathAnim;
+		BoundingBox					m_localBounds;
 		
 		/**
 		 * Constructor.
@@ -182,10 +182,11 @@ public class AssetsFactory
 
 	
 	// baloon factories
-	private BaloonFactory[]		m_baloonTypes;
-	private FanFactory[]		m_fanTypes = new FanFactory[Fan.Direction.values().length];
-	private ExitDoorData 		m_exitDoorDefinition;
-	private PuffData			m_puffData;
+	private GesturesRecognition		m_gesturesRecognition;
+	private BaloonFactory[]			m_baloonTypes;
+	private FanFactory[]			m_fanTypes = new FanFactory[Fan.Direction.values().length];
+	private ExitDoorData 			m_exitDoorDefinition;
+	private PuffData				m_puffData;
 	
 	// ------------------------------------------------------------------------
 	// API
@@ -198,6 +199,10 @@ public class AssetsFactory
 	 */
 	public AssetsFactory( DataLoader loader ) 
 	{
+		// gestures
+		m_gesturesRecognition = new GesturesRecognition();
+		m_gesturesRecognition.load( loader );
+					
 		// load definitions of the baloons
 		{
 			int baloonTypesCount = loader.getChildrenCount( "Baloon" );
@@ -226,6 +231,16 @@ public class AssetsFactory
 		// devices
 		m_exitDoorDefinition = new ExitDoorData( loader );
 		m_puffData = new PuffData( loader );
+	}
+	
+	/**
+	 * Returns the gestures recognition mechanism.
+	 * 
+	 * @return
+	 */
+	public GesturesRecognition getGesturesRecognition()
+	{
+		return m_gesturesRecognition;
 	}
 	
 	/**

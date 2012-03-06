@@ -36,4 +36,24 @@
 		<localBounds minX='-0.495' minY='-0.455' maxX='0.495' maxY='0.455' />
 	</Puff>
 	
+	<!-- Gestures -->
+	<GesturesDB>
+		<Gesture id="ADD_LEFT_FAN" type="DirectionalGesture" >
+			<Direction x='-1' y='0' z='0' />
+		</Gesture>
+		
+		<Gesture id="ADD_RIGHT_FAN" type="DirectionalGesture" >
+			<Direction x='1' y='0' z='0' />
+		</Gesture>
+		
+		<Gesture id="RELEASE_BALOON" type="DirectionalGesture" >
+			<Direction x='0' y='-1' z='0' />
+		</Gesture>
+		
+		<!--  there are a couple gestures corresponding to the fan removal - basically
+		we want the user to smear over the fan back and forth -->
+		<Gesture id="REMOVE_FAN" type="AngularGesture" directionChanges='1' angle='150.0' angleTolerance='60.0'/>
+	
+	</GesturesDB>
+	
 </Definitions>

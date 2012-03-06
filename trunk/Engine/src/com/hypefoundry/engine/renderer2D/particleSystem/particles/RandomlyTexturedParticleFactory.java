@@ -28,6 +28,7 @@ public class RandomlyTexturedParticleFactory implements ParticlesFactory
 			return null;
 		}
 		
+		--m_creationsLeftTillReshuffle;
 		if ( m_creationsLeftTillReshuffle <= 0 )
 		{
 			m_creationsLeftTillReshuffle = m_textureRegions.length;
@@ -36,7 +37,7 @@ public class RandomlyTexturedParticleFactory implements ParticlesFactory
 		
 		RandomlyTexturedParticle particle = new RandomlyTexturedParticle( m_textureRegions[m_nextIdx] );
 		m_nextIdx = ( m_nextIdx + 1 ) % m_textureRegions.length;
-		
+	
 		return particle;
 	}
 

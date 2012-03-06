@@ -102,29 +102,17 @@ public class ParticleSystemPlayer
 	public void simulate( float deltaTime ) 
 	{
 		Particle particle = null;
-		for ( int j = 0; j < m_particles.length; ++j )
-		{
-			float particleDeltaTime = m_particleTimeMultipliers[j] * deltaTime;
-	
-			particle = m_particles[j];
-			if ( particle != null && particle.m_timeToLive > 0 )
-			{
-				// update the affectors
-				for ( int i = 0; i < m_particleSystem.m_affectors.length; ++i )
-				{
-					m_particleSystem.m_affectors[i].update( particleDeltaTime, particle );
-				}
-
-				// move the particles around and update their lifetime timer			
-				particle.m_timeToLive -= particleDeltaTime;
-				m_tmpVelocity.set( particle.m_velocity ).scale( particleDeltaTime );
-				particle.m_position.add( m_tmpVelocity );
-			}
-		}
 		
-		// reset the time multiplier for the particles
+		// first - update the life timer of the existing particles - we need to do it 
+		// before the emiters are updated, because if the system is working in the 'looped' mode,
+		// we want to reemit the dead particles instantly
 		for ( int i = 0; i < m_particles.length; ++i )
 		{
+			// update life timer of the particles
+			float particleDeltaTime = m_particleTimeMultipliers[i] * deltaTime;			
+			m_particles[i].m_timeToLive -= particleDeltaTime;
+			
+			// and reset its time multiplier
 			m_particleTimeMultipliers[i] = 1.0f;
 		}
 				
@@ -153,6 +141,29 @@ public class ParticleSystemPlayer
 					
 					m_emitterIndices[i] += numInitialized;
 				}
+			}
+		}
+				
+
+		// update the affectors - the affectors shoud influence the particles as soon as they are created,
+		// because a affector might wish to change the alpha value of a paricle, and that will cause
+		// some nasty popping artifacts if we leave one frame in between
+		for ( int j = 0; j < m_particles.length; ++j )
+		{
+			float particleDeltaTime = m_particleTimeMultipliers[j] * deltaTime;
+	
+			particle = m_particles[j];
+			if ( particle != null && particle.m_timeToLive > 0 )
+			{
+				// update the affectors
+				for ( int i = 0; i < m_particleSystem.m_affectors.length; ++i )
+				{
+					m_particleSystem.m_affectors[i].update( particleDeltaTime, particle );
+				}
+
+				// move the particles around
+				m_tmpVelocity.set( particle.m_velocity ).scale( particleDeltaTime );
+				particle.m_position.add( m_tmpVelocity );
 			}
 		}
 	}

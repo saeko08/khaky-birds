@@ -77,6 +77,7 @@ public class ParticleSystem extends Resource
 			new EmittersFactoryData( DirectionalParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new DirectionalParticleEmitter(); } } ),
 			new EmittersFactoryData( LineParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new LineParticleEmitter(); } } ),
 			new EmittersFactoryData( CircularParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new CircularParticleEmitter(); } } ),
+			new EmittersFactoryData( BoxParticleEmitter.class, new EmitterFactory() { @Override public ParticleEmitter create() { return new BoxParticleEmitter(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
@@ -87,7 +88,9 @@ public class ParticleSystem extends Resource
 			new AffectorsFactoryData( BlowMovementAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new BlowMovementAffector(); } } ),
 			new AffectorsFactoryData( RotationAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new RotationAffector(); } } ),
 			new AffectorsFactoryData( AccelerationAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new AccelerationAffector(); } } ),
-			new AffectorsFactoryData( ScaleAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new ScaleAffector(); } } ),
+			new AffectorsFactoryData( LifetimeAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new LifetimeAffector(); } } ),
+			new AffectorsFactoryData( ClearSkyAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new ClearSkyAffector(); } } ),
+			new AffectorsFactoryData( AlphaAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new AlphaAffector(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
@@ -175,9 +178,6 @@ public class ParticleSystem extends Resource
 					ParticleEmitter emitter = factory.create();
 					emitter.load( child, m_resMgr );
 					addEmitter( emitter );
-					
-					// sum up the number of particles the system will operate on 
-					m_maxParticles += emitter.m_particlesCount;
 				}
 			}	
 			

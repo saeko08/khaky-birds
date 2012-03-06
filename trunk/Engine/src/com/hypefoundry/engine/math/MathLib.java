@@ -71,4 +71,29 @@ public final class MathLib
 		}
 		return angle;
 	}
+	
+	/**
+	 * Clamps the value to the specified range.
+	 * 
+	 * @param val
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public static float clamp( float val, float min, float max ) 
+	{
+		if ( val < min )
+		{
+			return min;
+		}
+		else if ( val > max )
+		{
+			return max;
+		}
+		else
+		{
+			return val;
+		}
+	}
+
 }

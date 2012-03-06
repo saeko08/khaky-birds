@@ -148,9 +148,16 @@ public abstract class GLGame extends Activity implements Game, Renderer
 				// update and draw the screen, if the game's running, providing it with a proper time delta
 				float deltaTime = ( System.nanoTime() - m_startTime ) / 1000000000.0f;
 				m_startTime = System.nanoTime();
-				m_input.update( deltaTime );
-				m_screen.update( deltaTime );
-				m_screen.present( deltaTime );
+				try
+				{
+					m_input.update( deltaTime );
+					m_screen.update( deltaTime );
+					m_screen.present( deltaTime );
+				}
+				catch( Exception ex )
+				{
+					ex.printStackTrace();
+				}
 				break;
 			}
 			

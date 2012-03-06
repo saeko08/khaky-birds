@@ -45,7 +45,7 @@ public class AnimatedParticle extends Particle
 	{
 		if ( m_timeToLive > 0 && m_player != null )
 		{
-			batcher.drawSprite( m_position.m_x + x, m_position.m_y + y, m_width * m_scale, m_height * m_scale, m_orientation, m_player.getTextureRegion( deltaTime ) );
+			batcher.drawSprite( m_position.m_x + x, m_position.m_y + y, m_width * m_scale, m_height * m_scale, m_orientation, m_player.getTextureRegion( deltaTime ), m_color );
 		}
 	}
 }

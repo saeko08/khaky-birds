@@ -565,15 +565,22 @@ public final class Vector3
 	public void load( String id, DataLoader loader )
 	{
 		DataLoader node = loader.getChild( id );
-		if ( node == null )
+		load( node );
+	}
+	
+	/**
+	 * Configures the vector based on the config file node's contents.
+	 * 
+	 * @param node			node in which to look for the data
+	 */
+	public void load( DataLoader node )
+	{		
+		if ( node != null )
 		{
-			// parent node doesn't contain the description of this shape
-			return;
+			m_x = node.getFloatValue( "x" );
+			m_y = node.getFloatValue( "y" );
+			m_z = node.getFloatValue( "z" );
 		}
-		
-		m_x = node.getFloatValue( "x" );
-		m_y = node.getFloatValue( "y" );
-		m_z = node.getFloatValue( "z" );
 	}
 	
 	/**

@@ -31,6 +31,9 @@ public class FogOfWarVisual extends EntityVisual
 		FogOfWar fogOfWar = (FogOfWar)entity;
 		
 		m_player = new ParticleSystemPlayer( fogOfWar.m_particleSystem, true );
+		
+		// add a presimulation period so that all the particles get spawned before we actually show the screen 
+		m_player.simulate( 5.0f );
 	}
 
 	@Override

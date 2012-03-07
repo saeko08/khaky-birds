@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ParticleSystem >
+<ParticleSystem>
 	<Emitter type="BoxParticleEmitter" frequency='0.5' amountEmittedEachTick='10' totalAmount='200' timeToLive='10' force='0.3'
 			particleType="RandomlyTexturedParticle" >
 		<Textures atlasName='hud/menu/levelSelection/atlas.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' >

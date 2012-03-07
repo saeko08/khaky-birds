@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Animation frameDuration='1.0' atlasName='hud/menu/levelSelection/atlas.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' >
-	<Frame type="StaticRegion" x='392' y='801' w='27' h='28' />
+	<Frame type="StaticRegion" x='0' y='931' w='64' h='64' />
 </Animation>

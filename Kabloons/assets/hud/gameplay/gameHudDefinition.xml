@@ -28,12 +28,8 @@
 	
 	<!-- Level end  -->
 	
-	<Template type="CustomFrameVisualTemplate" class="WinnerFrame" alphaOp='none' atlasName='hud/gameplay/gameHudAtlas.png' x='0' y='146' w='203' h='131' />
-	
-	<Template type="CustomFrameVisualTemplate" class="LooserFrame" alphaOp='none' atlasName='hud/gameplay/gameHudAtlas.png' x='204' y='146' w='203' h='131' />
-	
-	<Template type="ImageButtonVisualTemplate" class="ExitToMenu" path="hud/gameplay/exitToMenuIcon.xml" />
-	
+	<Template type="CustomFrameVisualTemplate" class="LevelEndFrame" alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' atlasName='hud/gameplay/gameHudAtlas.png' x='232' y='0' w='280' h='244' />
+		
 	<Template type="ImageButtonVisualTemplate" class="NextLevel" path="hud/gameplay/nextLevelIcon.xml" />
 	
 	<Template type="ImageButtonVisualTemplate" class="RetryLevel" path="hud/gameplay/retryLevelIcon.xml" />

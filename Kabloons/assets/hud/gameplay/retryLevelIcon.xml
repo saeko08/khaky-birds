@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<TextureRegion atlasName='hud/gameplay/gameHudAtlas.png' alphaOp='none' x='277' y='42' w='73' h='32'/>
+<TextureRegion atlasName='hud/gameplay/gameHudAtlas.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' x='0' y='146' w='124' h='100'/>

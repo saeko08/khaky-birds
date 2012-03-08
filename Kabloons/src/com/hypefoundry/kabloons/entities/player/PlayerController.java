@@ -127,10 +127,6 @@ public class PlayerController extends FiniteStateMachine
 					m_baloon = m_assetsFactory.createRandomBaloon( m_baloonReleasePos );
 					m_screen.m_world.addEntity( m_baloon );
 				}
-					
-				// keep the button checked no matter how many times you click it
-				CheckboxWidget checkbox = m_hudLayout.getWidget( CheckboxWidget.class, "ReleaseBaloon" );
-				checkbox.setChecked( true );
 			}
 		}
 		

@@ -18,10 +18,6 @@
 		<Widget type="ImageWidget" visualClass="FansCounter" id="RightFansCounter" width='0.13' height='0.92' >
 			<pos x='0.36' y='0.04' z='0' />
 		</Widget>
-		
-		<Widget type="CheckboxWidget" visualClass="ReleaseBaloonTemplate" id="ReleaseBaloon" width='0.058' height='0.92' >
-			<pos x='0.7' y='0.04' z='0' />
-		</Widget>
 				
 	</Widget>
 </Layout>

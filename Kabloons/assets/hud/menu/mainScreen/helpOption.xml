@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='0.1' atlasName='hud/menu/mainScreen/atlas2.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' >
+	<Frame type="FramesChain" x='0' y='160' vSpacing='1' hSpacing='1' numPerRow='6' numFrames='10' w='66' h='85' />
+</Animation>

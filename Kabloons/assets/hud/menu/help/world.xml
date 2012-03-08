@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<World width='4.8' height='8.0'>
+	<ResourcesCache>
+		<Resource type="Texture" path="hud/menu/help/atlas.png"/>
+	</ResourcesCache>
+
+	<Entity type="Background" path="hud/menu/help/background.xml">
+		<localBounds minX='-2.4' minY='-4.0' maxX='2.4' maxY='4.0' />
+		<position x='2.4' y='4.0' z='100' />
+	</Entity>
+	
+</World>

@@ -53,7 +53,8 @@ public class MainMenu extends Screen
 	enum MenuScreen
 	{
 		MS_Main( "hud/menu/mainScreen/world.xml" ),
-		MS_Level_Selection( "hud/menu/levelSelection/world.xml" );
+		MS_Level_Selection( "hud/menu/levelSelection/world.xml" ),
+		MS_Help( "hud/menu/help/world.xml" );
 		
 		public String m_worldPath;
 		MenuScreen( String worldPath )
@@ -179,6 +180,10 @@ public class MainMenu extends Screen
 		if ( menuOption.equals( "StartGame" ) )
 		{
 			m_game.setScreen( new MainMenu( m_game, MenuScreen.MS_Level_Selection ) );
+		}
+		if ( menuOption.equals( "Help" ) )
+		{
+			m_game.setScreen( new MainMenu( m_game, MenuScreen.MS_Help ) );
 		}
 		else if ( menuOption.equals( "Exit" ) )
 		{

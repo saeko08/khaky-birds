@@ -63,6 +63,7 @@ public class MainMenu extends Screen
 		}
 	}
 	
+	MenuScreen 							m_currentMenuScreenId;
 	Input								m_input;
 	
 	public World						m_world;
@@ -83,6 +84,7 @@ public class MainMenu extends Screen
 	{
 		super( game );
 		
+		m_currentMenuScreenId = menuScreenId;
 		final MainMenu menuScreen = this;
 		
 		m_input = game.getInput();
@@ -200,4 +202,25 @@ public class MainMenu extends Screen
 	{
 		m_game.setScreen( new GameScreen( m_game, levelIdx ) );
 	}
+	
+	@Override
+	public boolean onBackPressed() 
+	{
+		switch( m_currentMenuScreenId )
+		{
+			case MS_Main:
+			{
+				m_game.closeGame();
+				break;
+			}
+			
+			default:
+			{
+				m_game.setScreen( new MainMenu( m_game, MenuScreen.MS_Main ) );
+				break;
+			}
+		}
+		return true;
+	}
+	
 }

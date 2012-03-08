@@ -313,4 +313,11 @@ public class GameScreen extends Screen
 			levelsStorage.unlockLevel( nextLevelIdx );
 		}
 	}
+	
+	@Override
+	public boolean onBackPressed() 
+	{
+		exitToMenu();
+		return true;
+	}
 }

@@ -44,6 +44,9 @@ public class AndroidFileIO implements FileIO
 	@Override
 	public OutputStream writeFile( String fileName ) throws IOException 
 	{
-		return new FileOutputStream( m_externalStoragePath + fileName );
+		File fullPath = new File( m_externalStoragePath + fileName );
+		File dirPath = fullPath.getParentFile();
+		dirPath.mkdirs();
+		return new FileOutputStream( fullPath );
 	}
 }

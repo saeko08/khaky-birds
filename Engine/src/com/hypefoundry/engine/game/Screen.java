@@ -160,6 +160,16 @@ public abstract class Screen implements UpdatesManager
 		m_inputHandlers.remove( handler );
 	}
 	
+	/**
+	 * Called when the user presses the phone back button.
+	 * 
+	 * @return 'true' if you handled the request, 'false' otherwise
+	 */
+	public boolean onBackPressed() 
+	{
+		return false;
+	}
+	
 	// ------------------------------------------------------------------------
 	// UpdatesManager implementation
 	// ------------------------------------------------------------------------
@@ -188,4 +198,5 @@ public abstract class Screen implements UpdatesManager
 	{
 		m_running = !enable;
 	}
+
 }

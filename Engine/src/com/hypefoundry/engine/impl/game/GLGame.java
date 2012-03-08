@@ -48,6 +48,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	private AndroidInput 				m_input;
 	private FileIO 						m_fileIO;
 	private Screen 						m_screen;
+	private Screen 						m_newScreen = null;
 	private WakeLock 					m_wakeLock;
 	
 	private GLGameState 				m_state = GLGameState.Initialized;
@@ -134,6 +135,12 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		synchronized( m_stateChanged ) 
 		{
 			state = m_state;
+		}
+		
+		if ( m_newScreen != null )
+		{
+			// there's a new screen waiting - change it
+			executeScreenChange();
 		}
 		
 		if ( m_screen == null )
@@ -259,6 +266,14 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			throw new IllegalArgumentException( "Screen must not be null" );
 		}
 		
+		m_newScreen = screen;
+	}
+	
+	/**
+	 * Executes the screen change.
+	 */
+	private void executeScreenChange()
+	{	
 		// close the current screen
 		if ( m_screen != null )
 		{
@@ -270,14 +285,15 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		m_input.clear();
 		
 		// start up the new screen
-		if ( screen != null )
+		if ( m_newScreen != null )
 		{
-			screen.resume();
-			screen.update(0);
+			m_newScreen.resume();
+			m_newScreen.update(0);
 		}
 		
 		// memorize the new screen's instance
-		m_screen = screen;
+		m_screen = m_newScreen;
+		m_newScreen = null;
 	}
 
 	@Override
@@ -290,5 +306,23 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	public void closeGame()
 	{
 		super.finish();
+	}
+	
+	@Override
+	public void onBackPressed() 
+	{
+		boolean wasHandled = false;
+		
+		// back button was pressed - forward this to the screen
+		if ( m_screen != null )
+		{
+			wasHandled = m_screen.onBackPressed();
+		}
+	
+		if ( !wasHandled )
+		{
+			// screen didn't handle this event - so forward it to the higher instance and let it do its thing
+			super.onBackPressed();
+		}
 	}
 }

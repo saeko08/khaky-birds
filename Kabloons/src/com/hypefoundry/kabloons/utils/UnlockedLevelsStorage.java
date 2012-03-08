@@ -21,8 +21,9 @@ import com.hypefoundry.engine.util.serialization.xml.XMLDataSaver;
  */
 public class UnlockedLevelsStorage 
 {
-	private FileIO			m_fileIO;
-	private int[]			m_availableLevels = new int[0];
+	private static final String		LEVEL_DATA_FILENAME = "/Android/data/com.hypefoundry.kabloons/files/levelsUnlocked.dat";
+	private FileIO					m_fileIO;
+	private int[]					m_availableLevels = new int[0];
 	
 	/**
 	 * Constructor.
@@ -36,7 +37,7 @@ public class UnlockedLevelsStorage
 		// load information about the unlocked levels
 		try 
 		{
-			InputStream levelsInfoFile = m_fileIO.readFile( "levelsUnlocked.dat" );
+			InputStream levelsInfoFile = m_fileIO.readFile( LEVEL_DATA_FILENAME );
 			DataLoader levelsInfoLoader = XMLDataLoader.parse( levelsInfoFile, "LevelsUnlocked" );
 			
 			int count = levelsInfoLoader.getChildrenCount( "Level" );
@@ -85,7 +86,7 @@ public class UnlockedLevelsStorage
 			
 			try 
 			{
-				OutputStream levelsInfoFile = m_fileIO.writeFile( "levelsUnlocked.dat" );
+				OutputStream levelsInfoFile = m_fileIO.writeFile( LEVEL_DATA_FILENAME );
 				saver.flush( levelsInfoFile );
 			} 
 			catch ( IOException e ) 

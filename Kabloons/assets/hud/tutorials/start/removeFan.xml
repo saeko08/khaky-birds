@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureRegion atlasName='hud/tutorials/start/atlas.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' x='0' y='304' w='383' h='425' />

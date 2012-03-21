@@ -11,7 +11,6 @@ import com.hypefoundry.engine.gestures.GesturesListener;
 import com.hypefoundry.engine.gestures.GesturesRecognition;
 import com.hypefoundry.engine.hud.ButtonListener;
 import com.hypefoundry.engine.hud.HudLayout;
-import com.hypefoundry.engine.hud.widgets.checkbox.CheckboxWidget;
 import com.hypefoundry.engine.hud.widgets.image.ImageWidget;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.Camera2D;
@@ -46,7 +45,7 @@ public class PlayerController extends FiniteStateMachine
 	 * 
 	 * @author Paksas
 	 */
-	class Gameplay extends FSMState implements GesturesListener
+	class Gameplay extends FSMState implements GesturesListener, PlayerListener
 	{
 		// baloon related data
 		private Vector3				m_baloonReleasePos = new Vector3( 2.4f, -0.2f, 0.0f );
@@ -70,6 +69,8 @@ public class PlayerController extends FiniteStateMachine
 			
 			m_screen.registerInputHandler( m_gesturesRecognition );
 			m_gesturesRecognition.attachListener( this );
+			
+			m_player.attachListener( this );
 		}
 		
 		@Override
@@ -80,6 +81,8 @@ public class PlayerController extends FiniteStateMachine
 			
 			m_gesturesRecognition.detachListener( this );
 			m_screen.unregisterInputHandler( m_gesturesRecognition  );
+			
+			m_player.detachListener( this );
 		}
 		
 		@Override
@@ -121,7 +124,7 @@ public class PlayerController extends FiniteStateMachine
 			}
 			else if ( gesture.m_id.equalsIgnoreCase( "RELEASE_BALOON" ) )
 			{
-				if ( m_baloon == null )
+				if ( m_baloon == null && m_player.m_ghostReleaseEnabled )
 				{
 					// release a single baloon
 					m_baloon = m_assetsFactory.createRandomBaloon( m_baloonReleasePos );
@@ -209,6 +212,12 @@ public class PlayerController extends FiniteStateMachine
 			AnimatedBackground puffEffect = new AnimatedBackground();
 			m_assetsFactory.initializePuff( puffEffect, fan.getPosition() );
 			m_world.addEntity( puffEffect );
+		}
+
+		@Override
+		public void onFansCountChanged() 
+		{
+			updateFanCounters();
 		}
 	}
 	

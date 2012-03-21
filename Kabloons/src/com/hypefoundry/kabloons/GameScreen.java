@@ -49,6 +49,9 @@ import com.hypefoundry.kabloons.entities.player.PlayerController;
 import com.hypefoundry.kabloons.entities.toggle.Toggle;
 import com.hypefoundry.kabloons.entities.toggle.ToggleController;
 import com.hypefoundry.kabloons.entities.toggle.ToggleVisual;
+import com.hypefoundry.kabloons.entities.tutorial.StartTutorial;
+import com.hypefoundry.kabloons.entities.tutorial.StartTutorialController;
+import com.hypefoundry.kabloons.entities.tutorial.StartTutorialVisual;
 import com.hypefoundry.kabloons.utils.AssetsFactory;
 import com.hypefoundry.kabloons.utils.UnlockedLevelsStorage;
 
@@ -109,6 +112,7 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Player.class, new EntityFactory() { @Override public Entity create() { return new Player(); } } );
 		m_world.registerEntity( Toggle.class, new EntityFactory() { @Override public Entity create() { return new Toggle(); } } );
 		m_world.registerEntity( BuzzSaw.class, new EntityFactory() { @Override public Entity create() { return new BuzzSaw(); } } );
+		m_world.registerEntity( StartTutorial.class, new EntityFactory() { @Override public Entity create() { return new StartTutorial(); } } );
 		
 		// load the world
 		try 
@@ -137,6 +141,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Fan.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FanVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Toggle.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ToggleVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( BuzzSaw.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BuzzSawVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( StartTutorial.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new StartTutorialVisual( m_resourceManager, parentEntity ); } } );
 		
 		// register controllers
 		m_world.attachView( m_controllersView );
@@ -144,6 +149,7 @@ public class GameScreen extends Screen
 		m_controllersView.register( Fan.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new FanController( parentEntity ); } } );
 		m_controllersView.register( Player.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PlayerController( gameScreen, parentEntity ); } } );
 		m_controllersView.register( Toggle.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ToggleController( parentEntity ); } } );
+		m_controllersView.register( StartTutorial.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new StartTutorialController( m_world, parentEntity ); } } );
 		
 		// register physics
 		m_world.attachView( m_physicsView );

@@ -14,12 +14,60 @@ import com.hypefoundry.kabloons.entities.fan.Fan;
 public class Player extends Entity 
 {
 	int[]						m_fansLeft 					= new int[Fan.Direction.values().length];
+	boolean						m_ghostReleaseEnabled		= true;
+	PlayerListener				m_listener					= null;
 	
+	/**
+	 * Attaches a player listener.
+	 * 
+	 * @param listener
+	 */
+	void attachListener( PlayerListener listener )
+	{
+		m_listener = listener;
+	}
+	
+	/**
+	 * Detaches a player listener.
+	 * 
+	 * @param listener
+	 */
+	void detachListener( PlayerListener listener )
+	{
+		m_listener = null;
+	}
 	
 	@Override
 	public void onLoad( DataLoader loader ) 
 	{
 		m_fansLeft[Fan.Direction.Left.m_idx] = loader.getIntValue( "leftFans", 0 );
 		m_fansLeft[Fan.Direction.Right.m_idx] = loader.getIntValue( "rightFans", 0 );
+	}
+	
+	/**
+	 * Sets the number of fans available to the user.
+	 * 
+	 * @param left
+	 * @param right
+	 */
+	public void setFansCount( int left, int right )
+	{
+		m_fansLeft[Fan.Direction.Left.m_idx] = left;
+		m_fansLeft[Fan.Direction.Right.m_idx] = right;
+		
+		if ( m_listener != null )
+		{
+			m_listener.onFansCountChanged();
+		}
+	}
+	
+	/**
+	 * Toggles the ghost release mechanism
+	 * 
+	 * @param enable
+	 */
+	public void enableGhostRelease( boolean enable )
+	{
+		m_ghostReleaseEnabled = enable;
 	}
 }

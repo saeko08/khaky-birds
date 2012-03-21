@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HUD>
+	<Template type="CustomFrameVisualTemplate" class="BackgroundFrame" alphaOp='none' atlasName='hud/menu/mainMenuAtlas.png' x='0' y='0' w='480' h='800' />
+	
+	<Template type="ImageButtonVisualTemplate" class="StartGameButton" path="hud/menu/startIcon.xml" />
+	
+	<Template type="ImageButtonVisualTemplate" class="QuitButton" path="hud/menu/exitIcon.xml" />
+	
+	<Template type="ImageButtonVisualTemplate" class="BackToMainMenuButton" path="hud/menu/backToMainMenuIcon.xml" />
+	
+	<Template type="ImageButtonVisualTemplate" class="GameSelectionButton" fontPath="hud/menu/font.xml" borderSize='5' path="hud/menu/gameSelectionButton.xml" />
+	
+	<Template type="CustomCheckboxVisualTemplate" class="SoundCheckbox" alphaOp='test' atlasName='hud/menu/mainMenuAtlas.png' >
+		<Checked x='799' y='233' w='97' h='95' />
+		<Unchecked x='898' y='233' w='97' h='95' />
+	</Template>
+
+	<Template type="ImageVisualTemplate" class="Image" />
+	<Template type="AnimationVisualTemplate" class="Animation" />
+</HUD>

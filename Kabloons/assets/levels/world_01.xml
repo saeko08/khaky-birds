@@ -42,22 +42,22 @@
 		
 		<PLACE_FIRST_FAN path="hud/tutorials/start/placeFirstFan.xml" >
 			<position x='2.4' y='6.0' z='60' />
-			<bounds minX='-1.98' minY='-1.51' maxX='1.98' maxY='1.51' />
+			<bounds minX='-2.4' minY='-1.82' maxX='2.4' maxY='1.82' />
 		</PLACE_FIRST_FAN>
 		
 		<REMOVE_FAN path="hud/tutorials/start/removeFan.xml" >
 			<position x='2.4' y='5.8' z='60' />
-			<bounds minX='-1.91' minY='-2.12' maxX='1.91' maxY='2.12' />
+			<bounds minX='-2.4' minY='-2.195' maxX='2.4' maxY='2.195' />
 		</REMOVE_FAN>
 		
 		<PLACE_SECOND_FAN path="hud/tutorials/start/placeSecondFan.xml" >
 			<position x='2.4' y='6.0' z='60' />
-			<bounds minX='-1.98' minY='-1.51' maxX='1.98' maxY='1.51' />
+			<bounds minX='-2.4' minY='-1.82' maxX='2.4' maxY='1.82' />
 		</PLACE_SECOND_FAN>
 		
 		<RELEASE_GHOST path="hud/tutorials/start/releaseGhost.xml" >
 			<position x='2.4' y='6.0' z='60' />
-			<bounds minX='-1.7' minY='-2.01' maxX='1.7' maxY='2.01' />
+			<bounds minX='-2.4' minY='-2.195' maxX='2.4' maxY='2.195' />
 		</RELEASE_GHOST>
 		
 	</Entity>

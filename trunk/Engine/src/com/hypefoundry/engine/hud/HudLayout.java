@@ -135,14 +135,17 @@ public class HudLayout extends Resource
 	/**
 	 * Called when a button is pressed.
 	 * 
-	 * @param id
+	 * @param widget
 	 */
-	public void onButtonPressed( String id )
+	public void onButtonPressed( HudWidget widget )
 	{
-		int count = m_buttonListeners.size();
-		for ( int i = 0; i < count; ++i )
+		if ( widget.m_isVisible )
 		{
-			m_buttonListeners.get(i).onButtonPressed( id );
+			int count = m_buttonListeners.size();
+			for ( int i = 0; i < count; ++i )
+			{
+				m_buttonListeners.get(i).onButtonPressed( widget.m_id );
+			}
 		}
 	}
 	

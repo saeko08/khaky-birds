@@ -4,15 +4,9 @@
 	
 	<Template type="CustomFrameVisualTemplate" class="BackgroundFrame" alphaOp='none' atlasName='hud/gameplay/gameHudAtlas.png' x='0' y='42' w='128' h='45' />
 	
-	<Template type="CustomCheckboxVisualTemplate" class="LeftFanButtonTemplate" atlasName='hud/gameplay/gameHudAtlas.png' alphaOp='test' >
-		<Unchecked x='29' y='0' w='28' h='41' />
-		<Checked x='87' y='0' w='28' h='41' />
-	</Template>
+	<Template type="ImageButtonVisualTemplate" class="LeftFanButtonTemplate" borderSize='1' path="hud/gameplay/leftFanIcon.xml" />
 
-	<Template type="CustomCheckboxVisualTemplate" class="RightFanButtonTemplate" atlasName='hud/gameplay/gameHudAtlas.png' alphaOp='test' >
-		<Unchecked x='0' y='0' w='28' h='41' />
-		<Checked x='58' y='0' w='28' h='41' />
-	</Template>
+	<Template type="ImageButtonVisualTemplate" class="RightFanButtonTemplate" borderSize='1' path="hud/gameplay/rightFanIcon.xml" />
 	
 	<Template type="ImageVisualTemplate" class="FansCounter" fontPath='hud/gameplay/font.xml' border='0' />
 	

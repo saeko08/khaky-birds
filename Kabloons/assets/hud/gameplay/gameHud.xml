@@ -3,7 +3,7 @@
 	<Widget type="FrameWidget" visualClass="BackgroundFrame" width='1' height='0.056'>
 		<pos x='0' y='0.944' z='0' />
 				
-		<Widget type="CheckboxWidget" visualClass="LeftFanButtonTemplate" id="LeftFan" width='0.058' height='0.92' >
+		<Widget type="ImageWidget" visualClass="LeftFanButtonTemplate" id="LeftFan" width='0.058' height='0.92' >
 			<pos x='0.1' y='0.04' z='0' />
 		</Widget>
 		
@@ -11,7 +11,7 @@
 			<pos x='0.16' y='0.04' z='0' />
 		</Widget>
 		
-		<Widget type="CheckboxWidget" visualClass="RightFanButtonTemplate" id="RightFan" width='0.058' height='0.92' >
+		<Widget type="ImageWidget" visualClass="RightFanButtonTemplate" id="RightFan" width='0.058' height='0.92' >
 			<pos x='0.3' y='0.04' z='0' />
 		</Widget>
 		

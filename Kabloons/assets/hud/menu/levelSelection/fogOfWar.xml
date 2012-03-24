@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ParticleSystem>
-	<Emitter type="BoxParticleEmitter" frequency='0.5' amountEmittedEachTick='10' totalAmount='200' timeToLive='10' force='0.3'
+	<Emitter type="BoxParticleEmitter" frequency='0.5' amountEmittedEachTick='3' timeToLive='10' totalAmount='70' force='0.3'
 			particleType="RandomlyTexturedParticle" >
 		<Textures atlasName='hud/menu/levelSelection/atlas.png' alphaOp='blend' srcAlphaFunc='AF_Src_Alpha' destAlphaFunc='AF_One_Minus_Src_Alpha' >
         	<Texture x='481' y='0' w='200' h='151' />
         	<Texture x='682' y='0' w='200' h='151' />
         	<Texture x='481' y='152' w='200' h='151' />
         	<Texture x='682' y='152' w='200' h='151' />
+        	<Texture x='481' y='304' w='200' h='151' />
+        	<Texture x='682' y='304' w='200' h='151' />
+        	<Texture x='481' y='456' w='200' h='151' />
+        	<Texture x='682' y='456' w='200' h='151' />
         </Textures> 
 		<localBounds minX='-0.5' minY='-0.5' maxX='5.3' maxY='8.5' />
 		<direction x='-1' y='0' z='0' />

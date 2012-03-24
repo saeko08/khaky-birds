@@ -65,7 +65,10 @@
 		<position x='1.625' y='6.225' z='70' />
 	</Entity>
 		
-		
+	<Entity type="Help" path="hud/tutorials/helpers/factoryInterior1Help.xml" >
+		<localBounds minX='-1.91' minY='-1.69' maxX='1.91' maxY='1.69' />
+		<position x='2.4' y='5.2' z='40' />
+	</Entity>
 		
 	<Entity type="Player" leftFans='2' rightFans='1' />
 		

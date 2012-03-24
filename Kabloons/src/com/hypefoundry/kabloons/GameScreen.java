@@ -44,6 +44,9 @@ import com.hypefoundry.kabloons.entities.fan.Fan;
 import com.hypefoundry.kabloons.entities.fan.FanController;
 import com.hypefoundry.kabloons.entities.fan.FanPhysicalBody;
 import com.hypefoundry.kabloons.entities.fan.FanVisual;
+import com.hypefoundry.kabloons.entities.help.Help;
+import com.hypefoundry.kabloons.entities.help.HelpController;
+import com.hypefoundry.kabloons.entities.help.HelpVisual;
 import com.hypefoundry.kabloons.entities.player.Player;
 import com.hypefoundry.kabloons.entities.player.PlayerController;
 import com.hypefoundry.kabloons.entities.toggle.Toggle;
@@ -113,6 +116,7 @@ public class GameScreen extends Screen
 		m_world.registerEntity( Toggle.class, new EntityFactory() { @Override public Entity create() { return new Toggle(); } } );
 		m_world.registerEntity( BuzzSaw.class, new EntityFactory() { @Override public Entity create() { return new BuzzSaw(); } } );
 		m_world.registerEntity( StartTutorial.class, new EntityFactory() { @Override public Entity create() { return new StartTutorial(); } } );
+		m_world.registerEntity( Help.class, new EntityFactory() { @Override public Entity create() { return new Help(); } } );
 		
 		// load the world
 		try 
@@ -142,6 +146,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Toggle.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ToggleVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( BuzzSaw.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BuzzSawVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( StartTutorial.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new StartTutorialVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( Help.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new HelpVisual( m_resourceManager, parentEntity ); } } );
 		
 		// register controllers
 		m_world.attachView( m_controllersView );
@@ -150,6 +155,7 @@ public class GameScreen extends Screen
 		m_controllersView.register( Player.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new PlayerController( gameScreen, parentEntity ); } } );
 		m_controllersView.register( Toggle.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new ToggleController( parentEntity ); } } );
 		m_controllersView.register( StartTutorial.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new StartTutorialController( m_world, parentEntity ); } } );
+		m_controllersView.register( Help.class , new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new HelpController( parentEntity ); } } );
 		
 		// register physics
 		m_world.attachView( m_physicsView );

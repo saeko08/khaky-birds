@@ -11,15 +11,18 @@ import com.hypefoundry.engine.gestures.GesturesListener;
 import com.hypefoundry.engine.gestures.GesturesRecognition;
 import com.hypefoundry.engine.hud.ButtonListener;
 import com.hypefoundry.engine.hud.HudLayout;
+import com.hypefoundry.engine.hud.widgets.button.ButtonWidget;
 import com.hypefoundry.engine.hud.widgets.image.ImageWidget;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.Camera2D;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
+import com.hypefoundry.engine.world.WorldView;
 import com.hypefoundry.kabloons.GameScreen;
 import com.hypefoundry.kabloons.entities.background.AnimatedBackground;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
 import com.hypefoundry.kabloons.entities.fan.Fan;
+import com.hypefoundry.kabloons.entities.help.Help;
 import com.hypefoundry.kabloons.utils.AssetsFactory;
 
 
@@ -35,6 +38,7 @@ public class PlayerController extends FiniteStateMachine
 	private Camera2D					m_camera;
 	private AssetsFactory 				m_assetsFactory;
 	private GesturesRecognition			m_gesturesRecognition;
+	
 
 	// ------------------------------------------------------------------------
 	// States
@@ -45,11 +49,13 @@ public class PlayerController extends FiniteStateMachine
 	 * 
 	 * @author Paksas
 	 */
-	class Gameplay extends FSMState implements GesturesListener, PlayerListener
+	class Gameplay extends FSMState implements GesturesListener, PlayerListener, WorldView, ButtonListener
 	{
 		// baloon related data
 		private Vector3				m_baloonReleasePos = new Vector3( 2.4f, -0.2f, 0.0f );
 		private Baloon				m_baloon;
+		
+		private Help				m_help = null;
 		
 		private Vector3				m_touchPos = new Vector3();
 		private HudLayout			m_hudLayout;
@@ -63,6 +69,7 @@ public class PlayerController extends FiniteStateMachine
 			{
 				m_hudLayout = m_screen.getResourceManager().getResource( HudLayout.class, "hud/gameplay/gameHud.xml" );
 				m_hudLayout.attachRenderer( m_screen.m_hudRenderer ); 
+				m_hudLayout.attachButtonListener( this );
 						
 				updateFanCounters();
 			}
@@ -71,11 +78,14 @@ public class PlayerController extends FiniteStateMachine
 			m_gesturesRecognition.attachListener( this );
 			
 			m_player.attachListener( this );
+			
+			m_world.attachView( this );
 		}
 		
 		@Override
 		public void deactivate()
 		{		
+			m_hudLayout.detachButtonListener( this );
 			m_hudLayout.detachRenderer( m_screen.m_hudRenderer ); 
 			m_hudLayout = null;
 			
@@ -83,6 +93,8 @@ public class PlayerController extends FiniteStateMachine
 			m_screen.unregisterInputHandler( m_gesturesRecognition  );
 			
 			m_player.detachListener( this );
+			
+			m_world.detachView( this );
 		}
 		
 		@Override
@@ -130,6 +142,15 @@ public class PlayerController extends FiniteStateMachine
 					m_baloon = m_assetsFactory.createRandomBaloon( m_baloonReleasePos );
 					m_screen.m_world.addEntity( m_baloon );
 				}
+			}
+		}
+		
+		@Override
+		public void onButtonPressed( String id ) 
+		{
+			if ( id.equalsIgnoreCase( "HelpButton" ) && m_help != null )
+			{
+				m_help.toggleVisible();
 			}
 		}
 		
@@ -218,6 +239,37 @@ public class PlayerController extends FiniteStateMachine
 		public void onFansCountChanged() 
 		{
 			updateFanCounters();
+		}
+
+		@Override
+		public void onAttached(World world) {}
+
+		@Override
+		public void onDetached(World world) {}
+
+		@Override
+		public void onEntityAdded(Entity entity) 
+		{
+			if ( entity instanceof Help )
+			{
+				m_help = (Help)entity;
+				
+				// show the help icon
+				ButtonWidget helpButton = m_hudLayout.getWidget( ButtonWidget.class, "HelpButton" );
+				helpButton.m_isVisible = true;
+			}
+		}
+
+		@Override
+		public void onEntityRemoved(Entity entity) 
+		{
+			if ( entity instanceof Help )
+			{
+				m_help = null;
+				
+				ButtonWidget helpButton = m_hudLayout.getWidget( ButtonWidget.class, "HelpButton" );
+				helpButton.m_isVisible = false;
+			}
 		}
 	}
 	

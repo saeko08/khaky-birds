@@ -19,5 +19,9 @@
 			<pos x='0.36' y='0.04' z='0' />
 		</Widget>
 				
+		<Widget type="ButtonWidget" visualClass="HelpButton" id="HelpButton" width='0.058' height='0.933' visible="false" >
+			<pos x='0.884' y='0.04' z='0' />
+		</Widget>
+		
 	</Widget>
 </Layout>

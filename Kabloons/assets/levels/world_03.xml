@@ -45,6 +45,11 @@
 		<localBounds minX='-0.1' minY='-0.165' maxX='0.1' maxY='0.165' />
 		<position x='4.13' y='3.545' z='70' />
 	</Entity>
+	
+	<Entity type="Help" path="hud/tutorials/helpers/factoryEntranceHelp.xml" >
+		<localBounds minX='-1.91' minY='-1.69' maxX='1.91' maxY='1.69' />
+		<position x='2.4' y='5.2' z='40' />
+	</Entity>
 		 
 	<Entity type="Player" leftFans='1' rightFans='0' />
 		

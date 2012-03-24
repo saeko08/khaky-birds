@@ -23,6 +23,7 @@ public abstract class HudWidget
 	public float			m_height		= 1;
 	public String			m_visualName;
 	public String			m_id;
+	public boolean			m_isVisible 	= true;
 	
 	public HudWidget 		m_parent;
 	public HudLayout		m_layout;
@@ -52,6 +53,20 @@ public abstract class HudWidget
 		m_height = loader.getFloatValue( "height", 1 );
 		m_visualName = loader.getStringValue( "visualClass" );
 		m_id = loader.getStringValue( "id" );
+		
+		// read the visibility flag. mnost time it's not gonna be set explictly at all - in fact
+		// most of cases it will will be to indicate that it should be set to false, so that's
+		// what we're testing
+		String visibleStr = loader.getStringValue( "visible" );
+		if ( visibleStr.length() <= 0 )
+		{
+			m_isVisible = true;
+		}
+		else
+		{
+			m_isVisible = visibleStr.equalsIgnoreCase( "true" );
+		}
+		
 		onLoad( resMgr, loader );
 	}
 	

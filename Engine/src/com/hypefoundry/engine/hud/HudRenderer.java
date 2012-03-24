@@ -131,7 +131,7 @@ public class HudRenderer implements InputHandler
 		for ( int i = 0; i < count; ++i )
 		{
 			HudWidgetVisual visual = m_visuals.get(i);
-			if ( visual != null )
+			if ( visual != null && visual.m_widget.m_isVisible )
 			{
 				visual.draw( m_batcher, deltaTime );
 			}

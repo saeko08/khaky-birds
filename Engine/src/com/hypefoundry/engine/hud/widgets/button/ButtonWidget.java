@@ -28,7 +28,7 @@ public class ButtonWidget extends HudWidget implements ClickableHudWidget, Capti
 	@Override
 	public void onButtonPressed( int id ) 
 	{
-		m_layout.onButtonPressed( m_id );
+		m_layout.onButtonPressed( this );
 	}
 
 	@Override

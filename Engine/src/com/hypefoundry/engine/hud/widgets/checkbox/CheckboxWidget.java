@@ -43,7 +43,7 @@ public class CheckboxWidget extends HudWidget  implements ClickableHudWidget, Ca
 	@Override
 	public void onButtonPressed( int id ) 
 	{
-		m_layout.onButtonPressed( m_id );
+		m_layout.onButtonPressed( this );
 	}
 
 	@Override

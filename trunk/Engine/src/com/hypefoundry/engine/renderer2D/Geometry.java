@@ -19,6 +19,8 @@ import com.hypefoundry.engine.core.GLGraphics;
  */
 public class Geometry 
 {
+	public int						m_maxVertices;
+	public int						m_maxIndices;
 	private final GLGraphics 		m_graphics;
 	private final boolean 			m_hasColor;
 	private final boolean 			m_hasTexCoords;
@@ -38,6 +40,9 @@ public class Geometry
 	 */
 	public Geometry( GLGraphics graphics, int maxVertices, int maxIndices, boolean hasColor, boolean hasTexCoords ) 
 	{
+		m_maxVertices = maxVertices;
+		m_maxIndices = maxIndices;
+				
 		m_graphics = graphics;
 		m_hasColor = hasColor;
 		m_hasTexCoords = hasTexCoords;
@@ -175,3 +180,4 @@ public class Geometry
 		}
 	}
 }
+

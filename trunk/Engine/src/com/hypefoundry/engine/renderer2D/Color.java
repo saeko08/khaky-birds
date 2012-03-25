@@ -63,6 +63,19 @@ public final class Color
 	}
 	
 	/**
+	 * Copies the color settings from a different color.
+	 * 
+	 * @param rhs
+	 */
+	public void set( Color rhs )
+	{
+		m_vals[Red] = rhs.m_vals[Red];
+		m_vals[Green] = rhs.m_vals[Green];
+		m_vals[Blue] = rhs.m_vals[Blue];
+		m_vals[Alpha] = rhs.m_vals[Alpha];
+	}
+	
+	/**
 	 * Brightens up the color by the specified factor.
 	 * 
 	 * @param factor

@@ -68,6 +68,20 @@ public abstract class PhysicalBody implements SpatialGridObject
 	{
 		this( entity, entity.getWorldBounds(), checkCollisions );
 	}
+	
+	/**
+	 * Sets an alternative bounding shape.
+	 * 
+	 * @param collisionShape
+	 */
+	public void setCollisionShape( BoundingShape collisionShape )
+	{
+		m_collisionShape = collisionShape;
+		
+		// initialize the extruded collision shape - if this is a static body, this will never get updated
+		m_extrudedCollisionShape = m_collisionShape;
+		m_extrudedCollisionShape.getBoundingBox( m_runtimeWorldBounds );
+	}
 
 	@Override
 	public final BoundingBox getBounds()
@@ -124,6 +138,8 @@ public abstract class PhysicalBody implements SpatialGridObject
 	 */
 	final void calculateCollisionShapes( float deltaTime ) 
 	{
+		preCalculateCollisionShapes( deltaTime );
+		
 		if ( m_dynamicObjectAspect != null )
 		{
 			m_tmpVelocity.set( m_dynamicObjectAspect.m_velocity ).scale( deltaTime );
@@ -154,4 +170,13 @@ public abstract class PhysicalBody implements SpatialGridObject
 	 * @param collisionPoint
 	 */
 	protected abstract void respondToCollision( PhysicalBody collider, Vector3 collisionPoint );
+	
+	/**
+	 * Called before the runtime collision shape is calculated for the simulation purposes.
+	 * 
+	 * This is the place to update your alternative body shape if you're using it. 
+	 * 
+	 * @param deltaTime
+	 */
+	protected void preCalculateCollisionShapes( float deltaTime ) {}
 }

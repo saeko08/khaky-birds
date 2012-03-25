@@ -28,8 +28,8 @@
 	
 	<!--  Devices  -->
 	
-	<ExitDoor openAnim="gameplay/exitPortal/portalAnim.xml" >
-		<localBounds minX='-1.44' minY='-0.5' maxX='1.44' maxY='0.5' />
+	<ExitDoor >
+		<localBounds minX='-1.44' minY='-0.67' maxX='1.44' maxY='0.67' />
 	</ExitDoor>
 	
 	<Puff anim="gameplay/puffAnim.xml" >

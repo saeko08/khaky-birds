@@ -6,6 +6,7 @@ package com.hypefoundry.kabloons.utils;
 import com.hypefoundry.engine.gestures.GesturesRecognition;
 import com.hypefoundry.engine.math.BoundingBox;
 import com.hypefoundry.engine.math.Vector3;
+import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.kabloons.entities.background.AnimatedBackground;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
@@ -118,7 +119,6 @@ public class AssetsFactory
 	 */
 	public class ExitDoorData
 	{
-		public String		m_openAnim;
 		public BoundingBox	m_localBounds;
 		
 		/**
@@ -130,9 +130,7 @@ public class AssetsFactory
 		{			
 			DataLoader exitDoorNode = loader.getChild( "ExitDoor" );
 			if ( exitDoorNode != null )
-			{
-				m_openAnim = exitDoorNode.getStringValue( "openAnim" );
-				
+			{				
 				m_localBounds = new BoundingBox();
 				m_localBounds.load( "localBounds", exitDoorNode );
 			}
@@ -140,7 +138,6 @@ public class AssetsFactory
 		
 		public void initialize( ExitDoor door )
 		{
-			door.m_openAnim = m_openAnim;
 			door.setBoundingBox( m_localBounds );
 		}
 	}

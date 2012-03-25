@@ -62,6 +62,23 @@ public class Player extends Entity
 	}
 	
 	/**
+	 * Changes the number of fans by the specified amounts.
+	 * 
+	 * @param dLeft
+	 * @param dRight
+	 */
+	public void changeFansCount( int dLeft, int dRight ) 
+	{
+		m_fansLeft[Fan.Direction.Left.m_idx] += dLeft;
+		m_fansLeft[Fan.Direction.Right.m_idx] += dRight;
+		
+		if ( m_listener != null )
+		{
+			m_listener.onFansCountChanged();
+		}
+	}
+	
+	/**
 	 * Toggles the ghost release mechanism
 	 * 
 	 * @param enable

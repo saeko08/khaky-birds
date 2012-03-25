@@ -17,6 +17,7 @@
 	
 	<Entity type="ExitDoor" tag="ExitDoor" state="Closed" >
 		<position x='2.4' y='7.91' z='50' />
+		<position x='2.4' y='7.91' z='50' />
 	</Entity>
 	
 	

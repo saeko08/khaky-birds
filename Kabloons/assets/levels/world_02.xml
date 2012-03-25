@@ -31,7 +31,7 @@
 	<!--  gameplay -->
 	
 	<Entity type="ExitDoor" >
-		<position x='1.84' y='7.5' z='70' />
+		<position x='1.84' y='7.33' z='50' />
 	</Entity>
 	
 	<Entity type="Fan" windFx="backgrounds/meadow/groundWind.xml">

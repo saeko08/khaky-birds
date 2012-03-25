@@ -85,9 +85,12 @@ public class PlayerController extends FiniteStateMachine
 		@Override
 		public void deactivate()
 		{		
-			m_hudLayout.detachButtonListener( this );
-			m_hudLayout.detachRenderer( m_screen.m_hudRenderer ); 
-			m_hudLayout = null;
+			if ( m_hudLayout != null )
+			{
+				m_hudLayout.detachButtonListener( this );
+				m_hudLayout.detachRenderer( m_screen.m_hudRenderer ); 
+				m_hudLayout = null;
+			}
 			
 			m_gesturesRecognition.detachListener( this );
 			m_screen.unregisterInputHandler( m_gesturesRecognition  );
@@ -255,8 +258,11 @@ public class PlayerController extends FiniteStateMachine
 				m_help = (Help)entity;
 				
 				// show the help icon
-				ButtonWidget helpButton = m_hudLayout.getWidget( ButtonWidget.class, "HelpButton" );
-				helpButton.m_isVisible = true;
+				if ( m_hudLayout != null )
+				{
+					ButtonWidget helpButton = m_hudLayout.getWidget( ButtonWidget.class, "HelpButton" );
+					helpButton.m_isVisible = true;
+				}
 			}
 		}
 
@@ -267,8 +273,11 @@ public class PlayerController extends FiniteStateMachine
 			{
 				m_help = null;
 				
-				ButtonWidget helpButton = m_hudLayout.getWidget( ButtonWidget.class, "HelpButton" );
-				helpButton.m_isVisible = false;
+				if ( m_hudLayout != null )
+				{
+					ButtonWidget helpButton = m_hudLayout.getWidget( ButtonWidget.class, "HelpButton" );
+					helpButton.m_isVisible = false;
+				}
 			}
 		}
 	}

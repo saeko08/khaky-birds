@@ -38,25 +38,25 @@
 	
 	<Entity type="StartTutorial" >
 		<localBounds minX='-2.4' minY='-4.0' maxX='2.4' maxY='4.0' />
-		<position x='2.4' y='4.0' z='60' />
+		<position x='2.4' y='4.0' z='40' />
 		
 		<PLACE_FIRST_FAN path="hud/tutorials/start/placeFirstFan.xml" >
-			<position x='2.4' y='6.0' z='60' />
+			<position x='2.4' y='6.0' z='40' />
 			<bounds minX='-2.4' minY='-1.82' maxX='2.4' maxY='1.82' />
 		</PLACE_FIRST_FAN>
 		
 		<REMOVE_FAN path="hud/tutorials/start/removeFan.xml" >
-			<position x='2.4' y='5.8' z='60' />
+			<position x='2.4' y='5.8' z='40' />
 			<bounds minX='-2.4' minY='-2.195' maxX='2.4' maxY='2.195' />
 		</REMOVE_FAN>
 		
 		<PLACE_SECOND_FAN path="hud/tutorials/start/placeSecondFan.xml" >
-			<position x='2.4' y='6.0' z='60' />
+			<position x='2.4' y='6.0' z='40' />
 			<bounds minX='-2.4' minY='-1.82' maxX='2.4' maxY='1.82' />
 		</PLACE_SECOND_FAN>
 		
 		<RELEASE_GHOST path="hud/tutorials/start/releaseGhost.xml" >
-			<position x='2.4' y='6.0' z='60' />
+			<position x='2.4' y='6.0' z='40' />
 			<bounds minX='-2.4' minY='-2.195' maxX='2.4' maxY='2.195' />
 		</RELEASE_GHOST>
 		
@@ -65,7 +65,7 @@
 	<!--  gameplay -->
 	
 	<Entity type="ExitDoor" >
-		<position x='1.84' y='7.5' z='70' />
+		<position x='1.84' y='7.33' z='50' />
 	</Entity>
 	
 	<Entity type="Fan" windFx="backgrounds/park_alleyway/leftWindFx.xml">

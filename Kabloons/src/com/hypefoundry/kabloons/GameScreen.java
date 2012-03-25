@@ -141,7 +141,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( Background.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BackgroundVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( AnimatedBackground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new AnimatedBackgroundVisual( m_world, m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Baloon.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BaloonVisual( m_resourceManager, parentEntity ); } } );
-		m_worldRenderer.register( ExitDoor.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ExitDoorVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( ExitDoor.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ExitDoorVisual( m_resourceManager, m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( Fan.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FanVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Toggle.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ToggleVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( BuzzSaw.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BuzzSawVisual( m_resourceManager, parentEntity ); } } );

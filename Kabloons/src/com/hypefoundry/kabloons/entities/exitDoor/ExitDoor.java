@@ -4,6 +4,7 @@
 package com.hypefoundry.kabloons.entities.exitDoor;
 
 import com.hypefoundry.engine.physics.events.CollisionEvent;
+import com.hypefoundry.engine.renderer2D.Color;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.EntityEvent;
@@ -24,7 +25,6 @@ public class ExitDoor extends Entity implements EntityEventListener, Toggled
 		Closed
 	}
 	
-	public String		m_openAnim;
 	String 				m_tag;
 	State				m_state;
 	

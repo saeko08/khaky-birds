@@ -282,7 +282,7 @@ public class StartTutorialController extends FiniteStateMachine
 			// give back the missing fan ( the left one, 'cause the right
 			// one is either already set on the screen, or is in the inventory )
 			// and allow to release of a ghost
-			m_player.setFansCount( 1, 0 );
+			m_player.changeFansCount( 1, 0 );
 			m_player.enableGhostRelease( true );
 		}
 		

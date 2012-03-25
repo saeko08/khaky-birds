@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureRegion atlasName='gameplay/atlas.png' x='288' y='0' w='288' h='134' alphaOp='blend' srcAlphaFunc='AF_One' destAlphaFunc='AF_One_Minus_Src_Alpha' />

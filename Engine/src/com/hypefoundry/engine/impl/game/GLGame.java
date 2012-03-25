@@ -55,12 +55,24 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	private Object 						m_stateChanged = new Object();
 	private long 						m_startTime = System.nanoTime();
 	
+	private static GLGame				s_theInstance = null;			
 	
 	/**
 	 * Constructor.
 	 */
 	public GLGame() 
 	{
+		s_theInstance = this;
+	}
+	
+	/**
+	 * Returns the singleton instance of the game. 
+	 * 
+	 * @return
+	 */
+	public static GLGame getInstance()
+	{
+		return s_theInstance;
 	}
 
 	@Override

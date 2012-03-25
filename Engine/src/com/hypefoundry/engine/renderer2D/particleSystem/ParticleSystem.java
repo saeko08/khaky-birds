@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.hypefoundry.engine.core.Resource;
+import com.hypefoundry.engine.impl.game.GLGame;
 import com.hypefoundry.engine.util.Arrays;
 import com.hypefoundry.engine.util.serialization.DataLoader;
 import com.hypefoundry.engine.util.serialization.xml.XMLDataLoader;
@@ -101,6 +102,7 @@ public class ParticleSystem extends Resource
 		new ParticlesFactoryData( TexturedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new TexturedParticleFactory(); } } ),
 		new ParticlesFactoryData( RandomlyTexturedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new RandomlyTexturedParticleFactory(); } } ),
 		new ParticlesFactoryData( TracerParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new TracerParticleFactory(); } } ),
+		new ParticlesFactoryData( LightShaftParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new LightShaftParticleFactory( GLGame.getInstance().getGraphics() ); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
@@ -108,7 +110,7 @@ public class ParticleSystem extends Resource
 	// ------------------------------------------------------------------------
 	ParticleEmitter[] 						m_emitters 		= new ParticleEmitter[0];
 	ParticleAffector[] 						m_affectors 	= new ParticleAffector[0];
-	public int								m_maxParticles;					
+	public int								m_maxParticles;
 	
 	/**
 	 * Default constructor ( required by the resources manager ).

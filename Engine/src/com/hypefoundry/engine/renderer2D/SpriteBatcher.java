@@ -24,7 +24,8 @@ public class SpriteBatcher
 	{
 		Lines,
 		Sprites,
-		ColoredSprites
+		ColoredSprites,
+		External
 	};
 			
 	public GLGraphics			m_graphics;
@@ -138,6 +139,23 @@ public class SpriteBatcher
 		
 		// clear the render state
 		m_currRenderState.clear();
+	}
+	
+	/**
+	 * Draws a mesh.
+	 * 
+	 * @param mesh
+	 * @param rs		render state
+	 */
+	public void drawMesh( Mesh mesh, RenderState rs )
+	{		
+		// we'll be drawing lines now, so flush the buffer if something else was drawn before
+		switchTo( DrawItem.External );
+		
+		// set the render state
+		setRenderState( rs );
+		
+		mesh.draw();
 	}
 	
 	/**
@@ -551,7 +569,7 @@ public class SpriteBatcher
 	 */
 	private void switchTo( DrawItem item )
 	{
-		if ( m_currentDrawItem != item )
+		if ( m_currentDrawItem != item || item == DrawItem.External )
 		{
 			flush();
 			

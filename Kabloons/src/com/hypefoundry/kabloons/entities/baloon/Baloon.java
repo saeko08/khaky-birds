@@ -21,12 +21,12 @@ public class Baloon extends Entity
 		Safe
 	};
 	
-	String 		m_floatingUpAnim;
-	String 		m_floatingLeftAnim;
-	String 		m_floatingRightAnim;
-	String		m_inVortexAnim;
-	String		m_deathAnim;
-	State		m_state;
+	String 			m_floatingUpAnim;
+	String 			m_floatingLeftAnim;
+	String 			m_floatingRightAnim;
+	String			m_inVortexAnim;
+	String			m_deathAnim;
+	State			m_state;
 	
 	/**
 	 * Initializes a baloon instance.

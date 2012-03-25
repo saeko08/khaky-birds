@@ -34,11 +34,13 @@ import com.hypefoundry.kabloons.entities.background.Background;
 import com.hypefoundry.kabloons.entities.background.BackgroundVisual;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
 import com.hypefoundry.kabloons.entities.baloon.BaloonController;
+import com.hypefoundry.kabloons.entities.baloon.BaloonPhysicalBody;
 import com.hypefoundry.kabloons.entities.baloon.BaloonVisual;
 import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSaw;
 import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSawPhysicalBody;
 import com.hypefoundry.kabloons.entities.buzzSaw.BuzzSawVisual;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoor;
+import com.hypefoundry.kabloons.entities.exitDoor.ExitDoorPhysicalBody;
 import com.hypefoundry.kabloons.entities.exitDoor.ExitDoorVisual;
 import com.hypefoundry.kabloons.entities.fan.Fan;
 import com.hypefoundry.kabloons.entities.fan.FanController;
@@ -67,7 +69,7 @@ import com.hypefoundry.kabloons.utils.UnlockedLevelsStorage;
 public class GameScreen extends Screen 
 {
 	private int									m_levelIdx;
-	private static int							m_levelsCount = 9;
+	private static int							m_levelsCount = 5;
 	
 	public World								m_world;
 	public Renderer2D							m_worldRenderer;
@@ -159,9 +161,9 @@ public class GameScreen extends Screen
 		
 		// register physics
 		m_world.attachView( m_physicsView );
-		m_physicsView.register( Baloon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( Baloon.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new BaloonPhysicalBody( parentEntity ); } } );
 		m_physicsView.register( Fan.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new FanPhysicalBody( parentEntity ); } } );
-		m_physicsView.register( ExitDoor.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
+		m_physicsView.register( ExitDoor.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new ExitDoorPhysicalBody( parentEntity ); } } );
 		m_physicsView.register( Toggle.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new CollisionBody( parentEntity, true ); } } );
 		m_physicsView.register( BuzzSaw.class , new PhysicalBodyFactory() { @Override public PhysicalBody instantiate( Entity parentEntity ) { return new BuzzSawPhysicalBody( parentEntity ); } } );
 		
@@ -295,7 +297,7 @@ public class GameScreen extends Screen
 
 	public void loadNextLevel() 
 	{		
-		if ( m_levelIdx < m_levelsCount - 1 )
+		if ( m_levelIdx < m_levelsCount )
 		{
 			loadLevel( m_levelIdx + 1 );
 		}
@@ -316,7 +318,7 @@ public class GameScreen extends Screen
 	 */
 	public void unlockNextLevel()
 	{
-		if ( m_levelIdx < m_levelsCount - 1 )
+		if ( m_levelIdx < m_levelsCount )
 		{
 			int nextLevelIdx = m_levelIdx + 1;
 			

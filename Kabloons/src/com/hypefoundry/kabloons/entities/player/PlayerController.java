@@ -310,11 +310,7 @@ public class PlayerController extends FiniteStateMachine
 		@Override
 		public void onButtonPressed( String buttonId ) 
 		{
-			if ( buttonId.equals( "ExitToMenu" ) )
-			{	
-				m_screen.exitToMenu();
-			}
-			else if ( buttonId.equals( "NextLevel" ) )
+			if ( buttonId.equals( "NextLevel" ) )
 			{
 				m_screen.loadNextLevel();
 			}
@@ -346,11 +342,7 @@ public class PlayerController extends FiniteStateMachine
 		@Override
 		public void onButtonPressed( String buttonId ) 
 		{
-			if ( buttonId.equals( "ExitToMenu" ) )
-			{	
-				m_screen.exitToMenu();
-			}
-			else if ( buttonId.equals( "RetryLevel" ) )
+			if ( buttonId.equals( "RetryLevel" ) )
 			{
 				m_screen.reloadLevel();
 			}

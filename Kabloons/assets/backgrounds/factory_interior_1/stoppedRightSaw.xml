@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureRegion atlasName='backgrounds/factory_interior_1/atlas.png' x='301' y='801' w='105' h='105' alphaOp='blend' srcAlphaFunc='AF_One' destAlphaFunc='AF_One_Minus_Src_Alpha' />

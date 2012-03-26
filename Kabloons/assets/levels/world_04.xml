@@ -6,7 +6,7 @@
 		<Resource type="Texture" path="backgrounds/factory_interior_1/atlas.png"/> 
 	</ResourcesCache>
 
-	<Entity type="AnimatedBackground" path="backgrounds/factory_interior_1/background.xml" >
+	<Entity type="Background" path="backgrounds/factory_interior_1/background.xml" >
 		<localBounds minX='-2.4' minY='-4.0' minZ='-0.5' maxX='2.4' maxY='4.0' maxZ='0.5' />
 		<position x='2.4' y='4.0' z='100' />
 	</Entity>
@@ -22,32 +22,66 @@
 	
 	
 	<!--  buzzsaws  -->
-	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw1.xml" fx="backgrounds/factory_interior_1/saw1Fx.xml" tag="Saw1" >
-		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+	 
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_1/stoppedRightSaw.xml" 
+	 						runningPath="backgrounds/factory_interior_1/runningRightSaw.xml" 
+	 						fx="backgrounds/factory_interior_1/saw1Fx.xml" tag="Saw1" 
+	 						dir="-1" >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='1.015' y='7.02' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw2.xml" fx="backgrounds/factory_interior_1/saw2Fx.xml" tag="Saw2" >
-		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+	<Entity type="Background" path="backgrounds/factory_interior_1/saw1.xml" >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
+		<position x='1.015' y='7.02' z='64' />
+	</Entity>
+	
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_1/stoppedLeftSaw.xml" 
+							runningPath="backgrounds/factory_interior_1/runningLeftSaw.xml" 
+							fx="backgrounds/factory_interior_1/saw2Fx.xml" tag="Saw2"
+							dir="1" >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='2.715' y='6.39' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw3.xml" fx="backgrounds/factory_interior_1/saw3Fx.xml" tag="Saw3" >
-		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+	<Entity type="Background" path="backgrounds/factory_interior_1/saw2.xml" >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
+		<position x='2.715' y='6.39' z='64' />
+	</Entity>
+	
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_1/stoppedRightSaw.xml" 
+							runningPath="backgrounds/factory_interior_1/runningRightSaw.xml" 
+							fx="backgrounds/factory_interior_1/saw3Fx.xml" tag="Saw3" 
+							dir="-1" >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='4.455' y='4.6' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw4.xml" fx="backgrounds/factory_interior_1/saw4Fx.xml" tag="Saw4" >
-		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+	<Entity type="Background" path="backgrounds/factory_interior_1/saw3.xml" >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
+		<position x='4.455' y='4.6' z='64' />
+	</Entity>
+	
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_1/stoppedRightSaw.xml" 
+							runningPath="backgrounds/factory_interior_1/runningRightSaw.xml" 
+							fx="backgrounds/factory_interior_1/saw4Fx.xml" tag="Saw4" 
+							dir="-1" >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='2.295' y='3.64' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" animPath="backgrounds/factory_interior_1/saw5.xml" fx="backgrounds/factory_interior_1/saw5Fx.xml" tag="Saw5" >
-		<localBounds minX='-0.525' minY='-0.55' maxX='0.525' maxY='0.55' />
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_1/stoppedLeftSaw.xml" 
+							runningPath="backgrounds/factory_interior_1/runningLeftSaw.xml" 
+							fx="backgrounds/factory_interior_1/saw5Fx.xml" tag="Saw5" 
+							dir="1">
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='0.405' y='4.34' z='65' />
 	</Entity>
-
+	
+	<Entity type="Background" path="backgrounds/factory_interior_1/saw5.xml" >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
+		<position x='0.405' y='4.34' z='64' />
+	</Entity>
 	
 	<!--  toggles  -->
 	

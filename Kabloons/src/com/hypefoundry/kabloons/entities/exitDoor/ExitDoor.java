@@ -67,7 +67,7 @@ public class ExitDoor extends Entity implements EntityEventListener, Toggled
 		}
 		
 		// transform the exit area bounds to the world space
-		m_exitAreaBoundsWorldSpace = new BoundingBox( -0.69f, 0.01f, 0.59f, 0.67f );
+		m_exitAreaBoundsWorldSpace = new BoundingBox( -0.69f, -0.2f, 0.59f, 0.67f );
 		m_exitAreaBoundsWorldSpace.translate( getPosition() );
 	}
 

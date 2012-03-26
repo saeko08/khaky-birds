@@ -22,8 +22,10 @@ public class BuzzSaw extends Entity implements EntityEventListener, Toggled
 		SwitchedOff
 	}
 	
-	public String			m_animPath;
+	public String			m_stoppedImagePath;
+	public String			m_runningImagePath;
 	public String			m_fxPath;
+	float					m_rotationDir;
 	String					m_tag;
 	State					m_state;
 	
@@ -44,8 +46,10 @@ public class BuzzSaw extends Entity implements EntityEventListener, Toggled
 	public void onLoad( DataLoader loader )
 	{
 		m_tag = loader.getStringValue( "tag" );
-		m_animPath = loader.getStringValue( "animPath" );
+		m_stoppedImagePath = loader.getStringValue( "stoppedPath" );
+		m_runningImagePath = loader.getStringValue( "runningPath" );
 		m_fxPath = loader.getStringValue( "fx" );
+		m_rotationDir = loader.getFloatValue( "dir", 1.0f );
 	}
 	
 	@Override

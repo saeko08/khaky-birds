@@ -1,4 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Animation frameDuration='1.0' atlasName='backgrounds/factory_interior_1/atlas.png' alphaOp='test' >
-	<Frame type="StaticRegion" x='513' y='801' w='105' h='110' />
-</Animation>
+<TextureRegion atlasName='backgrounds/factory_interior_1/atlas.png' x='106' y='907' w='105' h='105' alphaOp='blend' srcAlphaFunc='AF_One' destAlphaFunc='AF_One_Minus_Src_Alpha' />

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParticleSystem >
+	<Emitter type="LineParticleEmitter" frequency='0.5' amountEmittedEachTick='1' totalAmount='8' timeToLive='4' particleType="LightShaftParticle" >
+		<LightShaft brightnessRange='0.3' minWidth='1.5' widthRange='0.5' >
+			<color r='255' g='241' b='48' a='50' />
+		</LightShaft>	
+		<lineStart x='-5.0' y='-3.5' z='0' />
+		<lineEnd x='-4.5' y='-7.0' z='0' />
+		<velocity x='0' y='0' z='0' />
+	</Emitter>
+	
+	<Affector type="LifetimeAffector" mode="InvExp" modifier="AbsSin" value="Alpha" /> 
+</ParticleSystem>

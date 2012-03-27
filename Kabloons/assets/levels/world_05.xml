@@ -6,12 +6,17 @@
 		<Resource type="Texture" path="backgrounds/factory_interior_2/atlas.png"/> 
 	</ResourcesCache>
 
-	<Entity type="AnimatedBackground" path="backgrounds/factory_interior_2/background.xml" >
+	<Entity type="Background" path="backgrounds/factory_interior_2/background.xml" >
 		<localBounds minX='-2.4' minY='-4.0' minZ='-0.5' maxX='2.4' maxY='4.0' maxZ='0.5' />
 		<position x='2.4' y='4.0' z='100' />
 	</Entity>
 	
 	<!-- background anims -->
+	
+	<Entity type="FXBackground" path="backgrounds/factory_interior_2/sunLightShaftFx.xml" >
+		<localBounds minX='-5.0' minY='-5.0' maxX='0.0' maxY='0.2' />
+		<position x='5.0' y='6.55' z='45' />
+	</Entity>
 	
 	<!--  gameplay -->
 	
@@ -22,36 +27,82 @@
 	
 	<!--  buzzsaws  -->
 	
-	<Entity type="BuzzSaw" fx="backgrounds/factory_interior_2/saw1Fx.xml" tag="Saw1" coordinatesMode='TopLeft' >
-		<localBounds minX='-0.505' minY='-0.51' maxX='0.505' maxY='0.51' />
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_2/stoppedRightSaw.xml" 
+	 						runningPath="backgrounds/factory_interior_2/runningRightSaw.xml" 
+	 						dir="-1"
+	 						fx="backgrounds/factory_interior_2/saw1Fx.xml" 
+							tag="Saw1" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='0.38' y='7.42' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" fx="backgrounds/factory_interior_2/saw2Fx.xml" tag="Saw2" coordinatesMode='TopLeft' >
-		<localBounds minX='-0.505' minY='-0.51' maxX='0.505' maxY='0.51' />
+	<Entity type="Background" path="backgrounds/factory_interior_2/saw1.xml" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
+		<position x='0.38' y='7.41' z='64' />
+	</Entity>
+	 
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_2/stoppedRightSaw.xml" 
+	 						runningPath="backgrounds/factory_interior_2/runningRightSaw.xml" 
+	 						dir="-1"
+	 						fx="backgrounds/factory_interior_2/saw2Fx.xml" 
+	 						tag="Saw2" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='3.43' y='7.3' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" fx="backgrounds/factory_interior_2/saw3Fx.xml" tag="Saw3" coordinatesMode='TopLeft' >
-		<localBounds minX='-0.505' minY='-0.51' maxX='0.505' maxY='0.51' />
+	
+	<Entity type="Background" path="backgrounds/factory_interior_2/saw2.xml" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
+		<position x='3.43' y='7.3' z='64' />
+	</Entity>
+	 
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_2/stoppedRightSaw.xml" 
+	 						runningPath="backgrounds/factory_interior_2/runningRightSaw.xml" 
+	 						dir="-1"
+	 						fx="backgrounds/factory_interior_2/saw3Fx.xml" 
+	 						tag="Saw3" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='2.11' y='5.57' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" fx="backgrounds/factory_interior_2/saw4Fx.xml" tag="Saw4" coordinatesMode='TopLeft' >
-		<localBounds minX='-0.525' minY='-0.51' maxX='0.525' maxY='0.51' />
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_2/stoppedRightSaw.xml" 
+	 						runningPath="backgrounds/factory_interior_2/runningRightSaw.xml" 
+	 						dir="-1"
+	 						fx="backgrounds/factory_interior_2/saw4Fx.xml" 
+	 						tag="Saw4" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='1.39' y='4.25' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" fx="backgrounds/factory_interior_2/saw5Fx.xml" tag="Saw5" coordinatesMode='TopLeft' >
-		<localBounds minX='-0.525' minY='-0.505' maxX='0.525' maxY='0.505' />
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_2/stoppedRightSaw.xml" 
+	 						runningPath="backgrounds/factory_interior_2/runningRightSaw.xml" 
+	 						dir="-1"
+	 						fx="backgrounds/factory_interior_2/saw5Fx.xml" 
+	 						tag="Saw5" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='0.52' y='3.06' z='65' />
 	</Entity>
 	
-	<Entity type="BuzzSaw" fx="backgrounds/factory_interior_2/saw6Fx.xml" tag="Saw6" coordinatesMode='TopLeft' >
-		<localBounds minX='-0.525' minY='-0.51' maxX='0.525' maxY='0.51' />
+
+	<Entity type="Background" path="backgrounds/factory_interior_2/saw5.xml" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
+		<position x='0.52' y='3.08' z='64' />
+	</Entity>
+
+	<Entity type="BuzzSaw" 	stoppedPath="backgrounds/factory_interior_2/stoppedRightSaw.xml" 
+	 						runningPath="backgrounds/factory_interior_2/runningRightSaw.xml" 
+	 						dir="-1"
+	 						fx="backgrounds/factory_interior_2/saw6Fx.xml" 
+	 						tag="Saw6" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
 		<position x='3.22' y='3.09' z='65' />
 	</Entity>
-	
+
+	<Entity type="Background" path="backgrounds/factory_interior_2/saw6.xml" coordinatesMode='TopLeft' >
+		<localBounds minX='-0.525' minY='-0.525' maxX='0.525' maxY='0.525' />
+		<position x='3.22' y='3.1' z='64' />
+	</Entity>
+
 	<!--  toggles  -->
 	
 	<Entity type="Toggle" offAnim="backgrounds/factory_interior_2/leftLeverToggleOff.xml" onAnim="backgrounds/factory_interior_2/leftLeverToggleOn.xml" tag="Switch1" entityTag="Saw6" coordinatesMode='TopLeft' >

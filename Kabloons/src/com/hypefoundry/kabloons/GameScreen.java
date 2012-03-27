@@ -32,6 +32,8 @@ import com.hypefoundry.kabloons.entities.background.AnimatedBackground;
 import com.hypefoundry.kabloons.entities.background.AnimatedBackgroundVisual;
 import com.hypefoundry.kabloons.entities.background.Background;
 import com.hypefoundry.kabloons.entities.background.BackgroundVisual;
+import com.hypefoundry.kabloons.entities.background.FXBackground;
+import com.hypefoundry.kabloons.entities.background.FXBackgroundVisual;
 import com.hypefoundry.kabloons.entities.baloon.Baloon;
 import com.hypefoundry.kabloons.entities.baloon.BaloonController;
 import com.hypefoundry.kabloons.entities.baloon.BaloonPhysicalBody;
@@ -111,6 +113,7 @@ public class GameScreen extends Screen
 		// serialization support
 		m_world.registerEntity( Background.class, new EntityFactory() { @Override public Entity create() { return new Background(); } } );
 		m_world.registerEntity( AnimatedBackground.class, new EntityFactory() { @Override public Entity create() { return new AnimatedBackground(); } } );
+		m_world.registerEntity( FXBackground.class, new EntityFactory() { @Override public Entity create() { return new FXBackground(); } } );
 		m_world.registerEntity( Baloon.class, new EntityFactory() { @Override public Entity create() { return new Baloon(); } } );
 		m_world.registerEntity( ExitDoor.class, new EntityFactory() { @Override public Entity create() { return new ExitDoor( m_assetsFactory ); } } );
 		m_world.registerEntity( Fan.class, new EntityFactory() { @Override public Entity create() { return new Fan(); } } );
@@ -142,6 +145,7 @@ public class GameScreen extends Screen
 		m_world.attachView( m_worldRenderer );
 		m_worldRenderer.register( Background.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BackgroundVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( AnimatedBackground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new AnimatedBackgroundVisual( m_world, m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( FXBackground.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FXBackgroundVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Baloon.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BaloonVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( ExitDoor.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new ExitDoorVisual( m_resourceManager, m_game.getGraphics(), parentEntity ); } } );
 		m_worldRenderer.register( Fan.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FanVisual( m_resourceManager, parentEntity ); } } );

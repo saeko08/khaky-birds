@@ -13,10 +13,14 @@
 	
 	<!-- background anims -->
 	
+	<Entity type="FXBackground" path="backgrounds/factory_interior_1/sunLightShaftFx.xml" >
+		<localBounds minX='-5.0' minY='-5.0' maxX='0.0' maxY='0.2' />
+		<position x='5.0' y='6.55' z='45' />
+	</Entity>
+	
 	<!--  gameplay -->
 	
 	<Entity type="ExitDoor" tag="ExitDoor" state="Closed" >
-		<position x='2.4' y='7.91' z='50' />
 		<position x='2.4' y='7.91' z='50' />
 	</Entity>
 	

@@ -27,6 +27,7 @@ public class LightShaft
 
 	// runtime info
 	private ColoredMesh		m_geometry;
+	private float			m_maxAlpha;
 	private Vector3			m_tmpVec 		= new Vector3();
 	
 	/**
@@ -50,6 +51,7 @@ public class LightShaft
 		}
 		
 		// setup colors
+		m_maxAlpha = color.m_vals[Color.Alpha];
 		m_geometry.m_vertexColor[0].set( color );
 		m_geometry.m_vertexColor[1].set( color );
 		m_geometry.m_vertexColor[2].set( color );
@@ -64,7 +66,7 @@ public class LightShaft
 	 */
 	public void setAlpha( float alpha )
 	{
-		m_geometry.m_vertexColor[0].m_vals[Color.Alpha] = alpha;
+		m_geometry.m_vertexColor[0].m_vals[Color.Alpha] = alpha * m_maxAlpha;
 	}
 	
 	/**

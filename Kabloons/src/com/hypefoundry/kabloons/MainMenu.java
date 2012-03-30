@@ -127,7 +127,7 @@ public class MainMenu extends Screen
 		m_worldRenderer.register( MenuItem.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new MenuItemVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( LevelItem.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new LevelItemVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( FogOfWar.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new FogOfWarVisual( parentEntity ); } } );
-
+		
 		// register controllers
 		m_world.attachView( m_controllersView );
 		m_controllersView.register( MenuManager.class, new EntityControllerFactory() { @Override public EntityController instantiate( Entity parentEntity ) { return new MenuManagerController( parentEntity, m_world, menuScreen, m_worldRenderer.getCamera() ); } } );
@@ -170,7 +170,6 @@ public class MainMenu extends Screen
 	public void dispose() 
 	{
 	}
-
 
 	/**
 	 * Executes an option associated with a particular menu item

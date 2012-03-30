@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParticleSystem >
+	<!-- <Emitter type="BoxParticleEmitter" uniformDistribution="true" horizDistribution='1.0' vertDistribution='1.0' timeToLive='10' particleType="CircleParticle" >
+		<CircleParticle stencilOp="SO_Write_Or" radius='1.5' >
+			<color r='255' g='255' b='255' a='255' />
+		</CircleParticle>	
+		<localBounds minX='-3.0' minY='-4.5' maxX='3.0' maxY='4.5' />
+	</Emitter>
+	 -->
+	 
+	 <Emitter type="LineParticleEmitter" frequency='0.1' timeToLive='100' uniformDistribution='0.75' particleType="CircleParticle" >
+		<CircleParticle stencilOp="SO_Write_Or" radius='1.5' segments='64' >
+			<color r='255' g='255' b='255' a='255' />
+		</CircleParticle>	
+		<lineStart x='-2.9' y='0' z='0' />
+		<lineEnd x='2.9' y='0' z='0' />
+	</Emitter>
+	
+	<Affector type="BubblesAffector" /> 
+</ParticleSystem>
+

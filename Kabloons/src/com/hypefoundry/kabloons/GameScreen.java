@@ -122,7 +122,7 @@ public class GameScreen extends Screen
 		m_world.registerEntity( BuzzSaw.class, new EntityFactory() { @Override public Entity create() { return new BuzzSaw(); } } );
 		m_world.registerEntity( StartTutorial.class, new EntityFactory() { @Override public Entity create() { return new StartTutorial(); } } );
 		m_world.registerEntity( Help.class, new EntityFactory() { @Override public Entity create() { return new Help(); } } );
-		
+
 		// load the world
 		try 
 		{

@@ -29,6 +29,8 @@ public class ColoredMesh implements Mesh
 	private float[]				m_flatVertexData;
 	private final short			m_vertexStride = 6;
 	
+	private int					m_numElements;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -50,6 +52,15 @@ public class ColoredMesh implements Mesh
 		}
 		
 		m_indices = new short[indicesCount];
+		
+		if ( indicesCount > 0 )
+		{
+			m_numElements = indicesCount;
+		}
+		else
+		{
+			m_numElements = verticesCount;
+		}
 	}
 	
 	/**
@@ -87,7 +98,7 @@ public class ColoredMesh implements Mesh
 	public void draw()
 	{
 		m_geometry.bind();
-		m_geometry.draw( GL10.GL_TRIANGLES, 0, m_vertices.length );
+		m_geometry.draw( GL10.GL_TRIANGLES, 0, m_numElements );
 		m_geometry.unbind();	
 	}
 }

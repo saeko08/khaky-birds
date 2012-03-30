@@ -581,6 +581,12 @@ public final class Vector3
 			m_y = node.getFloatValue( "y" );
 			m_z = node.getFloatValue( "z" );
 		}
+		else
+		{
+			m_x = 0.0f;
+			m_y = 0.0f;
+			m_z = 0.0f;
+		}
 	}
 	
 	/**

@@ -7,6 +7,7 @@ import java.util.*;
 
 import com.hypefoundry.engine.game.Game;
 
+
 /**
  * Resources manager interface.
  * 

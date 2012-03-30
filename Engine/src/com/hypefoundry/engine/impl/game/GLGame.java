@@ -26,6 +26,7 @@ import com.hypefoundry.engine.impl.core.AndroidAudio;
 import com.hypefoundry.engine.impl.core.AndroidFileIO;
 import com.hypefoundry.engine.impl.core.AndroidInput;
 
+
 /**
  * A game that uses openGL renderer.
  * 
@@ -45,17 +46,22 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	private GLSurfaceView 				m_glView;
 	private GLGraphics 					m_graphics;
 	private Audio 						m_audio;
-	private AndroidInput 				m_input;
+	AndroidInput 						m_input;
 	private FileIO 						m_fileIO;
-	private Screen 						m_screen;
-	private Screen 						m_newScreen = null;
+	Screen 								m_screen;
 	private WakeLock 					m_wakeLock;
+	long 								m_startTime = System.nanoTime();
 	
 	private GLGameState 				m_state = GLGameState.Initialized;
 	private Object 						m_stateChanged = new Object();
-	private long 						m_startTime = System.nanoTime();
 	
-	private static GLGame				s_theInstance = null;			
+	private static GLGame				s_theInstance = null;
+	
+	// operations
+	GameLoopOperation					m_gameLoopOperation;
+	private ScreenChangeTransaction		m_screenChangeTransaction;
+	private GameOperation				m_operation;
+	
 	
 	/**
 	 * Constructor.
@@ -104,6 +110,11 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		// setup a wake lock
 		PowerManager powerManager = (PowerManager)getSystemService( Context.POWER_SERVICE );
 		m_wakeLock = powerManager.newWakeLock( PowerManager.FULL_WAKE_LOCK, "GLGame" );
+		
+		// initialize the operations
+		m_gameLoopOperation = new GameLoopOperation();
+		m_screenChangeTransaction = new ScreenChangeTransaction( this );
+		m_operation = null;
 	}
 	
 	@Override
@@ -133,6 +144,7 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			}
 		}
 		
+		m_screenChangeTransaction.onPause();		
 		m_wakeLock.release();
 		m_glView.onPause();
 		
@@ -148,34 +160,18 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		{
 			state = m_state;
 		}
-		
-		if ( m_newScreen != null )
-		{
-			// there's a new screen waiting - change it
-			executeScreenChange();
-		}
-		
-		if ( m_screen == null )
-		{
-			return;
-		}
-		
+			
 		switch( state )
 		{
 			case Running:
-			{
-				// update and draw the screen, if the game's running, providing it with a proper time delta
+			{			
+				// update the system timer
 				float deltaTime = ( System.nanoTime() - m_startTime ) / 1000000000.0f;
 				m_startTime = System.nanoTime();
-				try
+				
+				if ( m_operation != null )
 				{
-					m_input.update( deltaTime );
-					m_screen.update( deltaTime );
-					m_screen.present( deltaTime );
-				}
-				catch( Exception ex )
-				{
-					ex.printStackTrace();
+					m_operation.update( deltaTime, this );
 				}
 				break;
 			}
@@ -187,7 +183,11 @@ public abstract class GLGame extends Activity implements Game, Renderer
 				// it's finished before we can move on and then notify
 				// other locked threads that (i.e. the one that's running
 				// the onPause method ), that it's safe to proceed
-				m_screen.pause();
+				if ( m_screen != null )
+				{
+					m_screen.pause();
+				}
+				
 				synchronized( m_stateChanged ) 
 				{
 					m_state = GLGameState.Idle;
@@ -202,8 +202,11 @@ public abstract class GLGame extends Activity implements Game, Renderer
 				// to end before moving on and then notify
 				// other locked threads that (i.e. the one that's running
 				// the onPause method ), that it's safe to proceed
-				m_screen.pause();
-				m_screen.dispose();
+				if ( m_screen != null )
+				{
+					m_screen.pause();
+					m_screen.dispose();
+				}
 					
 				synchronized( m_stateChanged ) 
 				{
@@ -241,6 +244,14 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			{
 				m_screen.resume();
 			}
+			
+			// inform the operations about the new surface creation
+			m_screenChangeTransaction.onSurfaceCreated( this );
+			
+			// start running the game loop
+			switchToGameLoop();
+			
+			// reset the timer
 			m_startTime = System.nanoTime();
 		}
 	}
@@ -278,34 +289,8 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			throw new IllegalArgumentException( "Screen must not be null" );
 		}
 		
-		m_newScreen = screen;
-	}
-	
-	/**
-	 * Executes the screen change.
-	 */
-	private void executeScreenChange()
-	{	
-		// close the current screen
-		if ( m_screen != null )
-		{
-			m_screen.pause();
-			m_screen.dispose();
-		}
-		
-		// clear the input
-		m_input.clear();
-		
-		// start up the new screen
-		if ( m_newScreen != null )
-		{
-			m_newScreen.resume();
-			m_newScreen.update(0);
-		}
-		
-		// memorize the new screen's instance
-		m_screen = m_newScreen;
-		m_newScreen = null;
+		m_operation = m_screenChangeTransaction;
+		m_screenChangeTransaction.initialize( this, screen );
 	}
 
 	@Override
@@ -337,4 +322,27 @@ public abstract class GLGame extends Activity implements Game, Renderer
 			super.onBackPressed();
 		}
 	}
+	
+	// ------------------------------------------------------------------------
+	// Game operations management
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * Sets a new loading screen factory.
+	 * 
+	 * @param loadingScreenFactory
+	 */
+	public void setLoadingScreen( LoadingScreenFactory loadingScreenFactory )
+	{
+		m_screenChangeTransaction.setLoadingScreen( loadingScreenFactory );
+	}
+	
+	/**
+	 * Switches to the main game loop operation
+	 */
+	void switchToGameLoop()
+	{
+		m_operation = m_gameLoopOperation;
+	}
+
 }

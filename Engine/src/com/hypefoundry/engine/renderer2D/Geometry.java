@@ -136,8 +136,13 @@ public class Geometry
 	
 	/**
 	 * Renders the geometry.
+	 * 
+	 * @param primitiveType
+	 * @param offset			offset of the first index ( if we're using the indices )
+	 * @param numElements		how many elements should be drawn
+	 * 
 	 */
-	public void draw( int primitiveType, int offset, int numVertices ) 
+	public void draw( int primitiveType, int offset, int numElements ) 
 	{
 		int verticesCount = m_vertices.limit();
 		if ( verticesCount <= 0 )
@@ -149,11 +154,11 @@ public class Geometry
 		if( m_indices != null ) 
 		{
 			m_indices.position( offset );
-			gl.glDrawElements( primitiveType, numVertices, GL10.GL_UNSIGNED_SHORT, m_indices );
+			gl.glDrawElements( primitiveType, numElements, GL10.GL_UNSIGNED_SHORT, m_indices );
 		} 
 		else 
 		{
-			gl.glDrawArrays( primitiveType, offset, numVertices );
+			gl.glDrawArrays( primitiveType, offset, numElements );
 		}
 	}
 	

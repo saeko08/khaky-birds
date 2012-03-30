@@ -40,17 +40,17 @@ public class RenderState
 			return false;
 		}
 		
-		if ( !m_alphaOperation.equals( rhs.m_alphaOperation ) )
+		if ( m_alphaOperation != rhs.m_alphaOperation )
 		{
 			return false;
 		}
 		
-		if ( !m_srcAlphaFunc.equals( rhs.m_srcAlphaFunc ) )
+		if ( m_srcAlphaFunc != rhs.m_srcAlphaFunc )
 		{
 			return false;
 		}
 		
-		if ( !m_destAlphaFunc.equals( rhs.m_destAlphaFunc ) )
+		if ( m_destAlphaFunc != rhs.m_destAlphaFunc )
 		{
 			return false;
 		}
@@ -74,8 +74,11 @@ public class RenderState
 	public void clear()
 	{
 		m_texture = null;
-		m_alphaOperation = AlphaOp.AO_None;
-		m_stencilOp = StencilOp.SO_None;
+		m_alphaOperation = null;
+		m_stencilOp = null;
+		m_srcAlphaFunc = null;
+		m_destAlphaFunc = null;
+		m_lineWidth = -1;
 	}
 	
 	/**
@@ -320,6 +323,18 @@ public class RenderState
 			m_alphaOperation = AlphaOp.AO_None;
 		}
 		
+		return this;
+	}
+	
+	/**
+	 * Sets a new stencil operation.
+	 * 
+	 * @param stencilOp
+	 * @return
+	 */
+	public RenderState setStencilOp( StencilOp stencilOp )
+	{
+		m_stencilOp = stencilOp;
 		return this;
 	}
 }

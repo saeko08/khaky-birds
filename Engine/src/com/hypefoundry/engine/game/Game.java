@@ -2,6 +2,7 @@ package com.hypefoundry.engine.game;
 
 import com.hypefoundry.engine.core.*;
 
+
 /** Main game interface, providing the ability to query the core engine systems.
  * 
  * The game manages the game screens @see Screen.

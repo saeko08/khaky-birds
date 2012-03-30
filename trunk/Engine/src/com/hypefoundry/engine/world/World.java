@@ -232,6 +232,11 @@ public class World implements Updatable
 	 */
 	public void detachView( WorldView view )
 	{
+		if ( view == null )
+		{
+			return;
+		}
+		
 		// remove all entities from the view
 		int count = m_entities.size();
 		for( int i = 0; i < count; ++i )

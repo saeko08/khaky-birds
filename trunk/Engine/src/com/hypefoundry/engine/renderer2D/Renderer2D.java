@@ -39,6 +39,7 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	private SpatialGrid2D						m_visualsGrid;
 	private List< EntityVisual >				m_visuals;
 	private SpriteBatcher						m_batcher = null;
+	private boolean								m_additiveMode = false;
 	
 	private EntityVisual[]						m_queryResult = new EntityVisual[MAX_ENTITIES];
 	
@@ -112,12 +113,21 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		// update the grid
 		m_visualsGrid.update();
 		
-		// set the render state
 		GL10 gl = m_graphics.getGL();
-		gl.glClear( GL10.GL_COLOR_BUFFER_BIT | GL10.GL_STENCIL_BUFFER_BIT );
+		
+		// clear the buffers
+		if ( m_additiveMode )
+		{
+			gl.glClear( GL10.GL_STENCIL_BUFFER_BIT );		
+		}
+		else
+		{
+			gl.glClear( GL10.GL_COLOR_BUFFER_BIT | GL10.GL_STENCIL_BUFFER_BIT );
+		}
+		
+		// set the render state
 		m_camera.setViewportAndMatrices();
-
-		gl.glDisable( GL10.GL_DEPTH_TEST );		// clear the buffers
+		gl.glDisable( GL10.GL_DEPTH_TEST );
 		
 		// draw the visuals, sorting them first in their Z order		
 		int count = m_visualsGrid.getPotentialColliders( m_camera.getFrustum(), m_queryResult );
@@ -132,6 +142,22 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		m_batcher.flush();
 	}
 	
+	/**
+	 * Enables/disables the mode in which the renderer will not clean
+	 * the color buffer.
+	 * 
+	 * Ideal for situations where we want to have two cooperating renderers - one
+	 * draws the background, the other one draws on top of that.
+	 * 
+	 * Stencil buffer will be cleaned though.
+	 * 
+	 * @param enable
+	 * @return
+	 */
+	public void setAdditiveMode( boolean enable )
+	{
+		m_additiveMode = enable;
+	}
 	
 	@Override
 	public void onEntityAdded( Entity entity )

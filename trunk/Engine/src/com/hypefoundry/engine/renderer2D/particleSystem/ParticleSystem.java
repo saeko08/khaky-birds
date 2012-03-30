@@ -92,6 +92,7 @@ public class ParticleSystem extends Resource
 			new AffectorsFactoryData( LifetimeAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new LifetimeAffector(); } } ),
 			new AffectorsFactoryData( ClearSkyAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new ClearSkyAffector(); } } ),
 			new AffectorsFactoryData( AlphaAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new AlphaAffector(); } } ),
+			new AffectorsFactoryData( BubblesAffector.class, new AffectorFactory() { @Override public ParticleAffector create() { return new BubblesAffector(); } } ),
 	};
 	
 	// ------------------------------------------------------------------------
@@ -103,6 +104,7 @@ public class ParticleSystem extends Resource
 		new ParticlesFactoryData( RandomlyTexturedParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new RandomlyTexturedParticleFactory(); } } ),
 		new ParticlesFactoryData( TracerParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new TracerParticleFactory(); } } ),
 		new ParticlesFactoryData( LightShaftParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new LightShaftParticleFactory( GLGame.getInstance().getGraphics() ); } } ),
+		new ParticlesFactoryData( CircleParticle.class, new AbstractParticlesFactory() { @Override public ParticlesFactory create() { return new CircleParticleFactory( GLGame.getInstance().getGraphics() ); } } ),
 	};
 	
 	// ------------------------------------------------------------------------

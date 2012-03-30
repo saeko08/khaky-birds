@@ -28,7 +28,7 @@ public abstract class ParticleEmitter
 	public ParticleEmitter( ) 
 	{
 		m_particlesCount = 0;
-		m_emissionFrequency = 0;
+		m_emissionFrequency = 0.01f;
 		m_timeToLive = 0;
 		m_numEmittedEachTick = 0;
 
@@ -161,7 +161,7 @@ public abstract class ParticleEmitter
 	void load( DataLoader loader, ResourceManager resMgr )
 	{
 		// load the basic parameters
-		m_emissionFrequency 			= loader.getFloatValue( "frequency" );
+		m_emissionFrequency 			= Math.max( loader.getFloatValue( "frequency" ), 0.01f );
 		m_timeToLive 					= loader.getFloatValue( "timeToLive" );
 		m_numEmittedEachTick			= loader.getIntValue( "amountEmittedEachTick" );
 		m_particlesCount				= loader.getIntValue( "totalAmount" );

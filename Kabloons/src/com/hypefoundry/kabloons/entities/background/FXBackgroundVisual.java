@@ -42,4 +42,13 @@ public class FXBackgroundVisual extends EntityVisual
 		Vector3 pos = m_entity.getPosition();
 		m_player.draw( pos.m_x, pos.m_y, batcher, deltaTime );
 	}
+	
+	@Override
+	public void onRemoved()
+	{
+		if ( m_player != null )
+		{
+			m_player.release();
+		}
+	}
 }

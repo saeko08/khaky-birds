@@ -71,4 +71,13 @@ public class ExitDoorVisual extends EntityVisual
 		batcher.drawSprite( pos, bs, m_frontImage );
 	
 	}
+	
+	@Override
+	public void onRemoved()
+	{
+		if ( m_shaftsFxPlayer != null )
+		{
+			m_shaftsFxPlayer.release();
+		}
+	}
 }

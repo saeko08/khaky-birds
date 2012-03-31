@@ -77,5 +77,14 @@ public class FanVisual extends EntityVisual
 		// play the wind effect
 		m_windPlayer.draw( pos.m_x, pos.m_y, batcher, deltaTime * m_rotationSpeed );
 	}
+	
+	@Override
+	public void onRemoved()
+	{
+		if ( m_windPlayer != null )
+		{
+			m_windPlayer.release();
+		}
+	}
 
 }

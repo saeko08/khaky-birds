@@ -131,4 +131,14 @@ public class GenericLoadingScreenVisual extends LoadingScreenVisual
 		return m_yPos >= m_yBoundary;
 	}
 
+	@Override
+	public void onRemoved()
+	{
+		super.onRemoved();
+		
+		if ( m_bubblesFxPlayer != null )
+		{
+			m_bubblesFxPlayer.release();
+		}
+	}
 }

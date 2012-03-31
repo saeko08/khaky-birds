@@ -114,5 +114,14 @@ public class BuzzSawVisual extends EntityVisual
 		}
 
 	}
+	
+	@Override
+	public void onRemoved()
+	{
+		if ( m_fxPlayer != null )
+		{
+			m_fxPlayer.release();
+		}
+	}
 
 }

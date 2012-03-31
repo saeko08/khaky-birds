@@ -62,4 +62,9 @@ public abstract class EntityVisual implements SpatialGridObject
 	{
 		return m_entity.getWorldBounds();
 	}
+
+	/**
+	 * Called when the visual is being removed - a good place to clean up.
+	 */
+	public void onRemoved() {}
 }

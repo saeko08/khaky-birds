@@ -12,7 +12,7 @@ import com.hypefoundry.engine.renderer2D.SpriteBatcher;
  * @author Paksas
  *
  */
-public class ParticleSystemPlayer 
+public class ParticleSystemPlayer implements ParticleSystemListener
 {
 	private ParticleSystem		m_particleSystem;
 	private Particle[]			m_particles;
@@ -32,22 +32,18 @@ public class ParticleSystemPlayer
 	{
 		m_particleSystem = particleSystem;
 		m_looped = looped;
-		
-		// allocate space for particles
-		m_particles = new Particle[ m_particleSystem.m_maxParticles ];
-		m_particleTimeMultipliers = new float[ m_particleSystem.m_maxParticles ];
-		m_emitterIndices = new int[ m_particleSystem.m_emitters.length + 1 ];
-		
-		// initialize the particles
-		int startIdx = 0;
-		int addedParticlesCount = 0;
-		for ( int i = 0; i < m_particleSystem.m_emitters.length; ++i )
+		m_particleSystem.attachListener( this );
+	}
+	
+	/**
+	 * Call this method when the player should be released.
+	 */
+	public void release()
+	{
+		if ( m_particleSystem != null )
 		{
-			m_emitterIndices[i] = startIdx;
-			addedParticlesCount = m_particleSystem.m_emitters[i].onPlayerAttached( m_particles, startIdx );
-			startIdx += addedParticlesCount;
+			m_particleSystem.detachListener( this );
 		}
-		m_emitterIndices[ m_particleSystem.m_emitters.length ] = startIdx;
 	}
 	
 	/**
@@ -178,6 +174,12 @@ public class ParticleSystemPlayer
 	 */
 	public void draw( float x, float y, SpriteBatcher batcher, float deltaTime ) 
 	{
+		if ( m_particles == null )
+		{
+			// the player hasn't been initialized yet
+			return;
+		}
+		
 		simulate( deltaTime );
 		
 		// render the particles
@@ -191,4 +193,33 @@ public class ParticleSystemPlayer
 			}
 		}
 	}
+	
+	@Override
+	public void onSystemInitialized()
+	{	
+		// allocate space for particles
+		m_particles = new Particle[ m_particleSystem.m_maxParticles ];
+		m_particleTimeMultipliers = new float[ m_particleSystem.m_maxParticles ];
+		m_emitterIndices = new int[ m_particleSystem.m_emitters.length + 1 ];
+		
+		// initialize the particles
+		int startIdx = 0;
+		int addedParticlesCount = 0;
+		for ( int i = 0; i < m_particleSystem.m_emitters.length; ++i )
+		{
+			m_emitterIndices[i] = startIdx;
+			addedParticlesCount = m_particleSystem.m_emitters[i].onPlayerAttached( m_particles, startIdx );
+			startIdx += addedParticlesCount;
+		}
+		m_emitterIndices[ m_particleSystem.m_emitters.length ] = startIdx;
+	}
+
+	@Override
+	public void onSystemReleased() 
+	{
+		m_particles = null;
+		m_particleTimeMultipliers = null;
+		m_emitterIndices = null;
+	}
+
 }

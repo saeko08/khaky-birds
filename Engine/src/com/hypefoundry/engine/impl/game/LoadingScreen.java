@@ -23,15 +23,7 @@ public class LoadingScreen extends Entity
 		setPosition( 2.4f, 4.0f, 0.0f );
 		setBoundingBox( new BoundingBox( -2.4f, -4.0f, 2.4f, 4.0f ) );
 	}
-	
-	/**
-	 * Resets the entity.
-	 */
-	void reset()
-	{
-		m_visual = null;
-	}
-	
+		
 	/**
 	 * Begins to fade the loading screen into the image rendered in the background
 	 * by the other renderer.

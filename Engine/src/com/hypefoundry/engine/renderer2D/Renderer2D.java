@@ -239,6 +239,8 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 		EntityVisual visual = findVisualFor( entity );
 		if ( visual != null )
 		{
+			visual.onRemoved();
+			
 			m_visualsGrid.removeObject( visual );
 			m_visuals.remove( visual );
 		}

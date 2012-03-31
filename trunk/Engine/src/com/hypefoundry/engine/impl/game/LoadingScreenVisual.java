@@ -12,7 +12,7 @@ import com.hypefoundry.engine.world.Entity;
  */
 public abstract class LoadingScreenVisual extends EntityVisual 
 {
-
+	private LoadingScreen 		m_screen;
 	/**
 	 * Constructor.
 	 * 
@@ -21,7 +21,14 @@ public abstract class LoadingScreenVisual extends EntityVisual
 	public LoadingScreenVisual( Entity entity ) 
 	{
 		super(entity);
-		((LoadingScreen)entity).m_visual = this;
+		m_screen = (LoadingScreen)entity;
+		m_screen.m_visual = this;
+	}
+	
+	@Override
+	public void onRemoved() 
+	{
+		m_screen.m_visual = null;
 	}
 
 	/**

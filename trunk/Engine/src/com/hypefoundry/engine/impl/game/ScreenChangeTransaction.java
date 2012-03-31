@@ -134,7 +134,7 @@ class ScreenChangeTransaction implements GameOperation
 	public void initialize( GLGame game, Screen newScreen )
 	{
 		m_newScreen = newScreen;
-		
+
 		// clear the input
 		game.m_input.clear();
 		
@@ -224,8 +224,7 @@ class ScreenChangeTransaction implements GameOperation
 					
 					// and clean up
 					m_world.removeEntity( m_loadingScreen );
-					m_loadingScreen.reset();
-					m_resMgr.releaseResources();
+					m_resMgr.clearResources();
 				}
 				break;
 			}

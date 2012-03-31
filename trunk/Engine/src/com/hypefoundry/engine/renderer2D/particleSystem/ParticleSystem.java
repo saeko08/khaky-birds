@@ -5,6 +5,7 @@ package com.hypefoundry.engine.renderer2D.particleSystem;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 
 import com.hypefoundry.engine.core.Resource;
 import com.hypefoundry.engine.impl.game.GLGame;
@@ -110,9 +111,12 @@ public class ParticleSystem extends Resource
 	// ------------------------------------------------------------------------
 	// members
 	// ------------------------------------------------------------------------
-	ParticleEmitter[] 						m_emitters 		= new ParticleEmitter[0];
-	ParticleAffector[] 						m_affectors 	= new ParticleAffector[0];
-	public int								m_maxParticles;
+	ParticleEmitter[] 							m_emitters 		= new ParticleEmitter[0];
+	ParticleAffector[] 							m_affectors 	= new ParticleAffector[0];
+	public int									m_maxParticles;
+	
+	// runtime data
+	private	List< ParticleSystemListener >		m_listeners		= new ArrayList< ParticleSystemListener >();
 	
 	/**
 	 * Default constructor ( required by the resources manager ).
@@ -127,13 +131,19 @@ public class ParticleSystem extends Resource
 	 * Adds a new particle emitter.
 	 * 
 	 * @param emitter
+	 * @param listenerToExclude		sometimes we want to add the affector definitions
+	 * 								in response to the resource being reloaded - and we'll usualy use
+	 * 								the listeners mechanism to learn about that. This additional param
+	 * 								provides a way to append them from the callbackj method without running into a stack overload
 	 */
-	public void addEmitter( ParticleEmitter emitter )
+	public void addEmitter( ParticleEmitter emitter, ParticleSystemListener listenerToExclude )
 	{
 		if ( emitter != null )
 		{
 			m_emitters = Arrays.append( m_emitters, emitter );
 			m_maxParticles += emitter.m_particlesCount;
+			
+			reinitializeListeners( listenerToExclude );
 		}
 	}
 	
@@ -141,12 +151,103 @@ public class ParticleSystem extends Resource
 	 * Adds a new particle emitter.
 	 * 
 	 * @param emitter
+	 * @param listenerToExclude		sometimes we want to add the affector definitions
+	 * 								in response to the resource being reloaded - and we'll usualy use
+	 * 								the listeners mechanism to learn about that. This additional param
+	 * 								provides a way to append them from the callbackj method without running into a stack overload
 	 */
-	public void addAffector( ParticleAffector affector )
+	public void addAffector( ParticleAffector affector, ParticleSystemListener listenerToExclude )
 	{
 		if ( affector != null )
 		{
 			m_affectors = Arrays.append( m_affectors, affector );
+			
+			reinitializeListeners( listenerToExclude );
+		}
+	}
+	
+	/**
+	 * Adds a batch of affectors.
+	 * 
+	 * @param affectors
+	 * @param listenerToExclude		sometimes we want to add the affector definitions
+	 * 								in response to the resource being reloaded - and we'll usualy use
+	 * 								the listeners mechanism to learn about that. This additional param
+	 * 								provides a way to append them from the callbackj method without running into a stack overload
+	 */
+	public void addAffectors( List< ? extends ParticleAffector > affectors, ParticleSystemListener listenerToExclude ) 
+	{
+		int count = affectors.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			ParticleAffector affector = affectors.get(i);
+			if ( affector != null )
+			{
+				m_affectors = Arrays.append( m_affectors, affector );
+			}
+		}
+		
+		reinitializeListeners( listenerToExclude );
+	}
+	
+	// ------------------------------------------------------------------------
+	// Listeners management
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * Attaches a new particle system listener.
+	 * 
+	 * @param listener
+	 */
+	public void attachListener( ParticleSystemListener listener )
+	{
+		if ( listener != null )
+		{
+			m_listeners.add( listener );
+			
+			if ( m_maxParticles > 0 )
+			{
+				// initialize the listener, if there's something to be initialized for
+				listener.onSystemInitialized();
+			}
+		}
+	}
+	
+	/**
+	 * Detaches an existing particle system listener.
+	 * 
+	 * @param listener
+	 */
+	public void detachListener( ParticleSystemListener listener )
+	{
+		if ( listener != null )
+		{
+			m_listeners.remove( listener );
+		}
+	}
+	
+	/**
+	 * Reinitializes all attached listeners.
+	 * 
+	 * @param listenerToExclude		informs all the listeners but this one
+	 */
+	private void reinitializeListeners( ParticleSystemListener listenerToExclude )
+	{
+		int listenersCount = m_listeners.size();
+		for ( int i = 0; i < listenersCount; ++i )
+		{
+			ParticleSystemListener listener = m_listeners.get(i);
+			if ( listener == listenerToExclude )
+			{
+				continue;
+			}
+				
+			listener.onSystemReleased();
+			
+			if ( m_maxParticles > 0 )
+			{
+				listener.onSystemInitialized();
+			}
 		}
 	}
 	
@@ -181,7 +282,10 @@ public class ParticleSystem extends Resource
 				{
 					ParticleEmitter emitter = factory.create();
 					emitter.load( child, m_resMgr );
-					addEmitter( emitter );
+					
+					// add the emitter
+					m_emitters = Arrays.append( m_emitters, emitter );
+					m_maxParticles += emitter.m_particlesCount;
 				}
 			}	
 			
@@ -194,15 +298,37 @@ public class ParticleSystem extends Resource
 				{
 					ParticleAffector affector = factory.create();
 					affector.load( child );
-					addAffector( affector );
+					
+					// add the affector
+					m_affectors = Arrays.append( m_affectors, affector );
 				}
 			}	
+		}
+		
+		// initialize the listeners, providing the system is capable of producing any particles
+		if ( m_maxParticles > 0 )
+		{
+			int listenersCount = m_listeners.size();
+			for ( int i = 0; i < listenersCount; ++i )
+			{
+				m_listeners.get(i).onSystemInitialized();
+			}
 		}
 	}
 
 	@Override
 	public void release() 
 	{
+		m_emitters 		= new ParticleEmitter[0];
+		m_affectors 	= new ParticleAffector[0];
+		m_maxParticles 	= 0;
+		
+		// deinitialzie the listeners
+		int listenersCount = m_listeners.size();
+		for ( int i = 0; i < listenersCount; ++i )
+		{
+			m_listeners.get(i).onSystemReleased();
+		}
 	}
 	
 	/**

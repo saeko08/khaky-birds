@@ -124,7 +124,7 @@ public class ResourceManager
 	 * Loads all registered resources after they have been unloaded.
 	 */
 	public void loadResources() 
-	{
+	{		
 		m_isActive = true;
 		int count = m_resources.size();
 		for ( int i = 0; i < count; ++i )
@@ -156,5 +156,19 @@ public class ResourceManager
 			res.release();
 		}
 		m_isActive = false;
+	}
+	
+	/**
+	 * Purges the resources storage without deactivating the manager.
+	 */
+	public void clearResources()
+	{
+		int count = m_resources.size();
+		for ( int i = 0; i < count; ++i )
+		{
+			Resource res = m_resources.get( i );
+			res.release();
+		}
+		m_resources.clear();
 	}
 }

@@ -53,7 +53,7 @@ public class ParticlesTest extends AndroidTestCase
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( emissionFrequency )
 							.setParticlesCount( maxAliveParticles, new ParticlesFactoryStub() )
-							.setTimeToLive( timeToLive ) );
+							.setTimeToLive( timeToLive ), null );
 		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
 		
@@ -73,12 +73,12 @@ public class ParticlesTest extends AndroidTestCase
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 1 )
 							.setParticlesCount( maxParticles / 2, new ParticlesFactoryStub() )
-							.setTimeToLive( 10 ) );
+							.setTimeToLive( 10 ), null );
 		ps.addEmitter( new RadialParticleEmitter( new Vector3( 2, 0, 0 ), 0 )							
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 1 )
 							.setParticlesCount( maxParticles / 2, new ParticlesFactoryStub() )
-							.setTimeToLive( 10 ) );
+							.setTimeToLive( 10 ), null );
 		
 		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
@@ -100,7 +100,7 @@ public class ParticlesTest extends AndroidTestCase
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 0.1f )
 							.setParticlesCount( 1, new ParticlesFactoryStub() )
-							.setTimeToLive( 10 ) );
+							.setTimeToLive( 10 ), null );
 		
 		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
@@ -122,8 +122,8 @@ public class ParticlesTest extends AndroidTestCase
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 0.1f )
 							.setParticlesCount( maxParticles, new ParticlesFactoryStub() )
-							.setTimeToLive( 10 ) );
-		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ) );
+							.setTimeToLive( 10 ), null );
+		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ), null );
 		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
 		
@@ -144,8 +144,8 @@ public class ParticlesTest extends AndroidTestCase
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 0.1f )
 							.setParticlesCount( maxParticles, new ParticlesFactoryStub() )
-							.setTimeToLive( 1 ) );
-		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ) );
+							.setTimeToLive( 1 ), null );
+		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ), null );
 		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, true );
 		
@@ -177,8 +177,8 @@ public class ParticlesTest extends AndroidTestCase
 							.setAmountEmittedEachTick( 1 )
 							.setEmissionFrequency( 0.1f )
 							.setParticlesCount( maxParticles, new ParticlesFactoryStub() )
-							.setTimeToLive( 1 ) );
-		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ) );
+							.setTimeToLive( 1 ), null );
+		ps.addAffector( new LinearMovementAffector( new Vector3( 10, 0, 0 ) ), null );
 		Particle[] particles = new Particle[ps.m_maxParticles];
 		ParticleSystemPlayer player = new ParticleSystemPlayer( ps, false );
 		
@@ -232,8 +232,8 @@ public class ParticlesTest extends AndroidTestCase
 		// setup the system
 		Vector3 particlePos = new Vector3( 1.5f, 0, 0 );
 		ParticleSystem ps = new ParticleSystem();
-		ps.addEmitter( new FixedPositionMockParticleEmitter( particlePos ) );
-		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0, 0, 1, 1 ), 0.5f ) );
+		ps.addEmitter( new FixedPositionMockParticleEmitter( particlePos ), null );
+		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0, 0, 1, 1 ), 0.5f ), null );
 		
 		// start the simulation - first emit the particles
 		Particle[] particles = new Particle[ps.m_maxParticles];
@@ -307,11 +307,11 @@ public class ParticlesTest extends AndroidTestCase
 		// setup the system
 		Vector3 particlePos = new Vector3( 2.0f, 0, 0 );
 		ParticleSystem ps = new ParticleSystem();
-		ps.addEmitter( new FixedPositionMockParticleEmitter( particlePos ) );
+		ps.addEmitter( new FixedPositionMockParticleEmitter( particlePos ), null );
 		
 		// two overlapping clear sky affectors
-		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0, 0, 1, 1 ), 0.5f ) );
-		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0.5f, 0, 1.5f, 1 ), 0.5f ) );
+		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0, 0, 1, 1 ), 0.5f ), null );
+		ps.addAffector( new ClearSkyAffector( new BoundingBox( 0.5f, 0, 1.5f, 1 ), 0.5f ), null );
 		
 		// start the simulation - first emit the particles
 		Particle[] particles = new Particle[ps.m_maxParticles];

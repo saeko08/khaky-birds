@@ -104,11 +104,10 @@ public class GenericLoadingScreenVisual extends LoadingScreenVisual
 		
 		// draw the non-stenciled background
 		m_bgQuadRenderState.setStencilOp( StencilOp.SO_Test );
-		batcher.drawMesh( m_bgQuad, m_bgQuadRenderState );
-		
+		batcher.drawMesh( m_bgQuad, m_bgQuadRenderState );	
 		
 		// draw the stencil tested graphics on top of it all
-		//batcher.drawSprite( pos, bs, m_loadingScreenImage );*/
+		batcher.drawSprite( 2.4f, 4.0f, 2.4f, 2.37f, m_loadingScreenImage );
 	}
 
 	@Override

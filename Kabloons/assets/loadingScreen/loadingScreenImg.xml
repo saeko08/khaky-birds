@@ -1,1 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<TextureRegion atlasName='loadingScreen/atlas.png' x='0' y='0' w='240' h='236' alphaOp='none' stencilOp='SO_Test' />

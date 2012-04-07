@@ -90,8 +90,12 @@ public abstract class GLGame extends Activity implements Game, Renderer
 		requestWindowFeature( Window.FEATURE_NO_TITLE );
 		getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN );
 		
-		// create the OpenGL surface view
+		// create the OpenGL surface view and set it to use v1.0 of OpenGL extensions - we're gonna need it
+		// in order to be able to use the SurfaceTexture and similar features.
 		m_glView = new GLSurfaceView( this );
+		m_glView.setEGLContextClientVersion(1);
+		
+		// set the view
 		m_glView.setRenderer( this );
 		setContentView( m_glView );
 		

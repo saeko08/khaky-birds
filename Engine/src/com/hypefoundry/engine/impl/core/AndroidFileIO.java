@@ -1,12 +1,14 @@
 package com.hypefoundry.engine.impl.core;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.os.Environment;
 
@@ -27,6 +29,13 @@ public class AndroidFileIO implements FileIO
 	{
 		m_assets = assets;
 		m_externalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+	}
+	
+	@Override
+	public AssetFileDescriptor getAssetFileDescriptor( String fileName ) throws IOException
+	{
+		AssetFileDescriptor afd = m_assets.openFd( fileName );
+		return afd;
 	}
 	
 	@Override

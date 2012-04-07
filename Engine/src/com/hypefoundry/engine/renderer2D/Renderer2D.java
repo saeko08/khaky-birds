@@ -125,6 +125,10 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 			gl.glClear( GL10.GL_COLOR_BUFFER_BIT | GL10.GL_STENCIL_BUFFER_BIT );
 		}
 		
+		// reset the texture matrix
+		gl.glMatrixMode( GL10.GL_TEXTURE );
+		gl.glLoadIdentity();
+
 		// set the render state
 		m_camera.setViewportAndMatrices();
 		gl.glDisable( GL10.GL_DEPTH_TEST );

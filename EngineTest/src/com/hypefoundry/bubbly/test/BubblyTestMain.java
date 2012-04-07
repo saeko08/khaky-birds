@@ -1,17 +1,10 @@
 package com.hypefoundry.bubbly.test;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -23,6 +16,7 @@ public class BubblyTestMain extends ListActivity
 	private final String m_testClassNames[] = 
 	{ 
 			"prototypes.khaky_birds.KhakyBirds"
+			, "openGL.MoviesPlayback"
 			, "openGL.LinesDrawingTest"
 			, "openGL.SpritesBatcherTest"
 			, "openGL.ColoredTriangleTest"

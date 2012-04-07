@@ -72,6 +72,10 @@
 		<activity android:label="GL Lines Drawing Test"
 			android:name=".tests.openGL.LinesDrawingTest"
 			android:screenOrientation="portrait" />	
+		
+		<activity android:label="Movies Playback"
+			android:name=".tests.openGL.MoviesPlayback"
+			android:screenOrientation="portrait" />	
 
 		<activity android:label="KhakyBirds prototype"
 			android:name=".tests.prototypes.khaky_birds.KhakyBirds"

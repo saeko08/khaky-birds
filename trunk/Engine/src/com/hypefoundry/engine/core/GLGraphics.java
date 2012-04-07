@@ -5,6 +5,7 @@ package com.hypefoundry.engine.core;
 
 import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLSurfaceView;
+import android.view.SurfaceHolder;
 
 /**
  * OpenGL graphics system interface.
@@ -65,5 +66,15 @@ public class GLGraphics
 	public int getHeight() 
 	{
 		return m_glView.getHeight();
+	}
+
+	/**
+	 * Returns the rendering surface holder.
+	 * 
+	 * @return
+	 */
+	public SurfaceHolder getSurfaceHolder() 
+	{
+		return m_glView.getHolder();
 	}
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import android.content.res.AssetFileDescriptor;
+
 /**
  * An interface for handling file input output.
  * 
@@ -12,6 +14,15 @@ import java.io.OutputStream;
  */
 public interface FileIO 
 {
+	/**
+	 * Returns an asset file descriptor to the specified asset.
+	 * 
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 */
+	public AssetFileDescriptor getAssetFileDescriptor( String fileName ) throws IOException;
+	
 	/**
 	 * Creates an input stream using which one will be able to read
 	 * an asset file shipped along with the application.

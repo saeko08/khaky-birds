@@ -74,16 +74,6 @@ class ScreenChangeTransaction implements GameOperation
 				m_state = ScreenChangeTransaction.State.ScreenLoaded;
 				m_stateChanged.notifyAll();
 			}
-			
-			// exit
-			try 
-			{
-				join();
-			} 
-			catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
         }
 	}
 	

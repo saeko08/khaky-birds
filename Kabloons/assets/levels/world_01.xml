@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='4.8' height='8.0'>
+    <Cutscene path="movies/intro.mp4" />
 	<ResourcesCache>
 		<Resource type="Texture" path="gameplay/atlas.png"/>
 		<Resource type="Texture" path="gameplay/atlas2.png"/>

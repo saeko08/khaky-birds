@@ -14,6 +14,7 @@ import com.hypefoundry.engine.controllers.EntityControllerFactory;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
+import com.hypefoundry.engine.impl.game.GLGame;
 import com.hypefoundry.engine.physics.PhysicalBody;
 import com.hypefoundry.engine.physics.PhysicalBodyFactory;
 import com.hypefoundry.engine.physics.PhysicsView;
@@ -42,6 +43,7 @@ import com.hypefoundry.kabloons.entities.menu.MenuItemController;
 import com.hypefoundry.kabloons.entities.menu.MenuItemVisual;
 import com.hypefoundry.kabloons.entities.menu.MenuManager;
 import com.hypefoundry.kabloons.entities.menu.MenuManagerController;
+import com.hypefoundry.kabloons.utils.LevelsLoader;
 
 
 /**
@@ -199,8 +201,9 @@ public class MainMenu extends Screen
 	 */
 	public void loadLevel( int levelIdx )
 	{
-		m_game.setScreen( new GameScreen( m_game, levelIdx ) );
+		LevelsLoader.loadLevel( (GLGame)m_game, levelIdx, -1 );
 	}
+	
 	
 	@Override
 	public boolean onBackPressed() 

@@ -16,6 +16,7 @@ import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.hud.Hud;
 import com.hypefoundry.engine.hud.HudRenderer;
+import com.hypefoundry.engine.impl.game.GLGame;
 import com.hypefoundry.engine.physics.PhysicalBody;
 import com.hypefoundry.engine.physics.PhysicalBodyFactory;
 import com.hypefoundry.engine.physics.PhysicsView;
@@ -60,6 +61,7 @@ import com.hypefoundry.kabloons.entities.tutorial.StartTutorial;
 import com.hypefoundry.kabloons.entities.tutorial.StartTutorialController;
 import com.hypefoundry.kabloons.entities.tutorial.StartTutorialVisual;
 import com.hypefoundry.kabloons.utils.AssetsFactory;
+import com.hypefoundry.kabloons.utils.LevelsLoader;
 import com.hypefoundry.kabloons.utils.UnlockedLevelsStorage;
 
 
@@ -126,7 +128,7 @@ public class GameScreen extends Screen
 		// load the world
 		try 
 		{
-			String levelPath = getLevelPath( levelIdx );
+			String levelPath = LevelsLoader.getLevelPath( levelIdx );
 			InputStream worldFileStream = game.getFileIO().readAsset( levelPath );
 			m_world.load( XMLDataLoader.parse( worldFileStream, "World" ), m_resourceManager );
 		} 
@@ -243,67 +245,12 @@ public class GameScreen extends Screen
 		m_game.setScreen( new MainMenu( m_game, MainMenu.MenuScreen.MS_Main ) );
 	}
 
-	/**
-	 * Loads the specified level.
-	 * 
-	 * @param levelIdx
-	 */
-	public void loadLevel( int levelIdx ) 
-	{
-		levelIdx = validateLevelIdx( levelIdx );
-		m_game.setScreen( new GameScreen( m_game, levelIdx ) );
-	}
-	
-	/**
-	 * Creates a path to the specified game level.
-	 * 
-	 * @param levelIdx
-	 * @return
-	 */
-	private String getLevelPath( int levelIdx )
-	{
-		// assert the input data
-		levelIdx = validateLevelIdx( levelIdx );
-		
-		// build the path
-		StringBuilder levelPath = new StringBuilder();
-		levelPath.append( "levels/world_" );
-		if ( levelIdx < 10 )
-		{
-			levelPath.append( "0" );
-		}
-		levelPath.append( levelIdx );
-
-		levelPath.append( ".xml" );
-		
-		return levelPath.toString();
-	}
-	
-	/**
-	 * Validates and returns a corrected level index.
-	 * @param idx
-	 * @return
-	 */
-	private int validateLevelIdx( int idx )
-	{
-		// assert the input data
-		if ( idx < 1 )
-		{
-			idx = 1;
-		}
-		else if ( idx > m_levelsCount )
-		{
-			idx = m_levelsCount;
-		}
-		
-		return idx;
-	}
 
 	public void loadNextLevel() 
 	{		
 		if ( m_levelIdx < m_levelsCount )
 		{
-			loadLevel( m_levelIdx + 1 );
+			LevelsLoader.loadLevel( (GLGame)m_game, m_levelIdx + 1, m_levelIdx );
 		}
 		else
 		{
@@ -314,7 +261,7 @@ public class GameScreen extends Screen
 
 	public void reloadLevel() 
 	{
-		loadLevel( m_levelIdx );
+		LevelsLoader.loadLevel( (GLGame)m_game, m_levelIdx, m_levelIdx );
 	}
 	
 	/**

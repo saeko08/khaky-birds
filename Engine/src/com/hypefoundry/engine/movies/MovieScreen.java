@@ -44,6 +44,7 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 	int 				m_textureId;
 	Geometry			m_fullscreenQuad;
 	float[]				m_texCoordMtx = new float[16];
+	private Object		m_synchObj = new Object();
 	
 	// movie details
 	String				m_movieAssetPath;
@@ -72,9 +73,22 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 	@Override
 	public void present( float deltaTime ) 
 	{
-		if ( m_gl == null || m_renderTexture == null )
+		if ( m_gl == null)
 		{
 			return;
+		}
+		
+		if ( m_renderSurface == null )
+		{
+			initializeRenderSurface();
+		}
+		
+		synchronized( m_synchObj )
+		{
+			if ( m_fullscreenQuad == null )
+			{
+				return;
+			}
 		}
 		
 		// render the latest frame from the movie
@@ -82,11 +96,15 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 		
 		m_gl.glViewport( 0, 0, m_viewportWidth, m_viewportHeight );
 		m_gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
+		
 		m_gl.glMatrixMode( GL10.GL_PROJECTION );
 		m_gl.glLoadIdentity();
 		m_gl.glOrthof( 0, m_viewportWidth, 0, m_viewportHeight, 1, -1 );
 		
-		m_gl.glDisable( GL10.GL_BLEND );
+		m_gl.glDisable( GL10.GL_STENCIL_TEST );
+		//m_gl.glColorMask( true, true, true, true );
+		m_gl.glDisable( GL10.GL_ALPHA_TEST ); 
+		m_gl.glDisable( GL10.GL_BLEND ); 
 		m_gl.glEnable( GL_TEXTURE_EXTERNAL_OES );
 
 		// bind the render texture to the GL device
@@ -147,7 +165,13 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 		{
 			ex.printStackTrace();
 		}
-		
+	}
+	
+	/**
+	 * Initializes the media player and the surfaces it renders to. MUST be called from the rendering thread.
+	 */
+	private void initializeRenderSurface()
+	{
 		// set the rendering surface
 		{
 			// create the texture
@@ -170,19 +194,25 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 			int[] textureIds = new int[1];
 			m_gl.glGenTextures( 1, textureIds, 0 );
 			
-			m_textureId = textureIds[0] ;
+			m_textureId = textureIds[0];
 			m_renderTexture = new SurfaceTexture( m_textureId );
 		}
 
 		m_renderSurface = new Surface( m_renderTexture );
 		m_mediaPlayer.setSurface( m_renderSurface );
-	
+
 		m_mediaPlayer.prepareAsync(); // prepare async to not block main thread
 	}
 	
 	@Override
 	public void pause() 
 	{
+		// delete the old texture
+		m_gl.glBindTexture( GL_TEXTURE_EXTERNAL_OES, m_textureId );
+		int[] textureIds = new int[] { m_textureId };
+		m_gl.glDeleteTextures( 1, textureIds, 0 );
+		m_gl.glBindTexture( GL_TEXTURE_EXTERNAL_OES, 0 );
+		
 		if ( m_renderTexture != null )
 		{
 			m_renderTexture.release();
@@ -200,6 +230,11 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 	@Override
 	public void dispose() 
 	{
+		m_gl.glBindTexture( GL_TEXTURE_EXTERNAL_OES, m_textureId );
+		int[] textureIds = new int[] { m_textureId };
+		m_gl.glDeleteTextures( 1, textureIds, 0 );
+		m_gl.glBindTexture( GL_TEXTURE_EXTERNAL_OES, 0 );
+		
 		if ( m_renderTexture != null )
 		{
 			m_renderTexture.release();
@@ -281,15 +316,20 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 		short[] indices = new short[] { 0, 1, 2, 0, 2, 3 };
 		
 		
-		m_fullscreenQuad = new Geometry( graphics, 4, 6, false, true );
-		m_fullscreenQuad.setVertices( vertices, 0, vertices.length );
-		m_fullscreenQuad.setIndices( indices, 0, indices.length );
+		synchronized( m_synchObj )
+		{
+			m_fullscreenQuad = new Geometry( graphics, 4, 6, false, true );
+			m_fullscreenQuad.setVertices( vertices, 0, vertices.length );
+			m_fullscreenQuad.setIndices( indices, 0, indices.length );
+		}
 	}
 
 
 	@Override
 	public void onCompletion( MediaPlayer player ) 
 	{
+		player.release();
+		
 		// the clip has completed - jump to the next screen
 		Screen nextScreen = m_nextScreenFactory.createScreen();
 		m_game.setScreen( nextScreen );

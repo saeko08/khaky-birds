@@ -125,7 +125,7 @@ public class GameScreen extends Screen
 		}
 		
 		// create the views
-		m_worldRenderer = new Renderer2D( game );
+		m_worldRenderer = new Renderer2D( game, 480, 800 );
 		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
 		m_controllersView = new ControllersView( this );
 		

@@ -41,7 +41,7 @@ public class MenuScreen extends Screen implements ButtonListener
 			throw new RuntimeException( "No HUD definition" );
 		}
 		
-		m_hudRenderer = new HudRenderer( game, hud );
+		m_hudRenderer = new HudRenderer( game, hud, 480, 800 );
 		registerInputHandler( m_hudRenderer );
 		
 		// load the menu layout

@@ -143,7 +143,7 @@ public class GameScreen extends Screen
 		}
 		
 		// create the views
-		m_worldRenderer = new Renderer2D( game );
+		m_worldRenderer = new Renderer2D( game, 480, 800 );
 		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
 		m_controllersView = new ControllersView( this );
 		
@@ -207,7 +207,7 @@ public class GameScreen extends Screen
 		
 		// initialize the HUD renderer
 		Hud hud = m_resourceManager.getResource( Hud.class, "hud/gameplay/gameHudDefinition.xml" );
-		m_hudRenderer = new HudRenderer( game, hud );
+		m_hudRenderer = new HudRenderer( game, hud, 480, 800 );
 		registerInputHandler( m_hudRenderer );
 	}
 	

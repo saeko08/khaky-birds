@@ -95,5 +95,33 @@ public final class MathLib
 			return val;
 		}
 	}
+	
+	/**
+	 * Processes the dimensions with respect to the specified viewport size
+	 * to fill it to the maximum possible extents while preserving the aspect ratio.
+	 * 
+	 * @param inViewportSize
+	 * @param inOutDimensions
+	 */
+	public static void processAspectRatio( Vector3 inViewportSize, Vector3 inOutDimensions ) 
+	{
+		float ratio = inOutDimensions.m_x / inOutDimensions.m_y;
+		
+		float dW1 = inViewportSize.m_x;
+		float dH1 = inViewportSize.m_x / ratio;
+		
+		float dW2 = inViewportSize.m_y * ratio;
+		float dH2 = inViewportSize.m_y;
 
+		if ( dW1 <= inViewportSize.m_x && dH1 <= inViewportSize.m_y )
+		{
+			inOutDimensions.m_x = dW1;
+			inOutDimensions.m_y = dH1;
+		}
+		else
+		{
+			inOutDimensions.m_x = dW2;
+			inOutDimensions.m_y = dH2;
+		}
+	}
 }

@@ -155,12 +155,13 @@ public class Text
 			return;
 		}
 		
-		// calculate the maximum number of characters that we'll be able to write
-		m_font.getDesiredCharactersCount( m_text, screenWidth, batcher.m_graphics.getWidth(), m_textMetrics );
-
 		// viewport dimensions
-		float viewportWidth = (float)batcher.m_graphics.getWidth();
-		float viewportHeight = (float)batcher.m_graphics.getHeight();
+		Vector3 viewportDim = batcher.m_graphics.getViewportDimensions();
+		float viewportWidth = viewportDim.m_x;
+		float viewportHeight = viewportDim.m_y;
+		
+		// calculate the maximum number of characters that we'll be able to write
+		m_font.getDesiredCharactersCount( m_text, screenWidth, viewportWidth, m_textMetrics );
 		
 		// calculate the text dimensions
 		float whitespaceWidth = m_font.m_whitespaceWidth / viewportWidth;

@@ -75,6 +75,9 @@ public class GameScreen extends Screen
 	private int									m_levelIdx;
 	private static int							m_levelsCount = 5;
 	
+	private static int							m_nominalViewportWidth = 480;
+	private static int							m_nominalViewportHeight = 800;
+	
 	public World								m_world;
 	public Renderer2D							m_worldRenderer;
 	ControllersView								m_controllersView;
@@ -139,7 +142,7 @@ public class GameScreen extends Screen
 		}
 		
 		// create the views
-		m_worldRenderer = new Renderer2D( game );
+		m_worldRenderer = new Renderer2D( game, m_nominalViewportWidth, m_nominalViewportHeight );
 		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
 		m_controllersView = new ControllersView( this );
 		
@@ -179,7 +182,7 @@ public class GameScreen extends Screen
 		
 		// initialize the HUD renderer
 		Hud hud = m_resourceManager.getResource( Hud.class, "hud/gameplay/gameHudDefinition.xml" );
-		m_hudRenderer = new HudRenderer( game, hud );
+		m_hudRenderer = new HudRenderer( game, hud, m_nominalViewportWidth, m_nominalViewportHeight );
 		registerInputHandler( m_hudRenderer );
 	}
 	

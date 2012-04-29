@@ -65,16 +65,19 @@ public class MainMenu extends Screen
 		}
 	}
 	
-	MenuScreen 							m_currentMenuScreenId;
-	Input								m_input;
+	private static int							m_nominalViewportWidth = 480;
+	private static int							m_nominalViewportHeight = 800;
 	
-	public World						m_world;
-	public Renderer2D					m_worldRenderer;
-	ControllersView						m_controllersView;
-	PhysicsView							m_physicsView;
+	MenuScreen 									m_currentMenuScreenId;
+	Input										m_input;
+	
+	public World								m_world;
+	public Renderer2D							m_worldRenderer;
+	ControllersView								m_controllersView;
+	PhysicsView									m_physicsView;
 		
 	// settings
-	boolean								m_playSounds = true;
+	boolean										m_playSounds = true;
 	
 	/**
 	 * Constructor.
@@ -117,7 +120,7 @@ public class MainMenu extends Screen
 		}
 				
 		// create the views
-		m_worldRenderer = new Renderer2D( game );
+		m_worldRenderer = new Renderer2D( game, m_nominalViewportWidth, m_nominalViewportHeight );
 		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
 		m_controllersView = new ControllersView( this );
 		

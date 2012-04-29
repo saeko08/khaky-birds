@@ -11,6 +11,7 @@ import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.core.Input;
 import com.hypefoundry.engine.game.Game;
 import com.hypefoundry.engine.game.InputHandler;
+import com.hypefoundry.engine.math.MathLib;
 import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 
@@ -22,6 +23,12 @@ import com.hypefoundry.engine.renderer2D.SpriteBatcher;
 public class HudRenderer implements InputHandler
 {
 	private final int					MAX_SPRITES = 512;			// TODO: config
+	
+	// viewport parameters 
+	private int 						m_viewportWidth;
+	private int 						m_viewportHeight;
+	private int 						m_viewportPosX;
+	private int							m_viewportPosY;
 	
 	public GLGraphics 					m_graphics;
 	private Input						m_input;
@@ -36,13 +43,23 @@ public class HudRenderer implements InputHandler
 	 * 
 	 * @param game
 	 * @param hud
+	 * @param desiredViewportWidth
+	 * @param desiredViewportHeight
 	 */
-	public HudRenderer( Game game, Hud hud )
+	public HudRenderer( Game game, Hud hud, int desiredViewportWidth, int desiredViewportHeight )
 	{
 		m_graphics = game.getGraphics();
 		m_input = game.getInput();
 		m_hud = hud;
 		m_batcher = new SpriteBatcher( m_graphics, MAX_SPRITES );
+		
+		// calculate viewport dimensions
+		Vector3 viewportDimensions = m_graphics.getViewportDimensions();
+		
+		m_viewportWidth = (int)viewportDimensions.m_x;
+		m_viewportHeight = (int)viewportDimensions.m_y;
+		m_viewportPosX = ( m_graphics.getWidth() - m_viewportWidth ) / 2;
+		m_viewportPosY = ( m_graphics.getHeight() - m_viewportHeight ) / 2;
 	}
 	
 	/**
@@ -147,10 +164,7 @@ public class HudRenderer implements InputHandler
 		// set the viewport
 		GL10 gl = m_graphics.getGL();
 				
-		int viewportWidth = m_graphics.getWidth();
-		int viewportHeight = m_graphics.getHeight();
-		
-		gl.glViewport( 0, 0, viewportWidth, viewportHeight );
+		gl.glViewport( m_viewportPosX, m_viewportPosY, m_viewportWidth, m_viewportHeight );
 		gl.glMatrixMode( GL10.GL_PROJECTION );
 		gl.glLoadIdentity();
 		gl.glOrthof( 0, 1, 1, 0, 1, -1 );
@@ -199,6 +213,8 @@ public class HudRenderer implements InputHandler
 	 */
 	public void getTouchPos( int x, int y, Vector3 outTouchPos )
 	{
-		outTouchPos.set( (float)x / (float)m_graphics.getWidth(), (float)y / (float)m_graphics.getHeight(), 0 );
+		float sX = x - m_viewportPosX;
+		float sY = y - m_viewportPosY;
+		outTouchPos.set( sX / (float)m_viewportWidth, sY / (float)m_viewportHeight, 0 );
 	}
 }

@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.hypefoundry.engine.core.GLGraphics;
 import com.hypefoundry.engine.math.BoundingBox;
+import com.hypefoundry.engine.math.MathLib;
 import com.hypefoundry.engine.math.Vector3;
 
 /**
@@ -19,8 +20,16 @@ public class Camera2D
 {	
 	public final Vector3 		m_position;
 	public float 				m_zoom;
-	public final float 			m_frustumWidth;
-	public final float 			m_frustumHeight;
+	public float 				m_frustumWidth;
+	public float 				m_frustumHeight;
+	
+	public int					m_screenWidth;
+	public int					m_screenHeight;
+	public int					m_viewportWidth;
+	public int					m_viewportHeight;
+	public int					m_viewportPosX;
+	public int					m_viewportPosY;
+	
 	final GLGraphics 			m_graphics;
 	private final BoundingBox	m_frustum;
 	
@@ -29,17 +38,30 @@ public class Camera2D
 	 * Constructor.
 	 * 
 	 * @param graphics
-	 * @param frustumWidth
-	 * @param frustumHeight
+	 * @param frustumWidth (in pixels)
+	 * @param frustumHeight (in pixels)
+	 * @param pixelsToMeters		pixels to meters conversion factor
 	 */
-	public Camera2D( GLGraphics graphics, float frustumWidth, float frustumHeight ) 
-	{
+	public Camera2D( GLGraphics graphics, int frustumWidth, int frustumHeight, float pixelsToMeters ) 
+	{	
 		m_graphics = graphics;
-		m_frustumWidth = frustumWidth;
-		m_frustumHeight = frustumHeight;
-		m_position = new Vector3( frustumWidth / 2, frustumHeight / 2, 0 );
-		m_zoom = 1.0f;
 		
+		// Calculate the viewport parameters
+		Vector3 viewportDimensions = m_graphics.getViewportDimensions();
+		
+		m_screenWidth = m_graphics.getWidth();
+		m_screenHeight = m_graphics.getHeight();
+		m_viewportWidth = (int)viewportDimensions.m_x;
+		m_viewportHeight = (int)viewportDimensions.m_y;
+		m_viewportPosX = ( m_screenWidth - m_viewportWidth ) / 2;
+		m_viewportPosY = ( m_screenHeight - m_viewportHeight ) / 2;
+				
+		// calculate frustum parameters
+		m_frustumWidth = frustumWidth * pixelsToMeters;
+		m_frustumHeight = frustumHeight * pixelsToMeters;
+		m_position = new Vector3( m_frustumWidth / 2.0f, m_frustumHeight / 2.0f, 0 );
+		
+		m_zoom = 1.0f;	
 		m_frustum = new BoundingBox( 0, 0, m_frustumWidth, m_frustumHeight );
 	}
 		
@@ -58,7 +80,7 @@ public class Camera2D
 		// set the viewport
 		GL10 gl = m_graphics.getGL();
 		
-		gl.glViewport( 0, 0, m_graphics.getWidth(), m_graphics.getHeight() );
+		gl.glViewport( m_viewportPosX, m_viewportPosY, m_viewportWidth, m_viewportHeight );
 		gl.glMatrixMode( GL10.GL_PROJECTION );
 		gl.glLoadIdentity();
 		gl.glOrthof( m_frustum.m_minX, m_frustum.m_maxX, m_frustum.m_minY, m_frustum.m_maxY, 1, -1 );
@@ -69,23 +91,6 @@ public class Camera2D
 	}
 	
 	/**
-	 * Sets a unit world matrix for the HUD rendering purposes. 
-	 */
-	public void setHudMatrices()
-	{
-		// set the viewport
-		GL10 gl = m_graphics.getGL();
-				
-		gl.glViewport( 0, 0, m_graphics.getWidth(), m_graphics.getHeight() );
-		gl.glMatrixMode( GL10.GL_PROJECTION );
-		gl.glLoadIdentity();
-		gl.glOrthof( 0, m_frustumWidth, 0, m_frustumHeight, 1, -1 );
-				
-		gl.glMatrixMode( GL10.GL_MODELVIEW );
-		gl.glLoadIdentity();
-	}
-	
-	/**
 	 * Translates the touch position to the world coordinates
 	 * 
 	 * @param screen
@@ -93,8 +98,12 @@ public class Camera2D
 	 */
 	public void screenPosToWorld( Vector3 screen, Vector3 world ) 
 	{
-		world.m_x = (screen.m_x / (float) m_graphics.getWidth()) * m_frustumWidth * m_zoom;
-		world.m_y = (1 - screen.m_y / (float) m_graphics.getHeight()) * m_frustumHeight * m_zoom;
+		// convert to viewport coordinates
+		float vX = screen.m_x - m_viewportPosX;
+		float vY = ( m_screenHeight - screen.m_y ) - m_viewportPosY;
+		
+		world.m_x = ( vX / (float)m_viewportWidth ) * m_frustumWidth * m_zoom;
+		world.m_y = ( vY / (float)m_viewportHeight ) * m_frustumHeight * m_zoom;
 		world.add( m_position ).sub( m_frustumWidth * m_zoom / 2, m_frustumHeight * m_zoom / 2, 0 );
 	}
 	
@@ -105,9 +114,9 @@ public class Camera2D
 	 * @param world
 	 */
 	public void screenVecToWorld( Vector3 screen, Vector3 world ) 
-	{
-		world.m_x = (screen.m_x / (float) m_graphics.getWidth()) * m_frustumWidth * m_zoom;
-		world.m_y = (-screen.m_y / (float) m_graphics.getHeight()) * m_frustumHeight * m_zoom;
+	{				
+		world.m_x = ( screen.m_x / (float)m_viewportWidth ) * m_frustumWidth * m_zoom;
+		world.m_y = (-screen.m_y / (float)m_viewportHeight ) * m_frustumHeight * m_zoom;
 	}
 	
 	/**
@@ -117,9 +126,9 @@ public class Camera2D
 	 * @param world
 	 */
 	public void screenDimToWorld( Vector3 screen, Vector3 world ) 
-	{
-		world.m_x = (screen.m_x / (float) m_graphics.getWidth()) * m_frustumWidth * m_zoom;
-		world.m_y = (screen.m_y / (float) m_graphics.getHeight()) * m_frustumHeight * m_zoom;
+	{		
+		world.m_x = ( screen.m_x / (float)m_viewportWidth ) * m_frustumWidth * m_zoom;
+		world.m_y = ( screen.m_y / (float)m_viewportHeight ) * m_frustumHeight * m_zoom;
 	}
 
 	/**

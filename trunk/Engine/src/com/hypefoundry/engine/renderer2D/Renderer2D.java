@@ -30,8 +30,9 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 {
 	private final int							MAX_SPRITES = 512;			// TODO: config
 	private final short							MAX_ENTITIES = 512;			// TODO: config
-	private final float 						VIEWPORT_WIDTH = 4.8f;		// TODO: config
-	private final float 						VIEWPORT_HEIGHT = 8.0f;		// TODO: config
+	private final float							PIXELS_TO_METERS = 0.01f;	// TODO: config								
+	private float 								VIEWPORT_WIDTH;
+	private float 								VIEWPORT_HEIGHT;
 	
 	private GLGraphics 							m_graphics;
 	private List< Entity >						m_entitiesToAdd;
@@ -58,16 +59,20 @@ public class Renderer2D extends GenericFactory< Entity, EntityVisual > implement
 	 * Constructor.
 	 * 
 	 * @param game
+	 * @param desiredViewportWidth
+	 * @param desiredViewportHeight
 	 */
-	public Renderer2D( Game game )
+	public Renderer2D( Game game, int desiredViewportWidth, int desiredViewportHeight )
 	{
+		VIEWPORT_WIDTH = (float)desiredViewportWidth * PIXELS_TO_METERS;
+		VIEWPORT_HEIGHT = (float)desiredViewportHeight * PIXELS_TO_METERS;
 		m_graphics = game.getGraphics();
 		
 		m_entitiesToAdd = new ArrayList< Entity >();
 		m_entitiesToRemove = new ArrayList< Entity >();
 		
 		m_batcher = new SpriteBatcher( m_graphics, MAX_SPRITES );
-		m_camera = new Camera2D( m_graphics, VIEWPORT_WIDTH, VIEWPORT_HEIGHT );
+		m_camera = new Camera2D( m_graphics, desiredViewportWidth, desiredViewportHeight, PIXELS_TO_METERS );
 		m_visuals = new ArrayList< EntityVisual >( MAX_ENTITIES );
 	}
 	

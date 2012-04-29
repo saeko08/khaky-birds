@@ -220,8 +220,6 @@ class ScreenChangeTransaction implements GameOperation
 			}
 		}
 		
-		// TODO: find out what's causeing the screen to turn blue when we're rendeirng the background scene
-		
 		// keep on drawing the overlay all the time
 		m_world.update( deltaTime );
 		m_worldRenderer.draw( deltaTime );
@@ -252,7 +250,7 @@ class ScreenChangeTransaction implements GameOperation
 			m_world.detachView( m_worldRenderer );
 		}
 		
-		m_worldRenderer = new Renderer2D( game );
+		m_worldRenderer = new Renderer2D( game, 480, 800 ); // TODO: config - nominal resolution of the scene transition screen
 		m_worldRenderer.register( LoadingScreen.class, m_loadingScreenFactory );
 		m_world.attachView( m_worldRenderer );
 		

@@ -61,4 +61,9 @@ public interface Game
 	 * Closes the game application.
 	 */
 	public void closeGame();
+
+	/**
+	 * Called when a back button is pressed.
+	 */
+	public void onBackPressed();
 }

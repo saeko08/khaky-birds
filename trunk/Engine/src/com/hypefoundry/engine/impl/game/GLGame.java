@@ -312,9 +312,15 @@ public abstract class GLGame extends Activity implements Game, Renderer
 	@Override
 	public void onBackPressed() 
 	{
-		boolean wasHandled = false;
+		if ( m_operation == m_screenChangeTransaction )
+		{
+			// don't process this request if the active operation is the screen transition operation
+			return;
+		}
+			
 		
 		// back button was pressed - forward this to the screen
+		boolean wasHandled = false;
 		if ( m_screen != null )
 		{
 			wasHandled = m_screen.onBackPressed();

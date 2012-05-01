@@ -1,39 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <World width='4.8' height='8.0'>
 
-	<Entity type="Background" path="backgrounds/meadow/meadow.xml" >
+	<Entity type="Background" path="backgrounds/demo_end/background.xml" >
 		<localBounds minX='-2.4' minY='-4.0' minZ='-0.5' maxX='2.4' maxY='4.0' maxZ='0.5' />
 		<position x='2.4' y='4.0' z='100' />
 	</Entity>
 	
-	<Entity type="ExitDoor" tag="ExitDoor" state="Closed" >
-		<position x='2.4' y='7.91' z='50' />
- 	</Entity>
- 	
- 	<Entity type="Player" leftFans='2' rightFans='2' />
- 	
- 	<!--  Buzzsaws  -->
-	
-	<Entity type="BuzzSaw">
-		<position x='2.5' y='2.3' z='70' />
-	</Entity>
-		
-	<Entity type="BuzzSaw">
-		<position x='2.3' y='5.5' z='70' />
-	</Entity>
-	
-	<Entity type="BuzzSaw" tag="ToggledBuzzSaw" >
-		<position x='1.4' y='6.5' z='70' />
-	</Entity>
-	
-	<!--  Toggles  -->
-	
-	<Entity type="Toggle" entityTag="ToggledBuzzSaw" >
-		<position x='3.4' y='2.3' z='70' />
-	</Entity>
-	
-	<Entity type="Toggle" entityTag="ExitDoor" >
-		<position x='1.4' y='5.5' z='70' />
+	<Entity type="WebLink" path="backgrounds/demo_end/hypeforgeLink.xml" url="http://hypeforge.org" >
+		<localBounds minX='-1.23' minY='-0.335' minZ='-0.5' maxX='1.23' maxY='0.335' maxZ='0.5' />
+		<position x='3.4' y='4.265' z='90' />
 	</Entity>
 	
 </World>

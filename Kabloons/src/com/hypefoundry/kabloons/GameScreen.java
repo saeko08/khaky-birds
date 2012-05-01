@@ -60,6 +60,8 @@ import com.hypefoundry.kabloons.entities.toggle.ToggleVisual;
 import com.hypefoundry.kabloons.entities.tutorial.StartTutorial;
 import com.hypefoundry.kabloons.entities.tutorial.StartTutorialController;
 import com.hypefoundry.kabloons.entities.tutorial.StartTutorialVisual;
+import com.hypefoundry.kabloons.entities.webLink.WebLink;
+import com.hypefoundry.kabloons.entities.webLink.WebLingVisual;
 import com.hypefoundry.kabloons.utils.AssetsFactory;
 import com.hypefoundry.kabloons.utils.LevelsLoader;
 import com.hypefoundry.kabloons.utils.UnlockedLevelsStorage;
@@ -73,7 +75,6 @@ import com.hypefoundry.kabloons.utils.UnlockedLevelsStorage;
 public class GameScreen extends Screen 
 {
 	private int									m_levelIdx;
-	private static int							m_levelsCount = 5;
 	
 	private static int							m_nominalViewportWidth = 480;
 	private static int							m_nominalViewportHeight = 800;
@@ -99,6 +100,7 @@ public class GameScreen extends Screen
 		m_levelIdx = levelIdx;
 		
 		final GameScreen gameScreen = this;
+		final Game gameInstance = game;
 		
 		// load common assets definitions
 		try 
@@ -115,6 +117,11 @@ public class GameScreen extends Screen
 		// create the game world
 		m_world = new World();
 		
+		// create the views
+		m_worldRenderer = new Renderer2D( game, m_nominalViewportWidth, m_nominalViewportHeight );
+		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
+		m_controllersView = new ControllersView( this );
+		
 		// serialization support
 		m_world.registerEntity( Background.class, new EntityFactory() { @Override public Entity create() { return new Background(); } } );
 		m_world.registerEntity( AnimatedBackground.class, new EntityFactory() { @Override public Entity create() { return new AnimatedBackground(); } } );
@@ -127,6 +134,7 @@ public class GameScreen extends Screen
 		m_world.registerEntity( BuzzSaw.class, new EntityFactory() { @Override public Entity create() { return new BuzzSaw(); } } );
 		m_world.registerEntity( StartTutorial.class, new EntityFactory() { @Override public Entity create() { return new StartTutorial(); } } );
 		m_world.registerEntity( Help.class, new EntityFactory() { @Override public Entity create() { return new Help(); } } );
+		m_world.registerEntity( WebLink.class, new EntityFactory() { @Override public Entity create() { return new WebLink( gameInstance, gameScreen, m_worldRenderer.getCamera() ); } } );
 
 		// load the world
 		try 
@@ -141,11 +149,6 @@ public class GameScreen extends Screen
 			throw new RuntimeException( e );
 		}
 		
-		// create the views
-		m_worldRenderer = new Renderer2D( game, m_nominalViewportWidth, m_nominalViewportHeight );
-		m_physicsView = new PhysicsView( 2.0f ); // TODO: configure cell size
-		m_controllersView = new ControllersView( this );
-		
 		// register visuals
 		m_world.attachView( m_worldRenderer );
 		m_worldRenderer.register( Background.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BackgroundVisual( m_resourceManager, parentEntity ); } } );
@@ -158,6 +161,7 @@ public class GameScreen extends Screen
 		m_worldRenderer.register( BuzzSaw.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new BuzzSawVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( StartTutorial.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new StartTutorialVisual( m_resourceManager, parentEntity ); } } );
 		m_worldRenderer.register( Help.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new HelpVisual( m_resourceManager, parentEntity ); } } );
+		m_worldRenderer.register( WebLink.class, new EntityVisualFactory() { @Override public EntityVisual instantiate( Entity parentEntity ) { return new WebLingVisual( m_resourceManager, parentEntity ); } } );
 		
 		// register controllers
 		m_world.attachView( m_controllersView );
@@ -251,7 +255,7 @@ public class GameScreen extends Screen
 
 	public void loadNextLevel() 
 	{		
-		if ( m_levelIdx < m_levelsCount )
+		if ( m_levelIdx < LevelsLoader.m_levelsCount )
 		{
 			LevelsLoader.loadLevel( (GLGame)m_game, m_levelIdx + 1, m_levelIdx );
 		}
@@ -272,7 +276,7 @@ public class GameScreen extends Screen
 	 */
 	public void unlockNextLevel()
 	{
-		if ( m_levelIdx < m_levelsCount )
+		if ( m_levelIdx < LevelsLoader.m_levelsCount )
 		{
 			int nextLevelIdx = m_levelIdx + 1;
 			

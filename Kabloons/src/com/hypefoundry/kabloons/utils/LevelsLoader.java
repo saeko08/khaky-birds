@@ -1,9 +1,8 @@
 package com.hypefoundry.kabloons.utils;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-import android.util.Log;
+
 
 import com.hypefoundry.engine.game.Screen;
 import com.hypefoundry.engine.game.ScreenFactory;
@@ -16,7 +15,7 @@ import com.hypefoundry.kabloons.GameScreen;
 
 public class LevelsLoader 
 {
-	private static int							m_levelsCount = 5;
+	public static int							m_levelsCount = 6;
 	
 	
 	static class GameScreenFactory implements ScreenFactory

@@ -14,7 +14,13 @@ import com.hypefoundry.engine.util.serialization.DataLoader;
 public abstract class Gesture 
 {
 	// static info about a gesture
+	
+	// gesture ID
 	public String			m_id;
+	
+	// can the gesture be performed without taking the finger off the screen
+	public boolean			m_continuous = false;
+	
 
 	// runtime info about the most recent instance of the gesture
 	private Vector3[]		m_samplePoints 		= new Vector3[GesturesRecognition.MAX_SAMPLES];
@@ -40,6 +46,13 @@ public abstract class Gesture
 	 * @return similarity factor in range [0..1]
 	 */
 	public abstract float analyzeGesture( Vector3[] instanceDirections, int instanceDirectionsCount );
+	
+	/**
+	 * Returns the minimum number of samples required to match the gesture.
+	 * 
+	 * @return
+	 */
+	public abstract int getRequiredSamplesCount();
 	
 	// ------------------------------------------------------------------------
 	// Utility methods
@@ -91,6 +104,7 @@ public abstract class Gesture
 	public void load( DataLoader loader ) 
 	{
 		m_id = loader.getStringValue( "id" );
+		m_continuous = loader.getBoolValue( "continuous" );
 				
 		onLoad( loader );
 	}

@@ -44,6 +44,12 @@ public class AngularGesture extends Gesture
 		
 		return probability;
 	}
+	
+	@Override
+	public int getRequiredSamplesCount()
+	{
+		return m_directionChanges + 2;
+	}
 		
 	@Override
 	protected void onLoad(DataLoader loader)

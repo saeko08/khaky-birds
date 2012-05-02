@@ -68,6 +68,10 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 	// following screen factory
 	ScreenFactory		m_nextScreenFactory;
 	
+	// cooldown timer that prevents you from clicking through the movie too quickly
+	float				m_inputCooldownTimer = 1.0f;
+	
+	
 	/**
 	 * Constructor.
 	 * 
@@ -112,6 +116,10 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 			
 			case Draw:
 			{
+				// decrease the cooldown timer value 
+				m_inputCooldownTimer -= deltaTime;
+				
+				// draw the movie
 				draw();
 				break;
 			}
@@ -349,8 +357,11 @@ public class MovieScreen extends Screen implements MediaPlayer.OnPreparedListene
 		{
 			synchronized( m_stateSynchObj )
 			{
-				m_currentState = State.MoveToNextScreen;
-				m_stateSynchObj.notifyAll();
+				if ( m_inputCooldownTimer <= 0.0f )
+				{
+					m_currentState = State.MoveToNextScreen;
+					m_stateSynchObj.notifyAll();
+				}
 			}
 			return true;
 		}

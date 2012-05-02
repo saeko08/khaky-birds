@@ -60,6 +60,11 @@ public class DirectionalGesture extends Gesture
 		return probability;		
 	}
 	
+	@Override
+	public int getRequiredSamplesCount()
+	{
+		return 2;
+	}
 	
 	@Override
 	protected void onLoad(DataLoader loader)

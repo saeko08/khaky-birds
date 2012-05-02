@@ -52,10 +52,12 @@ public class GesturesRecognition implements InputHandler
 	// ------------------------------------------------------------------------
 	// Member fields
 	// ------------------------------------------------------------------------
+	public final static int				MIN_SAMPLES					= 2;
 	public final static int				MAX_SAMPLES					= 64;
 	
 	// gestures DB
 	private List< Gesture >				m_gesturesDB				= new ArrayList< Gesture >();
+	private int							m_highestGestureScore		= 0;
 	
 	// listeners
 	private List< GesturesListener >	m_listeners					= new ArrayList< GesturesListener >();
@@ -67,6 +69,9 @@ public class GesturesRecognition implements InputHandler
 	
 	private Vector3[]					m_points					= new Vector3[MAX_SAMPLES];
 	private int							m_nextFreeSampleIdx 		= 0;
+	private int							m_gestureScore				= -1;
+	private boolean						m_continuousGesturePerformed = false;
+	
 	
 	private GesturesAnalyzer			m_gestureAnalyzer			= new GesturesAnalyzer();
 	
@@ -100,6 +105,12 @@ public class GesturesRecognition implements InputHandler
 		if ( gesture != null )
 		{
 			m_gesturesDB.add( gesture );
+			
+			int score = gesture.getRequiredSamplesCount();
+			if ( m_highestGestureScore < score && gesture.m_continuous )
+			{
+				m_highestGestureScore = score;
+			}
 		}
 	}
 	
@@ -126,7 +137,7 @@ public class GesturesRecognition implements InputHandler
 				Gesture gesture =  factory.create();
 				gesture.load( gestureNode );
 				
-				m_gesturesDB.add( gesture );
+				addGesture( gesture );
 			}	
 		}
 	}
@@ -206,13 +217,15 @@ public class GesturesRecognition implements InputHandler
 				// start recording the gesture
 				m_lastSamplePoint.set( lastEvent.x, lastEvent.y, 0 );
 				m_nextFreeSampleIdx = 0;
+				m_gestureScore = -1;
 				m_gestureInProgress = true;
+				m_continuousGesturePerformed = false;
 				
 				inputHandled = true;
 			}
 			else if ( lastEvent.type == TouchEvent.TOUCH_UP )
 			{
-				assert( m_gestureInProgress == true );
+				assert ( m_gestureInProgress == true );
 				
 				// calculate the last direction
 				addDirection( lastEvent.x, lastEvent.y, deltaTime );
@@ -222,6 +235,8 @@ public class GesturesRecognition implements InputHandler
 				
 				// reset the samples counter
 				m_nextFreeSampleIdx = 0;
+				m_gestureScore = -1;
+				m_continuousGesturePerformed = false;
 				
 				inputHandled = true;
 			}
@@ -233,16 +248,28 @@ public class GesturesRecognition implements InputHandler
 				addDirection( lastEvent.x, lastEvent.y, deltaTime );
 				
 				// increase the samples counter
-				++m_nextFreeSampleIdx;
+				++m_nextFreeSampleIdx;		
 				
-				// if the number of samples was exceeded, submit the gesture
-				// and start anew
-				if ( m_nextFreeSampleIdx >= MAX_SAMPLES )
+				// if the number of samples was exceeded, or the gesture we drew
+				// so far is the best one we can get, submit it and start anew
+				boolean resetGesture = peekContinuousGesture();
+				if ( resetGesture )
+				{
+					// a continuous gesture was performed
+					m_continuousGesturePerformed = true;
+				}
+				
+				if ( !resetGesture && m_nextFreeSampleIdx >= MAX_SAMPLES )
 				{
 					submitGesture();
-					
+					resetGesture = true;
+				}
+
+				if ( resetGesture )
+				{	
 					m_lastSamplePoint.set( lastEvent.x, lastEvent.y, 0 );
 					m_nextFreeSampleIdx = 0;
+					m_gestureScore = -1;
 				}
 				
 				inputHandled = true;
@@ -275,6 +302,43 @@ public class GesturesRecognition implements InputHandler
 	}
 	
 	/**
+	 * Checks if a ontinuous gesture was performed
+	 * 
+	 * @return
+	 */
+	private boolean peekContinuousGesture()
+	{
+		if ( m_nextFreeSampleIdx < MIN_SAMPLES )
+		{
+			return false;
+		}
+		
+		Gesture bestMatchingGesture = m_gestureAnalyzer.analyze( m_points, m_nextFreeSampleIdx, m_gesturesDB );
+		if ( bestMatchingGesture != null && bestMatchingGesture.m_continuous )
+		{
+			int score = bestMatchingGesture.getRequiredSamplesCount();
+			if ( score >= m_gestureScore )
+			{
+				m_gestureScore = score;
+			}
+		}
+		
+		if ( m_gestureScore >= m_highestGestureScore )
+		{
+			if ( m_gestureScore < 3 )
+			{
+				int a = 0;
+			}
+			
+			// that's our gesture
+			notifyGesture( bestMatchingGesture );	
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Submits a gesture for recognitions
 	 */
 	private void submitGesture()
@@ -284,18 +348,41 @@ public class GesturesRecognition implements InputHandler
 		Gesture bestMatchingGesture = m_gestureAnalyzer.analyze( m_points, m_nextFreeSampleIdx, m_gesturesDB );
 		
 		// if any matching gesture was found, inform the listener about it 
-		if ( bestMatchingGesture != null )
+		if ( bestMatchingGesture == null )
 		{
-			// but first - set the samples on it - it will be needed for checking stuff such as
-			// positioning etc.
-			bestMatchingGesture.setInstancePoints( m_points, m_nextFreeSampleIdx );
-			
-			int listenersCount = m_listeners.size();
-			for ( int i = 0; i < listenersCount; ++i )
-			{
-				GesturesListener listener = m_listeners.get(i);
-				listener.onGestureRecognized( bestMatchingGesture );
-			}
+			return;
+		}
+		
+		if ( m_continuousGesturePerformed && !bestMatchingGesture.m_continuous )
+		{
+			// if a continuous gesture was already performed, and this one is not continuous, don't submit it
+			return;
+		}
+		
+		notifyGesture( bestMatchingGesture );
+	}
+	
+	/**
+	 * Notifies the listeners about a successfully identified gesture.
+	 * 
+	 * @param gesture
+	 */
+	private void notifyGesture( Gesture gesture )
+	{
+		if ( gesture == null )
+		{
+			return;
+		}
+		
+		// but first - set the samples on it - it will be needed for checking stuff such as
+		// positioning etc.
+		gesture.setInstancePoints( m_points, m_nextFreeSampleIdx );
+					
+		int listenersCount = m_listeners.size();
+		for ( int i = 0; i < listenersCount; ++i )
+		{
+			GesturesListener listener = m_listeners.get(i);
+			listener.onGestureRecognized( gesture );
 		}
 	}
 }

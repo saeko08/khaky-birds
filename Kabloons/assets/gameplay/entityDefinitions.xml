@@ -52,7 +52,7 @@
 		
 		<!--  there are a couple gestures corresponding to the fan removal - basically
 		we want the user to smear over the fan back and forth -->
-		<Gesture id="REMOVE_FAN" type="AngularGesture" directionChanges='1' angle='150.0' angleTolerance='60.0'/>
+		<Gesture id="REMOVE_FAN" type="AngularGesture" directionChanges='1' angle='150.0' angleTolerance='60.0' continuous='true' />
 	
 	</GesturesDB>
 	

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movie width='4.8' height='8.0'>
+    <Entity type="MovieEntity" path="movies/introMovie.xml">
+        <localBounds minX='-2.4' minY='-1.8' maxX='2.4' maxY='1.8' />
+		<position x='2.4' y='4.0' z='100' />
+	</Entity>
+</Movie>

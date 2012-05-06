@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Animation frameDuration='3' looped='false' atlasName='movies/logoAtlas.jpg' alphaOp='none' >
+	<Frame type="StaticRegion" x='0' y='0' w='480' h='800' />
+</Animation>

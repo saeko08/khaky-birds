@@ -43,7 +43,7 @@ public class Kabloons extends GLGame
 	@Override
 	public Screen getStartScreen()
 	{
-		return new MovieScreen( this, "movies/logo.mp4", new MainMenuFactory( this ) );
+		return new MovieScreen( this, "movies/logo.xml", new MainMenuFactory( this ) );
 	}
 }
 

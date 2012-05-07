@@ -5,6 +5,7 @@ package com.hypefoundry.kabloons.entities.tutorial;
 
 import com.hypefoundry.engine.controllers.fsm.FSMState;
 import com.hypefoundry.engine.controllers.fsm.FiniteStateMachine;
+import com.hypefoundry.engine.math.Vector3;
 import com.hypefoundry.engine.world.Entity;
 import com.hypefoundry.engine.world.World;
 import com.hypefoundry.engine.world.WorldView;
@@ -21,6 +22,9 @@ public class StartTutorialController extends FiniteStateMachine
 	private StartTutorial			m_tutorial;
 	private World					m_world;
 	private Player					m_player;
+	
+	// tells where the first fan was actually placed
+	private Vector3					m_firstFanPosition;
 	
 	
 	// ------------------------------------------------------------------------
@@ -73,10 +77,11 @@ public class StartTutorialController extends FiniteStateMachine
 		public void activate()
 		{
 			m_tutorial.m_state = StartTutorial.State.PLACE_FIRST_FAN;
+			m_tutorial.m_gesturePos.set( 2.4f, 4.0f, 0.0f );
 			m_world.attachView( this );
 			
 			m_fanPlaced = false;
-			
+
 			// give the player a single fan - the one that's supposed to be placed,
 			// and prevent the ghost release
 			m_player.setFansCount( 1, 0 );
@@ -108,7 +113,11 @@ public class StartTutorialController extends FiniteStateMachine
 		@Override
 		public void onEntityAdded(Entity entity) 
 		{
-			m_fanPlaced |= ( entity instanceof Fan );
+			if ( entity instanceof Fan && !m_fanPlaced )
+			{
+				m_firstFanPosition = ((Fan)entity).getPosition();
+				m_fanPlaced = true;
+			}
 		}
 
 		@Override
@@ -125,6 +134,10 @@ public class StartTutorialController extends FiniteStateMachine
 		public void activate()
 		{
 			m_tutorial.m_state = StartTutorial.State.REMOVE_FAN;
+			
+			// place the gesture exactly over the placed fan
+			m_tutorial.m_gesturePos.set( m_firstFanPosition );
+			
 			m_world.attachView( this );
 			
 			m_fanRemoved = false;
@@ -177,6 +190,10 @@ public class StartTutorialController extends FiniteStateMachine
 		public void activate()
 		{
 			m_tutorial.m_state = StartTutorial.State.PLACE_SECOND_FAN;
+			
+			// place the fan so that it can counter the effects of the wind
+			m_tutorial.m_gesturePos.set( 0.7f, 2.0f, 0.0f );
+			
 			m_world.attachView( this );
 			
 			m_fanPlaced = false;
@@ -229,6 +246,8 @@ public class StartTutorialController extends FiniteStateMachine
 		public void activate()
 		{
 			m_tutorial.m_state = StartTutorial.State.RELEASE_GHOST;
+			m_tutorial.m_gesturePos.set( 2.4f, 4.0f, 0.0f );
+			
 			m_world.attachView( this );
 			
 			m_ghostReleased = false;

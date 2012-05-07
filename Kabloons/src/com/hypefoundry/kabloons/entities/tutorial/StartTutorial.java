@@ -24,10 +24,13 @@ public class StartTutorial extends Entity
 	}
 
 	public String[]			m_stateImagePaths 		= new String[State.values().length];
+	public String			m_fingerImage;
 	public Vector3[]		m_stateImagePos 		= new Vector3[State.values().length];
 	public BoundingBox[]	m_stateImageBounds 		= new BoundingBox[State.values().length];
 	public State			m_state 				= State.NOTHING;
-	
+
+	// runtime data
+	public Vector3			m_gesturePos 			= new Vector3();
 
 	@Override
 	public void onLoad( DataLoader loader )
@@ -47,5 +50,7 @@ public class StartTutorial extends Entity
 				m_stateImageBounds[i].load( "bounds", stateNode );
 			}
 		}
+		
+		m_fingerImage = loader.getStringValue( "fingerImgPath" );
 	}
 }

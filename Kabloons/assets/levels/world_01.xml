@@ -37,7 +37,7 @@
 	
 	<!-- tutorial -->
 	
-	<Entity type="StartTutorial" >
+	<Entity type="StartTutorial" fingerImgPath="hud/tutorials/start/finger.xml">
 		<localBounds minX='-2.4' minY='-4.0' maxX='2.4' maxY='4.0' />
 		<position x='2.4' y='4.0' z='40' />
 		
@@ -48,7 +48,7 @@
 		
 		<REMOVE_FAN path="hud/tutorials/start/removeFan.xml" >
 			<position x='2.4' y='5.8' z='40' />
-			<bounds minX='-2.4' minY='-2.195' maxX='2.4' maxY='2.195' />
+			<bounds minX='-2.4' minY='-1.685' maxX='2.4' maxY='1.685' />
 		</REMOVE_FAN>
 		
 		<PLACE_SECOND_FAN path="hud/tutorials/start/placeSecondFan.xml" >

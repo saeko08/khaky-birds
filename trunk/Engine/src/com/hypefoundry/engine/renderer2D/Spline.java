@@ -198,5 +198,16 @@ public final class Spline
 			m_directions[i] = dir.normalize();
 		}
 	}
+	
+	public float length()
+	{
+		float l = 0.0f;
+		for ( int i = 0; i < m_lengths.length; ++i )
+		{
+			l += m_lengths[i];
+		}
+
+		return l;
+	}
 
 }

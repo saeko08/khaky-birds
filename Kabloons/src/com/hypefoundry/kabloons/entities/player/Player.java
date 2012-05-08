@@ -15,6 +15,7 @@ public class Player extends Entity
 {
 	int[]						m_fansLeft 					= new int[Fan.Direction.values().length];
 	boolean						m_ghostReleaseEnabled		= true;
+	boolean						m_fansRemovalEnabled		= true;
 	PlayerListener				m_listener					= null;
 	
 	/**
@@ -86,5 +87,16 @@ public class Player extends Entity
 	public void enableGhostRelease( boolean enable )
 	{
 		m_ghostReleaseEnabled = enable;
+	}
+
+	/**
+	 * Toggles the ability to remove fans.
+	 * 
+	 * @param enable
+	 */
+	public void enableFanRemoval( boolean enable ) 
+	{
+		m_fansRemovalEnabled = enable;
+		
 	}
 }

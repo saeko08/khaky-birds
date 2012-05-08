@@ -52,34 +52,35 @@ public class StartTutorialVisual extends EntityVisual
 		
 		m_fingerImage = resMgr.getResource( TextureRegion.class, m_tutorial.m_fingerImage );
 		m_fingerBounds = new BoundingBox( -1.38f, -0.885f, 0.39f, 0.885f );
-		// define finger paths for each gesture
+		
+		// define gesture paths
 		{
-			// place a left fan
+			// SWIPE_LEFT
 			m_fingerPaths[0] = new Spline();
-			m_fingerPaths[0].addPoint( new Vector3( 1.5f, 0.0f, 0.0f ) );
-			m_fingerPaths[0].addPoint( new Vector3( -0.5f, 0.0f, 0.0f ) );
+			m_fingerPaths[0].addPoint( new Vector3( 1.0f, 0.0f, 0.0f ) );
+			m_fingerPaths[0].addPoint( new Vector3( -1.0f, 0.0f, 0.0f ) );
 		}
 		
 		{
-			// remove the fan
+			// SWIPE_RIGHT
 			m_fingerPaths[1] = new Spline();
-			m_fingerPaths[1].addPoint( new Vector3( -0.5f, -0.5f, 0.0f ) );
-			m_fingerPaths[1].addPoint( new Vector3( 0.5f, 0.5f, 0.0f ) );
-			m_fingerPaths[1].addPoint( new Vector3( -0.5f, -0.5f, 0.0f ) );
+			m_fingerPaths[1].addPoint( new Vector3( -1.0f, 0.0f, 0.0f ) );
+			m_fingerPaths[1].addPoint( new Vector3( 1.0f, 0.0f, 0.0f ) );
 		}
 		
 		{
-			// place a right fan
+			// SWIPE_UP
 			m_fingerPaths[2] = new Spline();
-			m_fingerPaths[2].addPoint( new Vector3( 0.0f, 0.0f, 0.0f ) );
-			m_fingerPaths[2].addPoint( new Vector3( 2.0f, 0.0f, 0.0f ) );
+			m_fingerPaths[2].addPoint( new Vector3( 0.0f, -1.0f, 0.0f ) );
+			m_fingerPaths[2].addPoint( new Vector3( 0.0f, 1.0f, 0.0f ) );
 		}
 		
 		{
-			// release the boy
+			// SWIPE_ACROSS
 			m_fingerPaths[3] = new Spline();
-			m_fingerPaths[3].addPoint( new Vector3( 0.0f, -1.0f, 0.0f ) );
-			m_fingerPaths[3].addPoint( new Vector3( 0.0f, 1.0f, 0.0f ) );
+			m_fingerPaths[3].addPoint( new Vector3( -0.5f, -0.5f, 0.0f ) );
+			m_fingerPaths[3].addPoint( new Vector3( 0.5f, 0.5f, 0.0f ) );
+			m_fingerPaths[3].addPoint( new Vector3( -0.5f, -0.5f, 0.0f ) );
 		}
 
 	}
@@ -99,20 +100,25 @@ public class StartTutorialVisual extends EntityVisual
 		batcher.drawSprite( pos, bs, currRegion );
 		
 		// animate the gesture
-		float pathDist = 0.0f;
+		if ( m_tutorial.m_gestureTypes[stateIdx] != StartTutorial.GestureType.NOTHING )
 		{
-			m_fingerTimeline += deltaTime;
-			if ( m_fingerTimeline > m_fingerSpeed )
-			{
-				m_fingerTimeline -= (int)( m_fingerTimeline / m_fingerSpeed ) * m_fingerSpeed;
-			}
+			int gesturePathIdx = m_tutorial.m_gestureTypes[stateIdx].ordinal();
 			
-			float timeSlider = m_fingerTimeline / m_fingerSpeed;
-			pathDist = m_fingerPaths[stateIdx].length() * timeSlider;
+			float pathDist = 0.0f;
+			{
+				m_fingerTimeline += deltaTime;
+				if ( m_fingerTimeline > m_fingerSpeed )
+				{
+					m_fingerTimeline -= (int)( m_fingerTimeline / m_fingerSpeed ) * m_fingerSpeed;
+				}
+				
+				float timeSlider = m_fingerTimeline / m_fingerSpeed;
+				pathDist = m_fingerPaths[gesturePathIdx].length() * timeSlider;
+			}
+			m_fingerPaths[gesturePathIdx].getPosition( pathDist, m_fingerPos );
+			m_fingerPos.add( m_tutorial.m_gesturePos );
+			batcher.drawSprite( m_fingerPos, m_fingerBounds, m_fingerImage );
 		}
-		m_fingerPaths[stateIdx].getPosition( pathDist, m_fingerPos );
-		m_fingerPos.add( m_tutorial.m_gesturePos );
-		batcher.drawSprite( m_fingerPos, m_fingerBounds, m_fingerImage );
 	}
 
 }

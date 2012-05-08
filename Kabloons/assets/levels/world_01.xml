@@ -39,50 +39,46 @@
 	
 	<Entity type="StartTutorial" fingerImgPath="hud/tutorials/start/finger.xml">
 		<localBounds minX='-2.4' minY='-4.0' maxX='2.4' maxY='4.0' />
-		<position x='2.4' y='4.0' z='40' />
+		<position x='2.4' y='4.0' z='-1' />
 		
-		<PLACE_FIRST_FAN path="hud/tutorials/start/placeFirstFan.xml" >
-			<position x='2.4' y='6.0' z='40' />
-			<bounds minX='-2.4' minY='-1.82' maxX='2.4' maxY='1.82' />
+		<RELEASE_GHOST path="hud/tutorials/start/releaseGhost.xml" gesture="SWIPE_UP" >
+			<position x='2.4' y='6.0' z='-1' />
+			<bounds minX='-2.4' minY='-0.52' maxX='2.4' maxY='0.52' />
+		</RELEASE_GHOST>
+		
+		<PLACE_FIRST_FAN path="hud/tutorials/start/placeFirstFan.xml" gesture="SWIPE_LEFT" >
+			<position x='2.4' y='6.0' z='-1' />
+			<bounds minX='-2.4' minY='-0.52' maxX='2.4' maxY='0.52' />
 		</PLACE_FIRST_FAN>
 		
-		<REMOVE_FAN path="hud/tutorials/start/removeFan.xml" >
-			<position x='2.4' y='5.8' z='40' />
-			<bounds minX='-2.4' minY='-1.685' maxX='2.4' maxY='1.685' />
-		</REMOVE_FAN>
+		<WAIT_UNTIL_BOY_REACHES_FAN path="hud/tutorials/start/waitUntilBoyReachesFan.xml" >
+			<position x='2.4' y='6.0' z='-1' />
+			<bounds minX='-2.4' minY='-0.52' maxX='2.4' maxY='0.52' />
+		</WAIT_UNTIL_BOY_REACHES_FAN>
 		
-		<PLACE_SECOND_FAN path="hud/tutorials/start/placeSecondFan.xml" >
-			<position x='2.4' y='6.0' z='40' />
-			<bounds minX='-2.4' minY='-1.82' maxX='2.4' maxY='1.82' />
+		<REMOVE_FIRST_FAN path="hud/tutorials/start/removeFan.xml" gesture="SWIPE_ACROSS" >
+			<position x='2.4' y='6.0' z='-1' />
+			<bounds minX='-2.4' minY='-0.52' maxX='2.4' maxY='0.52' />
+		</REMOVE_FIRST_FAN>
+		
+		<PLACE_SECOND_FAN path="hud/tutorials/start/placeSecondFan.xml" gesture="SWIPE_RIGHT" >
+			<position x='2.4' y='6.0' z='-1' />
+			<bounds minX='-2.4' minY='-0.52' maxX='2.4' maxY='0.52' />
 		</PLACE_SECOND_FAN>
 		
-		<RELEASE_GHOST path="hud/tutorials/start/releaseGhost.xml" >
-			<position x='2.4' y='6.0' z='40' />
-			<bounds minX='-2.4' minY='-2.195' maxX='2.4' maxY='2.195' />
-		</RELEASE_GHOST>
+		<REMOVE_SECOND_FAN path="hud/tutorials/start/removeFan.xml" gesture="SWIPE_ACROSS" >
+			<position x='2.4' y='6.0' z='-1' />
+			<bounds minX='-2.4' minY='-0.52' maxX='2.4' maxY='0.52' />
+		</REMOVE_SECOND_FAN>
 		
 	</Entity>
 	
 	<!--  gameplay -->
 	
 	<Entity type="ExitDoor" >
-		<position x='1.84' y='7.33' z='50' />
+		<position x='2.4' y='7.33' z='50' />
 	</Entity>
 	
-	<Entity type="Fan" windFx="backgrounds/park_alleyway/leftWindFx.xml">
-		<position x='4.6' y='3.0' z='60' />
-		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
-		<windFieldBounds minX='-4.4' minY='-0.975' maxX='0.0' maxY='0.975' />
-		<BlowForce x='-0.4' y='0' z='0' />
-	</Entity>
-	
-	<Entity type="Fan" windFx="backgrounds/park_alleyway/rightWindFx.xml">
-		<position x='0.2' y='6.0' z='60' />
-		<localBounds minX='-0.725' minY='-0.975' maxX='0.725' maxY='0.975' />
-		<windFieldBounds minX='0.0' minY='-0.975' maxX='4.4' maxY='0.975' />
-		<BlowForce x='0.4' y='0' z='0' />
-	</Entity>
-
 	<Entity type="Player" leftFans='0' rightFans='0' />
 		
 </World>

@@ -197,6 +197,11 @@ public class PlayerController extends FiniteStateMachine
 		 */
 		private void removeFan( Gesture gesture )
 		{	
+			if ( m_player.m_fansRemovalEnabled == false )
+			{
+				return;
+			}
+			
 			gesture.getCenter( m_touchPos );
 			m_camera.screenPosToWorld( m_touchPos, m_touchPos );
 					
